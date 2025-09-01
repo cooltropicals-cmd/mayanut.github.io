@@ -6,12 +6,10 @@
   <title>MayaNut AI</title>
   <style>
     :root{
-      --bg1:#ffd6a6; --bg2:#ffeab3; --bg3:#ffd1e3;         /* shell-pink/orange/guava */
+      --bg1:#ffd6a6; --bg2:#ffeab3; --bg3:#ffd1e3;
       --panel:rgba(255,255,255,.28); --line:rgba(0,0,0,.08);
       --card:#ffffffee; --ink:#0f172a; --muted:#64748b; --logo:#384252;
       --shadow:0 18px 40px rgba(15,23,42,.18);
-      --seed1:#9a6a3a; --seed2:#7f5129; --seed3:#6b4524;   /* seed browns */
-      --iris:#3fbf6e;                                      /* green eyes */
     }
 
     html,body{height:100%}
@@ -49,47 +47,13 @@
     .stage{ width:100%; height:100%; padding-top:78px; display:flex; justify-content:center; align-items:center }
     .wrap{ width:min(980px,94%); display:flex; gap:24px; align-items:flex-start }
 
-    /* ======= MASCOT (flat, horizontal) ======= */
-    .mascot{ width:220px; min-width:220px; height:180px; display:flex; align-items:center; justify-content:center }
-    .seed{
-      position:relative; width:200px; height:130px;
-      /* Face elements are positioned inside .seed; we rotate only the shell layer */
+    /* FLAG IMAGE */
+    .flag{
+      width:220px; min-width:220px; height:150px; display:flex; align-items:center; justify-content:center;
     }
-    .shell{
-      position:absolute; inset:0;
-      border-radius:60%/50%;
-      background: linear-gradient(90deg, var(--seed3), var(--seed2) 45%, var(--seed1));
-      box-shadow: 0 10px 20px rgba(15,23,42,.18);
-      transform: rotate(90deg);           /* rotate the brown part 90° (left→right) */
-      animation: bob 4s ease-in-out infinite;
+    .flag img{
+      max-width:100%; height:auto; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.25);
     }
-    .shell::before{
-      content:""; position:absolute; inset:14% 10%; border-radius:48%;
-      box-shadow: inset 0 14px 22px rgba(0,0,0,.10), inset 0 -14px 22px rgba(255,255,255,.10);
-      pointer-events:none;
-    }
-    @keyframes bob{0%,100%{transform:rotate(90deg) translateY(0)}50%{transform:rotate(90deg) translateY(-5px)}}
-
-    .eye{
-      position:absolute; top:34%; width:52px; height:52px; background:#fff; border-radius:50%;
-      box-shadow: 0 2px 0 rgba(0,0,0,.06), inset 0 -2px 6px rgba(0,0,0,.08);
-      overflow:hidden;
-    }
-    .eye.left{ left:46px } .eye.right{ right:46px }
-    .iris{
-      position:absolute; left:12px; top:12px; width:28px; height:28px; border-radius:50%; background:var(--iris);
-      display:flex; align-items:center; justify-content:center; animation:gaze 5s ease-in-out infinite;
-    }
-    .eye.right .iris{ animation-delay:.1s }
-    .pupil{ width:14px; height:14px; background:#0b0b0b; border-radius:50% }
-    @keyframes gaze{ 0%{transform:translate(0,0)} 40%{transform:translate(9px,5px)} 60%{transform:translate(9px,5px)} 100%{transform:translate(0,0)} }
-    .lid{ position:absolute; inset:0 0 auto 0; height:0%; background:var(--seed2); opacity:.96; animation: blink 7s ease-in-out infinite }
-    @keyframes blink{ 0%,92%,100%{height:0%} 94%{height:100%} 96%{height:0%} }
-
-    .mouth{ position:absolute; bottom:20px; left:50%; transform:translateX(-50%); width:90px; height:40px }
-    .lip{ position:absolute; left:0; right:0; bottom:8px; height:24px; border-bottom:4px solid #2b1d12; border-radius:0 0 90px 90px }
-    .teeth{ position:absolute; left:50%; bottom:14px; transform:translateX(-50%); display:flex; gap:4px; padding:4px 6px; background:#fff; border-radius:8px 8px 12px 12px; border:1px solid rgba(0,0,0,.06) }
-    .tooth{ width:10px; height:12px; background:#fff; border-radius:0 0 3px 3px }
 
     /* CHAT */
     .chat{ flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
@@ -107,7 +71,7 @@
 
     /* Responsive */
     @media (max-width:760px){
-      .mascot{display:none}
+      .flag{display:none}
       .log{max-height:320px}
     }
   </style>
@@ -124,26 +88,9 @@
   <!-- STAGE -->
   <div class="stage">
     <div class="wrap">
-      <!-- Mascot -->
-      <div class="mascot" aria-hidden="true">
-        <div class="seed">
-          <div class="shell"></div>
-          <div class="eye left">
-            <div class="lid"></div>
-            <div class="iris"><div class="pupil"></div></div>
-          </div>
-          <div class="eye right">
-            <div class="lid"></div>
-            <div class="iris"><div class="pupil"></div></div>
-          </div>
-          <div class="mouth">
-            <div class="lip"></div>
-            <div class="teeth">
-              <div class="tooth"></div><div class="tooth"></div><div class="tooth"></div>
-              <div class="tooth"></div><div class="tooth"></div>
-            </div>
-          </div>
-        </div>
+      <!-- American Flag instead of mascot -->
+      <div class="flag">
+        <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="American Flag">
       </div>
 
       <!-- Chat -->
@@ -177,7 +124,7 @@
   </div>
 
   <script>
-    /* Offline smart intents + domain rule */
+    /* Offline chatbot intents */
     const mayaSynonyms = ["mayanut","maya nut","breadnut","brosimum","brosimum alicastrum","ramon","ojoche","guaimaro","capomo"];
     const BUY_TRIG = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
     const COMPANY_TRIG = ["company","about us","about mayanut","who are you","when founded"];
@@ -209,12 +156,6 @@
       if (includesAny(t, SOCIAL_TRIG)) return "social";
       if (includesAny(t, COMPANY_TRIG)) return "company";
       if (includesAny(t, TREE_TRIG) || includesAny(t, mayaSynonyms)) return "tree";
-      const m = t.match(/^(tell me about|what is|info on|information on)\s+(.+)$/i);
-      if(m){
-        const subj = m[2];
-        if (includesAny(subj, ["company","mayanut","mayanut company","maya nut"])) return "company";
-        if (includesAny(subj, mayaSynonyms)) return "tree";
-      }
       return "other";
     }
 
