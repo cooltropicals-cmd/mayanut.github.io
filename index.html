@@ -12,8 +12,6 @@
       --shadow:0 18px 40px rgba(15,23,42,.18);
       --seed1:#9a6a3a; --seed2:#7f5129; --seed3:#6b4524;   /* seed browns */
       --iris:#3fbf6e;                                      /* green eyes */
-      --consoleBG:#0f172a; --consoleInk:#e5e7eb; --consoleLine:#1f2937;
-      --consoleBtn:#111827; --consoleBtnInk:#e5e7eb;
     }
 
     html,body{height:100%}
@@ -51,20 +49,26 @@
     .stage{ width:100%; height:100%; padding-top:78px; display:flex; justify-content:center; align-items:center }
     .wrap{ width:min(980px,94%); display:flex; gap:24px; align-items:flex-start }
 
-    /* ======= MASCOT (flat, horizontal, stable) ======= */
+    /* ======= MASCOT (flat, horizontal) ======= */
     .mascot{ width:220px; min-width:220px; height:180px; display:flex; align-items:center; justify-content:center }
     .seed{
-      position:relative; width:200px; height:130px; border-radius:60%/50%;
+      position:relative; width:200px; height:130px;
+      /* Face elements are positioned inside .seed; we rotate only the shell layer */
+    }
+    .shell{
+      position:absolute; inset:0;
+      border-radius:60%/50%;
       background: linear-gradient(90deg, var(--seed3), var(--seed2) 45%, var(--seed1));
       box-shadow: 0 10px 20px rgba(15,23,42,.18);
+      transform: rotate(90deg);           /* rotate the brown part 90° (left→right) */
       animation: bob 4s ease-in-out infinite;
     }
-    .seed::before{
+    .shell::before{
       content:""; position:absolute; inset:14% 10%; border-radius:48%;
       box-shadow: inset 0 14px 22px rgba(0,0,0,.10), inset 0 -14px 22px rgba(255,255,255,.10);
       pointer-events:none;
     }
-    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    @keyframes bob{0%,100%{transform:rotate(90deg) translateY(0)}50%{transform:rotate(90deg) translateY(-5px)}}
 
     .eye{
       position:absolute; top:34%; width:52px; height:52px; background:#fff; border-radius:50%;
@@ -101,30 +105,10 @@
     .panel h3{ margin:0 0 8px 0 }
     .muted{ color:var(--muted) }
 
-    /* RIGHT COMMAND CONSOLE (visible by default; can self-delete via “GoldenGate”) */
-    .console{
-      position:fixed; top:78px; right:12px; width:340px; max-width:40vw;
-      background:var(--consoleBG); color:var(--consoleInk); border:1px solid var(--consoleLine);
-      border-radius:14px; box-shadow:0 12px 28px rgba(0,0,0,.25); padding:12px; z-index:12;
-    }
-    .console h4{ margin:0 0 6px 0; font-size:14px }
-    .console textarea{
-      width:100%; height:140px; border:1px solid #22304a; background:#0b1326; color:#e5e7eb; border-radius:10px; padding:10px; font-size:13px; resize:vertical
-    }
-    .console .btns{ display:flex; gap:8px; margin-top:8px }
-    .console button{
-      background:var(--consoleBtn); color:var(--consoleBtnInk); border:1px solid #2b3954; border-radius:10px; padding:8px 10px; font-weight:600; cursor:pointer
-    }
-    .console .out{
-      margin-top:8px; background:#0b1326; border:1px solid #22304a; border-radius:10px; padding:8px; min-height:60px; font-size:12px; white-space:pre-wrap
-    }
-    .console .hint{ color:#93a4c3; font-size:12px; margin-top:6px }
-
     /* Responsive */
     @media (max-width:760px){
       .mascot{display:none}
       .log{max-height:320px}
-      .console{ position:fixed; top:auto; bottom:12px; right:12px; width:92vw; max-width:none }
     }
   </style>
 </head>
@@ -143,6 +127,7 @@
       <!-- Mascot -->
       <div class="mascot" aria-hidden="true">
         <div class="seed">
+          <div class="shell"></div>
           <div class="eye left">
             <div class="lid"></div>
             <div class="iris"><div class="pupil"></div></div>
@@ -177,7 +162,11 @@
   <!-- PANELS -->
   <div class="panel" id="productPage">
     <h3>Products</h3>
-    <ul id="productList"></ul>
+    <ul id="productList">
+      <li>MayaNut Flour — placeholder</li>
+      <li>MayaNut Drink — placeholder</li>
+      <li>MayaNut Snacks — placeholder</li>
+    </ul>
     <p class="muted">Placeholders for now — we’ll wire real product pages when you’re ready.</p>
   </div>
 
@@ -187,76 +176,24 @@
     <p id="treeText"><em>Brosimum alicastrum</em> (Maya Nut / Breadnut) belongs to Moraceae. It’s valued in modern agroforestry for productivity, drought resilience, canopy services, and nutrient-dense seeds used as flour or a roasted, caffeine-free beverage.</p>
   </div>
 
-  <!-- RIGHT-SIDE COMMAND CONSOLE (self-deleting via “GoldenGate”) -->
-  <div class="console" id="console">
-    <h4>Command Console</h4>
-    <textarea id="cmdBox" placeholder="Examples:
-product: MayaNut Flour = Stone-milled, gluten-free flour.
-product-remove: MayaNut Drink
-company: New about text...
-tree: New tree facts...
-list
-reset
-
-Type GoldenGate to permanently remove this console."></textarea>
-    <div class="btns">
-      <button id="runBtn">Run</button>
-      <button id="helpBtn">Help</button>
-    </div>
-    <div class="out" id="cmdOut"></div>
-    <div class="hint">Edits save to your browser (localStorage). “GoldenGate” deletes this console (persists across reloads).</div>
-  </div>
-
   <script>
-    /* ---------------- Persistence for site content ---------------- */
-    const STORE_KEY = "mayanut_site_config_v1";
-    const CONSOLE_DISABLED_KEY = "console_disabled"; // when '1', console is gone
-
-    function loadConfig(){
-      try{
-        const raw = localStorage.getItem(STORE_KEY);
-        if(raw) return JSON.parse(raw);
-      }catch(e){}
-      return {
-        products: {
-          "MayaNut Flour": "Placeholder: gluten-free flour for baking.",
-          "MayaNut Drink": "Placeholder: caffeine-free roasted beverage.",
-          "MayaNut Snacks": "Placeholder: wholesome snack bites."
-        },
-        company: document.getElementById("companyText").innerHTML,
-        tree: document.getElementById("treeText").innerHTML
-      };
-    }
-    function saveConfig(c){ localStorage.setItem(STORE_KEY, JSON.stringify(c)); }
-
-    let CONFIG = loadConfig();
-
-    function renderProducts(){
-      const ul = document.getElementById("productList");
-      ul.innerHTML = "";
-      Object.keys(CONFIG.products).forEach(name=>{
-        const li = document.createElement("li");
-        li.textContent = `${name} — ${CONFIG.products[name]}`;
-        ul.appendChild(li);
-      });
-    }
-    function renderTexts(){
-      document.getElementById("companyText").innerHTML = CONFIG.company;
-      document.getElementById("treeText").innerHTML = CONFIG.tree;
-    }
-    renderProducts(); renderTexts();
-
-    /* ---------------- Chatbot (offline intents) ---------------- */
+    /* Offline smart intents + domain rule */
     const mayaSynonyms = ["mayanut","maya nut","breadnut","brosimum","brosimum alicastrum","ramon","ojoche","guaimaro","capomo"];
     const BUY_TRIG = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
     const COMPANY_TRIG = ["company","about us","about mayanut","who are you","when founded"];
     const SOCIAL_TRIG = ["instagram","social","social media","ig"];
     const TREE_TRIG = ["tree","brosimum","brosimum alicastrum","what is mayanut","tell me about mayanut","what is breadnut","what is ramon"];
+    const DOMAIN_TRIG = [
+      "domain for sale","is this domain for sale","sell this domain","sell the domain",
+      "buy this domain","buy the domain","is the domain for sale","are you selling the domain",
+      "is mayanut.com for sale","for sale domain","purchase this domain"
+    ];
 
     const chatLog = document.getElementById("chatLog");
     const chatInput = document.getElementById("chatInput");
     const productPage = document.getElementById("productPage");
     const aboutPage = document.getElementById("aboutPage");
+
     const norm = s => (s||"").toLowerCase();
     const includesAny = (t, arr) => arr.some(k => t.includes(k));
 
@@ -264,40 +201,58 @@ Type GoldenGate to permanently remove this console."></textarea>
       chatLog.innerHTML += `<div><strong>${role}:</strong> ${html}</div>`;
       chatLog.scrollTop = chatLog.scrollHeight;
     }
+
     function detectIntent(msg){
       const t = norm(msg);
-      if(includesAny(t, BUY_TRIG)) return "buy";
-      if(includesAny(t, SOCIAL_TRIG)) return "social";
-      if(includesAny(t, COMPANY_TRIG)) return "company";
-      if(includesAny(t, TREE_TRIG) || includesAny(t, mayaSynonyms)) return "tree";
+      if (includesAny(t, DOMAIN_TRIG)) return "domain";
+      if (includesAny(t, BUY_TRIG)) return "buy";
+      if (includesAny(t, SOCIAL_TRIG)) return "social";
+      if (includesAny(t, COMPANY_TRIG)) return "company";
+      if (includesAny(t, TREE_TRIG) || includesAny(t, mayaSynonyms)) return "tree";
       const m = t.match(/^(tell me about|what is|info on|information on)\s+(.+)$/i);
       if(m){
         const subj = m[2];
-        if(includesAny(subj, ["company","mayanut","mayanut company","maya nut"])) return "company";
-        if(includesAny(subj, mayaSynonyms)) return "tree";
+        if (includesAny(subj, ["company","mayanut","mayanut company","maya nut"])) return "company";
+        if (includesAny(subj, mayaSynonyms)) return "tree";
       }
       return "other";
     }
+
     function handle(message){
       say("You", message);
       const intent = detectIntent(message);
       switch(intent){
-        case "buy":     say("Bot", productPage.innerHTML); break;
-        case "social":  say("Bot", 'Find us on Instagram: <a href="https://instagram.com/mayanut.co" target="_blank">@mayanut.co</a>'); break;
-        case "company": say("Bot", document.getElementById("companyText").innerHTML); break;
-        case "tree":    say("Bot", document.getElementById("treeText").innerHTML); break;
-        default:        say("Bot","I can help with MayaNut products, our company, or the Maya Nut tree.");
+        case "domain":
+          say("Bot","mayanut.com is Not for Sale");
+          break;
+        case "buy":
+          say("Bot", productPage.innerHTML);
+          break;
+        case "social":
+          say("Bot", 'Find us on Instagram: <a href="https://instagram.com/mayanut.co" target="_blank">@mayanut.co</a>');
+          break;
+        case "company":
+          say("Bot", document.getElementById("companyText").innerHTML);
+          break;
+        case "tree":
+          say("Bot", document.getElementById("treeText").innerHTML);
+          break;
+        default:
+          say("Bot","I can help with MayaNut products, our company, or the Maya Nut tree.");
       }
     }
+
     chatInput.addEventListener("keydown", e=>{
       if(e.key==="Enter"){
         const v = chatInput.value.trim(); if(!v) return;
         chatInput.value=""; handle(v);
       }
     });
+
     document.querySelectorAll(".pill").forEach(p=>{
       p.addEventListener("click",()=>handle(p.getAttribute("data-quick")));
     });
+
     document.getElementById("aiTab").addEventListener("click", ()=>{
       productPage.style.display="none"; aboutPage.style.display="none";
       document.querySelector(".stage").scrollIntoView({behavior:"smooth"});
@@ -315,134 +270,6 @@ Type GoldenGate to permanently remove this console."></textarea>
       say("Bot","Welcome to MayaNut AI. Ask about products, our company, or the Maya Nut tree.");
       sessionStorage.setItem("greeted","1");
     }
-
-    /* ---------------- Command Console ---------------- */
-    const consoleEl = document.getElementById("console");
-    const cmdBox = document.getElementById("cmdBox");
-    const cmdOut = document.getElementById("cmdOut");
-    const runBtn = document.getElementById("runBtn");
-    const helpBtn= document.getElementById("helpBtn");
-
-    // If console previously deleted, remove it now
-    if (localStorage.getItem(CONSOLE_DISABLED_KEY) === "1" && consoleEl) {
-      consoleEl.remove();
-    }
-
-    function logOut(s){ cmdOut.textContent = s; }
-
-    function permanentlyRemoveConsole(){
-      if (!consoleEl) return;
-      localStorage.setItem(CONSOLE_DISABLED_KEY, "1");   // persist the deletion
-      consoleEl.remove();                                 // remove from DOM
-      // Also scrub the GoldenGate word from the textbox content in memory (best-effort)
-      // (No need to save it anywhere since console no longer exists)
-      alert("Console removed. Reload the page to confirm it stays hidden.");
-    }
-
-    function runCommand(raw){
-      const t = raw.trim();
-      if(!t){ logOut("No command."); return; }
-
-      // If the magic killword appears anywhere, delete the console and stop.
-      if (/\bGoldenGate\b/i.test(t)) {
-        permanentlyRemoveConsole();
-        return;
-      }
-
-      const lines = t.split(/\n+/);
-      let messages = [];
-
-      for(const line of lines){
-        const s = line.trim();
-        if(!s) continue;
-
-        if(/^list$/i.test(s)){
-          messages.push(
-            "Products:\n- " +
-            Object.keys(CONFIG.products).map(n => `${n} — ${CONFIG.products[n]}`).join("\n- ") +
-            "\n\nCompany:\n" + CONFIG.company +
-            "\n\nTree:\n" + CONFIG.tree
-          );
-          continue;
-        }
-
-        if(/^reset$/i.test(s)){
-          localStorage.removeItem(STORE_KEY);
-          CONFIG = loadConfig();
-          renderProducts(); renderTexts();
-          messages.push("Reset to defaults.");
-          continue;
-        }
-
-        // product add/update
-        let m = s.match(/^product\s*:\s*([^=]+?)\s*=\s*(.+)$/i);
-        if(m){
-          const name = m[1].trim();
-          const details = m[2].trim();
-          CONFIG.products[name] = details;
-          saveConfig(CONFIG);
-          renderProducts();
-          messages.push(`Saved product: ${name}`);
-          continue;
-        }
-
-        // product remove
-        m = s.match(/^product-remove\s*:\s*(.+)$/i);
-        if(m){
-          const name = m[1].trim();
-          if(CONFIG.products[name]){
-            delete CONFIG.products[name];
-            saveConfig(CONFIG);
-            renderProducts();
-            messages.push(`Removed product: ${name}`);
-          } else {
-            messages.push(`No product named: ${name}`);
-          }
-          continue;
-        }
-
-        // company text
-        m = s.match(/^company\s*:\s*(.+)$/i);
-        if(m){
-          CONFIG.company = m[1].trim();
-          saveConfig(CONFIG);
-          renderTexts();
-          messages.push("Updated company text.");
-          continue;
-        }
-
-        // tree text
-        m = s.match(/^tree\s*:\s*(.+)$/i);
-        if(m){
-          CONFIG.tree = m[1].trim();
-          saveConfig(CONFIG);
-          renderTexts();
-          messages.push("Updated tree text.");
-          continue;
-        }
-
-        messages.push(`Unrecognized command: ${s}`);
-      }
-
-      logOut(messages.join("\n\n"));
-    }
-
-    if (runBtn) runBtn.addEventListener("click", ()=> runCommand(cmdBox.value));
-    if (helpBtn) helpBtn.addEventListener("click", ()=>{
-      if (!cmdBox) return;
-      cmdBox.value =
-`Commands:
-  product: Name = details
-  product-remove: Name
-  company: Your HTML or text here
-  tree: Your HTML or text here
-  list
-  reset
-
-Type GoldenGate to permanently remove this console.`;
-      cmdBox.focus();
-      logOut("Help loaded into the box.");
-    });
   </script>
 </body>
 </html>
