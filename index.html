@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>MayaNut AI</title>
   <style>
     :root{
@@ -14,12 +14,9 @@
       --card:#ffffffee;
       --ink:#0f172a;
       --muted:#64748b;
-      --logo:#384252; /* darker than white */
+      --accent:#7c3aed;
+      --logo:#384252; /* darker, not pure white */
       --shadow:0 18px 40px rgba(15,23,42,.18);
-      --seed1:#9a6a3a;
-      --seed2:#7f5129;
-      --seed3:#6b4524;
-      --iris:#3fbf6e; /* green eyes */
     }
 
     html,body{height:100%}
@@ -31,14 +28,17 @@
         radial-gradient(1200px 800px at 20% -10%, var(--bg3) 0%, transparent 60%),
         radial-gradient(1100px 700px at 80% -10%, var(--bg1) 0%, transparent 60%),
         linear-gradient(180deg, var(--bg2) 0%, #fff 85%);
+      /* soft film blur effect */
+      backdrop-filter: blur(0.5px);
     }
+    /* subtle noise so it feels tactile */
     body::after{
       content:""; position:fixed; inset:0; pointer-events:none;
       background: radial-gradient(closest-side, rgba(255,255,255,.18), transparent 70%) center -140px/1200px 600px no-repeat;
       mix-blend-mode: soft-light;
     }
 
-    /* NAV */
+    /* NAV (x.ai-inspired minimal) */
     .navbar{
       position:fixed; top:0; left:0; width:100%; z-index:10;
       display:flex; justify-content:center; gap:28px; padding:12px 0;
@@ -55,71 +55,68 @@
       position:fixed; top:10px; left:14px; z-index:11;
       font-size:24px; font-weight:800; letter-spacing:.2px; color:var(--logo);
     }
-    .logo sup{ font-size:10px; vertical-align:top; margin-left:2px; color:var(--logo) }
+    .logo sup{font-size:10px; vertical-align:top; margin-left:2px; color:var(--logo)}
 
     /* LAYOUT */
     .stage{ width:100%; height:100%; padding-top:78px; display:flex; justify-content:center; align-items:center }
-    .wrap{ width:min(980px,94%); display:flex; gap:24px; align-items:flex-start }
+    .wrap{ width:min(980px,94%); display:flex; gap:22px; align-items:flex-start }
 
-    /* ============ FLAT, HORIZONTAL MASCOT ============ */
-    .mascot{ width:220px; min-width:220px; height:180px; display:flex; align-items:center; justify-content:center; }
+    /* ============ FLAT MODERN SEED MASCOT ============ */
+    .mascot{ width:160px; min-width:160px; height:220px; display:flex; align-items:center; justify-content:center; }
     .seed{
-      position:relative;
-      width:200px; height:130px;             /* wider + flatter */
-      border-radius:60% / 50%;               /* horizontal oval */
-      background: conic-gradient(from 90deg at 50% 50%, var(--seed1), var(--seed2) 35%, var(--seed3) 65%, var(--seed1));
+      position:relative; width:120px; height:160px; border-radius:55%/62%;
+      background: conic-gradient(from 210deg at 50% 40%, #9a6a3a, #7f5129 35%, #6b4524 65%, #9a6a3a);
       box-shadow: 0 10px 20px rgba(15,23,42,.18);
-      transform: rotate(0deg);               /* horizontal look */
       animation: bob 4s ease-in-out infinite;
     }
-    /* soft seams to hint real seed lines */
-    .seed::before, .seed::after{
-      content:""; position:absolute; inset:14% 10% 14% 10%; border-radius:48%;
-      box-shadow: inset 0 14px 22px rgba(0,0,0,.10), inset 0 -14px 22px rgba(255,255,255,.10);
-      pointer-events:none;
+    /* radial crease to hint the seed seam */
+    .seed::before{
+      content:""; position:absolute; inset:16% 18% 40% 18%;
+      border-radius:50%;
+      box-shadow: inset 0 -22px 24px rgba(0,0,0,.15), inset 0 10px 18px rgba(255,255,255,.1);
     }
-    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-
-    /* Eyes (large, expressive) */
+    /* radicle "nose" (flat, modern) */
+    .nose{
+      position:absolute; top:48%; left:50%; transform:translate(-50%,-50%);
+      width:14px; height:26px; border-radius:8px;
+      background:#e9c9a2; box-shadow:0 1px 0 rgba(0,0,0,.15);
+    }
+    /* smile */
+    .smile{
+      position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+      width:52px; height:28px; border-bottom:3px solid #2b1d12; border-radius:0 0 60px 60px; opacity:.9;
+    }
+    /* eyes */
     .eye{
-      position:absolute; top:36%; width:52px; height:52px; background:#fff; border-radius:50%;
-      box-shadow: 0 2px 0 rgba(0,0,0,.06), inset 0 -2px 6px rgba(0,0,0,.08);
+      position:absolute; top:38%; width:28px; height:28px; border-radius:50%; background:#fff;
+      box-shadow: 0 2px 0 rgba(0,0,0,.06);
       overflow:hidden;
     }
-    .eye.left{ left:52px; }
-    .eye.right{ right:52px; }
-    .iris{
-      position:absolute; width:28px; height:28px; border-radius:50%; background:var(--iris);
-      left:12px; top:12px; display:flex; align-items:center; justify-content:center;
-      transition: transform .08s linear;
-    }
+    .eye.left{ left:26px; } .eye.right{ right:26px; }
     .pupil{
-      width:14px; height:14px; background:#0b0b0b; border-radius:50%;
+      position:absolute; width:10px; height:10px; border-radius:50%; background:#0b0b0b;
+      left:9px; top:9px;
+      animation: gaze 5s ease-in-out infinite;
     }
-    /* eyelid / blink */
+    /* eyelid blink */
     .lid{
-      position:absolute; inset:0 0 auto 0; height:0%; background:var(--seed1); opacity:.96;
-      animation: blink 7s ease-in-out infinite;
+      position:absolute; inset:0 0 auto 0; height:0%; background:#9a6a3a; opacity:.95;
+      animation: blink 6s ease-in-out infinite;
+    }
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    /* gaze: look at input (to the right/down a touch), then forward */
+    @keyframes gaze{
+      0%   { transform: translate(0,0); }       /* forward */
+      40%  { transform: translate(6px,3px); }   /* toward chat box */
+      50%  { transform: translate(6px,3px); }
+      90%  { transform: translate(0,0); }       /* back at user */
+      100% { transform: translate(0,0); }
     }
     @keyframes blink{
-      0%,92%,100%{ height:0% } 94%{ height:100% } 96%{ height:0% }
+      0%,90%,100%{ height:0% }
+      92% { height:100% } /* quick blink */
+      94% { height:0% }
     }
-
-    /* Smile with teeth */
-    .mouth{
-      position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
-      width:90px; height:44px;
-    }
-    .lip{
-      position:absolute; left:0; right:0; bottom:10px; height:26px;
-      border-bottom:4px solid #2b1d12; border-radius:0 0 90px 90px;
-    }
-    .teeth{
-      position:absolute; left:50%; bottom:16px; transform:translateX(-50%);
-      display:flex; gap:4px; padding:4px 6px; background:#fff; border-radius:8px 8px 12px 12px;
-      border:1px solid rgba(0,0,0,.06);
-    }
-    .tooth{ width:10px; height:12px; background:#fff; border-radius:0 0 3px 3px; }
 
     /* CHAT CARD */
     .chat{
@@ -165,24 +162,19 @@
   <!-- STAGE -->
   <div class="stage">
     <div class="wrap">
-      <!-- Mascot -->
+      <!-- Mascot (flat modern) -->
       <div class="mascot" aria-hidden="true">
-        <div class="seed" id="seed">
+        <div class="seed">
           <div class="eye left">
             <div class="lid"></div>
-            <div class="iris" id="irisL"><div class="pupil"></div></div>
+            <div class="pupil"></div>
           </div>
           <div class="eye right">
             <div class="lid"></div>
-            <div class="iris" id="irisR"><div class="pupil"></div></div>
+            <div class="pupil"></div>
           </div>
-          <div class="mouth">
-            <div class="lip"></div>
-            <div class="teeth">
-              <div class="tooth"></div><div class="tooth"></div><div class="tooth"></div>
-              <div class="tooth"></div><div class="tooth"></div>
-            </div>
-          </div>
+          <div class="nose"></div>
+          <div class="smile"></div>
         </div>
       </div>
 
@@ -217,17 +209,22 @@
   </div>
 
   <script>
-    /* ---------- Chatbot (offline smart intents) ---------- */
-    const mayaSynonyms = ["mayanut","maya nut","breadnut","brosimum","brosimum alicastrum","ramon","ojoche","guaimaro","capomo"];
-    const COMPANY_INFO = "MayaNut was founded on April 24, 2008 to ensure the survival of the Brosimum alicastrum species and to benefit humanity through its agricultural uses.";
-    const TREE_INFO = "Brosimum alicastrum (Maya Nut / Breadnut) is in the Moraceae family. In agroforestry it’s prized for productivity, drought resilience, canopy services, and nutrient-dense seeds (flour or roasted, caffeine-free beverage).";
+    /* Offline smart intents (same clean guardrails) */
+    const mayaSynonyms = [
+      "mayanut","maya nut","breadnut","brosimum","brosimum alicastrum","ramon","ojoche","guaimaro","capomo"
+    ];
+    const COMPANY_INFO =
+      "MayaNut was founded on April 24, 2008 to ensure the survival of the Brosimum alicastrum species and to benefit humanity through its agricultural uses.";
+    const TREE_INFO =
+      "Brosimum alicastrum (Maya Nut / Breadnut) is in the Moraceae family. In agroforestry it’s prized for productivity, drought resilience, canopy services, and nutrient-dense seeds (flour or roasted, caffeine-free beverage).";
+
     const BUY_TRIG = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
     const COMPANY_TRIG = ["company","about us","about mayanut","who are you","when founded"];
     const SOCIAL_TRIG = ["instagram","social","social media","ig"];
     const TREE_TRIG = ["tree","brosimum","brosimum alicastrum","what is mayanut","tell me about mayanut","what is breadnut","what is ramon"];
 
     const norm = s => (s||"").toLowerCase();
-    const includesAny = (t, arr) => arr.some(k => t.includes(k));
+    function includesAny(t, arr){ return arr.some(k => t.includes(k)); }
 
     const chatLog = document.getElementById("chatLog");
     const chatInput = document.getElementById("chatInput");
@@ -262,7 +259,7 @@
         case "social":  say("Bot", 'Find us on Instagram: <a href="https://instagram.com/mayanut.co" target="_blank">@mayanut.co</a>'); break;
         case "company": say("Bot", COMPANY_INFO); break;
         case "tree":    say("Bot", TREE_INFO); break;
-        default:        say("Bot", "I can help with MayaNut products, our company, or the Maya Nut tree.");
+        default:        say("Bot","I can help with MayaNut products, our company, or the Maya Nut tree.");
       }
     }
 
@@ -272,9 +269,11 @@
         chatInput.value=""; handle(v);
       }
     });
+
     document.querySelectorAll(".pill").forEach(p=>{
       p.addEventListener("click",()=>handle(p.getAttribute("data-quick")));
     });
+
     document.getElementById("aiTab").addEventListener("click", ()=>{
       productPage.style.display="none"; aboutPage.style.display="none";
       document.querySelector(".stage").scrollIntoView({behavior:"smooth"});
@@ -287,34 +286,11 @@
       aboutPage.style.display="block"; productPage.style.display="none";
       aboutPage.scrollIntoView({behavior:"smooth"});
     });
+
     if(!sessionStorage.getItem("greeted")){
       say("Bot","Welcome to MayaNut AI. Ask about products, our company, or the Maya Nut tree.");
       sessionStorage.setItem("greeted","1");
     }
-
-    /* ---------- Eye tracking (mouse gaze) ---------- */
-    const irisL = document.getElementById("irisL");
-    const irisR = document.getElementById("irisR");
-
-    function trackEyes(e){
-      // Eye centers relative to viewport (approximate based on seed position)
-      const seed = document.getElementById("seed").getBoundingClientRect();
-      const leftCenter = { x: seed.left + 52 + 26, y: seed.top + seed.height*0.36 + 26 };
-      const rightCenter= { x: seed.right - 52 - 26, y: seed.top + seed.height*0.36 + 26 };
-
-      moveIris(irisL, leftCenter, e.clientX, e.clientY);
-      moveIris(irisR, rightCenter, e.clientX, e.clientY);
-    }
-    function moveIris(el, center, mx, my){
-      const dx = mx - center.x;
-      const dy = my - center.y;
-      const angle = Math.atan2(dy, dx);
-      const max = 9; // how far iris can travel
-      const ox = Math.cos(angle) * max;
-      const oy = Math.sin(angle) * max;
-      el.style.transform = `translate(${ox}px, ${oy}px)`;
-    }
-    window.addEventListener("mousemove", trackEyes);
   </script>
 </body>
 </html>
