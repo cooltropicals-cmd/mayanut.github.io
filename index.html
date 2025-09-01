@@ -5,84 +5,275 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>MayaNut AI</title>
   <style>
-    body{
-      margin:0;height:100vh;background:linear-gradient(to bottom,#a8edea 0%,#fed6e3 100%);
-      color:#222;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-      display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;position:relative
+    :root{
+      --bg:#111827;          /* dark gray base */
+      --fg:#1f2937;          /* panel border-ish */
+      --card:#ffffffee;      /* chat card */
+      --text:#222;
+      --muted:#4b5563;
+      --accent:#7c3aed;      /* subtle purple accent */
+      --shadow:0 12px 30px rgba(0,0,0,.18);
     }
-    .navbar{width:100%;display:flex;justify-content:center;gap:30px;padding:14px 0;background:rgba(255,255,255,.9);
-      border-bottom:1px solid #ddd;position:fixed;top:0;left:0;z-index:10}
-    .nav-item{color:#333;font-weight:600;font-size:16px;padding:8px 14px;border-radius:6px;text-decoration:none;transition:background .2s}
-    .nav-item:hover{background:#f0f0f0}
-    .logo{position:absolute;top:15px;left:20px;font-size:26px;font-weight:700;color:#1a1a1a}
-    .logo sup{font-size:10px;vertical-align:top;margin-left:2px}
-    .chat-box{margin-top:100px;width:560px;max-width:92%;background:rgba(255,255,255,.92);border-radius:12px;padding:20px;
-      box-shadow:0 0 20px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:10px}
-    .chat-log{display:block;text-align:left;max-height:360px;overflow-y:auto;padding:12px;background:rgba(240,240,240,.85);
-      border-radius:8px;font-size:16px;line-height:1.6;color:#333}
-    .chat-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;outline:none;font-size:15px;color:#333}
-    .pill{display:inline-block;margin:.25rem 0;padding:.15rem .5rem;border:1px solid #ddd;border-radius:999px;background:#f5f5f5;font-size:12px;color:#555;cursor:pointer}
-    .hint{font-size:12px;color:#666}
-    .hidden-products,.hidden-about{display:none;margin-top:20px;text-align:left;padding:10px;background:rgba(255,255,255,.75);
-      border-radius:8px;width:560px;max-width:92%}
-    .hidden-products ul{padding-left:20px}
-    @media (max-width:700px){.chat-log{max-height:300px}}
+
+    /* =============== LAYOUT / BACKGROUND =============== */
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+      overflow:hidden; position:relative;
+    }
+
+    /* Layered, minimal tropical mountains + treeline (non-distracting) */
+    /* Back mountains */
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        radial-gradient(1200px 600px at 50% -200px, #334155aa 0%, transparent 60%),
+        linear-gradient(to bottom, #111827 0%, #0b1220 100%);
+      z-index:0;
+    }
+    /* Mid/foreground silhouettes via inline SVG mask for soft shapes + treeline */
+    body::after{
+      content:"";
+      position:fixed; inset:0;
+      background:
+        url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="none">\
+<defs>\
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">\
+  <stop offset="0" stop-color="%231b2432" stop-opacity="0.0"/>\
+  <stop offset="0.45" stop-color="%231b2432" stop-opacity="0.0"/>\
+  <stop offset="1" stop-color="%231b2432" stop-opacity="1"/>\
+</linearGradient>\
+</defs>\
+<rect width="1440" height="900" fill="url(%23g)"/>\
+<!-- far mountains -->\
+<path d="M0 520 L180 480 L320 520 L520 470 L720 510 L920 480 L1100 510 L1280 470 L1440 500 L1440 900 L0 900 Z" fill="%2318222f" opacity="0.35"/>\
+<!-- near mountains -->\
+<path d="M0 580 L160 540 L300 560 L460 520 L650 560 L820 540 L1000 560 L1180 520 L1440 550 L1440 900 L0 900 Z" fill="%23131b27" opacity="0.55"/>\
+<!-- treeline (stylized palms/forest) -->\
+<g fill="%230f1622" opacity="0.75">\
+  <rect x="0" y="610" width="1440" height="290"/>\
+  <!-- simple repeating trunks + crowns -->\
+  <g opacity="0.7">\
+    <path d="M60 600 v40" stroke="%230c121b" stroke-width="6"/>\
+    <circle cx="60" cy="595" r="14" />\
+    <path d="M140 598 v44" stroke="%230c121b" stroke-width="6"/>\
+    <circle cx="140" cy="592" r="16" />\
+    <path d="M220 606 v36" stroke="%230c121b" stroke-width="6"/>\
+    <circle cx="220" cy="600" r="13" />\
+    <path d="M300 600 v40" stroke="%230c121b" stroke-width="6"/>\
+    <circle cx="300" cy="594" r="15" />\
+    <path d="M380 602 v38" stroke="%230c121b" stroke-width="6"/>\
+    <circle cx="380" cy="596" r="15" />\
+  </g>\
+  <use href='%23t'/>\
+</g>\
+</svg>') center bottom / cover no-repeat;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* =============== NAV / HEADER =============== */
+    .navbar{
+      width:100%;
+      display:flex; justify-content:center; gap:30px;
+      padding:14px 0;
+      background: #0f172ab3;            /* translucent dark bar */
+      backdrop-filter: blur(6px) saturate(140%);
+      border-bottom: 1px solid #111827;
+      position:fixed; top:0; left:0; z-index:5;
+    }
+    .nav-item{
+      color:#e5e7eb; font-weight:600; font-size:16px;
+      padding:8px 14px; border-radius:8px; text-decoration:none;
+      transition: background .18s ease, color .18s ease;
+    }
+    .nav-item:hover{ background:#1f2937; color:#fff; }
+
+    .logo{
+      position:fixed; top:12px; left:16px; z-index:6;
+      font-size:26px; font-weight:800; letter-spacing:.3px;
+      color:#fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,.35);
+    }
+    .logo sup{ font-size:10px; vertical-align:top; margin-left:2px; }
+
+    /* =============== CHAT / CONTENT =============== */
+    .stage{
+      position:relative; width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      padding-top:72px; /* space for navbar */
+      z-index:2;
+    }
+
+    .chat-wrap{
+      position:relative; display:flex; align-items:flex-start; gap:20px;
+      width:min(960px, 94%); max-width:960px; padding:10px;
+    }
+
+    /* Seed mascot on the left */
+    .seed{
+      position:relative;
+      width:140px; min-width:140px; height:200px;
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:none;
+    }
+    .seed .body{
+      width:110px; height:150px; border-radius:60% 60% 55% 55%;
+      background: radial-gradient(circle at 40% 30%, #8b5a2b 0%, #6b3f1d 50%, #4a2b15 100%);
+      box-shadow: inset 0 -8px 14px rgba(0,0,0,.35), 0 10px 20px rgba(0,0,0,.4);
+      position:relative;
+      animation: bob 3s ease-in-out infinite;
+    }
+    @keyframes bob{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
+    }
+    /* Eyes */
+    .eye{ position:absolute; top:52px; width:16px; height:16px; background:#fff; border-radius:50%; box-shadow:0 1px 0 rgba(0,0,0,.2); }
+    .eye::after{ content:""; position:absolute; left:5px; top:5px; width:6px; height:6px; background:#0b0b0b; border-radius:50%; }
+    .eye.l{ left:28px; }
+    .eye.r{ right:28px; }
+    /* Smile */
+    .smile{
+      position:absolute; bottom:52px; left:50%; transform:translateX(-50%);
+      width:42px; height:22px; border-bottom:3px solid #1a1a1a; border-radius:0 0 40px 40px;
+      opacity:.9;
+    }
+    /* Arms */
+    .arm{
+      position:absolute; top:78px; width:60px; height:12px;
+      transform-origin: left center;
+    }
+    .arm.l{ left:-6px; transform: rotate(-20deg); }
+    .arm.r{ right:-6px; transform: rotate(18deg); animation: point 1.8s ease-in-out infinite; }
+    @keyframes point{
+      0%,100%{ transform: rotate(18deg); }
+      50%{ transform: rotate(6deg); }
+    }
+    .arm .stick{
+      width:100%; height:4px; background:#3b2a18; border-radius:4px; position:relative;
+    }
+    .hand{
+      position:absolute; right:-6px; top:-6px;
+      width:18px; height:18px; background:#fce7c8; border-radius:50%;
+      box-shadow: inset 0 -1px 2px rgba(0,0,0,.2);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(124,58,237,.0); }
+      50%{ transform: scale(1.06); box-shadow: 0 0 0 6px rgba(124,58,237,.18); }
+    }
+
+    /* Chat card */
+    .chat-box{
+      flex:1;
+      background: var(--card);
+      border:1px solid #e5e7eb;
+      border-radius:16px;
+      box-shadow: var(--shadow);
+      padding:18px;
+      display:flex; flex-direction:column; gap:10px;
+      min-width:300px; max-width:660px;
+    }
+    .chat-log{
+      display:block; text-align:left; max-height:380px; overflow-y:auto;
+      padding:12px; border-radius:10px; background:#f3f4f6d9; color:#111827; font-size:16px; line-height:1.6;
+    }
+    .chat-input{
+      width:100%; padding:12px; border:1px solid #d1d5db; border-radius:10px; outline:none; font-size:15px; color:#111827;
+    }
+    .hint{ font-size:12px; color:#6b7280; }
+    .pill{
+      display:inline-block; margin:.25rem 0; padding:.2rem .6rem;
+      border:1px solid #d1d5db; border-radius:999px; background:#f3f4f6; font-size:12px; color:#374151; cursor:pointer;
+      transition: background .12s ease;
+    }
+    .pill:hover{ background:#e5e7eb; }
+
+    /* Hidden sections shown via nav */
+    .hidden-panel{
+      display:none; margin-top:14px; text-align:left; padding:14px;
+      background:#ffffffc9; border:1px solid #e5e7eb; border-radius:12px; width:min(960px, 94%); color:#111827;
+      box-shadow: var(--shadow);
+    }
+    .hidden-panel h3{ margin-top:0; }
+
+    /* Responsive tweak: hide mascot on very small screens */
+    @media (max-width: 720px){
+      .seed{ display:none; }
+      .chat-log{ max-height:320px; }
+    }
   </style>
 </head>
 <body>
-  <!-- Dashboard -->
+  <!-- NAV -->
   <div class="navbar">
     <a href="#" class="nav-item" id="aiTab">MayaNut AI</a>
     <a href="#" class="nav-item" id="productsTab">Products</a>
     <a href="#" class="nav-item" id="aboutTab">About MayaNut</a>
   </div>
-
-  <!-- Logo -->
   <div class="logo">MayaNut<sup>™</sup></div>
 
-  <!-- Chat -->
-  <div class="chat-box" id="chatBox">
-    <div class="chat-log" id="chatLog"></div>
-    <input type="text" id="chatInput" class="chat-input" placeholder="Ask what you want to buy"/>
-    <div class="hint">
-      Teach me with: <code>remember: ...</code> • <code>fact: ...</code> • <code>product: Name = details</code> • View: <code>memories</code> • Delete: <code>forget 2</code>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <span class="pill" data-quick="buy">Buy MayaNut Products</span>
-      <span class="pill" data-quick="about company">About Us</span>
-      <span class="pill" data-quick="instagram">Instagram</span>
+  <!-- STAGE -->
+  <div class="stage">
+    <div class="chat-wrap">
+      <!-- Mascot -->
+      <div class="seed" aria-hidden="true">
+        <div class="body">
+          <div class="eye l"></div>
+          <div class="eye r"></div>
+          <div class="smile"></div>
+          <div class="arm l"><div class="stick"></div></div>
+          <div class="arm r"><div class="stick"></div><div class="hand" title="Ask me here!"></div></div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <div class="chat-box" id="chatBox">
+        <div class="chat-log" id="chatLog" aria-live="polite"></div>
+        <input type="text" id="chatInput" class="chat-input" placeholder="Ask what you want to buy" aria-label="Chat input"/>
+        <div class="hint">
+          Teach me with: <code>remember: ...</code> • <code>fact: ...</code> • <code>product: Name = details</code> • View: <code>memories</code> • Delete: <code>forget 2</code>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="pill" data-quick="buy">Buy MayaNut Products</span>
+          <span class="pill" data-quick="about company">About Us</span>
+          <span class="pill" data-quick="instagram">Instagram</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Hidden product page -->
-  <div class="hidden-products" id="productPage">
+  <!-- PANELS -->
+  <div class="hidden-panel" id="productPage">
     <h3>MayaNut Products</h3>
-    <ul id="productList">
-      <!-- Will render from memory + defaults -->
-    </ul>
+    <ul id="productList"></ul>
   </div>
-
-  <!-- Hidden about page -->
-  <div class="hidden-about" id="aboutPage">
+  <div class="hidden-panel" id="aboutPage">
     <h3>About MayaNut</h3>
     <p>MayaNut was founded on April 24, 2008 to ensure the survival of the <em>Brosimum alicastrum</em> species and to benefit humanity through its agricultural uses.</p>
-    <p><em>Brosimum alicastrum</em> (Maya Nut / Breadnut) is a tropical rainforest tree in the Moraceae family (relatives of fig, jackfruit, mulberry). In modern agroforestry it’s valued for high productivity, drought resilience, shade canopy services, and nutrient-dense seeds that support people and ecosystems.</p>
+    <p><em>Brosimum alicastrum</em> (Maya Nut / Breadnut) belongs to Moraceae (fig, jackfruit, mulberry relatives). It’s valued in modern agroforestry for high productivity, drought resilience, shade canopy services, and nutrient-dense seeds used as flour or a roasted, caffeine-free beverage — supporting both communities and ecosystems.</p>
   </div>
 
   <script>
     /* ======= CORE BELIEF ======= */
-    const CORE_BELIEF = "Core belief: Preserve and promote the long-term survival of Brosimum alicastrum (Maya Nut) through responsible use in agriculture and community benefit.";
+    const CORE_BELIEF = "Core belief: Preserve and promote the long-term survival of Brosimum alicastrum (Maya Nut) through responsible agriculture and community benefit.";
 
     /* ======= MEMORY (localStorage) ======= */
     const MEM_KEY = "mayanut_memory_v1";
     function loadMem(){
-      const raw = localStorage.getItem(MEM_KEY);
-      if(raw){ try { return JSON.parse(raw); } catch(e){ /* ignore */ } }
-      // initial memory with 3 placeholder products
+      try{
+        const raw = localStorage.getItem(MEM_KEY);
+        if(raw) return JSON.parse(raw);
+      }catch(e){}
       return {
-        facts: [
-          {text: CORE_BELIEF, ts: Date.now()}
-        ],
+        facts: [{text: CORE_BELIEF, ts: Date.now()}],
         products: {
           "MayaNut Flour":"Placeholder: gluten-free flour for baking.",
           "MayaNut Roasted Drink":"Placeholder: caffeine-free roasted beverage.",
@@ -90,7 +281,7 @@
         }
       };
     }
-    function saveMem(mem){ localStorage.setItem(MEM_KEY, JSON.stringify(mem)); }
+    function saveMem(m){ localStorage.setItem(MEM_KEY, JSON.stringify(m)); }
     let MEMORY = loadMem();
 
     /* ======= RENDER PRODUCTS ======= */
@@ -147,17 +338,17 @@
     const COMPANY_INFO =
       "MayaNut was founded on April 24, 2008 to ensure the survival of the Brosimum alicastrum species and to benefit humanity through its agricultural uses.";
     const TREE_INFO =
-      "Brosimum alicastrum (Maya Nut / Breadnut) is in the Moraceae (fig, jackfruit, mulberry). It’s valued in modern agroforestry for productivity, drought resilience, canopy services, and nutrient-dense seeds (flour, roasted beverage, wholesome foods) that support communities and ecosystems.";
+      "Brosimum alicastrum (Maya Nut / Breadnut) is in Moraceae (fig, jackfruit, mulberry). In agroforestry it’s prized for productivity, drought resilience, canopy services, and nutrient-dense seeds used as flour or a roasted, caffeine-free beverage. "+CORE_BELIEF;
 
-    const BUY_TRIGGERS = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
-    const COMPANY_TRIGGERS = ["company","about us","about mayanut","who are you","when founded"];
+    const BUY_TRIGGERS    = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
+    const COMPANY_TRIGGERS= ["company","about us","about mayanut","who are you","when founded"];
     const SOCIAL_TRIGGERS = ["instagram","social","social media","ig"];
-    const TREE_TRIGGERS = ["tree","brosimum","brosimum alicastrum","what is mayanut","tell me about mayanut","what is breadnut","what is ramon"];
+    const TREE_TRIGGERS   = ["tree","brosimum","brosimum alicastrum","what is mayanut","tell me about mayanut","what is breadnut","what is ramon"];
 
-    /* ======= UI HELPERS ======= */
-    const chatInput = document.getElementById("chatInput");
-    const chatLog   = document.getElementById("chatLog");
-    const chatBox   = document.getElementById("chatBox");
+    /* ======= UI HOOKS ======= */
+    const chatInput   = document.getElementById("chatInput");
+    const chatLog     = document.getElementById("chatLog");
+    const chatBox     = document.getElementById("chatBox");
     const productPage = document.getElementById("productPage");
     const aboutPage   = document.getElementById("aboutPage");
 
@@ -167,16 +358,14 @@
     }
 
     /* ======= MEMORY COMMANDS ======= */
-    // remember: ..., fact: ..., teach: ...
     function addFact(text){
       MEMORY.facts.push({text:text.trim(), ts: Date.now()});
       saveMem(MEMORY);
       say("Bot","Saved that to my memory.");
     }
-    // product: Name = details
     function addProduct(raw){
       const m = raw.match(/^product\s*:\s*([^=]+?)\s*=\s*(.+)$/i);
-      if(!m){ say("Bot","To add a product, use: <code>product: Name = details</code>"); return; }
+      if(!m){ say("Bot","Use: <code>product: Name = details</code>"); return; }
       const name = m[1].trim();
       const details = m[2].trim();
       MEMORY.products[name] = details;
@@ -199,6 +388,7 @@
     /* ======= INTENT DETECTION ======= */
     function detectIntent(text){
       const t = norm(text);
+
       if (/^memories$/i.test(text)) return {type:"memories"};
       const forgetMatch = t.match(/^forget\s+(\d+)$/i);
       if (forgetMatch) return {type:"forget", idx: Number(forgetMatch[1])};
@@ -213,13 +403,11 @@
       const tellMatch = t.match(/^(tell me about|what is|info on|information on)\s+(.+)$/i);
       if (tellMatch){
         const subj = tellMatch[2];
-        // search products
         for(const name of Object.keys(MEMORY.products)){
           if (fuzzyIncludes(subj,[name])) return {type:"productInfo", name};
         }
         if (fuzzyIncludes(subj, ["company","mayanut","mayanut company","maya nut"])) return {type:"company"};
         if (fuzzyIncludes(subj, mayaSynonyms)) return {type:"tree"};
-        // search facts
         const hits = MEMORY.facts.filter(f=>fuzzyIncludes(f.text,[subj]));
         if (hits.length) return {type:"factsAnswer", hits};
       }
@@ -232,7 +420,6 @@
 
     function handle(message){
       say("You", message);
-
       const intent = detectIntent(message);
 
       switch(intent.type){
@@ -247,11 +434,7 @@
           window.open("https://instagram.com/mayanut.co","_blank");
           break;
         case "company": say("Bot", COMPANY_INFO); break;
-        case "tree": {
-          // Also weave core belief as guiding principle
-          say("Bot", TREE_INFO + "<br><em>"+CORE_BELIEF+"</em>");
-          break;
-        }
+        case "tree":    say("Bot", TREE_INFO); break;
         case "productInfo": {
           const info = MEMORY.products[intent.name] || "No details yet.";
           say("Bot", `<b>${intent.name}</b> — ${info}`);
@@ -263,23 +446,32 @@
           break;
         }
         default:
-          // Stay scoped + mention core belief gently
           say("Bot","I can help with MayaNut, Brosimum alicastrum, and related products/agroforestry. "+CORE_BELIEF);
       }
     }
 
-    /* ======= WIRE UI ======= */
+    /* ======= NAV / UI WIRES ======= */
     document.getElementById("aiTab").addEventListener("click", ()=>{
-      chatBox.style.display="flex"; productPage.style.display="none"; aboutPage.style.display="none";
+      document.getElementById("productPage").style.display="none";
+      document.getElementById("aboutPage").style.display="none";
+      document.querySelector(".stage").scrollIntoView({behavior:"smooth"});
     });
+
     document.getElementById("productsTab").addEventListener("click", ()=>{
-      renderProductsList(); productPage.style.display="block"; aboutPage.style.display="none"; chatBox.style.display="none";
+      renderProductsList();
+      document.getElementById("productPage").style.display="block";
+      document.getElementById("aboutPage").style.display="none";
+      document.getElementById("productPage").scrollIntoView({behavior:"smooth"});
     });
+
     document.getElementById("aboutTab").addEventListener("click", ()=>{
-      aboutPage.style.display="block"; productPage.style.display="none"; chatBox.style.display="none";
+      document.getElementById("aboutPage").style.display="block";
+      document.getElementById("productPage").style.display="none";
+      document.getElementById("aboutPage").scrollIntoView({behavior:"smooth"});
     });
 
     // Enter to send
+    const chatInput = document.getElementById("chatInput");
     chatInput.addEventListener("keydown", e=>{
       if(e.key==="Enter"){
         const v = chatInput.value.trim();
@@ -299,7 +491,7 @@
       });
     });
 
-    // Greet with mission once
+    // First-time greet
     if(!sessionStorage.getItem("greeted")){
       say("Bot","Welcome to MayaNut AI. Ask about products, our company, or the MayaNut tree. "+CORE_BELIEF);
       sessionStorage.setItem("greeted","1");
