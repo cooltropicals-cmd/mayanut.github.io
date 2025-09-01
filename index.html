@@ -2,108 +2,159 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>MayaNut AI</title>
   <style>
-    :root {
-      --bg: #0f1220;
-      --panel: #0b1020cc;
-      --card: #0f172a;
-      --card-ink: #e5e7eb;
-      --line: #1f2937;
-      --logo: #cbd5e1;
-      --shadow: 0 14px 36px rgba(0,0,0,.28);
+    :root{
+      --bg1:#ffd6a6; /* mango */
+      --bg2:#ffeab3; /* pineapple */
+      --bg3:#ffd1e3; /* guava pink */
+      --panel:rgba(255,255,255,.28);
+      --line:rgba(0,0,0,.08);
+      --card:#ffffffee;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --logo:#384252; /* darker than white */
+      --shadow:0 18px 40px rgba(15,23,42,.18);
+      --seed1:#9a6a3a;
+      --seed2:#7f5129;
+      --seed3:#6b4524;
+      --iris:#3fbf6e; /* green eyes */
     }
 
-    html,body { height:100%; margin:0; background: var(--bg); color: var(--card-ink); font-family: Inter, system-ui, sans-serif; }
-    body::before {
-      content:""; position:fixed; inset:0; z-index:0;
-      background: radial-gradient(1200px 600px at 50% -220px, #1a2336aa 0%, transparent 60%),
-                  linear-gradient(to bottom, #0f1220 0%, #0a0f1a 100%);
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--ink);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:flex-start; overflow:hidden; position:relative;
+      background:
+        radial-gradient(1200px 800px at 20% -10%, var(--bg3) 0%, transparent 60%),
+        radial-gradient(1100px 700px at 80% -10%, var(--bg1) 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg2) 0%, #fff 85%);
+    }
+    body::after{
+      content:""; position:fixed; inset:0; pointer-events:none;
+      background: radial-gradient(closest-side, rgba(255,255,255,.18), transparent 70%) center -140px/1200px 600px no-repeat;
+      mix-blend-mode: soft-light;
     }
 
-    .navbar {
-      width:100%; display:flex; justify-content:center; gap:28px; padding:12px 0;
-      background: var(--panel); backdrop-filter: blur(8px) saturate(140%);
-      border-bottom: 1px solid var(--line); position:fixed; top:0; left:0; z-index:5;
+    /* NAV */
+    .navbar{
+      position:fixed; top:0; left:0; width:100%; z-index:10;
+      display:flex; justify-content:center; gap:28px; padding:12px 0;
+      background:var(--panel); backdrop-filter: blur(8px) saturate(140%);
+      border-bottom:1px solid var(--line);
     }
-    .nav-item {
-      color:#cbd5e1; text-decoration:none; font-weight:600; font-size:15px;
-      padding:8px 14px; border-radius:10px; transition:background .18s,color .18s;
+    .nav-item{
+      color:#0b1222; text-decoration:none; font-weight:600; font-size:15px;
+      padding:8px 14px; border-radius:10px; transition:background .18s;
     }
-    .nav-item:hover { background:#10182b; color:#fff; }
+    .nav-item:hover{ background:rgba(0,0,0,.06); }
 
-    .logo {
-      position:fixed; top:10px; left:14px; z-index:6;
-      font-size:24px; font-weight:800; letter-spacing:.2px; color: var(--logo);
+    .logo{
+      position:fixed; top:10px; left:14px; z-index:11;
+      font-size:24px; font-weight:800; letter-spacing:.2px; color:var(--logo);
+    }
+    .logo sup{ font-size:10px; vertical-align:top; margin-left:2px; color:var(--logo) }
+
+    /* LAYOUT */
+    .stage{ width:100%; height:100%; padding-top:78px; display:flex; justify-content:center; align-items:center }
+    .wrap{ width:min(980px,94%); display:flex; gap:24px; align-items:flex-start }
+
+    /* ============ FLAT, HORIZONTAL MASCOT ============ */
+    .mascot{ width:220px; min-width:220px; height:180px; display:flex; align-items:center; justify-content:center; }
+    .seed{
+      position:relative;
+      width:200px; height:130px;             /* wider + flatter */
+      border-radius:60% / 50%;               /* horizontal oval */
+      background: conic-gradient(from 90deg at 50% 50%, var(--seed1), var(--seed2) 35%, var(--seed3) 65%, var(--seed1));
+      box-shadow: 0 10px 20px rgba(15,23,42,.18);
+      transform: rotate(0deg);               /* horizontal look */
+      animation: bob 4s ease-in-out infinite;
+    }
+    /* soft seams to hint real seed lines */
+    .seed::before, .seed::after{
+      content:""; position:absolute; inset:14% 10% 14% 10%; border-radius:48%;
+      box-shadow: inset 0 14px 22px rgba(0,0,0,.10), inset 0 -14px 22px rgba(255,255,255,.10);
+      pointer-events:none;
+    }
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+    /* Eyes (large, expressive) */
+    .eye{
+      position:absolute; top:36%; width:52px; height:52px; background:#fff; border-radius:50%;
+      box-shadow: 0 2px 0 rgba(0,0,0,.06), inset 0 -2px 6px rgba(0,0,0,.08);
+      overflow:hidden;
+    }
+    .eye.left{ left:52px; }
+    .eye.right{ right:52px; }
+    .iris{
+      position:absolute; width:28px; height:28px; border-radius:50%; background:var(--iris);
+      left:12px; top:12px; display:flex; align-items:center; justify-content:center;
+      transition: transform .08s linear;
+    }
+    .pupil{
+      width:14px; height:14px; background:#0b0b0b; border-radius:50%;
+    }
+    /* eyelid / blink */
+    .lid{
+      position:absolute; inset:0 0 auto 0; height:0%; background:var(--seed1); opacity:.96;
+      animation: blink 7s ease-in-out infinite;
+    }
+    @keyframes blink{
+      0%,92%,100%{ height:0% } 94%{ height:100% } 96%{ height:0% }
     }
 
-    .stage { margin-top:80px; display:flex; justify-content:center; }
-    .wrap { display:flex; gap:20px; align-items:flex-start; width: min(900px, 94%); }
+    /* Smile with teeth */
+    .mouth{
+      position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+      width:90px; height:44px;
+    }
+    .lip{
+      position:absolute; left:0; right:0; bottom:10px; height:26px;
+      border-bottom:4px solid #2b1d12; border-radius:0 0 90px 90px;
+    }
+    .teeth{
+      position:absolute; left:50%; bottom:16px; transform:translateX(-50%);
+      display:flex; gap:4px; padding:4px 6px; background:#fff; border-radius:8px 8px 12px 12px;
+      border:1px solid rgba(0,0,0,.06);
+    }
+    .tooth{ width:10px; height:12px; background:#fff; border-radius:0 0 3px 3px; }
 
-    /* Cartoon seed mascot */
-    .mascot {
-      width:120px; height:160px; position:relative; animation: floaty 3s ease-in-out infinite;
-      display:flex; align-items:center; justify-content:center;
+    /* CHAT CARD */
+    .chat{
+      flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
+      padding:18px; display:flex; flex-direction:column; gap:12px; min-width:300px; max-width:720px
     }
-    @keyframes floaty {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+    .log{
+      background:#f7f9ff; border:1px solid #e8eef8; border-radius:12px; padding:12px; max-height:380px; overflow:auto;
+      color:#0f172a; font-size:16px; line-height:1.6;
     }
-    .seed {
-      width:90px; height:120px; background: radial-gradient(circle at 40% 30%, #8b5a2b 0%, #6b3f1d 50%, #4a2b15 100%);
-      border-radius: 50% / 60%;
-      position: relative;
-      box-shadow: inset 0 -6px 10px rgba(0,0,0,.3), 0 6px 10px rgba(0,0,0,.4);
+    .input{
+      width:100%; padding:12px; border:1px solid #e6e8ef; border-radius:12px; outline:none; font-size:15px; color:#0f172a;
+      background:#fff;
     }
-    .eye {
-      position: absolute; top:35px; width:14px; height:14px; background:#fff; border-radius:50%;
+    .row{display:flex; gap:8px; flex-wrap:wrap}
+    .pill{
+      display:inline-block; padding:.34rem .7rem; border:1px solid #e5e7eb; border-radius:999px; background:#fff; color:#334155;
+      font-size:12px; cursor:pointer; transition:transform .06s ease, background .15s ease;
     }
-    .eye::after {
-      content:""; position:absolute; left:4px; top:4px; width:5px; height:5px; background:#000; border-radius:50%;
-    }
-    .eye.left { left:22px; }
-    .eye.right { right:22px; }
-    .smile {
-      position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
-      width:32px; height:16px; border-bottom:3px solid #000; border-radius:0 0 40px 40px;
-    }
-    .hand {
-      position:absolute; right:-20px; top:60px; width:16px; height:16px; background:#f3d9b1;
-      border-radius:50%; box-shadow:0 0 4px rgba(0,0,0,.3);
-      animation: pointy 1.8s ease-in-out infinite;
-    }
-    @keyframes pointy {
-      0%,100% { transform: translateX(0); }
-      50% { transform: translateX(3px); }
-    }
+    .pill:hover{ background:#f3f4f6; transform:translateY(-1px); }
 
-    /* Chat box */
-    .chat {
-      flex:1; background: var(--card); border:1px solid var(--line); border-radius:14px;
-      box-shadow: var(--shadow); padding:16px; display:flex; flex-direction:column; gap:10px;
+    /* PANELS */
+    .panel{
+      display:none; margin-top:16px; width:min(980px,94%); background:#ffffffcc; border:1px solid #e5e7eb;
+      border-radius:16px; padding:16px; box-shadow:var(--shadow); color:#0f172a;
     }
-    .log {
-      background:#0b1426; border:1px solid #111a2e; border-radius:10px;
-      padding:10px; height:280px; overflow:auto; font-size:15px; line-height:1.5;
-    }
-    .input {
-      padding:10px; border:1px solid #1f2937; border-radius:8px; background:#0b1222; color:#e2e8f0; font-size:14px;
-    }
-    .pill {
-      display:inline-block; padding:.3rem .6rem; margin:.2rem; border:1px solid #1f2937;
-      border-radius:999px; background:#0b1426; color:#cbd5e1; font-size:12px; cursor:pointer;
-    }
-    .pill:hover { background:#111d38; }
+    .panel h3{ margin:0 0 8px 0 }
+    .muted{ color:var(--muted) }
 
-    .panel {
-      display:none; margin-top:20px; background:#0f172a; border:1px solid #1f2937;
-      border-radius:12px; padding:16px; width:min(900px,94%);
-    }
-    .panel h3 { margin:0 0 6px 0; }
+    /* Responsive: hide mascot on small screens */
+    @media (max-width:760px){ .mascot{display:none} .log{max-height:320px} }
   </style>
 </head>
 <body>
+  <!-- NAV -->
   <div class="navbar">
     <a href="#" class="nav-item" id="aiTab">MayaNut AI</a>
     <a href="#" class="nav-item" id="productsTab">Products</a>
@@ -111,20 +162,35 @@
   </div>
   <div class="logo">MayaNut<sup>™</sup></div>
 
+  <!-- STAGE -->
   <div class="stage">
     <div class="wrap">
-      <div class="mascot">
-        <div class="seed">
-          <div class="eye left"></div>
-          <div class="eye right"></div>
-          <div class="smile"></div>
-          <div class="hand"></div>
+      <!-- Mascot -->
+      <div class="mascot" aria-hidden="true">
+        <div class="seed" id="seed">
+          <div class="eye left">
+            <div class="lid"></div>
+            <div class="iris" id="irisL"><div class="pupil"></div></div>
+          </div>
+          <div class="eye right">
+            <div class="lid"></div>
+            <div class="iris" id="irisR"><div class="pupil"></div></div>
+          </div>
+          <div class="mouth">
+            <div class="lip"></div>
+            <div class="teeth">
+              <div class="tooth"></div><div class="tooth"></div><div class="tooth"></div>
+              <div class="tooth"></div><div class="tooth"></div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Chat -->
       <div class="chat">
-        <div class="log" id="chatLog"></div>
-        <input id="chatInput" class="input" placeholder="Ask what you want to buy"/>
-        <div>
+        <div class="log" id="chatLog" aria-live="polite"></div>
+        <input id="chatInput" class="input" placeholder="Ask what you want to buy" aria-label="Chat input"/>
+        <div class="row">
           <span class="pill" data-quick="buy">Buy Products</span>
           <span class="pill" data-quick="about">About Us</span>
           <span class="pill" data-quick="social">Instagram</span>
@@ -133,6 +199,7 @@
     </div>
   </div>
 
+  <!-- PANELS -->
   <div class="panel" id="productPage">
     <h3>Products</h3>
     <ul>
@@ -140,73 +207,114 @@
       <li>MayaNut Drink — placeholder</li>
       <li>MayaNut Snacks — placeholder</li>
     </ul>
+    <p class="muted">Placeholders for now — we’ll wire real product pages when you’re ready.</p>
   </div>
 
   <div class="panel" id="aboutPage">
     <h3>About MayaNut</h3>
-    <p>MayaNut was founded on April 24, 2008 to ensure the survival of the Brosimum alicastrum species and benefit humanity.</p>
-    <p>The tree provides nutritious seeds for food and supports ecosystems in tropical regions.</p>
+    <p>MayaNut was founded on April 24, 2008 to ensure the survival of the <em>Brosimum alicastrum</em> species and to benefit humanity through its agricultural uses.</p>
+    <p><em>Brosimum alicastrum</em> (Maya Nut / Breadnut) belongs to Moraceae. It’s valued in modern agroforestry for productivity, drought resilience, canopy services, and nutrient-dense seeds used as flour or a roasted, caffeine-free beverage.</p>
   </div>
 
   <script>
+    /* ---------- Chatbot (offline smart intents) ---------- */
+    const mayaSynonyms = ["mayanut","maya nut","breadnut","brosimum","brosimum alicastrum","ramon","ojoche","guaimaro","capomo"];
+    const COMPANY_INFO = "MayaNut was founded on April 24, 2008 to ensure the survival of the Brosimum alicastrum species and to benefit humanity through its agricultural uses.";
+    const TREE_INFO = "Brosimum alicastrum (Maya Nut / Breadnut) is in the Moraceae family. In agroforestry it’s prized for productivity, drought resilience, canopy services, and nutrient-dense seeds (flour or roasted, caffeine-free beverage).";
+    const BUY_TRIG = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
+    const COMPANY_TRIG = ["company","about us","about mayanut","who are you","when founded"];
+    const SOCIAL_TRIG = ["instagram","social","social media","ig"];
+    const TREE_TRIG = ["tree","brosimum","brosimum alicastrum","what is mayanut","tell me about mayanut","what is breadnut","what is ramon"];
+
+    const norm = s => (s||"").toLowerCase();
+    const includesAny = (t, arr) => arr.some(k => t.includes(k));
+
     const chatLog = document.getElementById("chatLog");
     const chatInput = document.getElementById("chatInput");
     const productPage = document.getElementById("productPage");
     const aboutPage = document.getElementById("aboutPage");
 
-    const mayaSynonyms = ["mayanut","maya nut","breadnut","brosimum","ramon","ojoche","guaimaro","capomo"];
-
-    function say(role,msg){
-      chatLog.innerHTML += `<div><strong>${role}:</strong> ${msg}</div>`;
+    function say(role, html){
+      chatLog.innerHTML += `<div><strong>${role}:</strong> ${html}</div>`;
       chatLog.scrollTop = chatLog.scrollHeight;
     }
 
     function detectIntent(msg){
-      const m = msg.toLowerCase();
-      if(m.includes("buy")||m.includes("product")) return "buy";
-      if(m.includes("about")) return "about";
-      if(m.includes("social")||m.includes("instagram")) return "social";
-      if(mayaSynonyms.some(k=>m.includes(k))) return "tree";
+      const t = norm(msg);
+      if(includesAny(t, BUY_TRIG)) return "buy";
+      if(includesAny(t, SOCIAL_TRIG)) return "social";
+      if(includesAny(t, COMPANY_TRIG)) return "company";
+      if(includesAny(t, TREE_TRIG) || includesAny(t, mayaSynonyms)) return "tree";
+      const m = t.match(/^(tell me about|what is|info on|information on)\s+(.+)$/i);
+      if(m){
+        const subj = m[2];
+        if(includesAny(subj, ["company","mayanut","mayanut company","maya nut"])) return "company";
+        if(includesAny(subj, mayaSynonyms)) return "tree";
+      }
       return "other";
     }
 
-    function handle(msg){
-      say("You",msg);
-      const intent = detectIntent(msg);
-      if(intent==="buy") say("Bot",productPage.innerHTML);
-      else if(intent==="about") say("Bot",aboutPage.innerHTML);
-      else if(intent==="social") say("Bot",'Find us on Instagram: <a href="https://instagram.com/mayanut.co" target="_blank">@mayanut.co</a>');
-      else if(intent==="tree") say("Bot","Brosimum alicastrum (Maya Nut) is a tropical tree valued for food, ecology, and agroforestry.");
-      else say("Bot","I can help with products, our company, or the MayaNut tree.");
+    function handle(message){
+      say("You", message);
+      const intent = detectIntent(message);
+      switch(intent){
+        case "buy":     say("Bot", productPage.innerHTML); break;
+        case "social":  say("Bot", 'Find us on Instagram: <a href="https://instagram.com/mayanut.co" target="_blank">@mayanut.co</a>'); break;
+        case "company": say("Bot", COMPANY_INFO); break;
+        case "tree":    say("Bot", TREE_INFO); break;
+        default:        say("Bot", "I can help with MayaNut products, our company, or the Maya Nut tree.");
+      }
     }
 
-    chatInput.addEventListener("keydown",e=>{
+    chatInput.addEventListener("keydown", e=>{
       if(e.key==="Enter"){
-        const v=chatInput.value.trim();
-        if(!v) return;
-        chatInput.value="";
-        handle(v);
+        const v = chatInput.value.trim(); if(!v) return;
+        chatInput.value=""; handle(v);
       }
     });
-
     document.querySelectorAll(".pill").forEach(p=>{
       p.addEventListener("click",()=>handle(p.getAttribute("data-quick")));
     });
-
-    document.getElementById("aiTab").addEventListener("click",()=>{
+    document.getElementById("aiTab").addEventListener("click", ()=>{
       productPage.style.display="none"; aboutPage.style.display="none";
+      document.querySelector(".stage").scrollIntoView({behavior:"smooth"});
     });
-    document.getElementById("productsTab").addEventListener("click",()=>{
+    document.getElementById("productsTab").addEventListener("click", ()=>{
       productPage.style.display="block"; aboutPage.style.display="none";
+      productPage.scrollIntoView({behavior:"smooth"});
     });
-    document.getElementById("aboutTab").addEventListener("click",()=>{
+    document.getElementById("aboutTab").addEventListener("click", ()=>{
       aboutPage.style.display="block"; productPage.style.display="none";
+      aboutPage.scrollIntoView({behavior:"smooth"});
     });
-
     if(!sessionStorage.getItem("greeted")){
-      say("Bot","Welcome to MayaNut AI. Ask about products, our company, or the MayaNut tree.");
+      say("Bot","Welcome to MayaNut AI. Ask about products, our company, or the Maya Nut tree.");
       sessionStorage.setItem("greeted","1");
     }
+
+    /* ---------- Eye tracking (mouse gaze) ---------- */
+    const irisL = document.getElementById("irisL");
+    const irisR = document.getElementById("irisR");
+
+    function trackEyes(e){
+      // Eye centers relative to viewport (approximate based on seed position)
+      const seed = document.getElementById("seed").getBoundingClientRect();
+      const leftCenter = { x: seed.left + 52 + 26, y: seed.top + seed.height*0.36 + 26 };
+      const rightCenter= { x: seed.right - 52 - 26, y: seed.top + seed.height*0.36 + 26 };
+
+      moveIris(irisL, leftCenter, e.clientX, e.clientY);
+      moveIris(irisR, rightCenter, e.clientX, e.clientY);
+    }
+    function moveIris(el, center, mx, my){
+      const dx = mx - center.x;
+      const dy = my - center.y;
+      const angle = Math.atan2(dy, dx);
+      const max = 9; // how far iris can travel
+      const ox = Math.cos(angle) * max;
+      const oy = Math.sin(angle) * max;
+      el.style.transform = `translate(${ox}px, ${oy}px)`;
+    }
+    window.addEventListener("mousemove", trackEyes);
   </script>
 </body>
 </html>
