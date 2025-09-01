@@ -1,205 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MayaNut — Naturally Nourishing</title>
-  <meta name="description" content="MayaNut — clean, elegant, and nourishing products made from Brosimum alicastrum." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MayaNut Galactic Chat</title>
   <style>
-    :root{--bg:#ffffff;--fg:#0f172a;--muted:#475569;--line:#e2e8f0;--chip:#f8fafc;}
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;color:var(--fg);background:var(--bg);}
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #2a0845, #000000);
+      background-size: cover;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
 
-    /* Layout */
-    .site{min-height:100dvh;display:flex;flex-direction:column}
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+      opacity: 0.4;
+      z-index: 1;
+    }
 
-    /* Header */
-    header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
-    .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-weight:800}
-    .brand b{letter-spacing:.2px}
+    .chat-box {
+      position: relative;
+      z-index: 2;
+      width: 400px;
+      max-width: 90%;
+      background: rgba(20, 20, 40, 0.9);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(150, 80, 255, 0.3);
+    }
 
-    .menu{display:flex;align-items:center;gap:26px}
-    .menu a{font-weight:500;color:var(--muted)}
-    .menu a:hover{color:var(--fg)}
+    .chat-box h2 {
+      margin: 0 0 10px;
+      font-weight: 600;
+      color: #e0e0ff;
+    }
 
-    /* Hamburger (3-line menu) */
-    .hamb{display:none;gap:6px;flex-direction:column;cursor:pointer}
-    .hamb span{width:22px;height:2px;background:var(--fg);border-radius:2px}
+    .chat-log {
+      display: none;
+      text-align: left;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
 
-    /* Mobile drawer */
-    .drawer{position:fixed;inset:0;display:none;background:rgba(15,23,42,.5)}
-    .drawer__panel{position:absolute;right:0;top:0;width:min(86%,360px);height:100%;background:#fff;border-left:1px solid var(--line);box-shadow:-10px 0 30px rgba(2,6,23,.08);padding:28px}
-    .drawer__links{display:grid;gap:18px;margin-top:20px}
-    .drawer__close{all:unset;position:absolute;top:14px;right:16px;cursor:pointer;font-size:18px}
+    .chat-input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+      font-size: 14px;
+      margin-top: 10px;
+    }
 
-    /* Hero */
-    .hero{max-width:1200px;margin:0 auto;padding:64px 18px 40px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
-    .eyebrow{display:inline-block;padding:6px 10px;background:var(--chip);border:1px solid var(--line);border-radius:999px;font-size:12px;letter-spacing:.3px;color:var(--muted)}
-    .h1{font-size:clamp(34px,6vw,56px);line-height:1.05;margin:14px 0 12px;font-weight:800}
-    .sub{color:var(--muted);font-size:18px;max-width:50ch}
-    .cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 18px;border:1px solid var(--line);font-weight:600}
-    .btn--primary{background:var(--fg);color:#fff;border-color:var(--fg)}
-    .btn--ghost:hover{border-color:var(--fg)}
-    .hero__card{border:1px solid var(--line);border-radius:20px;overflow:hidden}
-    .hero__img{aspect-ratio:4/3;background:linear-gradient(135deg,#e2f3ff,#f7fbff);display:grid;place-items:center;color:#0b4a6f;font-weight:700}
+    .products {
+      display: none;
+      margin-top: 15px;
+      text-align: left;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
 
-    /* Features */
-    .section{max-width:1200px;margin:0 auto;padding:28px 18px 64px}
-    .kicker{font-weight:700;margin-bottom:12px}
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
-    .card{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}
-    .card h3{margin:4px 0 8px}
-    .muted{color:var(--muted)}
-
-    /* Footer */
-    footer{margin-top:auto;border-top:1px solid var(--line)}
-    .foot{max-width:1200px;margin:0 auto;padding:22px 18px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
-
-    /* Responsive */
-    @media (max-width: 900px){
-      .menu{display:none}
-      .hamb{display:flex}
-      .hero{grid-template-columns:1fr;gap:26px;padding-top:40px}
-      .grid{grid-template-columns:1fr}
+    .products h3 {
+      margin: 5px 0;
+      color: #b8aaff;
     }
   </style>
 </head>
 <body>
-  <div class="site">
-    <header>
-      <nav class="nav" aria-label="Main">
-        <a class="brand" href="#" aria-label="MayaNut home">
-          <!-- Replace this box with your real logo image/SVG -->
-          <span class="logo" aria-hidden="true">MN</span>
-          <b>MayaNut</b>
-        </a>
-
-        <div class="menu" role="navigation">
-          <a href="#products">Products</a>
-          <a href="#story">Our Story</a>
-          <a href="#impact">Impact</a>
-          <a href="#contact">Contact</a>
-        </div>
-
-        <button class="hamb" id="hamb" aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </nav>
-
-      <!-- Mobile drawer -->
-      <div class="drawer" id="mobile-drawer" aria-hidden="true">
-        <div class="drawer__panel">
-          <button class="drawer__close" id="drawer-close" aria-label="Close menu">✕</button>
-          <a class="brand" href="#" aria-label="MayaNut home">
-            <span class="logo" aria-hidden="true">MN</span>
-            <b>MayaNut</b>
-          </a>
-          <div class="drawer__links" role="navigation">
-            <a href="#products">Products</a>
-            <a href="#story">Our Story</a>
-            <a href="#impact">Impact</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main>
-      <!-- HERO -->
-      <section class="hero">
-        <div>
-          <span class="eyebrow">Naturally nourishing • Brosimum alicastrum</span>
-          <h1 class="h1">Clean, elegant nutrition from the Maya nut.</h1>
-          <p class="sub">A modern take on an ancient superfood. Thoughtfully sourced, minimally processed, and crafted for everyday wellness.</p>
-          <div class="cta">
-            <a href="#products" class="btn btn--primary">Shop MayaNut</a>
-            <a href="#story" class="btn btn--ghost">Learn more</a>
-          </div>
-        </div>
-        <div class="hero__card">
-          <div class="hero__img">Your product image here</div>
-        </div>
-      </section>
-
-      <!-- FEATURES -->
-      <section class="section" id="products">
-        <div class="kicker">Why MayaNut</div>
-        <div class="grid">
-          <article class="card">
-            <h3>Balanced & gentle</h3>
-            <p class="muted">Naturally caffeine-free, with fiber and essential micronutrients for daily vitality.</p>
-          </article>
-          <article class="card">
-            <h3>Versatile</h3>
-            <p class="muted">Enjoy as flour, a roasted beverage, or wholesome snacks — easy to fit into any routine.</p>
-          </article>
-          <article class="card">
-            <h3>Thoughtful sourcing</h3>
-            <p class="muted">Responsible harvesting that supports local communities and preserves tropical forests.</p>
-          </article>
-        </div>
-      </section>
-
-      <!-- STORY -->
-      <section class="section" id="story">
-        <div class="kicker">Our Story</div>
-        <p class="muted">MayaNut celebrates a time-honored ingredient with modern craft. We partner with growers and processors who share our commitment to quality and sustainability.</p>
-      </section>
-
-      <!-- IMPACT -->
-      <section class="section" id="impact">
-        <div class="kicker">Impact</div>
-        <p class="muted">From canopy to kitchen, our choices aim to regenerate ecosystems and livelihoods. We’re building a supply chain that benefits people and the planet.</p>
-      </section>
-
-      <!-- CONTACT -->
-      <section class="section" id="contact">
-        <div class="kicker">Contact</div>
-        <p class="muted">Questions or wholesale? Reach us at <a href="mailto:hello@mayanut.example">hello@mayanut.example</a>.</p>
-      </section>
-    </main>
-
-    <footer>
-      <div class="foot">
-        <span>© <span id="year"></span> MayaNut</span>
-        <span class="muted">All rights reserved.</span>
-      </div>
-    </footer>
+  <div class="chat-box">
+    <h2>Ask what you want to buy</h2>
+    <div class="chat-log" id="chatLog"></div>
+    <input type="text" id="chatInput" class="chat-input" placeholder="Type here...">
+    <div class="products" id="products">
+      <h3>Products</h3>
+      <ul>
+        <li>MayaNut Flour</li>
+        <li>MayaNut Roasted Drink</li>
+        <li>MayaNut Energy Bites</li>
+      </ul>
+    </div>
   </div>
 
   <script>
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const chatInput = document.getElementById("chatInput");
+    const chatLog = document.getElementById("chatLog");
+    const products = document.getElementById("products");
 
-    // Mobile nav behavior
-    const hamb = document.getElementById('hamb');
-    const drawer = document.getElementById('mobile-drawer');
-    const closeBtn = document.getElementById('drawer-close');
+    // Product info and facts
+    const productInfo = {
+      "mayanut flour": "MayaNut Flour is gluten-free and perfect for baking.",
+      "mayanut roasted drink": "MayaNut Roasted Drink is caffeine-free and rich in nutrients.",
+      "mayanut energy bites": "MayaNut Energy Bites are healthy snacks made from MayaNut flour."
+    };
 
-    function openDrawer(){
-      drawer.style.display = 'block';
-      drawer.setAttribute('aria-hidden','false');
-      hamb.setAttribute('aria-expanded','true');
-    }
-    function closeDrawer(){
-      drawer.style.display = 'none';
-      drawer.setAttribute('aria-hidden','true');
-      hamb.setAttribute('aria-expanded','false');
-    }
+    // New detailed facts about Brosimum alicastrum
+    const brosimumFacts = "Brosimum alicastrum, also known as Maya Nut or Breadnut, is a tall tropical rainforest tree in the Moraceae family — the same family as figs, jackfruit, and mulberries. It plays an important role in modern agroforestry because it is highly productive, drought-resistant, and provides nutritious seeds for food, supporting both ecosystems and local economies.";
 
-    hamb.addEventListener('click', openDrawer);
-    closeBtn.addEventListener('click', closeDrawer);
-    drawer.addEventListener('click', (e)=>{ if(e.target === drawer) closeDrawer(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeDrawer(); });
+    // New company information
+    const companyInfo = "MayaNut was founded on April 24, 2008 to ensure the survival of the Brosimum alicastrum species and to benefit humanity through its agricultural uses.";
+
+    // General tree facts
+    const treeFacts = [
+      "The MayaNut tree can live for over 100 years and provides sustainable food.",
+      "Its seeds can be ground into flour rich in fiber, calcium, and potassium."
+    ];
+
+    chatInput.addEventListener("focus", () => {
+      chatLog.style.display = "block";
+      products.style.display = "block";
+    });
+
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const userText = chatInput.value.trim().toLowerCase();
+        if (!userText) return;
+
+        chatLog.innerHTML += `<div><strong>You:</strong> ${userText}</div>`;
+        chatInput.value = "";
+
+        if (userText.includes("buy")) {
+          chatLog.innerHTML += `<div><strong>Bot:</strong> Sure, here's our products list. Click on any product name to view more.</div>`;
+        } 
+        else if (userText.includes("tell me about")) {
+          if (userText.includes("brosimum alicastrum")) {
+            chatLog.innerHTML += `<div><strong>Bot:</strong> ${brosimumFacts}</div>`;
+          } 
+          else if (userText.includes("mayanut company")) {
+            chatLog.innerHTML += `<div><strong>Bot:</strong> ${companyInfo}</div>`;
+          }
+          else {
+            let found = false;
+            for (let p in productInfo) {
+              if (userText.includes(p)) {
+                chatLog.innerHTML += `<div><strong>Bot:</strong> ${productInfo[p]}</div>`;
+                found = true;
+              }
+            }
+            if (!found && userText.includes("mayanut")) {
+              const fact = treeFacts[Math.floor(Math.random() * treeFacts.length)];
+              chatLog.innerHTML += `<div><strong>Bot:</strong> ${fact}</div>`;
+            }
+            if (!found && !userText.includes("mayanut")) {
+              chatLog.innerHTML += `<div><strong>Bot:</strong> I only know about MayaNut and related plants.</div>`;
+            }
+          }
+        } 
+        else {
+          chatLog.innerHTML += `<div><strong>Bot:</strong> I only know about MayaNut and related plants.</div>`;
+        }
+
+        chatLog.scrollTop = chatLog.scrollHeight;
+      }
+    });
   </script>
 </body>
 </html>
