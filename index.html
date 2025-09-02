@@ -45,7 +45,7 @@
   </div>
   <canvas id="gameCanvas"></canvas>
   <div id="chat">
-    <input id="chatInput" placeholder="Type commands like /spawn 20 gold...">
+    <input id="chatInput" placeholder="Type commands like /spawn 20 white...">
   </div>
 
   <script>
@@ -59,61 +59,44 @@
       canvas.width = W; canvas.height = H;
     });
 
-    // Colors and Stages
-    const colors = ["white","grey","blue","black","gold","doctor-green","red","lightgrey"];
-    const stages = ["little","medium","big"];
+    // Game variables
     let balls = [];
-    let lines = [];
+    let chains = [];
     let score = 0;
     const scoreEl = document.getElementById("score");
     const maxBalls = 300;
 
-    // Ball constructor
-    function makeBall(x,y,color,stage="little"){
+    // Ball types
+    const TYPES = {
+      SMALL: "small",
+      SPAWNER: "spawner",
+      FACTORY: "factory"
+    };
+
+    // Create a ball
+    function makeBall(x,y,type=TYPES.SMALL){
+      let r = type===TYPES.SMALL?6:type===TYPES.SPAWNER?12:20;
       return {
         x,y,
         vx:(Math.random()-0.5)*2,
         vy:(Math.random()-0.5)*2,
-        r:stage==="little"?6:stage==="medium"?10:14,
-        color,
-        stage,
-        chainId:null,
-        supercell:false,
+        r,
+        type,
+        orbiting:null,
+        bonded:false,
         dead:false
       };
     }
 
-    // Spawn helper
-    function spawnBalls(n,color){
-      let added = 0;
+    // Spawn command
+    function spawnBalls(n,type){
+      let added=0;
       for(let i=0;i<n;i++){
-        if(balls.length >= maxBalls) break;
-        balls.push(makeBall(Math.random()*W, Math.random()*H, color));
+        if(balls.length>=maxBalls) break;
+        balls.push(makeBall(Math.random()*W, Math.random()*H, type));
         added++;
       }
       return added;
-    }
-
-    // Stage promotion
-    function promote(ball){
-      if(ball.stage==="little"){ ball.stage="medium"; ball.r=10; }
-      else if(ball.stage==="medium"){ ball.stage="big"; ball.r=14; }
-    }
-
-    // Stage demotion
-    function demote(ball){
-      if(ball.stage==="big"){ ball.stage="medium"; ball.r=10; }
-      else if(ball.stage==="medium"){ ball.stage="little"; ball.r=6; }
-    }
-
-    // Supercell creation
-    function tryCreateSupercell(chain){
-      if(chain.length>=5 && chain.length<=8){
-        let cx=0, cy=0;
-        chain.forEach(id => { cx+=balls[id].x; cy+=balls[id].y; balls[id].dead=true; });
-        cx/=chain.length; cy/=chain.length;
-        balls.push({x:cx,y:cy,vx:0,vy:0,r:40,color:"gold",supercell:true,dead:false});
-      }
     }
 
     // Chat commands
@@ -124,38 +107,41 @@
         chatInput.value="";
         if(text.startsWith("/")){
           const parts=text.slice(1).split(" ");
-          const cmd=parts[0];
-          if(cmd==="spawn"){
+          if(parts[0]==="spawn"){
             const n=parseInt(parts[1])||1;
-            const color=parts[2]||"white";
-            if(colors.includes(color)){
-              const added=spawnBalls(n,color);
-              console.log(`Spawned ${added} ${color} balls`);
-            }
+            const type=parts[2]==="spawner"?TYPES.SPAWNER:
+                        parts[2]==="factory"?TYPES.FACTORY:TYPES.SMALL;
+            spawnBalls(n,type);
           }
         }
       }
     });
 
-    // Click scoring
+    // Clicking ends of chains folds into circle
     canvas.addEventListener("click",e=>{
       const mx=e.clientX,my=e.clientY;
-      let hit=false;
-      for(const b of balls){
-        if(!b.dead){
-          const d=Math.hypot(b.x-mx,b.y-my);
-          if(d<b.r){
-            hit=true; b.dead=true; score+=1;
+      for(const chain of chains){
+        if(chain.length>2){
+          let start=chain[0], end=chain[chain.length-1];
+          if(Math.hypot(start.x-mx,start.y-my)<start.r+5 ||
+             Math.hypot(end.x-mx,end.y-my)<end.r+5){
+            // fold into circle
+            const cx=chain.reduce((s,b)=>s+b.x,0)/chain.length;
+            const cy=chain.reduce((s,b)=>s+b.y,0)/chain.length;
+            const radius=chain.length*3;
+            chain.forEach((b,i)=>{
+              const angle=(i/chain.length)*Math.PI*2;
+              b.x=cx+Math.cos(angle)*radius;
+              b.y=cy+Math.sin(angle)*radius;
+            });
           }
         }
       }
-      if(!hit) score-=1;
-      scoreEl.textContent=score;
     });
 
-    // Main loop
+    // Physics + logic
     function update(){
-      // Physics
+      // Move
       for(const b of balls){
         if(b.dead) continue;
         b.x+=b.vx; b.y+=b.vy;
@@ -163,107 +149,82 @@
         if(b.y<b.r||b.y>H-b.r) b.vy*=-1;
       }
 
-      // Gold line connections
-      lines=[];
-      let chains={};
-      for(let i=0;i<balls.length;i++){
-        const a=balls[i];
-        if(a.dead||a.color!=="gold"||a.supercell) continue;
-        for(let j=i+1;j<balls.length;j++){
-          const b=balls[j];
-          if(b.dead||b.color!=="gold"||b.supercell) continue;
-          const d=Math.hypot(a.x-b.x,a.y-b.y);
-          if(d<100){
-            lines.push([a,b]);
-            if(a.chainId==null && b.chainId==null){
-              const id=Math.random();
-              a.chainId=b.chainId=id;
-              chains[id]=[i,j];
-            } else if(a.chainId!=null && b.chainId==null){
-              b.chainId=a.chainId; chains[a.chainId].push(j);
-            } else if(a.chainId==null && b.chainId!=null){
-              a.chainId=b.chainId; chains[b.chainId].push(i);
-            } else if(a.chainId===b.chainId){
-              chains[a.chainId].push(j);
-            }
-          }
-        }
-      }
-
-      // Check for supercell formation
-      for(const id in chains){
-        tryCreateSupercell(chains[id]);
-      }
-
-      // Red hits: break supercells & gold -> lightgrey
-      for(const r of balls.filter(b=>b.color==="red"&&!b.dead)){
-        for(const g of balls.filter(b=>b.color==="gold"&&!b.dead)){
-          const d=Math.hypot(r.x-g.x,r.y-g.y);
-          if(d<r.r+g.r){
-            g.color="lightgrey"; g.supercell=false;
-          }
-        }
-        for(const s of balls.filter(b=>b.supercell&&!b.dead)){
-          const d=Math.hypot(r.x-s.x,r.y-s.y);
-          if(d<r.r+s.r){
-            s.dead=true; // break apart supercell
-          }
-        }
-      }
-
-      // Lightgrey merges -> gold
-      const light = balls.filter(b=>b.color==="lightgrey"&&!b.dead);
-      for(let i=0;i<light.length;i++){
-        for(let j=i+1;j<light.length;j++){
-          const a=light[i], b=light[j];
-          const d=Math.hypot(a.x-b.x,a.y-b.y);
-          if(d<a.r+b.r){
-            a.dead=true; b.dead=true;
-            balls.push(makeBall(a.x,a.y,"gold","little"));
-          }
-        }
-      }
-
-      // Promote on collisions
+      // Collisions
       for(let i=0;i<balls.length;i++){
         for(let j=i+1;j<balls.length;j++){
           const a=balls[i], b=balls[j];
           if(a.dead||b.dead) continue;
           const d=Math.hypot(a.x-b.x,a.y-b.y);
-          if(d<a.r+b.r && a.color===b.color && a.stage===b.stage && a.stage!=="big"){
-            promote(a); promote(b);
+          if(d<a.r+b.r){
+            // small+small -> spawner
+            if(a.type===TYPES.SMALL && b.type===TYPES.SMALL){
+              a.dead=true; b.dead=true;
+              balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,TYPES.SPAWNER));
+            }
+            // spawner+spawner -> factory
+            if(a.type===TYPES.SPAWNER && b.type===TYPES.SPAWNER){
+              a.dead=true; b.dead=true;
+              balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,TYPES.FACTORY));
+            }
+            // orbiting behavior
+            if(a.type===TYPES.SMALL && b.type!==TYPES.SMALL){
+              a.orbiting=b;
+            }
+            if(b.type===TYPES.SMALL && a.type!==TYPES.SMALL){
+              b.orbiting=a;
+            }
           }
         }
       }
 
-      // Clean up dead
+      // Orbit motion
+      for(const b of balls){
+        if(b.orbiting && !b.orbiting.dead){
+          const center=b.orbiting;
+          const angle=Math.atan2(b.y-center.y,b.x-center.x)+0.05;
+          const dist=center.r+20;
+          b.x=center.x+Math.cos(angle)*dist;
+          b.y=center.y+Math.sin(angle)*dist;
+        }
+      }
+
+      // Chain formation: orbiting orbits bond
+      chains=[];
+      let visited=new Set();
+      for(const b of balls){
+        if(b.orbiting && !visited.has(b)){
+          let chain=[];
+          let current=b;
+          while(current && current.orbiting && !visited.has(current)){
+            chain.push(current);
+            visited.add(current);
+            current=current.orbiting;
+          }
+          if(chain.length>1) chains.push(chain);
+        }
+      }
+
+      // Remove dead
       balls=balls.filter(b=>!b.dead);
     }
 
+    // Draw
     function draw(){
       ctx.clearRect(0,0,W,H);
-      // Draw lines
-      ctx.strokeStyle="rgba(255,215,0,0.6)";
-      for(const [a,b] of lines){
+      // Chains first
+      ctx.strokeStyle="rgba(255,255,255,0.5)";
+      for(const chain of chains){
         ctx.beginPath();
-        ctx.moveTo(a.x,a.y);
-        ctx.lineTo(b.x,b.y);
+        ctx.moveTo(chain[0].x,chain[0].y);
+        for(const b of chain) ctx.lineTo(b.x,b.y);
         ctx.stroke();
       }
-      // Draw balls
+      // Balls
       for(const b of balls){
         ctx.beginPath();
-        if(b.supercell){
-          ctx.strokeStyle="gold"; ctx.lineWidth=3;
-          ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-          ctx.stroke(); continue;
-        }
-        if(b.color==="lightgrey"){
-          ctx.strokeStyle="lightgrey"; ctx.lineWidth=2;
-          ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-          ctx.stroke(); continue;
-        }
-        ctx.fillStyle=b.color==="doctor-green"?"lime":b.color;
+        if(b.type===TYPES.SMALL) ctx.fillStyle="white";
+        else if(b.type===TYPES.SPAWNER) ctx.fillStyle="orange";
+        else if(b.type===TYPES.FACTORY) ctx.fillStyle="red";
         ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
         ctx.fill();
       }
@@ -277,7 +238,7 @@
     loop();
 
     // Initial spawn
-    spawnBalls(20,"white");
+    spawnBalls(20,TYPES.SMALL);
   </script>
 </body>
 </html>
