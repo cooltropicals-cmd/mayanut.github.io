@@ -12,7 +12,8 @@
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
     --shadow:0 18px 40px rgba(0,0,0,.45);
     --galaxy1: rgba(156,124,255,.22); --galaxy2: rgba(85,180,255,.20); --galaxy3: rgba(255,170,220,.16);
-    --danger:#ff4d4d;
+    --danger:#ff4d4d; --pink:#ff8ad6;
+    --gold: rgba(255,220,130,.9);
   }
 
   html,body{height:100%}
@@ -62,13 +63,13 @@
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
   .brand{font-weight:800;letter-spacing:.2px;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
   .brand small{font-size:11px;opacity:.95;vertical-align:top}
-  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9} /* counter under logo */
-
-  .nav{display:flex;gap:18px}
+  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
+  .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+  .btn{cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--ink);}
 
-  /* Score badge */
+  /* Score */
   .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
     border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px; box-shadow:var(--shadow)}
 
@@ -95,13 +96,34 @@
   /* Footer */
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);backdrop-filter:blur(6px);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* Ball layer + Game Over overlay */
+  /* Canvas + overlays */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
   #gameOver{
     position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center;
-    background:rgba(0,0,0,.45); backdrop-filter: blur(2px); color:#fff; font-size:42px; font-weight:800;
-    text-shadow:0 8px 24px rgba(0,0,0,.65)
+    background:rgba(0,0,0,.45); backdrop-filter: blur(2px); color:#fff; text-align:center;
   }
+  #gameOver .card{
+    background:rgba(10,14,34,.9); border:1px solid var(--line); border-radius:16px; padding:18px 20px; box-shadow:var(--shadow);
+    width:min(420px,92vw)
+  }
+  #gameOver h2{margin:0 0 10px}
+  #gameOver .row{display:flex; gap:10px; justify-content:center; margin-top:12px}
+  #gameOver button{cursor:pointer; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.08); color:var(--ink)}
+
+  /* Auth modal */
+  .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter: blur(2px); display:none; align-items:center; justify-content:center; z-index:12000;}
+  .modal{width:min(460px, 92vw); background:rgba(12,16,34,.95); border:1px solid var(--line); border-radius:14px; padding:16px; color:#eaf2ff; box-shadow:var(--shadow)}
+  .modal h4{margin:0 0 10px}
+  .modal label{display:block; font-size:13px; margin:8px 0 4px; color:#cfe1ff}
+  .modal input{width:100%; padding:10px; border:1px solid var(--inputLine); border-radius:10px; background:var(--inputBG); color:#eaf2ff;}
+  .modal .row{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+  .modal button{padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.08); color:var(--ink); cursor:pointer}
+  .closeX{position:absolute; right:16px; top:12px; cursor:pointer; opacity:.9}
+  .muted{color:#c6d0ea; font-size:12px; margin-top:8px}
+
+  /* Bonus star */
+  .starPulse{ animation: star 1.5s ease-in-out infinite }
+  @keyframes star{ 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.4)} }
 
   @media (max-width:720px){.nav a{padding:6px 10px}}
 </style>
@@ -120,6 +142,8 @@
       <a href="#home" id="navHome">MayaNut</a>
       <a href="#buy"  id="navBuy">Buy</a>
       <a href="#about" id="navAbout">About</a>
+      <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+      <button id="accountBtn" class="btn" type="button">Account</button>
     </nav>
   </header>
 
@@ -164,408 +188,663 @@
   <!-- Footer -->
   <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
 
-  <!-- Ball overlay + Game Over -->
+  <!-- Canvas + Overlays -->
   <canvas id="ballLayer"></canvas>
-  <div id="gameOver">Game Over</div>
+
+  <div id="gameOver">
+    <div class="card">
+      <h2>Game Over</h2>
+      <p id="finalScoreText">Your score: 0</p>
+      <div class="row">
+        <button id="playAgainBtn">Play Again</button>
+        <button id="saveScoreBtn">Save Score</button>
+      </div>
+      <p class="muted" id="saveStatus"></p>
+    </div>
+  </div>
+
+  <!-- Auth modal -->
+  <div id="authModalBack" class="modalBack" aria-hidden="true">
+    <div class="modal">
+      <div class="closeX" id="closeAuth">✕</div>
+      <h4>Player Account</h4>
+      <label>Email</label>
+      <input id="authEmail" placeholder="you@example.com" />
+      <label>Password</label>
+      <input id="authPass" type="password" placeholder="••••••••" />
+      <div class="row">
+        <button id="signUpBtn"  type="button">Sign Up</button>
+        <button id="signInBtn"  type="button">Sign In</button>
+        <button id="signOutBtn" type="button">Sign Out</button>
+      </div>
+      <p class="muted" id="authInfo"></p>
+    </div>
+  </div>
 
 <script>
-  /* ===== Minimal chat behavior ===== */
-  const input = document.getElementById('chatInput');
-  const logBox = document.getElementById('chatLog');
-
-  function say(role, text){
-    const el = document.createElement('div');
-    el.className = 'msg';
-    el.innerHTML = `<strong>${role}:</strong> ${text}`;
-    logBox.appendChild(el);
-    logBox.scrollTop = logBox.scrollHeight;
+/* =========================
+   AI Chat (brand-safe helpers)
+   ========================= */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+function say(role, text){
+  const el = document.createElement('div');
+  el.className = 'msg';
+  el.innerHTML = `<strong>${role}:</strong> ${text}`;
+  logBox.appendChild(el);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+function handleMessage(v){
+  const t = (v||'').trim(); if(!t) return; say('You', t);
+  const low = t.toLowerCase();
+  const domainTriggers = [
+    "domain for sale","is this domain for sale","sell this domain","sell the domain",
+    "buy this domain","buy the domain","is the domain for sale","are you selling the domain",
+    "is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"
+  ];
+  if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
+  if (low.includes('buy') || low.includes('product') || low.includes('shop')) {
+    say('MayaNut','Head to the Buy section below for our upcoming products. (Placeholders for now.)');
+    document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return;
   }
-
-  function handleMessage(v){
-    const t = (v||'').trim();
-    if(!t) return;
-    say('You', t);
-
-    const low = t.toLowerCase();
-    const domainTriggers = [
-      "domain for sale","is this domain for sale","sell this domain","sell the domain",
-      "buy this domain","buy the domain","is the domain for sale","are you selling the domain",
-      "is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"
-    ];
-    if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
-    if (low.includes('buy') || low.includes('product') || low.includes('shop')) {
-      say('MayaNut','Head to the Buy section below for our upcoming products. (Placeholders for now.)');
-      document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return;
-    }
-    if (low.includes('about') || low.includes('company')) {
-      say('MayaNut','We’re a South Florida company promoting the Maya Nut tree. Scroll to the About section for details.');
-      document.getElementById('about').scrollIntoView({behavior:'smooth'}); return;
-    }
-    say('MayaNut', "Tell me what you want and I’ll point you in the right direction.");
+  if (low.includes('about') || low.includes('company')) {
+    say('MayaNut','We’re a South Florida company promoting the Maya Nut tree. Scroll to the About section for details.');
+    document.getElementById('about').scrollIntoView({behavior:'smooth'}); return;
   }
+  say('MayaNut', "Tell me what you want and I’ll point you in the right direction.");
+}
+input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ handleMessage(input.value); input.value = ''; }});
+document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'}); input.focus(); });
+document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
+document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-  input.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter'){ handleMessage(input.value); input.value = ''; }
-  });
+/* =========================
+   Firebase Auth + Cloud score (ready for production)
+   ========================= */
+// TODO: Replace with your Firebase config from the Firebase Console
+const FIREBASE_CONFIG = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  appId: "YOUR_APP_ID"
+};
+// TODO: Replace with your deployed Cloud Function URL (submitScore)
+const SCORE_FN_URL = "https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/submitScore";
 
-  document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'}); input.focus(); });
-  document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
-  document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
+window.mnAuth = {
+  ready:false,
+  user:null,
+  bestScoreLocal: Number(localStorage.getItem('mn_best') || 0),
+  async init(){
+    try{
+      const [{ initializeApp }] = await Promise.all([
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js")
+      ]);
+      const app = initializeApp(FIREBASE_CONFIG);
 
-  /* ===== Game engine with spatial hashing & new rules ===== */
-  (function(){
-    const scoreEl = document.getElementById('score');
-    const ballCountEl = document.getElementById('ballCount');
-    const gameOverEl = document.getElementById('gameOver');
-    let score = 0; const addScore = d => { score += d; scoreEl.textContent = score; };
+      const [{ getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut },
+             { getFirestore, doc, getDoc, setDoc } ] = await Promise.all([
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
+      ]);
+      this._auth = getAuth(app);
+      this._db = getFirestore(app);
+      this._create = createUserWithEmailAndPassword;
+      this._signin = signInWithEmailAndPassword;
+      this._signout = signOut;
+      this._doc = doc; this._getDoc = getDoc; this._setDoc = setDoc;
 
-    const MAX_BALLS = 19;
-    const canvas = document.getElementById('ballLayer');
-    const ctx = canvas.getContext('2d');
-
-    function resize(){
-      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      const cssW = window.innerWidth, cssH = window.innerHeight;
-      canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
-      canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-    }
-    resize(); window.addEventListener('resize', resize);
-
-    // Colliders
-    const heroTitle = document.getElementById('heroTitle');
-    const chatInput = document.getElementById('chatInput');
-    const chatLog  = document.getElementById('chatLog');
-    const buySec   = document.getElementById('buy');
-    const aboutSec = document.getElementById('about');
-    const topbar   = document.querySelector('.topbar');
-
-    function getRects(){
-      const list = [heroTitle, chatInput, chatLog, buySec, aboutSec, topbar];
-      const rects = [];
-      for (const el of list){
-        if(!el) continue;
-        const r = el.getBoundingClientRect();
-        if (r.bottom >= -50 && r.top <= window.innerHeight + 50) {
-          rects.push({x:r.left, y:r.top, w:r.width, h:r.height});
-        }
-      }
-      return rects;
-    }
-
-    /* ==== Ball model ==== */
-    // types: 'original' | 'small' | 'spawner' | 'killer'
-    function tierToRadius(tier){ const t = Math.max(1, Math.min(15, tier|0)); return 8 + (4 * (t - 1) / 14); }
-
-    function makeBall(opts={}){
-      const {
-        x=window.innerWidth*0.6, y=window.innerHeight*0.3,
-        r=10, vx=3.2, vy=2.6, type='small', sizeTier=null, hasFast=false
-      } = opts;
-      return {
-        x,y,r,vx,vy, type, sizeTier, hasFast,
-        squashTimer:0, squashAxis:'y',
-        jellyTimer:0, jellyPhase:0,
-        balloonTimer:0, balloonAxis:'y',
-        _dead:false
-      };
-    }
-
-    const balls = [ makeBall({ type:'original', vx:1.1, vy:0.9, r:tierToRadius(7), sizeTier:7, hasFast:false }) ];
-    updateBallCount();
-
-    /* ==== Spatial Hash (reduces O(n^2)) ==== */
-    const CELL = 48; // px
-    function buildGrid(){
-      const grid = new Map();
-      for (let i=0;i<balls.length;i++){
-        const b = balls[i]; if (b._dead) continue;
-        const minx = Math.floor((b.x - b.r)/CELL), maxx = Math.floor((b.x + b.r)/CELL);
-        const miny = Math.floor((b.y - b.r)/CELL), maxy = Math.floor((b.y + b.r)/CELL);
-        for(let gx=minx; gx<=maxx; gx++){
-          for(let gy=miny; gy<=maxy; gy++){
-            const key = gx+','+gy;
-            if(!grid.has(key)) grid.set(key, []);
-            grid.get(key).push(i);
+      onAuthStateChanged(this._auth, async (user)=>{
+        this.user = user || null;
+        if (user){
+          const ref = this._doc(this._db, "users", user.uid);
+          const snap = await this._getDoc(ref);
+          if (!snap.exists()){
+            await this._setDoc(ref, {
+              email: user.email, displayName: user.email.split("@")[0],
+              createdAt: new Date(), bestScore: this.bestScoreLocal || 0, bonuses: {}
+            });
+          } else {
+            const bs = snap.data()?.bestScore || 0;
+            if (bs > this.bestScoreLocal){
+              this.bestScoreLocal = bs; localStorage.setItem('mn_best', String(bs));
+            }
           }
+          authInfo.textContent = `Signed in as ${user.email} · Best: ${this.bestScoreLocal}`;
+        } else {
+          authInfo.textContent = `Guest mode. Sign in to save scores across devices.`;
         }
-      }
-      return grid;
+      });
+      this.ready = true;
+    }catch(e){
+      console.warn("Firebase not initialized (offline mode).", e);
+      this.ready = false;
     }
-    function nearbyPairs(grid){
-      const seen = new Set();
-      const pairs = [];
-      for (const ids of grid.values()){
-        for (let a=0;a<ids.length;a++){
-          for (let b=a+1;b<ids.length;b++){
-            const i=ids[a], j=ids[b];
-            const key = i<j ? (i+'-'+j) : (j+'-'+i);
-            if (seen.has(key)) continue;
-            seen.add(key); pairs.push([i,j]);
-          }
-        }
-      }
-      return pairs;
-    }
-
-    /* ==== Physics & collisions ==== */
-    function bounceWall(b, W, H){
-      if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
-      if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
-      if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
-      if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
-    }
-
-    function collideWithRect(b, R){
-      const nx = Math.max(R.x, Math.min(b.x, R.x + R.w));
-      const ny = Math.max(R.y, Math.min(b.y, R.y + R.h));
-      const dx = b.x - nx, dy = b.y - ny;
-      if (dx*dx + dy*dy > b.r*b.r) return false;
-
-      const cx = R.x + R.w/2, cy = R.y + R.h/2;
-      const overlapX = (R.w/2 + b.r) - Math.abs(b.x - cx);
-      const overlapY = (R.h/2 + b.r) - Math.abs(b.y - cy);
-
-      if (overlapX < overlapY){
-        b.vx *= -1; b.x += (b.vx>0?1:-1)*Math.max(1,overlapX*0.6); b.squashTimer=8; b.squashAxis='x';
+  },
+  async signUp(email, pass){ if(!this.ready) return; await this._create(this._auth, email, pass); },
+  async signIn(email, pass){ if(!this.ready) return; await this._signin(this._auth, email, pass); },
+  async signOut(){ if(!this.ready) return; await this._signout(this._auth); },
+  async submitScore(score, extras={}){
+    try{
+      if (score <= 0) return { ok:false, offline:true };
+      let headers = { "Content-Type":"application/json" };
+      if (this.user){
+        const token = await this._auth.currentUser.getIdToken(false);
+        headers.Authorization = `Bearer ${token}`;
       } else {
-        b.vy *= -1; b.y += (b.vy>0?1:-1)*Math.max(1,overlapY*0.6); b.squashTimer=8; b.squashAxis='y';
+        // require login for cloud save
+        return { ok:false, needLogin:true };
       }
+      const r = await fetch(SCORE_FN_URL, { method:"POST", headers, body: JSON.stringify({ score, sessionStats: extras })});
+      const data = await r.json();
+      if (!r.ok) throw new Error(data?.error||"submit failed");
 
-      // water balloon bend for big merged (we’ll piggyback: spawners that grew large can bend)
-      if (b.type==='spawner' && b.r>=13 && b.balloonTimer===0){
-        b.balloonTimer = 20;
-        b.balloonAxis = (overlapX < overlapY) ? 'x' : 'y';
+      // update local best
+      const prev = Number(localStorage.getItem('mn_best') || 0);
+      if (score > prev){ localStorage.setItem('mn_best', String(score)); }
+      return { ok:true, data };
+    }catch(e){
+      console.warn("Cloud submit failed, keeping local only.", e);
+      // local best fallback
+      const prev = Number(localStorage.getItem('mn_best') || 0);
+      if (score > prev){ localStorage.setItem('mn_best', String(score)); }
+      return { ok:false, offline:true };
+    }
+  }
+};
+mnAuth.init();
+
+/* Auth UI wiring */
+const accountBtn = document.getElementById('accountBtn');
+const authModalBack = document.getElementById('authModalBack');
+const closeAuth = document.getElementById('closeAuth');
+const signUpBtn = document.getElementById('signUpBtn');
+const signInBtn = document.getElementById('signInBtn');
+const signOutBtn = document.getElementById('signOutBtn');
+const authEmail = document.getElementById('authEmail');
+const authPass = document.getElementById('authPass');
+const authInfo  = document.getElementById('authInfo');
+
+accountBtn.addEventListener('click', ()=>{ authModalBack.style.display='flex'; authModalBack.setAttribute('aria-hidden','false'); });
+closeAuth.addEventListener('click', ()=>{ authModalBack.style.display='none'; authModalBack.setAttribute('aria-hidden','true'); });
+authModalBack.addEventListener('click', (e)=>{ if(e.target===authModalBack){ closeAuth.click(); }});
+
+signUpBtn.addEventListener('click', async ()=>{
+  try{ await mnAuth.signUp(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Account created. Signed in."; }
+  catch(e){ authInfo.textContent="Sign up failed: " + e.message; }
+});
+signInBtn.addEventListener('click', async ()=>{
+  try{ await mnAuth.signIn(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Signed in."; }
+  catch(e){ authInfo.textContent="Sign in failed: " + e.message; }
+});
+signOutBtn.addEventListener('click', async ()=>{
+  try{ await mnAuth.signOut(); authInfo.textContent="Signed out."; }
+  catch(e){ authInfo.textContent="Error: " + e.message; }
+});
+
+/* =========================
+   Game Engine (19 cap, reds max 6, spawner→pink→reds pipeline)
+   ========================= */
+(function(){
+  const scoreEl = document.getElementById('score');
+  const ballCountEl = document.getElementById('ballCount');
+  const gameOverEl = document.getElementById('gameOver');
+  const finalScoreText = document.getElementById('finalScoreText');
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  const saveScoreBtn = document.getElementById('saveScoreBtn');
+  const saveStatus = document.getElementById('saveStatus');
+
+  let score = 0;
+  function addScore(d){ score += d; scoreEl.textContent = score; }
+
+  const MAX_BALLS = 19;
+  const RED_MAX   = 6;
+
+  const canvas = document.getElementById('ballLayer');
+  const ctx = canvas.getContext('2d');
+
+  function resize(){
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    const cssW = window.innerWidth, cssH = window.innerHeight;
+    canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
+    canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  resize(); window.addEventListener('resize', resize);
+
+  // Colliders (UI)
+  const heroTitle = document.getElementById('heroTitle');
+  const chatInput = document.getElementById('chatInput');
+  const chatLog  = document.getElementById('chatLog');
+  const buySec   = document.getElementById('buy');
+  const aboutSec = document.getElementById('about');
+  const topbar   = document.querySelector('.topbar');
+
+  function getRects(){
+    const list = [heroTitle, chatInput, chatLog, buySec, aboutSec, topbar];
+    const rects = [];
+    for (const el of list){
+      if(!el) continue;
+      const r = el.getBoundingClientRect();
+      if (r.bottom >= -50 && r.top <= window.innerHeight + 50) {
+        rects.push({x:r.left, y:r.top, w:r.width, h:r.height});
       }
-      return true;
+    }
+    return rects;
+  }
+
+  // Ball types: 'original' | 'small' | 'spawner' | 'blob' | 'redSmall' | 'redBig'
+  function tierToRadius(tier){ const t = Math.max(1, Math.min(15, tier|0)); return 8 + (4 * (t - 1) / 14); }
+
+  function makeBall(opts={}){
+    const {
+      x=window.innerWidth*0.6, y=window.innerHeight*0.3,
+      r=10, vx=3.2, vy=2.6, type='small', sizeTier=null, hasFast=false
+    } = opts;
+    return {
+      x,y,r,vx,vy,type,sizeTier,hasFast,
+      squashTimer:0, squashAxis:'y',
+      jellyTimer:0, jellyPhase:0,
+      balloonTimer:0, balloonAxis:'y',
+      repelTimer:0,              // red repel effect
+      _dead:false
+    };
+  }
+
+  const balls = [ makeBall({ type:'original', vx:1.1, vy:0.9, r:tierToRadius(7), sizeTier:7 }) ];
+  updateBallCount();
+
+  /* Spatial Hash for performance */
+  const CELL = 48;
+  function buildGrid(){
+    const grid = new Map();
+    for (let i=0;i<balls.length;i++){
+      const b = balls[i]; if (b._dead) continue;
+      const minx = Math.floor((b.x - b.r)/CELL), maxx = Math.floor((b.x + b.r)/CELL);
+      const miny = Math.floor((b.y - b.r)/CELL), maxy = Math.floor((b.y + b.r)/CELL);
+      for(let gx=minx; gx<=maxx; gx++){
+        for(let gy=miny; gy<=maxy; gy++){
+          const key = gx+','+gy;
+          if(!grid.has(key)) grid.set(key, []);
+          grid.get(key).push(i);
+        }
+      }
+    }
+    return grid;
+  }
+  function nearbyPairs(grid){
+    const seen = new Set(), pairs = [];
+    for (const ids of grid.values()){
+      for (let a=0;a<ids.length;a++){
+        for (let b=a+1;b<ids.length;b++){
+          const i=ids[a], j=ids[b], key = i<j ? `${i}-${j}` : `${j}-${i}`;
+          if (seen.has(key)) continue; seen.add(key); pairs.push([i,j]);
+        }
+      }
+    }
+    return pairs;
+  }
+
+  function bounceWall(b, W, H){
+    if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
+    if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
+    if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
+    if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
+  }
+  function collideWithRect(b, R){
+    const nx = Math.max(R.x, Math.min(b.x, R.x + R.w));
+    const ny = Math.max(R.y, Math.min(b.y, R.y + R.h));
+    const dx = b.x - nx, dy = b.y - ny;
+    if (dx*dx + dy*dy > b.r*b.r) return false;
+
+    const cx = R.x + R.w/2, cy = R.y + R.h/2;
+    const overlapX = (R.w/2 + b.r) - Math.abs(b.x - cx);
+    const overlapY = (R.h/2 + b.r) - Math.abs(b.y - cy);
+
+    if (overlapX < overlapY){
+      b.vx *= -1; b.x += (b.vx>0?1:-1)*Math.max(1,overlapX*0.6); b.squashTimer=8; b.squashAxis='x';
+    } else {
+      b.vy *= -1; b.y += (b.vy>0?1:-1)*Math.max(1,overlapY*0.6); b.squashTimer=8; b.squashAxis='y';
     }
 
-    function accelerateOriginal(b){
-      const speed = Math.hypot(b.vx, b.vy);
-      const cap = (b.hasFast ? 9 : 4);
-      const accel = 0.002;
-      const ns = Math.min(cap, speed * (1 + accel));
-      if (ns>0 && speed>0){ const f = ns/speed; b.vx*=f; b.vy*=f; }
+    // Pink blobs (large) bend like balloons
+    if (b.type==='blob' && b.r>=12 && b.balloonTimer===0){
+      b.balloonTimer = 18;
+      b.balloonAxis = (overlapX < overlapY) ? 'x' : 'y';
     }
+    return true;
+  }
 
-    function handleBallBall(i,j){
-      const a=balls[i], b=balls[j];
-      if (a._dead || b._dead) return;
+  function accelerateOriginal(b){
+    const speed = Math.hypot(b.vx, b.vy);
+    const cap = (b.hasFast ? 9 : 4);
+    const accel = 0.002;
+    const ns = Math.min(cap, speed * (1 + accel));
+    if (ns>0 && speed>0){ const f = ns/speed; b.vx*=f; b.vy*=f; }
+  }
 
+  function countType(fn){ return balls.reduce((n,b)=> n + (!b._dead && fn(b) ? 1 : 0), 0); }
+
+  function tryMergePairs(){
+    const grid = buildGrid();
+    const pairs = nearbyPairs(grid);
+    for (const [i,j] of pairs){
+      const a = balls[i], b = balls[j];
+      if (a._dead || b._dead) continue;
       const dx = b.x - a.x, dy = b.y - a.y;
       const dist = Math.hypot(dx,dy);
-      if (dist > a.r + b.r) return;
+      if (dist > a.r + b.r) continue;
 
-      // If any is killer -> delete the other (non-red). Killers ignore each other.
-      if (a.type==='killer' && b.type!=='killer'){ b._dead = true; return; }
-      if (b.type==='killer' && a.type!=='killer'){ a._dead = true; return; }
-      if (a.type==='killer' && b.type==='killer'){ return; }
-
-      // Spawner + Spawner -> Red Swarm (transform field into up to 19 red killers total)
-      if ( (a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original') ){
-        triggerRedSwarm( (a.x+b.x)/2, (a.y+b.y)/2 );
-        return;
+      // Red interactions
+      if (a.type==='redSmall' || a.type==='redBig' || b.type==='redSmall' || b.type==='redBig'){
+        redVsAny(a,b);
+        continue;
       }
 
-      // Small + Small -> merge into Spawner
-      if (a.type==='small' && b.type==='small'){
-        mergeIntoSpawner(i,j);
-        return;
-      }
-
-      // Otherwise, simple elastic-ish bounce
-      const nx = dx / (dist||1), ny = dy / (dist||1);
-      const p = 2 * (a.vx*nx + a.vy*ny - b.vx*nx - b.vy*ny) / 2;
-      a.vx -= p*nx; a.vy -= p*ny;
-      b.vx += p*nx; b.vy += p*ny;
-      a.squashTimer = b.squashTimer = 8;
-      a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y';
-      b.squashAxis = a.squashAxis;
-    }
-
-    function mergeIntoSpawner(i,j){
-      const a=balls[i], b=balls[j];
-      // New spawner at mass-weighted midpoint (same mass so average), average velocity
-      const nx = (a.x + b.x)/2, ny = (a.y + b.y)/2;
-      const nvx = (a.vx + b.vx)/2, nvy = (a.vy + b.vy)/2;
-      const nr = Math.sqrt(a.r*a.r + b.r*b.r); // area-additive radius
-      a._dead = true; b._dead = true;
-      if (balls.length - (a._dead?1:0) - (b._dead?1:0) >= MAX_BALLS) return; // respect cap
-
-      balls.push(makeBall({
-        x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9, nr), type:'spawner'
-      }));
-      const sp = balls[balls.length-1];
-      sp.jellyTimer = 16; sp.jellyPhase = 0;
-    }
-
-    function triggerRedSwarm(cx,cy){
-      // Remove colliding spawners by marking everyone non-killer as dead first? No.
-      // We’ll keep existing balls and spawn red killers up to the cap (19 total).
-      // This keeps gameplay interesting and respects the global cap.
-      // If you prefer to ALWAYS have exactly 19 reds only, let me know and I’ll switch it.
-
-      // Count current balls; remove the two colliders handled by caller via dead flags if needed.
-      // Here we just spawn killers up to fill to MAX_BALLS.
-      let current = balls.filter(b=>!b._dead).length;
-      const toSpawn = Math.max(0, MAX_BALLS - current);
-      if (toSpawn === 0) return;
-
-      const radius = 7.5;
-      for (let i=0;i<toSpawn;i++){
-        const ang = Math.random()*Math.PI*2;
-        const spd = 2.5 + Math.random()*2.5;
-        balls.push(makeBall({
-          x: cx + Math.cos(ang)*(10+i*0.2),
-          y: cy + Math.sin(ang)*(10+i*0.2),
-          r: radius, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd,
-          type:'killer'
-        }));
-      }
-    }
-
-    /* ==== Drawing ==== */
-    function drawBall(b){
-      // squash/stretch on wall/UI
-      let sx=1, sy=1;
-      if (b.squashTimer>0){
-        const t = b.squashTimer/8;
-        const amt = 0.35 * Math.sin(t * Math.PI);
-        if (b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
-      }
-      // jelly merge wobble
-      if (b.jellyTimer>0){ const wob = 0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
-      // balloon bend
-      if (b.balloonTimer>0){
-        const t = b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI);
-        if (b.balloonAxis==='x'){ sx*=1+bow; sy*=1-bow*0.6; } else { sy*=1+bow; sx*=1-bow*0.6; }
-      }
-
-      ctx.save();
-      ctx.translate(b.x, b.y);
-      ctx.scale(sx, sy);
-
-      // glow
-      ctx.beginPath(); ctx.arc(0, 0, b.r+3, 0, Math.PI*2);
-      ctx.fillStyle = (b.type==='killer') ? 'rgba(255,77,77,.35)' : 'rgba(255,255,255,.40)';
-      ctx.fill();
-
-      // core
-      ctx.beginPath(); ctx.arc(0, 0, b.r, 0, Math.PI*2);
-      ctx.fillStyle = (b.type==='killer') ? '#ff4d4d' : '#ffffff';
-      ctx.fill();
-
-      // rings
-      if (b.type==='original' || b.type==='spawner'){
-        ctx.lineWidth=2; ctx.strokeStyle = (b.type==='spawner') ? 'rgba(255,220,130,.85)' : 'rgba(153,183,255,.7)';
-        ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
-      }
-
-      ctx.restore();
-    }
-
-    /* ==== Loop ==== */
-    function updateBallCount(){ ballCountEl.textContent = String(balls.filter(b=>!b._dead).length); }
-    function checkGameOver(){
-      const anyWhite = balls.some(b=>!b._dead && b.type!=='killer');
-      if (!anyWhite){
-        gameOverEl.style.display='flex';
-        setTimeout(()=>location.reload(), 1800);
-      }
-    }
-
-    function step(){
-      const W = window.innerWidth, H = window.innerHeight;
-      const rects = getRects();
-
-      // Move & walls/UI
-      for (const b of balls){
-        if (b._dead) continue;
-        b.x += b.vx; b.y += b.vy;
-        if (b.type==='original'){ // gradual accel
-          const speed = Math.hypot(b.vx,b.vy);
-          const cap = (b.hasFast?9:4);
-          const accel = 0.002;
-          const ns = Math.min(cap, speed*(1+accel));
-          if (ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
+      // Spawner + Spawner -> Pink blob
+      if ((a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original')){
+        // spawn one pink blob at midpoint, average velocity, trembling
+        const nx = (a.x + b.x)/2, ny = (a.y + b.y)/2;
+        const nvx= (a.vx + b.vx)/2, nvy= (a.vy + b.vy)/2;
+        const nr = Math.max(10, Math.sqrt(a.r*a.r + b.r*b.r));
+        a._dead = true; b._dead = true;
+        if (balls.length < MAX_BALLS){
+          const blob = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:nr, type:'blob' });
+          blob.jellyTimer = 30; blob.jellyPhase = 0;
+          balls.push(blob);
         }
-        bounceWall(b, W, H);
-        for (const R of rects) collideWithRect(b, R);
-        if (b.squashTimer>0) b.squashTimer--;
-        if (b.jellyTimer>0)  b.jellyTimer--;
-        if (b.balloonTimer>0) b.balloonTimer--;
+        continue;
       }
 
-      // Ball-ball collisions using spatial hash
-      const grid = buildGrid();
-      const pairs = nearbyPairs(grid);
-      for (const [i,j] of pairs){ handleBallBall(i,j); }
-
-      // Cleanup
-      for (let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
-
-      // Draw
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      for (const b of balls) drawBall(b);
-
-      updateBallCount();
-      checkGameOver();
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-
-    /* ==== Input / scoring / spawning ==== */
-    function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy) <= b.r + 5; }
-
-    document.addEventListener('click', (e)=>{
-      if (e.target.closest('input, textarea, [contenteditable="true"]')) return; // no score change
-
-      const x = e.clientX, y = e.clientY;
-      let handled = false;
-
-      // Prioritize clicking white balls (original/spawner/small)
-      for (let idx=0; idx<balls.length; idx++){
-        const b = balls[idx]; if (b._dead || b.type==='killer') continue;
-        if (hitBallAt(x,y,b)){
-          addScore(+1);
-          handled = true;
-
-          // push away
-          const dx = b.x - x, dy = b.y - y, len=Math.max(1,Math.hypot(dx,dy));
-          let pushX=(dx/len)*4.8, pushY=(dy/len)*4.8;
-          const cap = (b.type==='original' && b.hasFast) ? 9 : 4;
-          const sp=Math.hypot(pushX,pushY), f=Math.min(cap,sp)/(sp||1);
-          b.vx = pushX*f; b.vy = pushY*f;
-
-          // Original leveling: sizeTier up to 15
-          if (b.type==='original'){
-            if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
-            b._clicks = (b._clicks||0)+1;
-            if (b._clicks>=15){ b.hasFast=true; const curS=Math.hypot(b.vx,b.vy); if (curS<7){ const F=7/(curS||1); b.vx*=F; b.vy*=F; } }
-          }
-
-          // Spawner or Original can spawn a mini (respect cap)
-          if ((b.type==='spawner' || b.type==='original') && balls.length < MAX_BALLS){
-            const ang = Math.random()*Math.PI*2, spd = 1.6 + Math.random()*1.6;
+      // Pink blob + pink blob -> spawn small reds (up to RED_MAX total)
+      if (a.type==='blob' && b.type==='blob'){
+        const redsNow = countType(bb=>bb.type==='redSmall'||bb.type==='redBig');
+        const allowance = Math.max(0, RED_MAX - redsNow);
+        const spawn = Math.min(3, allowance); // 0..3 small reds
+        if (spawn>0){
+          const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+          for (let k=0;k<spawn;k++){
+            const ang = Math.random()*Math.PI*2, sp = 2.2 + Math.random()*1.8;
             balls.push(makeBall({
-              x: b.x + Math.cos(ang)*(b.r+6),
-              y: b.y + Math.sin(ang)*(b.r+6),
-              r: Math.max(5, Math.round(b.r * 0.6)),
-              vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, type:'small'
+              x: cx + Math.cos(ang)*(a.r+6),
+              y: cy + Math.sin(ang)*(a.r+6),
+              r: 7.5, vx: Math.cos(ang)*sp, vy: Math.sin(ang)*sp, type:'redSmall'
             }));
           }
-
-          break;
         }
+        a._dead = true; b._dead = true;
+        continue;
       }
 
-      if (!handled){
-        // Maybe clicked a killer (no points given), else miss
-        const hitKiller = balls.some(b=>!b._dead && b.type==='killer' && hitBallAt(x,y,b));
-        if (!hitKiller) addScore(-1); // miss
+      // Small + Small (white) -> Spawner
+      if (a.type==='small' && b.type==='small'){
+        const nx = (a.x + b.x)/2, ny = (a.y + b.y)/2;
+        const nvx= (a.vx + b.vx)/2, nvy= (a.vy + b.vy)/2;
+        const nr = Math.sqrt(a.r*a.r + b.r*b.r);
+        a._dead = true; b._dead = true;
+        if (balls.length < MAX_BALLS){
+          const sp = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9, nr), type:'spawner' });
+          sp.jellyTimer=16; sp.jellyPhase=0;
+          balls.push(sp);
+        }
+        continue;
       }
-    });
-  })();
+
+      // Otherwise: elastic-ish bounce + squash
+      const nx = dx / (dist||1), ny = dy / (dist||1);
+      const p = 2 * (a.vx*nx + a.vy*ny - b.vx*nx - b.vy*ny) / 2;
+      a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
+      a.squashTimer = b.squashTimer = 8;
+      a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis = a.squashAxis;
+    }
+  }
+
+  function redVsAny(a,b){
+    // Ensure 'A' is red if one is
+    let red=a, other=b;
+    if (!(a.type==='redSmall' || a.type==='redBig')){ red=b; other=a; }
+
+    // Red vs red
+    if (other.type==='redSmall' || other.type==='redBig'){
+      // small vs small -> one dies
+      if (red.type==='redSmall' && other.type==='redSmall'){
+        (Math.random()<0.5 ? red : other)._dead = true;
+      } else if (red.type==='redBig' && other.type==='redBig'){
+        // big vs big -> gentle merge bounce (keep both, slow them a bit)
+        red.vx*=0.85; red.vy*=0.85; other.vx*=0.85; other.vy*=0.85;
+      } else {
+        // big vs small -> small dies
+        (other.type==='redSmall' ? other : red)._dead = true;
+      }
+      return;
+    }
+
+    // Red vs spawner/original/small/blob (white team)
+    if (red.type==='redSmall'){
+      // red small vs spawner: red dies (your rule)
+      if (other.type==='spawner' || other.type==='original'){
+        red._dead = true; return;
+      }
+      // red small vs white (small/blob) -> eats it and becomes big red
+      if (other.type==='small' || other.type==='blob'){
+        other._dead = true;
+        red.type='redBig'; red.r = Math.max(red.r, 10.5);
+        red.vx*=0.95; red.vy*=0.95; // heavier feel
+        return;
+      }
+    } else if (red.type==='redBig'){
+      // big red deletes any white, including spawner/original
+      if (other.type!=='redSmall' && other.type!=='redBig'){
+        other._dead = true;
+        // knockback
+        red.vx*=0.98; red.vy*=0.98;
+        return;
+      }
+    }
+  }
+
+  function updateBallCount(){ ballCountEl.textContent = String(balls.filter(b=>!b._dead).length); }
+
+  function drawBall(b){
+    // effects
+    let sx=1, sy=1;
+    if (b.squashTimer>0){ const t=b.squashTimer/8, amt=0.35*Math.sin(t*Math.PI); if(b.squashAxis==='x'){sx=1+amt;sy=1-amt;} else {sy=1+amt;sx=1-amt;} }
+    if (b.jellyTimer>0){ const wob=0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
+    if (b.balloonTimer>0){ const t=b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI); if(b.balloonAxis==='x'){sx*=1+bow;sy*=1-bow*0.6;} else {sy*=1+bow;sx*=1-bow*0.6;} }
+
+    ctx.save(); ctx.translate(b.x, b.y); ctx.scale(sx, sy);
+
+    // glow & core
+    ctx.beginPath(); ctx.arc(0,0,b.r+3,0,Math.PI*2);
+    if (b.type==='redSmall' || b.type==='redBig') ctx.fillStyle='rgba(255,77,77,.35)';
+    else if (b.type==='blob') ctx.fillStyle='rgba(255,138,214,.35)';
+    else ctx.fillStyle='rgba(255,255,255,.40)';
+    ctx.fill();
+
+    ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
+    if (b.type==='redSmall' || b.type==='redBig') ctx.fillStyle='#ff4d4d';
+    else if (b.type==='blob') ctx.fillStyle='#ff8ad6';
+    else ctx.fillStyle='#ffffff';
+    ctx.fill();
+
+    // rings
+    if (b.type==='original'){
+      ctx.lineWidth=2; ctx.strokeStyle='rgba(153,183,255,.7)';
+      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
+    } else if (b.type==='spawner'){
+      ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.9)';
+      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
+    }
+
+    // bonus star visual (draw as little star when repelTimer>0)
+    if (b.repelTimer>0 && (b.type==='redSmall' || b.type==='redBig')){
+      ctx.beginPath(); ctx.arc(0,0, b.r+7, 0, Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,.4)'; ctx.lineWidth=1.2; ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  // Occasional bonus star (click for +5 and red repel)
+  let star = null; // {x,y,r,life}
+  function maybeSpawnStar(){
+    if (star || Math.random() > 0.004) return;
+    star = { x: 40 + Math.random()*(window.innerWidth-80), y: 120 + Math.random()*(window.innerHeight-200), r: 10, life: 100 };
+  }
+  function drawStar(){
+    if (!star) return;
+    const {x,y,r} = star;
+    ctx.save(); ctx.translate(x,y);
+    ctx.beginPath();
+    for (let i=0;i<10;i++){
+      const ang = i * Math.PI/5;
+      const rr = (i%2===0) ? r : r*0.45;
+      ctx.lineTo(Math.cos(ang)*rr, Math.sin(ang)*rr);
+    }
+    ctx.closePath();
+    ctx.fillStyle='rgba(255,255,200,.9)';
+    ctx.fill();
+    ctx.restore();
+    if (--star.life <= 0) star=null;
+  }
+
+  function checkGameOver(){
+    const anyFriendly = balls.some(b=>!b._dead && (b.type==='original'||b.type==='small'||b.type==='spawner'||b.type==='blob'));
+    if (!anyFriendly){
+      finalScoreText.textContent = `Your score: ${score}`;
+      gameOverEl.style.display='flex';
+
+      // Save if logged in (silent), otherwise button offers manual login/save
+      saveStatus.textContent = '';
+    }
+  }
+
+  playAgainBtn.addEventListener('click', ()=>location.reload());
+  saveScoreBtn.addEventListener('click', async ()=>{
+    saveStatus.textContent = 'Saving...';
+    const res = await mnAuth.submitScore(score, { maxBalls:MAX_BALLS, redsMax:RED_MAX });
+    if (res.ok) saveStatus.textContent = 'Saved! Best score updated if higher.';
+    else if (res.needLogin) saveStatus.textContent = 'Please sign in to save your score.';
+    else saveStatus.textContent = 'Offline – saved locally.';
+  });
+
+  function antiOrbit(b){
+    // If a small ball lingers near a spawner/original, nudge it away randomly
+    if (b.type!=='small') return;
+    const near = balls.find(x=>!x._dead && (x.type==='spawner'||x.type==='original') && Math.hypot(x.x-b.x,x.y-b.y) < (x.r + b.r + 18));
+    if (near){
+      const ang = Math.random()*Math.PI*2, kick = 0.6 + Math.random()*0.8;
+      b.vx += Math.cos(ang)*kick; b.vy += Math.sin(ang)*kick;
+    }
+  }
+
+  function step(){
+    const W = window.innerWidth, H = window.innerHeight;
+    const rects = getRects();
+
+    // Move, UI walls
+    for (const b of balls){
+      if (b._dead) continue;
+      b.x += b.vx; b.y += b.vy;
+
+      // Gradual speedup for original
+      if (b.type==='original') accelerateOriginal(b);
+
+      // Small randomness for reds to avoid laser efficiency
+      if (b.type==='redSmall' || b.type==='redBig'){
+        if (Math.random()<0.02){ b.vx += (Math.random()-.5)*0.6; b.vy += (Math.random()-.5)*0.6; }
+        if (b.repelTimer>0){ b.repelTimer--; }
+      }
+
+      // Anti-orbit
+      antiOrbit(b);
+
+      bounceWall(b, W, H);
+      for (const R of rects) collideWithRect(b, R);
+
+      // timers
+      if (b.squashTimer>0) b.squashTimer--;
+      if (b.jellyTimer>0)  b.jellyTimer--;
+      if (b.balloonTimer>0) b.balloonTimer--;
+    }
+
+    // Collisions & merges
+    tryMergePairs();
+
+    // Cleanup
+    for (let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
+
+    // Draw
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for (const b of balls) drawBall(b);
+
+    // Star
+    maybeSpawnStar(); drawStar();
+
+    updateBallCount();
+    checkGameOver();
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+
+  function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy) <= b.r + 5; }
+
+  // Click: +1 if ball, -1 if miss, no change if input
+  document.addEventListener('click', (e)=>{
+    if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
+
+    const x=e.clientX, y=e.clientY;
+
+    // Star click?
+    if (star && Math.hypot(star.x - x, star.y - y) <= star.r+6){
+      addScore(5); star=null;
+      // apply repel to reds briefly
+      for (const r of balls){ if (!r._dead && (r.type==='redSmall'||r.type==='redBig')) r.repelTimer = 120; }
+      return;
+    }
+
+    // Click on any ball (prefer friendlies)
+    let handled=false;
+    for (const b of balls){
+      if (b._dead) continue;
+      if (hitBallAt(x,y,b)){
+        addScore(1);
+        handled=true;
+
+        // push
+        const dx=b.x-x, dy=b.y-y, len=Math.max(1,Math.hypot(dx,dy));
+        let pushX=(dx/len)*4.8, pushY=(dy/len)*4.8;
+        const cap = (b.type==='original' && b.hasFast) ? 9 : 4;
+        const sp=Math.hypot(pushX,pushY), f=Math.min(cap,sp)/(sp||1);
+        b.vx = pushX*f; b.vy = pushY*f;
+
+        // Original leveling to 15
+        if (b.type==='original'){
+          if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
+          b._clicks = (b._clicks||0)+1;
+          if (b._clicks>=15){ b.hasFast=true; const curS=Math.hypot(b.vx,b.vy); if (curS<7){ const F=7/(curS||1); b.vx*=F; b.vy*=F; } }
+        }
+
+        // Spawners and Original can spawn a new small (respect 19 cap)
+        if ((b.type==='spawner' || b.type==='original') && balls.length < MAX_BALLS){
+          const ang=Math.random()*Math.PI*2, spd=1.6+Math.random()*1.6;
+          balls.push(makeBall({
+            x: b.x + Math.cos(ang)*(b.r+6),
+            y: b.y + Math.sin(ang)*(b.r+6),
+            r: Math.max(5, Math.round(b.r * 0.6)),
+            vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, type:'small'
+          }));
+          updateBallCount();
+        }
+
+        break;
+      }
+    }
+    // Miss
+    if (!handled) addScore(-1);
+  });
+
+})();
 </script>
 </body>
 </html>
