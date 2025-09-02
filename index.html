@@ -12,6 +12,7 @@
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
     --shadow:0 18px 40px rgba(0,0,0,.45);
     --galaxy1: rgba(156,124,255,.22); --galaxy2: rgba(85,180,255,.20); --galaxy3: rgba(255,170,220,.16);
+    --btnBG: rgba(255,255,255,.08);
   }
 
   html,body{height:100%}
@@ -64,6 +65,7 @@
   .nav{display:flex;gap:18px}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+  .playerBtn{margin-left:10px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--btnBG);color:var(--ink);cursor:pointer}
 
   /* Hero + chat */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
@@ -90,6 +92,37 @@
 
   /* Ball canvas (on top of content) */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
+
+  /* HUD (score/username) */
+  .hud{
+    position:fixed; top:58px; right:12px; z-index:31;
+    background:rgba(8,12,30,.7); border:1px solid var(--line);
+    border-radius:12px; padding:8px 10px; font-size:13px; box-shadow:var(--shadow);
+    cursor:pointer; user-select:none;
+  }
+  .hud b{color:#fff}
+
+  /* Account modal */
+  .modalBack{
+    position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter: blur(2px);
+    display:none; align-items:center; justify-content:center; z-index:10000;
+  }
+  .modal{
+    width:min(420px, 92vw);
+    background:rgba(12,16,34,.95); border:1px solid var(--line); border-radius:14px;
+    padding:16px; color:#eaf2ff; box-shadow:var(--shadow)
+  }
+  .modal h4{margin:0 0 10px}
+  .modal label{display:block; font-size:13px; margin:8px 0 4px; color:#cfe1ff}
+  .modal input{
+    width:100%; padding:10px; border:1px solid var(--inputLine); border-radius:10px; background:var(--inputBG); color:#eaf2ff;
+  }
+  .modal .row{display:flex; gap:10px; margin-top:12px}
+  .modal button{
+    padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--btnBG); color:var(--ink); cursor:pointer
+  }
+  .modal .muted{color:#c6d0ea; font-size:12px; margin-top:8px}
+  .modal .closeX{position:absolute; right:16px; top:12px; cursor:pointer; opacity:.9}
   @media (max-width:720px){.nav a{padding:6px 10px}}
 </style>
 </head>
@@ -106,6 +139,7 @@
       <a href="#home" id="navHome">MayaNut</a>
       <a href="#buy"  id="navBuy">Buy</a>
       <a href="#about" id="navAbout">About</a>
+      <button id="playerBtn" class="playerBtn" type="button">Player</button>
     </nav>
   </header>
 
@@ -153,6 +187,25 @@
   <!-- Ball overlay -->
   <canvas id="ballLayer"></canvas>
 
+  <!-- HUD -->
+  <div id="hud" class="hud" title="Click to manage your player account"></div>
+
+  <!-- Account Modal -->
+  <div id="modalBack" class="modalBack" aria-hidden="true">
+    <div class="modal">
+      <div class="closeX" id="closeModal">✕</div>
+      <h4>Player Account</h4>
+      <label for="username">Username</label>
+      <input id="username" placeholder="Choose a username"/>
+      <div class="row">
+        <button id="signUpBtn" type="button">Create Account</button>
+        <button id="signInBtn" type="button">Sign In</button>
+        <button id="signOutBtn" type="button">Sign Out</button>
+      </div>
+      <p class="muted" id="accountInfo" aria-live="polite"></p>
+    </div>
+  </div>
+
 <script>
   /* ===== Minimal chat behavior ===== */
   const input = document.getElementById('chatInput');
@@ -198,7 +251,80 @@
   document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
   document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-  /* ===== Bouncing ball game (now clearly visible, above all; collides with more sections) ===== */
+  /* ===== Client-side Accounts & Scoring (localStorage) ===== */
+  const hud = document.getElementById('hud');
+  const modalBack = document.getElementById('modalBack');
+  const closeModal = document.getElementById('closeModal');
+  const playerBtn = document.getElementById('playerBtn');
+  const usernameInput = document.getElementById('username');
+  const signUpBtn = document.getElementById('signUpBtn');
+  const signInBtn = document.getElementById('signInBtn');
+  const signOutBtn = document.getElementById('signOutBtn');
+  const accountInfo = document.getElementById('accountInfo');
+
+  function loadDB(){
+    try { return JSON.parse(localStorage.getItem('mn_users')||'{}'); } catch(e){ return {}; }
+  }
+  function saveDB(db){ localStorage.setItem('mn_users', JSON.stringify(db)); }
+  function getCurrent(){ return localStorage.getItem('mn_current') || null; }
+  function setCurrent(name){ if(name) localStorage.setItem('mn_current', name); else localStorage.removeItem('mn_current'); }
+  function getScore(name){ const db = loadDB(); return (db[name]?.score) ?? 0; }
+  function setScore(name,score){ const db = loadDB(); if(!db[name]) db[name]={score:0}; db[name].score = score; saveDB(db); }
+
+  function refreshHUD(){
+    const cur = getCurrent();
+    if(!cur){ hud.innerHTML = `<b>Guest</b> · Score: 0`; return; }
+    hud.innerHTML = `<b>${cur}</b> · Score: ${getScore(cur)}`;
+  }
+
+  function openModal(){ modalBack.style.display='flex'; modalBack.setAttribute('aria-hidden','false'); usernameInput.focus(); accountInfo.textContent = currentStatus(); }
+  function closeModalFn(){ modalBack.style.display='none'; modalBack.setAttribute('aria-hidden','true'); }
+  function currentStatus(){
+    const cur = getCurrent();
+    if(cur) return `Signed in as ${cur}. Current score: ${getScore(cur)}.`;
+    return `Not signed in. Create a new username or sign in to an existing one (no password; stored only in this browser).`;
+  }
+
+  playerBtn.addEventListener('click', openModal);
+  hud.addEventListener('click', openModal);
+  closeModal.addEventListener('click', closeModalFn);
+  modalBack.addEventListener('click', (e)=>{ if(e.target===modalBack) closeModalFn(); });
+
+  signUpBtn.addEventListener('click', ()=>{
+    const name = (usernameInput.value||'').trim();
+    if(!name){ accountInfo.textContent = 'Please enter a username.'; return; }
+    const db = loadDB();
+    if(db[name]){ accountInfo.textContent = 'That username already exists. Use Sign In.'; return; }
+    db[name] = {score:0}; saveDB(db); setCurrent(name); accountInfo.textContent = `Account created. Signed in as ${name}.`; refreshHUD();
+  });
+  signInBtn.addEventListener('click', ()=>{
+    const name = (usernameInput.value||'').trim();
+    if(!name){ accountInfo.textContent = 'Enter your username to sign in.'; return; }
+    const db = loadDB();
+    if(!db[name]){ accountInfo.textContent = 'No account by that name. Create it with Create Account.'; return; }
+    setCurrent(name); accountInfo.textContent = `Signed in as ${name}.`; refreshHUD();
+  });
+  signOutBtn.addEventListener('click', ()=>{ setCurrent(null); accountInfo.textContent = 'Signed out.'; refreshHUD(); });
+
+  refreshHUD();
+
+  function adjustScore(delta){
+    const cur = getCurrent();
+    if(!cur){ // If not signed in, keep a Guest score (non-persistent across reloads)
+      const guestKey = '__guest';
+      const db = loadDB();
+      db[guestKey] = db[guestKey] || {score:0};
+      db[guestKey].score += delta;
+      saveDB(db);
+      hud.innerHTML = `<b>Guest</b> · Score: ${db[guestKey].score}`;
+      return;
+    }
+    const newScore = getScore(cur) + delta;
+    setScore(cur, newScore);
+    refreshHUD();
+  }
+
+  /* ===== Bouncing ball game (click scoring) ===== */
   (function(){
     const canvas = document.getElementById('ballLayer');
     const ctx = canvas.getContext('2d');
@@ -214,13 +340,13 @@
 
     const ball = { x: window.innerWidth*0.6, y: window.innerHeight*0.3, r: 10, vx: 3.2, vy: 2.6, maxSpeed: 6.5 };
 
-    // Elements to collide with (viewport-coords rects)
+    // Elements to collide with
     const heroTitle = document.getElementById('heroTitle');
     const chatInput = document.getElementById('chatInput');
     const chatLog  = document.getElementById('chatLog');
     const buySec   = document.getElementById('buy');
     const aboutSec = document.getElementById('about');
-    const topbar   = document.querySelector('.topbar'); // optional
+    const topbar   = document.querySelector('.topbar');
 
     function getRects(){
       const list = [heroTitle, chatInput, chatLog, buySec, aboutSec, topbar];
@@ -228,7 +354,6 @@
       for (const el of list){
         if(!el) continue;
         const r = el.getBoundingClientRect();
-        // Only include portions in (or near) viewport; but allow some leeway so it bounces when scrolled to
         if (r.bottom >= -50 && r.top <= window.innerHeight + 50) {
           rects.push({x:r.left, y:r.top, w:r.width, h:r.height});
         }
@@ -254,7 +379,7 @@
     function step(){
       ball.x += ball.vx; ball.y += ball.vy;
 
-      // Viewport walls
+      // Walls
       const W = window.innerWidth, H = window.innerHeight;
       if (ball.x - ball.r < 0){ ball.x = ball.r; ball.vx = Math.abs(ball.vx); }
       if (ball.x + ball.r > W){ ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx); }
@@ -264,10 +389,10 @@
       // Collisions
       for (const R of getRects()) collideWithRect(ball, R);
 
-      // Draw (glow + core)
+      // Draw
       ctx.clearRect(0,0,canvas.width,canvas.height);
       ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r+3, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,.45)'; ctx.fill();
       ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
       ctx.fillStyle = '#ffffff'; ctx.fill();
 
@@ -275,16 +400,35 @@
     }
     requestAnimationFrame(step);
 
-    // Click “push”: click above → push downward, left → push right, etc.
+    // Click handling: +1 on ball, -1 elsewhere (except inputs/textareas/contenteditable)
     document.addEventListener('click', (e)=>{
+      // Ignore clicks inside text boxes (no points)
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
+
       const dx = ball.x - e.clientX, dy = ball.y - e.clientY;
-      const len = Math.max(1, Math.hypot(dx,dy));
-      let vx = (dx/len)*4.8, vy = (dy/len)*4.8;
-      const speed = Math.hypot(vx,vy), cap = Math.min(ball.maxSpeed, speed);
-      const f = cap / speed;
-      ball.vx = vx*f; ball.vy = vy*f;
+      const dist = Math.hypot(dx,dy);
+
+      if (dist <= ball.r + 3){
+        // Hit ball -> +1 and push it away
+        adjustScore(+1);
+        const len = Math.max(1, dist);
+        let vx = (dx/len)*4.8, vy = (dy/len)*4.8;
+        const speed = Math.hypot(vx,vy), cap = Math.min(ball.maxSpeed, speed);
+        const f = cap / speed;
+        ball.vx = vx*f; ball.vy = vy*f;
+      } else {
+        // Miss -> -1
+        adjustScore(-1);
+        // Also nudge the ball slightly away from click
+        const len = Math.max(1, Math.hypot(dx,dy));
+        ball.vx += (dx/len)*0.6;
+        ball.vy += (dy/len)*0.6;
+      }
     });
   })();
+
+  // Init HUD state
+  (function(){ if(!localStorage.getItem('mn_users')) saveDB({}); refreshHUD(); })();
 </script>
 </body>
 </html>
