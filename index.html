@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>MayaNut Game</title>
+  <title>MayaNut Biology Game</title>
   <style>
     body {
       margin: 0;
@@ -54,29 +54,31 @@
     let W = window.innerWidth, H = window.innerHeight;
     canvas.width = W; canvas.height = H;
 
-    // Resize handler
     window.addEventListener("resize", () => {
       W = window.innerWidth; H = window.innerHeight;
       canvas.width = W; canvas.height = H;
     });
 
-    // Game state
+    // Colors and Stages
+    const colors = ["white","grey","blue","black","gold","doctor-green","red","lightgrey"];
+    const stages = ["little","medium","big"];
+    let balls = [];
+    let lines = [];
     let score = 0;
     const scoreEl = document.getElementById("score");
-    const colors = ["white","grey","blue","black","gold","doctor-green"];
-    let balls = [];
-    let lines = []; // gold connections
     const maxBalls = 300;
 
     // Ball constructor
-    function makeBall(x,y,color){
+    function makeBall(x,y,color,stage="little"){
       return {
         x,y,
         vx:(Math.random()-0.5)*2,
         vy:(Math.random()-0.5)*2,
-        r:8,
+        r:stage==="little"?6:stage==="medium"?10:14,
         color,
+        stage,
         chainId:null,
+        supercell:false,
         dead:false
       };
     }
@@ -92,14 +94,25 @@
       return added;
     }
 
+    // Stage promotion
+    function promote(ball){
+      if(ball.stage==="little"){ ball.stage="medium"; ball.r=10; }
+      else if(ball.stage==="medium"){ ball.stage="big"; ball.r=14; }
+    }
+
+    // Stage demotion
+    function demote(ball){
+      if(ball.stage==="big"){ ball.stage="medium"; ball.r=10; }
+      else if(ball.stage==="medium"){ ball.stage="little"; ball.r=6; }
+    }
+
     // Supercell creation
     function tryCreateSupercell(chain){
       if(chain.length>=5 && chain.length<=8){
-        // Turn into one big supercell at centroid
         let cx=0, cy=0;
         chain.forEach(id => { cx+=balls[id].x; cy+=balls[id].y; balls[id].dead=true; });
         cx/=chain.length; cy/=chain.length;
-        balls.push({x:cx,y:cy,vx:0,vy:0,r:30,color:"supercell",dead:false});
+        balls.push({x:cx,y:cy,vx:0,vy:0,r:40,color:"gold",supercell:true,dead:false});
       }
     }
 
@@ -115,7 +128,7 @@
           if(cmd==="spawn"){
             const n=parseInt(parts[1])||1;
             const color=parts[2]||"white";
-            if(colors.includes(color)||color==="red"||color==="supercell"){
+            if(colors.includes(color)){
               const added=spawnBalls(n,color);
               console.log(`Spawned ${added} ${color} balls`);
             }
@@ -155,10 +168,10 @@
       let chains={};
       for(let i=0;i<balls.length;i++){
         const a=balls[i];
-        if(a.dead||a.color!=="gold") continue;
+        if(a.dead||a.color!=="gold"||a.supercell) continue;
         for(let j=i+1;j<balls.length;j++){
           const b=balls[j];
-          if(b.dead||b.color!=="gold") continue;
+          if(b.dead||b.color!=="gold"||b.supercell) continue;
           const d=Math.hypot(a.x-b.x,a.y-b.y);
           if(d<100){
             lines.push([a,b]);
@@ -176,9 +189,51 @@
           }
         }
       }
+
       // Check for supercell formation
       for(const id in chains){
         tryCreateSupercell(chains[id]);
+      }
+
+      // Red hits: break supercells & gold -> lightgrey
+      for(const r of balls.filter(b=>b.color==="red"&&!b.dead)){
+        for(const g of balls.filter(b=>b.color==="gold"&&!b.dead)){
+          const d=Math.hypot(r.x-g.x,r.y-g.y);
+          if(d<r.r+g.r){
+            g.color="lightgrey"; g.supercell=false;
+          }
+        }
+        for(const s of balls.filter(b=>b.supercell&&!b.dead)){
+          const d=Math.hypot(r.x-s.x,r.y-s.y);
+          if(d<r.r+s.r){
+            s.dead=true; // break apart supercell
+          }
+        }
+      }
+
+      // Lightgrey merges -> gold
+      const light = balls.filter(b=>b.color==="lightgrey"&&!b.dead);
+      for(let i=0;i<light.length;i++){
+        for(let j=i+1;j<light.length;j++){
+          const a=light[i], b=light[j];
+          const d=Math.hypot(a.x-b.x,a.y-b.y);
+          if(d<a.r+b.r){
+            a.dead=true; b.dead=true;
+            balls.push(makeBall(a.x,a.y,"gold","little"));
+          }
+        }
+      }
+
+      // Promote on collisions
+      for(let i=0;i<balls.length;i++){
+        for(let j=i+1;j<balls.length;j++){
+          const a=balls[i], b=balls[j];
+          if(a.dead||b.dead) continue;
+          const d=Math.hypot(a.x-b.x,a.y-b.y);
+          if(d<a.r+b.r && a.color===b.color && a.stage===b.stage && a.stage!=="big"){
+            promote(a); promote(b);
+          }
+        }
       }
 
       // Clean up dead
@@ -187,7 +242,7 @@
 
     function draw(){
       ctx.clearRect(0,0,W,H);
-      // Draw lines first
+      // Draw lines
       ctx.strokeStyle="rgba(255,215,0,0.6)";
       for(const [a,b] of lines){
         ctx.beginPath();
@@ -198,12 +253,15 @@
       // Draw balls
       for(const b of balls){
         ctx.beginPath();
-        if(b.color==="supercell"){
-          ctx.strokeStyle="gold";
-          ctx.lineWidth=3;
+        if(b.supercell){
+          ctx.strokeStyle="gold"; ctx.lineWidth=3;
           ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-          ctx.stroke();
-          continue;
+          ctx.stroke(); continue;
+        }
+        if(b.color==="lightgrey"){
+          ctx.strokeStyle="lightgrey"; ctx.lineWidth=2;
+          ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+          ctx.stroke(); continue;
         }
         ctx.fillStyle=b.color==="doctor-green"?"lime":b.color;
         ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
