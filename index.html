@@ -98,6 +98,7 @@
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
   .section h3{margin:0 0 8px;color:#fff;font-size:22px}
   .section p{margin:8px 0 0;color:#cfe9ff;line-height:1.6}
+  .section ul{margin:10px 0 0 18px;color:#dfe9ff;line-height:1.6}
 
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
   .card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;color:#eaf2ff;text-decoration:none;transition:transform .2s ease,background .2s ease,border-color .2s ease}
@@ -129,7 +130,7 @@
             font-family="Poppins, Inter, system-ui, sans-serif"
             font-weight="900" font-size="180"
             fill="url(#mn-gold)" filter="url(#mn-shadow)">
-        <tspan>MayaNut</tspan><tspan dx="-5" dy="-68" font-size="64">™</tspan>
+        <tspan>MayaNut</tspan><tspan dx="-10" dy="-68" font-size="64">™</tspan>
       </text>
     </symbol>
   </defs>
@@ -141,6 +142,7 @@
     <a href="#home" id="navHome">MayaNut</a>
     <a href="#buy"  id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
+    <a href="#core"  id="navCore">Core</a>
     <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
   </nav>
 </header>
@@ -153,7 +155,7 @@
       <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
     </div>
 
-    <!-- Common questions as rectangular “cards” matching inputs -->
+    <!-- Common questions -->
     <div class="quickQ">
       <button class="chip" data-q="What is MayaNut™?">What is MayaNut™?</button>
       <button class="chip" data-q="Shop MayaNut™ Products">Shop MayaNut™ Products</button>
@@ -179,6 +181,19 @@
   <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
 </section>
 
+<!-- NEW: Core Memory / Training -->
+<section id="core" class="section" aria-labelledby="coreTitle">
+  <h3 id="coreTitle">Core Memory (Chatbot Training)</h3>
+  <p><strong>Why it matters in agriculture:</strong> MayaNut™ comes from the tropical tree <em>Brosimum alicastrum</em> (also called Ramón, Breadnut, Ojoche, Oox). The tree is drought-resilient, perennial, and supports agroforestry systems by providing shade, leaf litter for soils, wildlife food, and long-term carbon storage.</p>
+  <ul>
+    <li><strong>Seed contents:</strong> Naturally caffeine-free; rich in complex carbohydrates, dietary fiber, and plant protein, with minerals commonly reported such as calcium, potassium, and iron. Seeds are traditionally roasted for a beverage or milled into flour for drinks and baked goods.</li>
+    <li><strong>Rising potential in U.S. agriculture:</strong> As consumers seek climate-smart, resilient crops, MayaNut™ offers a perennial tree crop alternative that can complement orchards and agroforestry in warm regions.</li>
+    <li><strong>South Florida initiative:</strong> MayaNut LLC is actively introducing and cultivating MayaNut™ in South Florida—piloting plantings, evaluating varieties, and developing value-added foods and beverages.</li>
+    <li><strong>Conservation focus:</strong> Wild populations face pressure from deforestation and disturbance; fruit and seedlings can be damaged where invasive/feral pigs forage. We work to conserve and propagate the species while creating economic value that incentivizes protection.</li>
+  </ul>
+  <p><strong>Our mission:</strong> We conserve <em>Brosimum alicastrum</em> and cultivate it for the betterment of humanity—restoring soils, diversifying diets, and building resilient, regenerative food systems.</p>
+</section>
+
 <footer>
   © 2025 MayaNut LLC. All rights reserved.
   <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
@@ -189,33 +204,46 @@
 </footer>
 
 <script>
-/* Minimal chat with topic guard + quick questions */
+/* ===== Minimal chat with topic guard + quick questions + core memory ===== */
 const input=document.getElementById('chatInput');
 const logBox=document.getElementById('chatLog');
 function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
 
-const allowTokens=['mayanut','maya nut','mayan nut','brosimum alicastrum','brosiumum alicastrum','brosimum','ramon','breadnut','mayan breadnut','ojoche','oox','ox','product','products','flour','drink','drinks','snack','snacks','buy','shop'];
+const allowTokens=['mayanut','maya nut','mayan nut','brosimum alicastrum','brosiumum alicastrum','brosimum','ramon','breadnut','mayan breadnut','ojoche','oox','ox','product','products','flour','drink','drinks','snack','snacks','buy','shop','core','training','conserve','conservation'];
 const offTopic=[
   "I can only help with MayaNut™ and our products.",
   "I'm focused on MayaNut™ topics—ask about the tree, uses, or shopping!",
   "Let’s stay on-topic: MayaNut™ or product questions only.",
   "I answer questions about MayaNut™ and our offerings."
 ];
+
+const CORE_MEMORY = `MayaNut™ comes from the tree Brosimum alicastrum (Ramón, Breadnut, Ojoche, Oox). It’s a drought-resilient, perennial agroforestry species. Seeds are caffeine-free and known for complex carbs, fiber, plant protein, and minerals (commonly noted: calcium, potassium, iron). Traditional uses include roasted beverages and flour for drinks/baked goods. In the U.S., MayaNut™ shows promise as a climate-smart perennial crop; MayaNut LLC is pioneering cultivation and products in South Florida. We also focus on conservation as forests face pressure and feral pigs disturb fruit/seedlings. Mission: conserve and cultivate for soil health, biodiversity, nutrition, and resilient food systems.`;
+
 function isOnTopic(t){return allowTokens.some(k=>t.toLowerCase().includes(k));}
 
 function handleUser(q){
   q=q.trim(); if(!q) return;
   say('You', q);
+
   if(!isOnTopic(q)){ say('MayaNut', offTopic[Math.floor(Math.random()*offTopic.length)]); return; }
 
-  if(/what\s+is\s+mayanut/i.test(q))
-    say('MayaNut',"MayaNut™ is the seed of the *Brosimum alicastrum* tree (also called Ramón or Breadnut). It’s nutritious and used for roasted beverages, flour, and snacks.");
-  else if(/shop|buy|product/i.test(q)){
-    say('MayaNut',"We're launching products soon! Check Flour, Drinks, and Snacks in the Buy section.");
-    document.getElementById('buy').scrollIntoView({behavior:'smooth'});
-  } else {
-    say('MayaNut',"Ask about cultivation, nutrition, history, or MayaNut™ products!");
+  if(/what\s+is\s+mayanut/i.test(q)){
+    say('MayaNut',"MayaNut™ is the seed of *Brosimum alicastrum* (Ramón/Breadnut). It’s caffeine-free and used as a roasted beverage or flour—nutritious, versatile, and great for agroforestry.");
+    return;
   }
+  if(/shop|buy|product/i.test(q)){
+    say('MayaNut',"We're launching products soon! Explore Flour, Drinks, and Snacks in the Buy section.");
+    document.getElementById('buy').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+  if(/core|training|mission|conserv/i.test(q)){
+    say('MayaNut', CORE_MEMORY);
+    document.getElementById('core').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+
+  // default on-topic help
+  say('MayaNut',"Ask about cultivation, nutrition, history, conservation, or MayaNut™ products. For a full overview, type “core”.");
 }
 
 input.addEventListener('keydown',e=>{
@@ -226,7 +254,7 @@ document.querySelectorAll('.chip').forEach(c=>{
   c.addEventListener('click',()=>handleUser(c.dataset.q||c.textContent));
 });
 
-['navHome','navBuy','navAbout'].forEach(id=>{
+['navHome','navBuy','navAbout','navCore'].forEach(id=>{
   const el=document.getElementById(id);
   if(el) el.addEventListener('click',e=>{
     e.preventDefault();
