@@ -149,7 +149,7 @@ function handleCommand(cmd){
   say('MayaNut', 'Commands: /spawn N [small|spawner|factory|red], /fill, /clear, /pause, /resume');
 }
 
-/* ===== Game Engine (big↔big only N/S; big↔medium only E/W; factories spawn littles) ===== */
+/* ===== Game Engine (factories spawn orbiters; directional bonding) ===== */
 (function(){
   const canvas=document.getElementById('ballLayer');
   const ctx=canvas.getContext('2d');
@@ -170,18 +170,18 @@ function handleCommand(cmd){
   const R_RED=8;
 
   // Params
-  const FACTORY_INTERVAL=200;     // factory spawn rate (littles)
+  const FACTORY_INTERVAL=200;     // factory spawn rate
   const ORBIT_RADIUS_PAD = 18;    // orbit gap from host edge
   const CHAIN_REPEL_MIN = 14;     // min spacing for bonded chains
   const CHAIN_REPEL_STRENGTH = 0.12;
   const SNAP_STRENGTH = 0.08;     // spring strength for bond points
   const SNAP_DAMP = 0.85;         // damping on snap correction
-  const ANGLE_TOL = 0.44;         // ~25° (tighter gate)
+  const ANGLE_TOL = 0.52;         // ~30 degrees in radians
 
   // State
   const balls=[];      // all balls
-  const chains=[];     // orbit-bonded small chains
-  const links=[];      // directional links for big-big & big-medium
+  const chains=[];     // orbit-bonded small chains (still allowed)
+  const links=[];      // explicit directional links for big-big & big-medium
   let score=0; const scoreEl=document.getElementById('score');
   const countEl=document.getElementById('ballCount');
   const aliveCount=()=>balls.filter(b=>!b._dead).length;
@@ -197,6 +197,7 @@ function handleCommand(cmd){
       cooldown:0,
       bondedToFactory:false,
       hostFactory:null,
+      // directional bond slots for FACTORY
       slots: type===FACTORY ? {top:null,bottom:null,left:null,right:null} : null,
       squashT:0, squashAxis:'x'
     };
@@ -207,7 +208,7 @@ function handleCommand(cmd){
     balls.push(b); return true;
   }
 
-  // Seed (1 factory so you see littles orbit soon)
+  // Seed
   const seedFactory = makeBall(innerWidth*0.50, innerHeight*0.42, FACTORY, 0.6, 0.5);
   addBall(seedFactory);
   for(let i=0;i<14;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
@@ -270,31 +271,40 @@ function handleCommand(cmd){
     if(a.slots && slotA) a.slots[slotA]=b;
     if(b.slots && slotB) b.slots[slotB]=a;
   }
-  function anchor(node, slot){
-    if(!node || node.type!=='factory' || !slot) return {x:node.x,y:node.y};
-    const r=node.r;
-    if(slot==='top')    return {x:node.x, y:node.y - r};
-    if(slot==='bottom') return {x:node.x, y:node.y + r};
-    if(slot==='left')   return {x:node.x - r, y:node.y};
-    if(slot==='right')  return {x:node.x + r, y:node.y};
-    return {x:node.x,y:node.y};
-  }
   function snapLinks(){
     for(const L of links){
       const {a,b,slotA,slotB,dist}=L;
       if(a._dead||b._dead) continue;
-      const A = anchor(a,slotA), B = anchor(b,slotB);
+
+      // desired anchors
+      function anchorFor(node, slot){
+        if(!node || node.type!==FACTORY) return {x:node.x,y:node.y};
+        const r=node.r;
+        if(slot==='top')    return {x:node.x, y:node.y - r};
+        if(slot==='bottom') return {x:node.x, y:node.y + r};
+        if(slot==='left')   return {x:node.x - r, y:node.y};
+        if(slot==='right')  return {x:node.x + r, y:node.y};
+        return {x:node.x,y:node.y};
+      }
+      const A = slotA?anchorFor(a,slotA):{x:a.x,y:a.y};
+      const B = slotB?anchorFor(b,slotB):{x:b.x,y:b.y};
+
+      // current vector
       let dx = (B.x - A.x), dy = (B.y - A.y);
       const d = Math.hypot(dx,dy) || 0.0001;
       const nx=dx/d, ny=dy/d;
-      const err = d - dist;
+      const target = dist;
+      const err = d - target;
+
+      // move each node half the error back along the axis (spring)
       const push = err * SNAP_STRENGTH;
+      // apply to real centers
       a.x += nx*push; a.y += ny*push; a.vx *= SNAP_DAMP; a.vy *= SNAP_DAMP;
       b.x -= nx*push; b.y -= ny*push; b.vx *= SNAP_DAMP; b.vy *= SNAP_DAMP;
     }
   }
 
-  // Collisions + promotions + directional bonding rules
+  // Collisions + promotions + directional bonding
   function handlePair(a,b){
     if(a._dead||b._dead) return;
     const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy);
@@ -340,45 +350,41 @@ function handleCommand(cmd){
       return;
     }
 
-    // ===== Directional bonding you requested =====
-    // FACTORY–FACTORY: only NORTH/SOUTH (top/bottom)
+    // Directional bonding:
+    // 1) FACTORY–FACTORY only at TOP/BOTTOM (near vertical line)
     if(a.type===FACTORY && b.type===FACTORY){
       const ang = Math.atan2(dy,dx); // angle from a to b
-      const gap = a.r + b.r + 6;
-
-      // b below a (bond a.bottom ↔ b.top)
+      const sumR = a.r + b.r + 6;
       if(nearAngle(ang, Math.PI/2) && !a.slots.bottom && !b.slots.top){
-        addLink(a,b,'bottom','top',gap);
+        // b should sit below a
+        addLink(a,b,'bottom','top',sumR);
         return;
       }
-      // b above a (bond a.top ↔ b.bottom)
       if(nearAngle(ang, -Math.PI/2) && !a.slots.top && !b.slots.bottom){
-        addLink(a,b,'top','bottom',gap);
+        // b should sit above a
+        addLink(a,b,'top','bottom',sumR);
         return;
       }
-      // no E/W bonding between bigs
+      // otherwise just bounce
     }
 
-    // FACTORY–SPAWNER: only EAST/WEST (left/right of factory)
+    // 2) FACTORY–SPAWNER only at LEFT/RIGHT of FACTORY (near horizontal line)
     if((a.type===FACTORY && b.type===SPAWNER) || (b.type===FACTORY && a.type===SPAWNER)){
       const fac = a.type===FACTORY?a:b;
       const spn = a.type===SPAWNER?a:b;
       const ang = Math.atan2(spn.y-fac.y, spn.x-fac.x);
-      const gap = fac.r + spn.r + 4;
-
-      // right side
-      if(nearAngle(ang, 0) && !fac.slots.right){
-        addLink(fac, spn, 'right', null, gap);
+      const sumR = fac.r + spn.r + 4;
+      if(nearAngle(ang, 0) && !fac.slots.right){ // right side
+        addLink(fac, spn, 'right', null, sumR);
         spn.bondedToFactory = true; spn.hostFactory = fac;
         return;
       }
-      // left side
-      if(nearAngle(ang, Math.PI) && !fac.slots.left){
-        addLink(fac, spn, 'left', null, gap);
+      if(nearAngle(ang, Math.PI) && !fac.slots.left){ // left side
+        addLink(fac, spn, 'left', null, sumR);
         spn.bondedToFactory = true; spn.hostFactory = fac;
         return;
       }
-      // no N/S bonding between big↔medium
+      // else: no bond; normal bounce below
     }
 
     // Orbiters around same host collide → make stagnant chain
@@ -467,7 +473,7 @@ function handleCommand(cmd){
       if(b._dead) continue;
 
       if(b.orbit){
-        // orbit around host (smalls captured by spawners/factories)
+        // orbit around host
         const c=b.orbit;
         const ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;
         const d=c.r + ORBIT_RADIUS_PAD;
@@ -493,7 +499,7 @@ function handleCommand(cmd){
         }
       }
 
-      // Factories continuously spawn little ones (that can be captured into orbit)
+      // Factories spawn smalls slowly
       if(b.type===FACTORY){
         b.cooldown++;
         if(b.cooldown>FACTORY_INTERVAL && aliveCount()<MAX_BALLS){
@@ -512,7 +518,7 @@ function handleCommand(cmd){
       }
     }
 
-    // spring snap for directional links (enforce N/S for big↔big and E/W for big↔med)
+    // spring snap for directional links
     snapLinks();
     // de-clump orbit chains
     repelChains();
@@ -526,13 +532,23 @@ function handleCommand(cmd){
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // Draw directional links first
+    // Draw explicit links first
     ctx.strokeStyle='rgba(255,255,255,0.55)';
     ctx.lineWidth=2;
     for(const L of links){
       const {a,b,slotA,slotB}=L;
       if(a._dead||b._dead) continue;
-      const A = anchor(a,slotA), B = anchor(b,slotB);
+
+      function anchor(node, slot){
+        if(!node || node.type!==FACTORY || !slot) return {x:node.x,y:node.y};
+        const r=node.r;
+        if(slot==='top')    return {x:node.x, y:node.y - r};
+        if(slot==='bottom') return {x:node.x, y:node.y + r};
+        if(slot==='left')   return {x:node.x - r, y:node.y};
+        if(slot==='right')  return {x:node.x + r, y:node.y};
+        return {x:node.x,y:node.y};
+      }
+      const A=anchor(a,slotA), B=anchor(b,slotB);
       ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
     }
 
@@ -567,7 +583,7 @@ function handleCommand(cmd){
         ctx.fillStyle='rgba(255,255,255,0.95)';
         ctx.beginPath(); ctx.arc(0,0,R_FACTORY,0,Math.PI*2); ctx.fill();
 
-        /* slot hints */
+        // little marks for available slots (subtle)
         ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
         if(!b.slots.top){    ctx.beginPath(); ctx.moveTo(0,-R_FACTORY); ctx.lineTo(0,-R_FACTORY-6); ctx.stroke(); }
         if(!b.slots.bottom){ ctx.beginPath(); ctx.moveTo(0,R_FACTORY);  ctx.lineTo(0,R_FACTORY+6); ctx.stroke(); }
@@ -582,6 +598,7 @@ function handleCommand(cmd){
     }
   }
 
+  // Click handling (folding chains + launching) is in the outer scope:
   function loop(){ update(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
