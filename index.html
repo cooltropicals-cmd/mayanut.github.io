@@ -6,50 +6,33 @@
 <title>MayaNut</title>
 <style>
   :root{
-    --ink:#eef3ff; --ink-dim:#cbd6f2;
+    --ink:#eef3ff;
     --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-    /* simple faded yellow–orange gold (no inner markings) */
     --gold1:#fff0b5;
     --gold2:#ffd46b;
     --gold3:#f3ac3a;
   }
 
-  html,body{height:100%}
-  body{
-    margin:0; color:var(--ink);
+  html,body{height:100%; margin:0; color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
-    /* Tropical backdrop: cyan + shell-pink with hints of deep purple */
     background:
       radial-gradient(1000px 600px at 15% -10%, rgba(255,182,146,.25), transparent 60%),
       radial-gradient(1200px 700px at 85% 0%, rgba(159,218,255,.22), transparent 65%),
       radial-gradient(800px 480px at 50% 120%, rgba(255,210,130,.18), transparent 60%),
       linear-gradient(180deg, #081229 0%, #0f1b42 35%, #13255a 60%, #0c183c 100%);
     overflow-x:hidden;
+    animation: backgroundMove 40s ease-in-out infinite;
+    background-size: 200% 200%;
   }
 
-  /* Gentle drifting color flares (subtle motion) */
-  .bg-wave, .bg-wave2{
-    position:fixed; inset:-15% -15% auto -15%; height:65vh; z-index:-1; pointer-events:none;
-    filter: blur(22px) saturate(120%) brightness(110%);
-    animation: drift 28s ease-in-out infinite;
+  /* Background gentle wobble animation */
+  @keyframes backgroundMove {
+    0% {background-position: 0% 0%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 0%;}
   }
-  .bg-wave{
-    background:
-      radial-gradient(70% 80% at 20% 30%, rgba(255,194,150,.28), transparent 65%),
-      radial-gradient(55% 70% at 70% 25%, rgba(147,220,255,.20), transparent 60%),
-      radial-gradient(40% 60% at 50% 60%, rgba(255,235,180,.18), transparent 60%);
-  }
-  .bg-wave2{
-    height:58vh; top:0; mix-blend-mode:screen; animation: drift2 36s ease-in-out infinite;
-    background:
-      radial-gradient(60% 70% at 35% -10%, rgba(255,168,232,.18), transparent 60%),
-      radial-gradient(55% 65% at 80% 10%, rgba(115,228,244,.20), transparent 60%),
-      radial-gradient(40% 55% at 10% 40%, rgba(255,246,210,.16), transparent 60%);
-  }
-  @keyframes drift { 0%{transform:translateY(0) translateX(0) scale(1)} 50%{transform:translateY(14px) translateX(-12px) scale(1.03)} 100%{transform:translateY(0) translateX(0) scale(1)} }
-  @keyframes drift2{ 0%{transform:translateY(0) translateX(0) scale(1.02)} 50%{transform:translateY(10px) translateX(10px) scale(1.05)} 100%{transform:translateY(0) translateX(0) scale(1.02)} }
 
   /* Top bar */
   .topbar{
@@ -59,7 +42,6 @@
     backdrop-filter:blur(10px) saturate(140%);
   }
 
-  /* Logo sizing */
   .brandLogo { display:block; height:28px; width:auto; }
   .heroLogo  { display:block; width:min(560px,80vw); margin:6px auto 12px; }
 
@@ -67,7 +49,6 @@
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
-  /* Layout */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
 
@@ -102,11 +83,7 @@
 </head>
 <body>
 
-<!-- subtle animated color flares -->
-<div class="bg-wave"></div>
-<div class="bg-wave2"></div>
-
-<!-- SVG defs: Simple faded yellow–orange gold “MayaNut™” (no inner markings) -->
+<!-- Logo Definition: TM now touches MayaNut -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="mn-gold-simple" x1="0" x2="0" y1="0" y2="1">
@@ -117,27 +94,17 @@
     <filter id="mn-soft-shadow" x="-20%" y="-40%" width="140%" height="200%">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.35)"/>
     </filter>
-
     <symbol id="MayaNutWordmarkSimple" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
       <text x="40" y="180"
             font-family="Poppins, Inter, system-ui, sans-serif"
             font-weight="900" font-size="180"
-            fill="url(#mn-gold-simple)" filter="url(#mn-soft-shadow)">MayaNut</text>
-      <!-- ™ pulled close to the word -->
-      <text x="970" y="95"
-            font-family="Inter, system-ui, sans-serif"
-            font-weight="800" font-size="44"
-            fill="url(#mn-gold-simple)" filter="url(#mn-soft-shadow)">™</text>
+            fill="url(#mn-gold-simple)" filter="url(#mn-soft-shadow)">MayaNut™</text>
     </symbol>
   </defs>
 </svg>
 
 <header class="topbar" role="banner">
-  <!-- top-left logo (simple gold) -->
-  <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
-    <use href="#MayaNutWordmarkSimple"></use>
-  </svg>
-
+  <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutWordmarkSimple"></use></svg>
   <nav class="nav" aria-label="Primary">
     <a href="#home" id="navHome">MayaNut</a>
     <a href="#buy"  id="navBuy">Buy</a>
@@ -148,135 +115,41 @@
 
 <main id="home" class="stage">
   <div class="panel">
-    <!-- hero logo above chat (same simple gold) -->
-    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
-      <use href="#MayaNutWordmarkSimple"></use>
-    </svg>
-
-    <div class="chatbar" role="search">
-      <input id="chatInput" placeholder="Ask about MayaNut, Brosimum alicastrum, or our products" aria-label="Type your MayaNut question and press Enter" />
-    </div>
-    <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutWordmarkSimple"></use></svg>
+    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" /></div>
+    <div class="log" id="chatLog"></div>
   </div>
 </main>
 
-<section id="buy" class="section" aria-labelledby="buyTitle">
-  <h3 id="buyTitle">Buy</h3>
-  <p>Search Through Our Wonderful Products — real items coming soon. For now, tap a category to return to home.</p>
-  <div class="cards">
-    <a class="card" href="#home">Flour (placeholder)</a>
-    <a class="card" href="#home">Drinks (placeholder)</a>
-    <a class="card" href="#home">Snacks (placeholder)</a>
-  </div>
+<section id="buy" class="section"><h3>Buy</h3>
+<p>Search Through Our Wonderful Products — real items coming soon. Tap a category to return to home.</p>
+<div class="cards">
+  <a class="card" href="#home">Flour (placeholder)</a>
+  <a class="card" href="#home">Drinks (placeholder)</a>
+  <a class="card" href="#home">Snacks (placeholder)</a>
+</div>
 </section>
 
-<section id="about" class="section" aria-labelledby="aboutTitle">
-  <h3 id="aboutTitle">About</h3>
-  <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida.
-    <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
+<section id="about" class="section"><h3>About</h3>
+<p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
 </section>
 
-<footer>
-  © 2025 MayaNut LLC. All rights reserved.
-  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <!-- simple white Instagram glyph -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
-    </svg>
-  </a>
+<footer>© 2025 MayaNut LLC. All rights reserved.
+  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg></a>
 </footer>
 
 <script>
-/* ========= Friendly, focused MayaNut chat =========
-   - Only answers about the MayaNut tree (Brosimum alicastrum) or our products.
-   - Recognizes many synonyms: maya nut, mayanut, ramón, breadnut, mayan breadnut, ojoche, oox, ooxte, etc.
-   - Otherwise, politely says it’s focused on MayaNut topics.
-*/
-const input = document.getElementById('chatInput');
-const logBox = document.getElementById('chatLog');
-
-function say(role, text){
-  const el=document.createElement('div'); el.className='msg';
-  el.innerHTML=`<strong>${role}:</strong> ${text}`;
-  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
-}
-function smoothTo(id){ const el=document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth'}); }
-
-document.getElementById('navHome').addEventListener('click', e=>{ e.preventDefault(); smoothTo('home'); input.focus(); });
-document.getElementById('navBuy').addEventListener('click',  e=>{ e.preventDefault(); smoothTo('buy'); });
-document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefault(); smoothTo('about'); });
-
-const MAYANUT_SYNONYMS = [
-  "mayanut","maya nut","bro s ium", // catch weird spacing/typos
-  "brosimum alicastrum","brosimum","alicastrum",
-  "ramon","ramón","breadnut","mayan breadnut","ojoche","oox","ox","ojush","oxte","capomo","chicozapote de hoja grande" // regional names
-].map(s=>s.toLowerCase());
-
-function mentionsMayaNut(text){
-  const q = text.toLowerCase().replace(/[^a-z0-9\s]/g," ").replace(/\s+/g," ").trim();
-  if (!q) return false;
-  // fast checks
-  if (q.includes("maya nut") || q.includes("mayanut") || q.includes("brosimum") || q.includes("alicastrum")) return true;
-  // token-based synonym scan
-  return MAYANUT_SYNONYMS.some(s => q.includes(s));
-}
-
-function answerMayaNut(q){
-  const t = q.toLowerCase();
-
-  // route: products
-  if (/(buy|price|shop|product|sell|store|order|purchase|availability)/.test(t)){
-    return "We’re preparing MayaNut products (flour, drinks, snacks). Tap any card in the Buy section for now—real listings are coming soon. 🌿";
+const input=document.getElementById('chatInput');
+const logBox=document.getElementById('chatLog');
+function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+input.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const t=input.value.trim();if(!t)return;say('You',t);input.value='';
+    say('MayaNut',"I'm here to help with questions about the MayaNut™ tree and our products!");
   }
-
-  // route: basic what is
-  if (/(what\s+is|about|info|information|tell me|overview|summary)/.test(t)){
-    return "MayaNut (Brosimum alicastrum) is a Central American rainforest tree. Its nutritious seed—often roasted and milled—can be used for flour or brewed like a coffee alternative. It’s drought-tolerant, supports agroforestry, and fits well with regenerative farming in South Florida. 🌱";
-  }
-
-  // route: nutrition
-  if (/(nutrition|protein|vitamin|fiber|nutrit|health|benefit)/.test(t)){
-    return "MayaNut flour is typically rich in fiber and minerals, with a mild, nutty flavor. It’s naturally caffeine-free when brewed and works well blended into baked goods or smoothies. 🥣";
-  }
-
-  // route: cultivation / growing
-  if (/(grow|cultivat|plant|sapling|soil|irrigation|south florida|zone|frost|cold|sun|shade)/.test(t)){
-    return "For South Florida, plant in well-drained soil with full sun to partial shade. Young trees appreciate regular watering; mature trees are drought-tolerant. Protect seedlings from cold snaps and wind; mulch helps retain moisture. 🌴";
-  }
-
-  // route: sustainability / agroforestry
-  if (/(sustainab|agroforest|regenerat|biodivers|reforest)/.test(t)){
-    return "MayaNut supports multi-story agroforestry. It provides shade, leaf litter, and habitat while producing a resilient, nutritious seed—great for regenerative systems and biodiversity. 🌳";
-  }
-
-  // route: recipes / uses
-  if (/(recipe|cook|brew|coffee|tea|uses?|how to use)/.test(t)){
-    return "Common uses: roast & brew like a caffeine-free coffee, mill into flour for pancakes/muffins, or blend into smoothies and energy bites. Flavor is mild and toasty. 🍪";
-  }
-
-  // route: company / founder
-  if (/(ceo|founder|who runs|company|about mayanut|leadership|owner)/.test(t)){
-    return "MayaNut LLC is dedicated to cultivating the MayaNut tree in South Florida. August Kokus is the founder and current CEO of MayaNut™.";
-  }
-
-  // default, still on-topic
-  return "I can help with questions about MayaNut (Brosimum alicastrum)—growing, nutrition, uses, and our products. What would you like to know?";
-}
-
-input.addEventListener('keydown', e=>{
-  if(e.key!=='Enter') return;
-  const val = input.value.trim(); if(!val) return;
-  say('You', val);
-  input.value='';
-
-  if (mentionsMayaNut(val)){
-    say('MayaNut', answerMayaNut(val));
-    // quick nav hints
-    if (/(buy|product|shop|price|order)/i.test(val)) document.getElementById('buy').scrollIntoView({behavior:'smooth'});
-    if (/(about|company|founder|ceo)/i.test(val)) document.getElementById('about').scrollIntoView({behavior:'smooth'});
-  } else {
-    say('MayaNut', "I’m here for questions about MayaNut (Brosimum alicastrum) and our products. Try asking about growing, nutrition, or how to use it. 🌿");
-  }
+});
+['navHome','navBuy','navAbout'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click', e=>{e.preventDefault();document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});});
 });
 </script>
 </body>
