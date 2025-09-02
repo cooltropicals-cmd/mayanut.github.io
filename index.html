@@ -1,16 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MayaNut</title>
+<style>
+  :root{
+    --ink:#eaf2ff; --ink-dim:#c6d0ea; --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
+    --accent:#8fdcff; --accent2:#c79bff; --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
+  }
+  html,body{height:100%}
+  body{
+    margin:0;color:var(--ink);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    background:
+      linear-gradient(180deg, rgba(159,243,255,.30) 0%, rgba(115,232,232,.22) 8%, rgba(215,228,242,.16) 14%, rgba(0,0,0,0) 22%),
+      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
+      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
+      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
+      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
+    overflow-x:hidden;
+  }
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .brand{font-weight:800;letter-spacing:.2px;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
+  .brand small{font-size:11px;opacity:.95;vertical-align:top}
+  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
+  .nav{display:flex;gap:18px;align-items:center}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
+  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+  .btn{cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.10);color:var(--ink);}
+  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
+    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
+  .panel{width:min(900px,92vw);text-align:center}
+  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;letter-spacing:.6px;color:#fff;text-shadow:0 8px 28px rgba(0,0,0,.35);margin:6px 0 14px}
+  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 26px rgba(156,124,255,.25))}
+  .title small{font-size:.35em;color:#fff;opacity:.95;vertical-align:super;margin-left:4px}
+  .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
+  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .chatbar input::placeholder{color:#bfe7ff}
+  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
+  .msg strong{color:#cfe1ff}
+  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .section h3{margin:0 0 8px;color:#fff}
+  .section p{margin:8px 0 0;color:#cfe9ff}
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
+  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
+</style>
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <div class="brand">MayaNut<small>™</small></div>
+    <div class="brandInfo">Cells: <b id="ballCount">1</b>/<b id="ballCap">250</b> (+<b id="redCap">50</b> reds)</div>
+    <nav class="nav" aria-label="Primary">
+      <a href="#home" id="navHome">MayaNut</a>
+      <a href="#buy"  id="navBuy">Buy</a>
+      <a href="#about" id="navAbout">About</a>
+      <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+    </nav>
+  </header>
+
+  <div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
+
+  <main id="home" class="stage">
+    <div class="panel">
+      <h1 id="heroTitle" class="title">
+        <span class="glow">MayaNut</span><small>™</small>
+      </h1>
+      <div class="chatbar" role="search">
+        <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
+      </div>
+      <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+    </div>
+  </main>
+
+  <section id="buy" class="section">
+    <h3>Buy</h3>
+    <p>Search Through Our Wonderful Products — real items coming soon.</p>
+  </section>
+
+  <section id="about" class="section">
+    <h3>About</h3>
+    <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
+      <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
+      farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
+    <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
+  </section>
+
+  <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
+  <canvas id="ballLayer"></canvas>
+
 <script>
-/* ========= Mini SFX engine (unchanged, short) ========= */
+/* --------- SAFE SFX (no crashes if Audio fails) --------- */
 (function(){
   const SFX = {
     ctx:null, master:null, enabled:true, ready:false,
-    ensure(){ if(this.ctx) return; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); this.master=this.ctx.createGain(); this.master.gain.value=0.32; this.master.connect(this.ctx.destination); this.ready=true;}catch(e){} },
-    resume(){ try{ this.ensure(); if(this.ctx && this.ctx.state==='suspended') this.ctx.resume(); }catch{} },
-    toggle(){ this.enabled=!this.enabled; if(this.master) this.master.gain.value=this.enabled?0.32:0; const b=document.getElementById('audioToggle'); if(b) b.textContent=this.enabled?'🔊':'🔈'; },
-    env(t0,dur){ const c=this.ctx,g=c.createGain(); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(.25,t0+.01); g.gain.exponentialRampToValueAtTime(.001,t0+dur); return g; },
-    blip(p=300,d=.09){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(p,t); o.frequency.exponentialRampToValueAtTime(p/2,t+d*.8); const g=this.env(t,d); o.connect(g).connect(this.master); o.start(t); o.stop(t+d+.05); },
-    squish(d=.12){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,b=c.createBuffer(1,2048,c.sampleRate),ch=b.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*.55; const src=c.createBufferSource(); src.buffer=b; const f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.setValueAtTime(420,t); f.Q.setValueAtTime(5,t); const g=this.env(t,d); src.connect(f).connect(g).connect(this.master); src.start(t); src.stop(t+d+.05); },
-    pop(){ this.blip(900,.06); }, tick(){ this.blip(1200,.04); }, bass(){ this.blip(70,.22); },
-    novaCharge(){ this.blip(260,.6); }, novaBoom(){ this.bass(); this.squish(.2); }
+    ensure(){ if(this.ctx) return; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); this.master=this.ctx.createGain(); this.master.gain.value=0.28; this.master.connect(this.ctx.destination); this.ready=true; }catch(e){ this.ready=false; } },
+    resume(){ try{ this.ensure(); if(this.ctx&&this.ctx.state==='suspended') this.ctx.resume(); }catch{} },
+    toggle(){ this.enabled=!this.enabled; if(this.master) this.master.gain.value=this.enabled?0.28:0; const b=document.getElementById('audioToggle'); if(b) b.textContent=this.enabled?'🔊':'🔈'; },
+    env(t0,d){ if(!this.ready) return null; const c=this.ctx,g=c.createGain(); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(.22,t0+.01); g.gain.exponentialRampToValueAtTime(.001,t0+d); return g; },
+    blip(p=320,d=.09){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(p,t); o.frequency.exponentialRampToValueAtTime(p/2,t+d*.8); const g=this.env(t,d); if(!g) return; o.connect(g).connect(this.master); o.start(t); o.stop(t+d+.05); },
+    squish(d=.1){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,b=c.createBuffer(1,2048,c.sampleRate),ch=b.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*.5; const src=c.createBufferSource(); src.buffer=b; const f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.setValueAtTime(420,t); f.Q.setValueAtTime(5,t); const g=this.env(t,d); if(!g) return; src.connect(f).connect(g).connect(this.master); src.start(t); src.stop(t+d+.05); },
+    pop(){ this.blip(900,.06); }, tap(){ this.blip(220,.06); }
   };
   window.__SFX=SFX;
   const unlock=()=>{SFX.ensure();SFX.resume();window.removeEventListener('pointerdown',unlock);window.removeEventListener('keydown',unlock);};
@@ -18,434 +112,377 @@
   window.addEventListener('DOMContentLoaded',()=>{ const hud=document.getElementById('scoreHUD'); if(!hud) return; const b=document.createElement('button'); b.id='audioToggle'; b.textContent='🔊'; b.style.cssText='margin-left:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#eaf2ff;border-radius:8px;padding:2px 6px;cursor:pointer;'; b.onclick=()=>SFX.toggle(); hud.appendChild(b); });
 })();
 
-/* ========= Chat controls (pause, Red, Brosimum) ========= */
-const input = document.getElementById('chatInput');
-const logBox = document.getElementById('chatLog');
-const pausedBadge = document.getElementById('pausedBadge');
-let GAME_PAUSED=false;
-let lastMouse={x:innerWidth/2,y:innerHeight/2};
-document.addEventListener('mousemove',e=>{lastMouse.x=e.clientX;lastMouse.y=e.clientY;});
-function say(role,text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
-function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display=GAME_PAUSED?'':'none'; }
-function togglePause(){ setPaused(!GAME_PAUSED); }
-function handleMessage(v){
-  const t=(v||'').trim(); if(!t) return; say('You',t); const low=t.toLowerCase();
-  if (low==='pause'){ setPaused(true); say('MayaNut','Paused. Type "resume" or press Space.'); return; }
-  if (['unpause','resume','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
-  if (low==='brosimum'){ window.spawnWhitesAt(lastMouse.x,lastMouse.y,100); say('MayaNut','Brosimum powertool spawned white cells.'); return; }
-  if (low==='red'){ window.spawnRedAgent(lastMouse.x,lastMouse.y); say('MayaNut','Red agent deployed — first contact demotes one full color.'); return; }
-  const domainTriggers=["domain for sale","is this domain for sale","sell this domain","sell the domain","buy this domain","buy the domain","is the domain for sale","are you selling the domain","is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"];
-  if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
-  if (low.includes('buy')||low.includes('product')||low.includes('shop')){ say('MayaNut','Head to the Buy section below for our upcoming products.'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
-  if (low.includes('about')||low.includes('company')){ say('MayaNut','We’re a South Florida company promoting the Maya Nut tree. See the About section.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
-  say('MayaNut',"Tell me what you want and I’ll point you in the right direction.");
-}
-input.addEventListener('keydown',e=>{ if(e.key==='Enter'){handleMessage(input.value); input.value='';}});
-document.addEventListener('keydown',e=>{
-  if(e.code==='Space'){ const a=document.activeElement; if(a&&(a===input||a.tagName==='INPUT'||a.tagName==='TEXTAREA')) return;
-    e.preventDefault(); togglePause(); __SFX.resume();
-  }
-});
-document.getElementById('navHome').addEventListener('click',e=>{e.preventDefault();document.getElementById('home').scrollIntoView({behavior:'smooth'});input.focus();});
-document.getElementById('navBuy').addEventListener('click',e=>{e.preventDefault();document.getElementById('buy').scrollIntoView({behavior:'smooth'});});
-document.getElementById('navAbout').addEventListener('click',e=>{e.preventDefault();document.getElementById('about').scrollIntoView({behavior:'smooth'});});
-
-/* ========= Game: “Biocells” system ========= */
+/* --------- Chat + Commands --------- */
 (function(){
-  const scoreEl=document.getElementById('score');
-  const ballCountEl=document.getElementById('ballCount');
-  const ballCapEl=document.getElementById('ballCap');
-  const MAX_CELLS=160; if(ballCapEl) ballCapEl.textContent=MAX_CELLS;
-  const canvas=document.getElementById('ballLayer'); const ctx=canvas.getContext('2d');
+  const input = document.getElementById('chatInput');
+  const logBox = document.getElementById('chatLog');
+  const pausedBadge = document.getElementById('pausedBadge');
+  let GAME_PAUSED = false;
+  let lastMouse = {x: innerWidth/2, y: innerHeight/2};
+  document.addEventListener('mousemove', e=>{ lastMouse.x=e.clientX; lastMouse.y=e.clientY; });
+  function say(role, text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
+  function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display=GAME_PAUSED?'':''; }
+  function togglePause(){ setPaused(!GAME_PAUSED); }
 
-  // Color/Stage ladders
-  const COLORS=['white','grey','blue','purple','green','black','gold']; // ascending power
-  const STAGES=['little','medium','big']; // only big reproduces
-  // Special pseudo-types
-  const TYPE_SUPERCELL='supercell'; // ring with interior logic
-  const TYPE_LAPIS='lapis'; // inside supercell only
-  const TYPE_REDAGENT='redAgent'; // command-based demoter
+  function handleMessage(v){
+    const t=(v||'').trim(); if(!t) return; say('You',t);
+    const low = t.toLowerCase();
+    if (low==='pause'){ setPaused(true); say('MayaNut','Paused. Type "resume" or press Space.'); return; }
+    if (['unpause','resume','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
+    if (low==='brosimum'){ window.spawnWhitesAt(lastMouse.x,lastMouse.y,100); say('MayaNut','Brosimum: spawned white cells (to cap).'); return; }
+    if (low==='red'){ const ok=window.spawnRedAgent(lastMouse.x,lastMouse.y); say('MayaNut', ok ? 'Red agent deployed.' : 'Red limit reached.'); return; }
+
+    const domainTriggers=["domain for sale","is this domain for sale","sell this domain","sell the domain","buy this domain","buy the domain","is the domain for sale","are you selling the domain","is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"];
+    if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
+
+    if (low.includes('buy')||low.includes('product')||low.includes('shop')){ say('MayaNut','Head to the Buy section below (placeholders for now).'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
+    if (low.includes('about')||low.includes('company')){ say('MayaNut','We’re a South Florida company promoting the Maya Nut tree—see About below.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
+    say('MayaNut',"Tell me what you want and I’ll point you in the right direction.");
+  }
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ handleMessage(input.value); input.value=''; }});
+  document.addEventListener('keydown', e=>{
+    if (e.code==='Space'){
+      const a=document.activeElement;
+      if (a && (a===input || a.tagName==='INPUT' || a.tagName==='TEXTAREA')) return;
+      e.preventDefault(); togglePause(); if (window.__SFX) __SFX.resume();
+    }
+  });
+  ['navHome','navBuy','navAbout'].forEach(id=>{
+    const el=document.getElementById(id);
+    if (el) el.addEventListener('click', e=>{ e.preventDefault(); document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'}); });
+  });
+})();
+
+/* --------- Biocells Engine (stable, capped, red extras) --------- */
+(function(){
+  const scoreEl = document.getElementById('score');
+  const countEl = document.getElementById('ballCount');
+  const baseCapEl = document.getElementById('ballCap');
+  const redCapEl  = document.getElementById('redCap');
+
+  const BASE_CAP = 250;           // main cells cap
+  const RED_EXTRA_CAP = 50;       // extra reds (beyond base)
+  baseCapEl.textContent = BASE_CAP;
+  redCapEl.textContent  = RED_EXTRA_CAP;
+
+  const canvas = document.getElementById('ballLayer');
+  const ctx = canvas.getContext('2d');
 
   function resize(){
-    const dpr=Math.max(1,Math.min(2,devicePixelRatio||1));
+    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
     canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
-    canvas.width=Math.round(innerWidth*dpr); canvas.height=Math.round(innerHeight*dpr);
+    canvas.width = Math.round(innerWidth*dpr);
+    canvas.height= Math.round(innerHeight*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  resize(); addEventListener('resize',resize);
+  resize(); addEventListener('resize', resize);
 
-  const uiRects=()=>[document.getElementById('heroTitle'), document.getElementById('chatInput'), document.getElementById('chatLog'), document.querySelector('.topbar')]
-    .filter(Boolean).map(el=>{const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height};});
+  const COLORS=['white','grey','blue','purple','green','black','gold'];
+  const STAGES=['little','medium','big'];
 
-  // base cell
-  function makeCell(o={}){
-    const {x=innerWidth*.5,y=innerHeight*.4,vx= (Math.random()-.5)*2,vy=(Math.random()-.5)*2,color='white',stage='little',r=radiusFor(color,stage)}=o;
-    return {x,y,vx,vy,color,stage,r,life:0,breedCD:0, chainId:null, docked:false, insideOf:null, _dead:false};
-  }
-  function radiusFor(color,stage){
-    const base={white:6, grey:7, blue:8, purple:9, green:10, black:11, gold:12}[color]||8;
-    const mul={little:1, medium:1.25, big:1.55}[stage]||1;
-    return base*mul;
-  }
-  const cells=[ makeCell({color:'white',stage:'medium',vx:1.2,vy:1}) ];
+  const TYPE_SUPERCELL='supercell';
+  const TYPE_LAPIS='lapis';
+  const TYPE_RED='redAgent';
 
-  // Supercells (from gold chain closure)
-  function makeSupercell(cx,cy,r){
-    return {type:TYPE_SUPERCELL, x:cx, y:cy, r:r, greens:[], lapis:[], spawnCD:0, wobble:0, _dead:false};
-  }
-
-  // lapis ovals (inside supercell)
-  function makeLapis(sc){
-    const ang=Math.random()*Math.PI*2, rad=sc.r*0.45;
-    const x=sc.x+Math.cos(ang)*rad, y=sc.y+Math.sin(ang)*rad;
-    const s={type:TYPE_LAPIS,x,y,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2, a:ang, r:6.5, life:0, parent:sc, _dead:false};
-    return s;
-  }
-
-  // Red agent (single demote)
-  function makeRedAgent(x,y){ return {type:TYPE_REDAGENT,x,y,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4, r:7.5, life:0, ttl:220, _dead:false}; }
+  // Data stores
+  const cells=[];         // normal cells
+  const supercells=[];    // ring objects
+  const reds=[];          // red agents (special cap)
 
   // Helpers
-  function aliveCount(){ return cells.filter(c=>!c._dead).length + supercells.filter(s=>!s._dead).length + lapisAll().length + reds.filter(r=>!r._dead).length; }
+  const uiRects = () => {
+    const ids = ['heroTitle','chatInput','chatLog','.topbar','#buy','#about'];
+    const els = [
+      document.getElementById('heroTitle'),
+      document.getElementById('chatInput'),
+      document.getElementById('chatLog'),
+      document.querySelector('.topbar'),
+      document.getElementById('buy'),
+      document.getElementById('about')
+    ].filter(Boolean);
+    return els.map(el=>{const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height};});
+  };
   function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+  function addScore(n){ const s=(parseInt(scoreEl.textContent)||0)+n; scoreEl.textContent=s; }
 
-  // Chain management for gold bonding
-  const CHAINS=new Map(); // id -> {nodes:[cellIds], closed:false}
-  let NEXT_CHAIN_ID=1;
-  function inChain(c){ return c.chainId!=null; }
-  function tryBondGold(a,b){
-    if (a.color!=='gold'||b.color!=='gold'||a.stage!=='big'||b.stage!=='big') return;
-    const d=Math.hypot(a.x-b.x,a.y-b.y);
-    if (d> a.r+b.r+4) return;
-    if (!inChain(a) && !inChain(b)){
-      const id=NEXT_CHAIN_ID++; CHAINS.set(id,{nodes:[a,b],closed:false}); a.chainId=b.chainId=id; __SFX.squish(.12);
-    } else if (inChain(a) && !inChain(b)){
-      CHAINS.get(a.chainId).nodes.push(b); b.chainId=a.chainId; __SFX.squish(.12);
-    } else if (!inChain(a) && inChain(b)){
-      CHAINS.get(b.chainId).nodes.push(a); a.chainId=b.chainId; __SFX.squish(.12);
-    } else if (a.chainId!==b.chainId){
-      // merge chains
-      const A=CHAINS.get(a.chainId), B=CHAINS.get(b.chainId);
-      A.nodes.push(...B.nodes); for(const n of B.nodes) n.chainId=a.chainId;
-      CHAINS.delete(b.chainId); __SFX.squish(.12);
-    }
-  }
-  function checkChainClosure(){
-    // If chain ends are near, close into supercell
-    for (const [id,ch] of [...CHAINS]){
-      if (ch.closed || ch.nodes.length<4) continue;
-      const first=ch.nodes[0], last=ch.nodes[ch.nodes.length-1];
-      const dist=Math.hypot(first.x-last.x, first.y-last.y);
-      if (dist < first.r+last.r+6){
-        // make a supercell at centroid
-        let cx=0, cy=0; for(const n of ch.nodes){ cx+=n.x; cy+=n.y; }
-        cx/=ch.nodes.length; cy/=ch.nodes.length;
-        const avgR = ch.nodes.reduce((s,n)=>s+n.r,0)/ch.nodes.length;
-        const sc=makeSupercell(cx,cy,Math.max(28,avgR*1.8));
-        supercells.push(sc);
-        // remove gold nodes that formed it
-        for(const n of ch.nodes){ n._dead=true; }
-        CHAINS.delete(id);
-        __SFX.novaCharge(); // fun feedback
-      }
-    }
+  function radiusFor(color,stage){
+    const base={white:6,grey:7,blue:8,purple:9,green:10,black:11,gold:12}[color]||8;
+    const mul = {little:1,medium:1.25,big:1.55}[stage]||1;
+    return base*mul;
   }
 
-  // Collections
-  const supercells=[]; const reds=[];
-  function lapisAll(){ return supercells.flatMap(s=>s.lapis.filter(l=>!l._dead)); }
+  function makeCell(o={}){
+    const {x=innerWidth*.55,y=innerHeight*.35,
+           vx=(Math.random()-.5)*1.8,vy=(Math.random()-.5)*1.8,
+           color='white',stage='little'}=o;
+    return {x,y,vx,vy,color,stage,r:radiusFor(color,stage),life:0,breedCD:0,_dead:false,chain:false,docked:false};
+  }
+  function makeSupercell(cx,cy,r){
+    return {type:TYPE_SUPERCELL,x:cx,y:cy,r,greens:[],lapis:[],spawnCD:0,wobble:0,_dead:false};
+  }
+  function makeLapis(sc){
+    const ang=Math.random()*Math.PI*2, rad=sc.r*0.45;
+    return {type:TYPE_LAPIS,x:sc.x+Math.cos(ang)*rad,y:sc.y+Math.sin(ang)*rad,vx:(Math.random()-.5)*1.1,vy:(Math.random()-.5)*1.1,a:ang,r:6.5,life:0,parent:sc,_dead:false};
+  }
+  function makeRed(x,y){
+    const ang=Math.random()*Math.PI*2, sp=3+Math.random()*2;
+    return {type:TYPE_RED,x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,r:7.5,life:0,ttl:220,_dead:false};
+  }
+
+  // Initial seed
+  cells.push(makeCell({color:'white',stage:'medium',vx:1.1,vy:1}));
+
+  function nonRedCount(){ return cells.filter(c=>!c._dead).length + supercells.filter(s=>!s._dead).length + supercells.reduce((n,s)=>n+s.lapis.filter(l=>!l._dead).length,0); }
+  function redCount(){ return reds.filter(r=>!r._dead).length; }
+  function totalCount(){ return nonRedCount() + redCount(); }
+  function updateCount(){ countEl.textContent = totalCount(); }
 
   // Physics
-  function bounceWorld(obj,W,H){
-    if (obj.x - obj.r < 0){ obj.x=obj.r; obj.vx=Math.abs(obj.vx); __SFX.squish(.08); }
-    if (obj.x + obj.r > W){ obj.x=W-obj.r; obj.vx=-Math.abs(obj.vx); __SFX.squish(.08); }
-    if (obj.y - obj.r < 0){ obj.y=obj.r; obj.vy=Math.abs(obj.vy); __SFX.squish(.08); }
-    if (obj.y + obj.r > H){ obj.y=H-obj.r; obj.vy=-Math.abs(obj.vy); __SFX.squish(.08); }
+  function bounce(obj,W,H){
+    if (obj.x - obj.r < 0){ obj.x=obj.r; obj.vx=Math.abs(obj.vx); if(window.__SFX) __SFX.tap(); }
+    if (obj.x + obj.r > W){ obj.x=W-obj.r; obj.vx=-Math.abs(obj.vx); if(window.__SFX) __SFX.tap(); }
+    if (obj.y - obj.r < 0){ obj.y=obj.r; obj.vy=Math.abs(obj.vy); if(window.__SFX) __SFX.tap(); }
+    if (obj.y + obj.r > H){ obj.y=H-obj.r; obj.vy=-Math.abs(obj.vy); if(window.__SFX) __SFX.tap(); }
   }
-  function collideUI(obj,rects){
+  function collideUI(obj, rects){
     for(const R of rects){
       const nx=clamp(obj.x,R.x,R.x+R.w), ny=clamp(obj.y,R.y,R.y+R.h);
       const dx=obj.x-nx, dy=obj.y-ny;
       if (dx*dx+dy*dy<=obj.r*obj.r){
-        // reflect
         const cx=R.x+R.w/2, cy=R.y+R.h/2;
         const ox=(R.w/2+obj.r)-Math.abs(obj.x-cx), oy=(R.h/2+obj.r)-Math.abs(obj.y-cy);
-        if (ox<oy){ obj.vx*=-1; obj.x+= (obj.vx>0?1:-1)*Math.max(1,ox*.6); } else { obj.vy*=-1; obj.y+= (obj.vy>0?1:-1)*Math.max(1,oy*.6); }
-        __SFX.squish(.1);
+        if (ox<oy){ obj.vx*=-1; obj.x+=(obj.vx>0?1:-1)*Math.max(1,ox*.6); }
+        else      { obj.vy*=-1; obj.y+=(obj.vy>0?1:-1)*Math.max(1,oy*.6); }
+        if(window.__SFX) __SFX.squish(.08);
       }
     }
   }
 
-  // Color ladder helpers
-  function colorIndex(c){ return COLORS.indexOf(c); }
-  function stageIndex(s){ return STAGES.indexOf(s); }
-  function promoteStage(cell){ // little→medium→big, else promote color
-    const si=stageIndex(cell.stage), ci=colorIndex(cell.color);
+  // Color ladder utils
+  const cIndex=c=>COLORS.indexOf(c);
+  const sIndex=s=>STAGES.indexOf(s);
+  function promoteStage(cell){
+    const si=sIndex(cell.stage), ci=cIndex(cell.color);
     if (si<2){ cell.stage=STAGES[si+1]; cell.r=radiusFor(cell.color,cell.stage); return true; }
-    // at big, promote color (except gold big)
-    if (ci<COLORS.length-1){ cell.color=COLORS[ci+1]; cell.stage='little'; cell.r=radiusFor(cell.color,cell.stage); return true; }
+    if (ci<COLORS.length-1){
+      const wasBlack=(cell.color==='black');
+      cell.color=COLORS[ci+1]; cell.stage='little'; cell.r=radiusFor(cell.color,cell.stage);
+      if (wasBlack && cell.color==='gold'){ // black->gold event: emit two green mediums
+        for(let i=0;i<2;i++){
+          if (nonRedCount()>=BASE_CAP) break;
+          const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
+          cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+8), y:cell.y+Math.sin(ang)*(cell.r+8),
+                               vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:'green',stage:'medium'}));
+        }
+        if(window.__SFX) __SFX.pop();
+      }
+      return true;
+    }
     return false;
   }
-  function demoteColor(cell){ // down one whole color; if white -> death
-    const ci=colorIndex(cell.color);
+  function demoteColor(cell){
+    const ci=cIndex(cell.color);
     if (ci<=0){ cell._dead=true; return; }
     cell.color=COLORS[ci-1];
-    // keep same stage if possible (clamp)
-    cell.stage= STAGES[Math.min(STAGES.length-1, stageIndex(cell.stage))];
     cell.r=radiusFor(cell.color,cell.stage);
   }
 
   // Reproduction (only big)
-  function tryReproduce(cell){
+  function reproduce(cell){
     if (cell.stage!=='big') return;
-    if (cell.breedCD>0) { cell.breedCD--; return; }
-    if (aliveCount()>=MAX_CELLS) return;
-    // cool-down changes by color (higher color, slower)
-    const cdByColor={white:240,grey:260,blue:280,purple:300,green:340,black:380,gold:440};
-    cell.breedCD = cdByColor[cell.color]||300;
-    // spawn same color little
+    if (cell.breedCD>0){ cell.breedCD--; return; }
+    if (nonRedCount()>=BASE_CAP) return;
+    const cd={white:240,grey:260,blue:280,purple:300,green:340,black:380,gold:440}[cell.color]||300;
+    cell.breedCD=cd;
     const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
     cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+6), y:cell.y+Math.sin(ang)*(cell.r+6),
                          vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:cell.color, stage:'little'}));
-    __SFX.squish(.12);
+    if(window.__SFX) __SFX.squish(.1);
   }
 
-  // Black→Gold upgrade event: emit two medium greens that dock outside supercells
-  function onBlackUpgradedToGold(cell){
-    for(let i=0;i<2;i++){
-      const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
-      cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+8), y:cell.y+Math.sin(ang)*(cell.r+8),
-                           vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:'green', stage:'medium'}));
+  // Gold bonding → chain → supercell (simplified, stable)
+  const CHAINS=new Map(); // id -> array of cell refs
+  let NEXT_CHAIN_ID=1;
+  function tryBondGold(a,b){
+    if (a.color!=='gold'||b.color!=='gold'||a.stage!=='big'||b.stage!=='big') return;
+    const d=Math.hypot(a.x-b.x,a.y-b.y); if (d>a.r+b.r+4) return;
+    const idA=a.chainId, idB=b.chainId;
+    if (idA==null && idB==null){
+      const id=NEXT_CHAIN_ID++; CHAINS.set(id,[a,b]); a.chainId=id; b.chainId=id;
+    } else if (idA!=null && idB==null){ CHAINS.get(idA).push(b); b.chainId=idA; }
+    else if (idA==null && idB!=null){ CHAINS.get(idB).push(a); a.chainId=idB; }
+    else if (idA!==idB){
+      const A=CHAINS.get(idA), B=CHAINS.get(idB); A.push(...B); for(const n of B) n.chainId=idA; CHAINS.delete(idB);
     }
-    __SFX.pop();
   }
-
-  // Collision & mutation
-  function handleCellCollision(a,b){
-    // Elastic-ish push apart
-    const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy); if(d===0) return;
-    const overlap=a.r+b.r-d; if (overlap>0){
-      const nx=dx/d, ny=dy/d;
-      a.x-=nx*overlap*.5; a.y-=ny*overlap*.5; b.x+=nx*overlap*.5; b.y+=ny*overlap*.5;
-      // reflect velocities slightly
-      const p= (a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
-      a.vx-=p*nx; a.vy-=p*ny; b.vx+=p*nx; b.vy+=p*ny;
-      __SFX.squish(.08);
-    }
-
-    // Gold bonding
-    if (a.color==='gold' && a.stage==='big' && b.color==='gold' && b.stage==='big'){ tryBondGold(a,b); }
-
-    // Promote on like-like bump (same color/stage), small chance
-    if (a.color===b.color && a.stage===b.stage && a.stage!=='big' && Math.random()<0.25){
-      if (promoteStage(a)) { if(a.color==='gold' && a.stage==='little' && b.color==='black') onBlackUpgradedToGold(a); }
-      if (promoteStage(b)) { if(b.color==='gold' && b.stage==='little' && a.color==='black') onBlackUpgradedToGold(b); }
-    }
-
-    // Mixed-color gentle influence: higher color may “pull up” lower (tiny chance)
-    const ai=colorIndex(a.color), bi=colorIndex(b.color);
-    if (Math.abs(ai-bi)===1 && Math.random()<0.06){
-      const hi= ai>bi?a:b, lo= ai>bi?b:a;
-      if (lo.stage==='big' && Math.random()<0.35) { /* big resists */ }
-      else { promoteStage(lo); }
-    }
-
-    // If a black gets promoted to gold (via any earlier rule), emit greens
-    // (Handled inside promoteStage caller above where possible)
-  }
-
-  // Supercell mechanics
-  function updateSupercell(sc){
-    sc.wobble += 0.06;
-    // Greens docking around circumference
-    for(const c of cells){
-      if (c._dead || c.color!=='green') continue;
-      const d=Math.hypot(c.x-sc.x, c.y-sc.y);
-      if (d< sc.r+10 && d> sc.r-18){
-        // pull into ring
-        const ang=Math.atan2(c.y-sc.y, c.x-sc.x);
-        const rr=sc.r; c.x=sc.x+Math.cos(ang)*rr; c.y=sc.y+Math.sin(ang)*rr;
-        c.vx*=0.3; c.vy*=0.3; c.docked=true;
-        if (!sc.greens.includes(c)) sc.greens.push(c);
-      }
-    }
-    // Lapis population: only if green ring is “complete-ish”
-    if (sc.greens.filter(g=>!g._dead).length>=8){
-      if (sc.lapis.filter(l=>!l._dead).length<5){
-        if (sc.spawnCD<=0){ const l=makeLapis(sc); sc.lapis.push(l); sc.spawnCD=180; __SFX.tick(); }
-        else sc.spawnCD--;
-      } else {
-        // After 5 lapis present, periodically spawn new gold (little) outside
-        if (sc.spawnCD<=0){
-          const ang=Math.random()*Math.PI*2, r=sc.r+16;
-          cells.push(makeCell({x:sc.x+Math.cos(ang)*r, y:sc.y+Math.sin(ang)*r, color:'gold', stage:'little', vx:(Math.random()-.5)*1.4, vy:(Math.random()-.5)*1.4}));
-          sc.spawnCD=220; __SFX.pop();
-        } else sc.spawnCD--;
+  function closeChainsIfLoop(){
+    for (const [id,arr] of [...CHAINS]){
+      if (arr.length<4) continue;
+      const first=arr[0], last=arr[arr.length-1];
+      const dist=Math.hypot(first.x-last.x, first.y-last.y);
+      if (dist < first.r+last.r+6){
+        // build supercell at centroid
+        const cx=arr.reduce((s,n)=>s+n.x,0)/arr.length;
+        const cy=arr.reduce((s,n)=>s+n.y,0)/arr.length;
+        const avgR=arr.reduce((s,n)=>s+n.r,0)/arr.length;
+        const sc=makeSupercell(cx,cy,Math.max(28,avgR*1.8));
+        supercells.push(sc);
+        arr.forEach(n=>n._dead=true);
+        CHAINS.delete(id);
       }
     }
   }
 
-  function drawSupercell(sc){
-    ctx.save();
-    ctx.translate(sc.x,sc.y);
-    const wob=1+Math.sin(sc.wobble)*0.02;
-    ctx.scale(wob,1/wob);
-    // ring
-    ctx.lineWidth=3;
-    ctx.strokeStyle='rgba(255,220,130,.95)';
-    ctx.beginPath(); ctx.arc(0,0,sc.r,0,Math.PI*2); ctx.stroke();
-    // interior soft glow
-    const grad=ctx.createRadialGradient(0,0,sc.r*0.1,0,0,sc.r*0.95);
-    grad.addColorStop(0,'rgba(255,240,180,.10)'); grad.addColorStop(1,'rgba(255,240,180,.02)');
-    ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(0,0,sc.r*0.96,0,Math.PI*2); ctx.fill();
-    ctx.restore();
-
-    // lapis inside
-    for(const l of sc.lapis){ if(l._dead) continue; drawLapis(l); }
-  }
-
-  function drawLapis(l){
-    ctx.save();
-    ctx.translate(l.x,l.y);
-    ctx.rotate(l.a+=0.015);
-    ctx.scale(1.4,1);
-    ctx.fillStyle='rgba(60,120,255,.9)';
-    ctx.beginPath(); ctx.arc(0,0,l.r,0,Math.PI*2); ctx.fill();
-    ctx.restore();
-  }
-
+  // Drawing
   function drawCell(c){
     ctx.save(); ctx.translate(c.x,c.y);
-    // shape
     if (c.color==='gold'){
-      // ring
-      ctx.lineWidth=2.2;
-      ctx.strokeStyle='rgba(255,220,130,.95)';
+      ctx.lineWidth=2.2; ctx.strokeStyle='rgba(255,220,130,.95)';
       ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.stroke();
-    } else {
-      // filled circle
-      const colorMap={
-        white:'#ffffff', grey:'#cdd3dd', blue:'#79a7ff', purple:'#b29bff', green:'#79ffb8', black:'#141414'
-      };
-      ctx.fillStyle=colorMap[c.color]||'#fff';
-      ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.fill();
+    }else{
+      const col={white:'#ffffff',grey:'#cdd3dd',blue:'#79a7ff',purple:'#b29bff',green:'#79ffb8',black:'#141414'}[c.color]||'#fff';
+      ctx.fillStyle=col; ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.fill();
     }
     ctx.restore();
   }
-
-  function drawRed(r){
-    ctx.save(); ctx.translate(r.x,r.y);
-    ctx.fillStyle='#ff4d4d'; ctx.beginPath(); ctx.arc(0,0,r.r,0,Math.PI*2); ctx.fill();
+  function drawSupercell(sc){
+    ctx.save(); ctx.translate(sc.x,sc.y);
+    sc.wobble += 0.06; const w=1+Math.sin(sc.wobble)*0.02; ctx.scale(w,1/w);
+    ctx.lineWidth=3; ctx.strokeStyle='rgba(255,220,130,.95)';
+    ctx.beginPath(); ctx.arc(0,0,sc.r,0,Math.PI*2); ctx.stroke();
     ctx.restore();
+    for(const l of sc.lapis){ if(l._dead) continue; ctx.save(); ctx.translate(l.x,l.y); l.a+=0.015; ctx.rotate(l.a); ctx.scale(1.4,1); ctx.fillStyle='rgba(60,120,255,.9)'; ctx.beginPath(); ctx.arc(0,0,l.r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
   }
+  function drawRed(r){ ctx.save(); ctx.translate(r.x,r.y); ctx.fillStyle='#ff4d4d'; ctx.beginPath(); ctx.arc(0,0,r.r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
 
-  // Click scoring (keep your rules)
-  const scoreAdd=d=>{ const s=Number(scoreEl.textContent||'0')+d; scoreEl.textContent=s; };
+  // Click scoring
+  document.addEventListener('click', e=>{
+    const tgt=e.target; if (tgt.closest('input,textarea,[contenteditable="true"]')) return;
+    let hit=false; const x=e.clientX,y=e.clientY;
+    for (const c of cells){ if(c._dead) continue; if (Math.hypot(c.x-x,c.y-y)<=c.r+4){ hit=true; break; } }
+    addScore(hit?+1:-1);
+  });
 
-  // Main loop
+  // Loop
   function step(){
-    const W=innerWidth,H=innerHeight;
-    const rects=uiRects();
+    const rects=uiRects(), W=innerWidth, H=innerHeight;
 
-    if (!GAME_PAUSED){
-      // move red agents
-      for(const r of reds){ if(r._dead) continue; r.life++; r.x+=r.vx; r.y+=r.vy; r.vx*=0.995; r.vy*=0.995; bounceWorld(r,W,H); collideUI(r,rects); if(r.life>r.ttl) r._dead=true; }
-
-      // move lapis
-      for(const sc of supercells){ if(sc._dead) continue; for(const l of sc.lapis){ if(l._dead) continue; l.life++; l.x+=l.vx; l.y+=l.vy; // keep inside
-          const dx=l.x-sc.x, dy=l.y-sc.y, d=Math.hypot(dx,dy), maxR=sc.r*0.8; if(d>maxR){ const nx=dx/d, ny=dy/d; l.x=sc.x+nx*maxR; l.y=sc.y+ny*maxR; l.vx*=-0.4; l.vy*=-0.4; }
-        }
-      }
-
-      // move cells
-      for(const c of cells){
-        if (c._dead) continue;
-        c.life++;
-        c.x+=c.vx; c.y+=c.vy;
-        // small drag by color
-        const drag={white:.998,grey:.998,blue:.999,purple:.999,green:.999,black:1.000,gold:1.000}[c.color]||.999;
-        c.vx*=drag; c.vy*=drag;
-        bounceWorld(c,W,H); collideUI(c,rects);
-        tryReproduce(c);
-      }
-
-      // collisions cell vs cell (broad)
-      for(let i=0;i<cells.length;i++){
-        const a=cells[i]; if(a._dead) continue;
-        for(let j=i+1;j<cells.length;j++){
-          const b=cells[j]; if(b._dead) continue;
-          const dx=b.x-a.x, dy=b.y-a.y, dd=dx*dx+dy*dy, rr=(a.r+b.r)*(a.r+b.r);
-          if (dd<=rr){ handleCellCollision(a,b); }
-        }
-      }
-
-      // red agent first-hit demotion
-      for(const r of reds){
-        if (r._dead) continue;
-        for(const c of cells){
-          if (c._dead) continue;
-          const d2=(c.x-r.x)*(c.x-r.x)+(c.y-r.y)*(c.y-r.y);
-          if (d2 <= (c.r+r.r)*(c.r+r.r)){
-            // demote color; white disappears
-            demoteColor(c);
-            r._dead=true;
-            __SFX.pop();
-            break;
-          }
-        }
-      }
-
-      // Gold chain closure → supercell
-      checkChainClosure();
-
-      // Supercell updates
-      for (const sc of supercells){ if(!sc._dead) updateSupercell(sc); }
-
-      // cleanup
-      for(let k=cells.length-1;k>=0;k--) if(cells[k]._dead) cells.splice(k,1);
-      for(let k=reds.length-1;k>=0;k--) if(reds[k]._dead) reds.splice(k,1);
-      for(let k=supercells.length-1;k>=0;k--) if(supercells[k]._dead) supercells.splice(k,1);
+    // Reds (cap 50)
+    for (const r of reds){ if(r._dead) continue;
+      r.life++; if (r.life>r.ttl){ r._dead=true; continue; }
+      r.x+=r.vx; r.y+=r.vy; r.vx*=0.995; r.vy*=0.995; bounce(r,W,H); collideUI(r,rects);
+      // First hit demotes a cell
+      for (const c of cells){ if(c._dead) continue; const d2=(c.x-r.x)*(c.x-r.x)+(c.y-r.y)*(c.y-r.y);
+        if (d2 <= (c.r+r.r)*(c.r+r.r)){ demoteColor(c); r._dead=true; if(window.__SFX) __SFX.pop(); break; } }
     }
 
-    // draw
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    // supercells under
-    for(const sc of supercells) drawSupercell(sc);
-    // cells
-    for(const c of cells) drawCell(c);
-    // reds on top
-    for(const r of reds) drawRed(r);
+    // Lapis (inside supercells)
+    for (const sc of supercells){ if(sc._dead) continue;
+      for (const l of sc.lapis){ if(l._dead) continue;
+        l.life++; l.x+=l.vx; l.y+=l.vy;
+        const dx=l.x-sc.x, dy=l.y-sc.y, d=Math.hypot(dx,dy), maxR=sc.r*0.8;
+        if (d>maxR){ const nx=dx/d, ny=dy/d; l.x=sc.x+nx*maxR; l.y=sc.y+ny*maxR; l.vx*=-0.4; l.vy*=-0.4; }
+      }
+    }
 
-    if (ballCountEl) ballCountEl.textContent=aliveCount();
+    // Cells
+    for (const c of cells){ if(c._dead) continue;
+      c.life++; c.x+=c.vx; c.y+=c.vy;
+      const drag = {white:.998,grey:.998,blue:.999,purple:.999,green:.999,black:1.000,gold:1.000}[c.color]||.999;
+      c.vx*=drag; c.vy*=drag;
+      bounce(c,W,H); collideUI(c,rects);
+      reproduce(c);
+    }
+
+    // Cell vs cell
+    for (let i=0;i<cells.length;i++){
+      const a=cells[i]; if(a._dead) continue;
+      for (let j=i+1;j<cells.length;j++){
+        const b=cells[j]; if(b._dead) continue;
+        const dx=b.x-a.x, dy=b.y-a.y, d2=dx*dx+dy*dy, R=a.r+b.r;
+        if (d2<=R*R){
+          const d=Math.max(0.0001,Math.sqrt(d2)), nx=dx/d, ny=dy/d, overlap=R-d;
+          if (overlap>0){ a.x-=nx*overlap*.5; a.y-=ny*overlap*.5; b.x+=nx*overlap*.5; b.y+=ny*overlap*.5;
+            const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
+            a.vx-=p*nx; a.vy-=p*ny; b.vx+=p*nx; b.vy+=p*ny;
+            if (window.__SFX) __SFX.squish(.08);
+          }
+          // promotions on like-like small chance
+          if (a.color===b.color && a.stage===b.stage && a.stage!=='big' && Math.random()<0.18){ promoteStage(a); promoteStage(b); }
+          // neighbor influence tiny chance
+          const ai=cIndex(a.color), bi=cIndex(b.color);
+          if (Math.abs(ai-bi)===1 && Math.random()<0.05){ (ai>bi ? b : a).stage!=='big' && promoteStage(ai>bi?b:a); }
+          // gold bonding
+          tryBondGold(a,b);
+        }
+      }
+    }
+
+    // chains → supercells
+    closeChainsIfLoop();
+
+    // Supercell logic: dock greens, spawn lapis, then spawn gold
+    for (const sc of supercells){ if(sc._dead) continue;
+      // Dock greens
+      for (const c of cells){ if(c._dead || c.color!=='green') continue;
+        const d=Math.hypot(c.x-sc.x, c.y-sc.y);
+        if (d< sc.r+10 && d> sc.r-18){
+          const ang=Math.atan2(c.y-sc.y, c.x-sc.x); const rr=sc.r;
+          c.x=sc.x+Math.cos(ang)*rr; c.y=sc.y+Math.sin(ang)*rr; c.vx*=0.3; c.vy*=0.3; c.docked=true;
+          if (!sc.greens.includes(c)) sc.greens.push(c);
+        }
+      }
+      // Populate lapis if enough greens
+      const liveGreens = sc.greens.filter(g=>!g._dead).length;
+      if (liveGreens>=8){
+        if (sc.lapis.filter(l=>!l._dead).length<5){
+          if (sc.spawnCD<=0 && nonRedCount()<BASE_CAP){ sc.lapis.push(makeLapis(sc)); sc.spawnCD=170; if(window.__SFX) __SFX.tap(); }
+          else sc.spawnCD--;
+        } else {
+          if (sc.spawnCD<=0 && nonRedCount()<BASE_CAP){
+            const ang=Math.random()*Math.PI*2, r=sc.r+16;
+            cells.push(makeCell({x:sc.x+Math.cos(ang)*r, y:sc.y+Math.sin(ang)*r, color:'gold', stage:'little', vx:(Math.random()-.5)*1.4, vy:(Math.random()-.5)*1.4}));
+            sc.spawnCD=210; if(window.__SFX) __SFX.pop();
+          } else sc.spawnCD--;
+        }
+      }
+    }
+
+    // Cleanup
+    for (let i=cells.length-1;i>=0;i--) if (cells[i]._dead) cells.splice(i,1);
+    for (let i=reds.length-1;i>=0;i--) if (reds[i]._dead) reds.splice(i,1);
+    for (let i=supercells.length-1;i>=0;i--) if (supercells[i]._dead) supercells.splice(i,1);
+
+    // Draw
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // under: supercells
+    for (const sc of supercells) drawSupercell(sc);
+    // cells
+    for (const c of cells) drawCell(c);
+    // top: reds
+    for (const r of reds) drawRed(r);
+
+    updateCount();
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 
-  // Click scoring (hit = +1, miss = -1; clicks on inputs ignored)
-  document.addEventListener('click',e=>{
-    if (e.target.closest('input,textarea,[contenteditable="true"]')) return;
-    if (GAME_PAUSED) return;
-    const x=e.clientX,y=e.clientY;
-    let hit=false;
-    for (const c of cells){ if(c._dead) continue; const d=Math.hypot(c.x-x,c.y-y); if(d<=c.r+4){ hit=true; scoreAdd(1); break; } }
-    if (!hit) scoreAdd(-1);
-  });
-
-  // Spawners for commands
-  function spawnWhites(cx,cy,n){
-    let made=0;
-    while(aliveCount()<MAX_CELLS && made<n){
+  // Spawners exposed to chat
+  window.spawnWhitesAt = function(cx,cy,n){
+    let created=0;
+    while (nonRedCount()<BASE_CAP && created<n){
       const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
-      cells.push(makeCell({x:cx+Math.cos(ang)*8, y:cy+Math.sin(ang)*8, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:'white', stage:'little'}));
-      made++;
+      cells.push(makeCell({x:cx+Math.cos(ang)*8,y:cy+Math.sin(ang)*8,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,color:'white',stage:'little'}));
+      created++;
     }
-    __SFX.squish(.12);
-  }
-  function spawnRedAgentAt(x,y){ reds.push(makeRedAgent(x,y)); __SFX.pop(); }
-
-  // expose
-  window.spawnWhitesAt=spawnWhites;
-  window.spawnRedAgent=spawnRedAgentAt;
-
+    if (window.__SFX) __SFX.squish(.1);
+    updateCount();
+  };
+  window.spawnRedAgent = function(x,y){
+    if (redCount()>=RED_EXTRA_CAP) return false;
+    reds.push(makeRed(x,y)); if (window.__SFX) __SFX.pop(); updateCount(); return true;
+  };
 })();
 </script>
+</body>
+</html>
