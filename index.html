@@ -20,8 +20,9 @@
     margin:0;color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
-    /* Base galaxy */
     background:
+      /* cyan/silver gleam at top */
+      linear-gradient(180deg, rgba(159,243,255,.30) 0%, rgba(115,232,232,.22) 8%, rgba(215,228,242,.16) 14%, rgba(0,0,0,0) 22%),
       radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
       radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
       radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
@@ -29,7 +30,7 @@
     overflow-x:hidden;
   }
 
-  /* Subtle animated gaseous/flare overlay */
+  /* Subtle animated gaseous overlays */
   .bg-wave, .bg-wave2 {
     position:fixed; inset:-20% -20% auto -20%;
     height:70vh; z-index:-1; pointer-events:none;
@@ -41,14 +42,12 @@
     animation: drift 28s ease-in-out infinite;
   }
   .bg-wave2{
-    height:60vh;
-    top:0;
+    height:60vh; top:0;
     background:
       radial-gradient(60% 70% at 35% -10%, rgba(139,226,255,.22), transparent 60%),
       radial-gradient(55% 65% at 80% 10%, rgba(111,219,240,.24), transparent 60%),
       radial-gradient(40% 55% at 10% 40%, rgba(215,228,242,.16), transparent 60%);
-    animation: drift2 36s ease-in-out infinite;
-    mix-blend-mode:screen;
+    animation: drift2 36s ease-in-out infinite; mix-blend-mode:screen;
   }
   @keyframes drift {
     0%{ transform: translateY(0) translateX(0) scale(1) }
@@ -61,7 +60,7 @@
     100%{ transform: translateY(0) translateX(0) scale(1.02) }
   }
 
-  /* Spinning galaxies (subtle) */
+  /* Galaxies */
   .galaxy{position:fixed; pointer-events:none; border-radius:50%; filter:blur(1px) saturate(120%) brightness(1.05); mix-blend-mode:screen; opacity:.30; animation:spin 140s linear infinite}
   .galaxy.g1{width:540px;height:540px;left:6%;top:14%;background:
       radial-gradient(closest-side, rgba(111,219,240,.22), transparent 70%),
@@ -87,6 +86,7 @@
   /* Score */
   .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
     border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px; box-shadow:var(--shadow)}
+  #pausedBadge{opacity:.8}
 
   /* Hero + chat */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
@@ -130,9 +130,8 @@
 </head>
 <body>
 
-  <!-- Animated top gaseous overlays -->
-  <div class="bg-wave"></div>
-  <div class="bg-wave2"></div>
+  <!-- Animated gaseous overglow -->
+  <div class="bg-wave"></div><div class="bg-wave2"></div>
 
   <!-- Subtle galaxies -->
   <div class="galaxy g1"></div><div class="galaxy g2"></div><div class="galaxy g3"></div>
@@ -140,7 +139,7 @@
   <!-- Top bar -->
   <header class="topbar" role="banner">
     <div class="brand">MayaNut<small>™</small></div>
-    <div class="brandInfo">Balls: <b id="ballCount">1</b>/19</div>
+    <div class="brandInfo">Balls: <b id="ballCount">1</b>/<b id="ballCap">120</b></div>
     <nav class="nav" aria-label="Primary">
       <a href="#home" id="navHome">MayaNut</a>
       <a href="#buy"  id="navBuy">Buy</a>
@@ -186,12 +185,12 @@
     <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
   </section>
 
-  <!-- Game CTA + objective + hotkeys -->
+  <!-- Game info -->
   <section id="game" class="section" aria-labelledby="gameTitle">
     <h3 id="gameTitle">The Game</h3>
     <p>Sign in to save your score, get on the Leaderboard today!</p>
-    <p class="muted"><strong>Objective:</strong> Grow and protect white balls. Spawners → pink blobs → reds → dotted reds → black balls → back to whites. Keep the ecosystem alive!</p>
-    <p class="muted"><strong>Hotkeys:</strong> Space = Pause/Play · Type <em>pause</em>/<em>unpause</em>/<em>resume</em>/<em>continue</em> in chat to control · Type <em>Brosimum</em> to toggle a 19-ball spawn cheat.</p>
+    <p class="muted"><strong>Objective:</strong> Keep the ecosystem thriving: whites → spawners → blobs → reds → dotted reds → novas & shards → back to whites via new mutations. Experiment with collisions!</p>
+    <p class="muted"><strong>Controls:</strong> Space = Pause/Play · Type <em>pause</em>/<em>resume</em> in chat · Type <em>Brosimum</em> to spawn 100 white balls at your cursor.</p>
   </section>
 
   <!-- Footer -->
@@ -219,12 +218,14 @@
   </div>
 
 <script>
-/* ===== Chat (brand helpers + pause/unpause + Brosimum toggle) ===== */
+/* ===== Chat (helpers + pause/resume + Brosimum powertool) ===== */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 const pausedBadge = document.getElementById('pausedBadge');
-let BROSIUM_BOOST = false;
 let GAME_PAUSED = false;
+let lastMouse = {x: window.innerWidth/2, y: window.innerHeight/2};
+document.addEventListener('mousemove', (e)=>{ lastMouse.x=e.clientX; lastMouse.y=e.clientY; });
+
 function say(role, text){
   const el = document.createElement('div');
   el.className = 'msg';
@@ -242,14 +243,14 @@ function handleMessage(v){
   const t = (v||'').trim(); if(!t) return; say('You', t);
   const low = t.toLowerCase();
 
-  // Pause / resume controls
-  if (['pause'].includes(low)){ setPaused(true); say('MayaNut','Paused. Type "unpause", "resume", "continue", or press Space to play.'); return; }
+  // Pause / resume
+  if (['pause'].includes(low)){ setPaused(true); say('MayaNut','Paused. Type "resume" or press Space to play.'); return; }
   if (['unpause','resume','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
 
-  // Brosimum cheat toggle
+  // Brosimum powertool: spawn up to 100 whites at cursor (respect cap)
   if (low === 'brosimum'){
-    BROSIUM_BOOST = !BROSIUM_BOOST;
-    say('MayaNut', BROSIUM_BOOST ? 'Brosimum boost ON — each click fills to 19 white balls.' : 'Brosimum boost OFF.');
+    window.spawnWhitesAt(lastMouse.x, lastMouse.y, 100);
+    say('MayaNut','Brosimum powertool: unleashed 100 white balls (capped by system).');
     return;
   }
 
@@ -274,18 +275,16 @@ function handleMessage(v){
 input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ handleMessage(input.value); input.value = ''; }});
 document.addEventListener('keydown', (e)=>{
   if (e.code === 'Space'){
-    // ignore if typing in the chat box
     const ae = document.activeElement;
     if (ae && (ae === input || ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) return;
-    e.preventDefault();
-    togglePause();
+    e.preventDefault(); togglePause();
   }
 });
 document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'}); input.focus(); });
 document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
 document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-/* ===== Firebase hooks (fill to enable) ===== */
+/* ===== Firebase hooks (fill in to enable real accounts + cloud score) ===== */
 const FIREBASE_CONFIG = { apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT_ID.firebaseapp.com", projectId:"YOUR_PROJECT_ID", appId:"YOUR_APP_ID" };
 const SCORE_FN_URL = "https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/submitScore";
 window.mnAuth = {
@@ -304,7 +303,7 @@ window.mnAuth = {
       this._create=createUserWithEmailAndPassword; this._signin=signInWithEmailAndPassword; this._signout=signOut;
       onAuthStateChanged(this._auth, u=>{ this.user=u||null; authInfo.textContent = u?`Signed in as ${u.email}`:'Guest mode. Sign in to save scores.'; });
       this.ready=true;
-    }catch(e){ console.warn("Firebase disabled/offline.", e); }
+    }catch(e){ console.warn("Firebase offline/disabled.", e); }
   },
   async signUp(email, pass){ if(!this.ready) return; await this._create(this._auth, email, pass); },
   async signIn(email, pass){ if(!this.ready) return; await this._signin(this._auth, email, pass); },
@@ -335,14 +334,18 @@ signUpBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signUp(authEma
 signInBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signIn(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Signed in."; }catch(e){ authInfo.textContent="Sign in failed: "+e.message; }});
 signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); authInfo.textContent="Signed out."; }catch(e){ authInfo.textContent="Error: "+e.message; }});
 
-/* ===== Game engine (pause/resume + Brosimum boost + existing rules) ===== */
+/* ===== Game engine with Mutations/Hybrids ===== */
 (function(){
   const scoreEl = document.getElementById('score');
   const ballCountEl = document.getElementById('ballCount');
-  const MAX_BALLS = 19;
-  const RED_MAX = 6;
+  const ballCapEl   = document.getElementById('ballCap');
+  const MAX_BALLS = 120; // raised for Brosimum 100 spawn
+  ballCapEl.textContent = MAX_BALLS;
 
-  // Types: 'original' | 'small' | 'spawner' | 'blob' | 'redSmall' | 'redBig' | 'redBigDot' | 'blackBig'
+  // Types:
+  // 'original' | 'small' | 'spawner' | 'blob'
+  // 'redSmall' | 'redBig' | 'redBigDot' | 'blackBig'
+  // NEW: 'cyanSwift' | 'amberHeavy' | 'violetGhost' | 'greenSeeker' | 'crimsonNova' | 'shard'
   const canvas = document.getElementById('ballLayer');
   const ctx = canvas.getContext('2d');
 
@@ -383,7 +386,9 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
   function tierToRadius(tier){ const t = Math.max(1, Math.min(15, tier|0)); return 8 + (4 * (t - 1) / 14); }
   function makeBall(o={}){
     const {x=window.innerWidth*0.6, y=window.innerHeight*0.3, r=10, vx=3, vy=2, type='small', sizeTier=null, hasFast=false} = o;
-    return { x,y,r,vx,vy,type,sizeTier,hasFast, squashTimer:0, squashAxis:'y', jellyTimer:0, jellyPhase:0, balloonTimer:0, balloonAxis:'y', _dead:false };
+    return { x,y,r,vx,vy,type,sizeTier,hasFast,
+      squashTimer:0, squashAxis:'y', jellyTimer:0, jellyPhase:0,
+      balloonTimer:0, balloonAxis:'y', life:0, trail:[], _dead:false };
   }
   const balls = [ makeBall({ type:'original', vx:1.1, vy:0.9, r:tierToRadius(7), sizeTier:7 }) ];
 
@@ -426,10 +431,14 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
   }
   function collideWithRect(b,R){
+    // Violet Ghost: passes through UI
+    const ghosty = (b.type==='violetGhost');
     const nx = Math.max(R.x, Math.min(b.x, R.x + R.w));
     const ny = Math.max(R.y, Math.min(b.y, R.y + R.h));
     const dx=b.x-nx, dy=b.y-ny;
     if (dx*dx+dy*dy>b.r*b.r) return false;
+    if (ghosty) return false;
+
     const cx = R.x+R.w/2, cy=R.y+R.h/2;
     const ox = (R.w/2 + b.r) - Math.abs(b.x - cx);
     const oy = (R.h/2 + b.r) - Math.abs(b.y - cy);
@@ -441,7 +450,7 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
 
   function count(predicate){ return balls.reduce((n,b)=> n + (!b._dead && predicate(b)?1:0), 0); }
   function redsCount(){ return count(b=>b.type==='redSmall'||b.type==='redBig'||b.type==='redBigDot'); }
-  function whitesCount(){ return count(b=>b.type==='original'||b.type==='small'||b.type==='spawner'||b.type==='blob'); }
+  function whitesCount(){ return count(b=>b.type==='original'||b.type==='small'||b.type==='spawner'||b.type==='blob'||b.type==='cyanSwift'||b.type==='amberHeavy'||b.type==='violetGhost'||b.type==='greenSeeker'); }
 
   function accelerateOriginal(b){
     const speed = Math.hypot(b.vx,b.vy);
@@ -453,41 +462,52 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
 
   function randomDottedChance(){ const N = Math.floor(Math.random()*(44-19+1)) + 19; return Math.random() < (1/N); }
 
-  function handleBallVsBall(i,j, noWhitesMode){
+  /* ===== Collision rules (including new mutations) ===== */
+  function handleBallVsBall(i,j){
     const a=balls[i], b=balls[j];
     if (a._dead || b._dead) return;
     const dx=b.x-a.x, dy=b.y-a.y;
     const dist = Math.hypot(dx,dy);
     if (dist > a.r + b.r) return;
 
+    // Fast path: Shards carve small reds / ping big reds down a tier
+    if (a.type==='shard' || b.type==='shard'){
+      const shard = a.type==='shard'?a:b;
+      const other = a.type==='shard'?b:a;
+      if (other.type==='redSmall'){ other._dead=true; }
+      else if (other.type==='redBig' || other.type==='redBigDot'){
+        // de-level big red → small red
+        other.type='redSmall'; other.r=Math.max(7.5, other.r*0.7);
+      }
+      // shards decay on hit
+      shard.life+=15; if (shard.life>120) shard._dead=true;
+      return;
+    }
+
     // Black interactions
     if (a.type==='blackBig' || b.type==='blackBig'){
       let black = a.type==='blackBig'?a:b;
       let other = a.type==='blackBig'?b:a;
       if (other.type==='redSmall'){ other._dead=true; return; }
-      if (other.type==='blackBig'){
+      if (other.type==='blackBig'){ // black vs black → spawn small whites
         a._dead=true; b._dead=true;
-        const spawn=Math.min(3, MAX_BALLS - balls.filter(bb=>!bb._dead).length);
-        for(let k=0;k<spawn;k++){
-          const ang = Math.random()*Math.PI*2, sp=1.6+Math.random()*1.4;
-          balls.push(makeBall({ x:black.x+Math.cos(ang)*(black.r+6), y:black.y+Math.sin(ang)*(black.r+6), r:7, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
-        }
+        spawnWhites((a.x+b.x)/2,(a.y+b.y)/2,3);
         return;
       }
       other.vx *= -0.9; other.vy *= -0.9; return;
     }
 
-    // Two dotted big reds → 50/50 big red / big black
-    if ((a.type==='redBigDot' && b.type==='redBigDot')){
+    // Dotted big reds → CRIMSON NOVA (not black anymore)
+    if (a.type==='redBigDot' && b.type==='redBigDot'){
       a._dead=true; b._dead=true;
-      const makeBlack = Math.random() < 0.5;
-      const ang = Math.random()*Math.PI*2, sp=2+Math.random()*1.2, R=12;
-      balls.push(makeBall({ x:(a.x+b.x)/2, y:(a.y+b.y)/2, r:R, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type: makeBlack ? 'blackBig':'redBig' }));
+      const nova = makeBall({ x:(a.x+b.x)/2, y:(a.y+b.y)/2, r:14, vx:0, vy:0, type:'crimsonNova' });
+      nova.life = 0; // explode later
+      balls.push(nova);
       return;
     }
 
-    // Red vs Red (and red → seed if no whites)
-    if ((a.type.startsWith('red') && b.type.startsWith('red'))){
+    // Red vs Red
+    if (a.type.startsWith('red') && b.type.startsWith('red')){
       if (a.type==='redSmall' && b.type==='redSmall'){
         (Math.random()<0.5?a:b)._dead = true;
       } else if ((a.type==='redBig' || a.type==='redBigDot') && (b.type==='redBig' || b.type==='redBigDot')){
@@ -495,27 +515,36 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
       } else {
         (a.type==='redSmall'?a:b)._dead = true;
       }
-      if (noWhitesMode && balls.filter(bb=>!bb._dead).length < MAX_BALLS && Math.random()<0.35){
+      // If no whites left, sometimes drop a white seed
+      if (whitesCount()===0 && balls.filter(bb=>!bb._dead).length < MAX_BALLS && Math.random()<0.35){
         const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2, ang=Math.random()*Math.PI*2, sp=1.5+Math.random();
         balls.push(makeBall({ x:cx, y:cy, r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
       }
       return;
     }
 
-    // Red vs White
+    // Red vs White side (includes hybrids)
     if (a.type.startsWith('red') || b.type.startsWith('red')){
       let red = a.type.startsWith('red')?a:b;
       let w   = a.type.startsWith('red')?b:a;
+
+      // greenSeeker repels reds slightly
+      if (w.type==='greenSeeker'){
+        const ux = dx/(dist||1), uy=dy/(dist||1);
+        red.vx += ux*1.2; red.vy += uy*1.2;
+        return;
+      }
+
       if (red.type==='redSmall'){
         if (w.type==='spawner' || w.type==='original'){ red._dead = true; return; }
-        if (w.type==='small' || w.type==='blob'){
+        if (w.type==='small' || w.type==='blob' || w.type==='violetGhost' || w.type==='cyanSwift'){
           w._dead = true;
           red.type = randomDottedChance() ? 'redBigDot' : 'redBig';
           red.r = Math.max(red.r, 10.5);
           red.vx*=0.95; red.vy*=0.95;
           return;
         }
-      } else {
+      } else { // big/dotted red
         if (w.type!=='blackBig'){ w._dead = true; }
         red.vx*=0.98; red.vy*=0.98; return;
       }
@@ -526,48 +555,75 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
       const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
       const nr = Math.max(10, Math.sqrt(a.r*a.r + b.r*b.r));
       a._dead=true; b._dead=true;
-      if (balls.filter(bb=>!bb._dead).length < MAX_BALLS){
+      if (aliveCount() < MAX_BALLS){
         const blob = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:nr, type:'blob' });
         blob.jellyTimer=28; blob.jellyPhase=0; balls.push(blob);
       }
       return;
     }
 
-    // Blob + Blob -> spawn small reds (cap 6)
-    if (a.type==='blob' && b.type==='blob'){
-      const allowance = Math.max(0, RED_MAX - redsCount());
-      const spawn = Math.min(3, allowance);
-      if (spawn>0){
-        const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
-        for(let k=0;k<spawn;k++){
-          const ang=Math.random()*Math.PI*2, sp=2.2+Math.random()*1.6;
-          balls.push(makeBall({ x:cx+Math.cos(ang)*(a.r+6), y:cy+Math.sin(ang)*(a.r+6), r:7.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'redSmall' }));
-        }
+    // Blob + Small -> Amber Heavy (slow breeder)
+    if ((a.type==='blob' && b.type==='small') || (b.type==='blob' && a.type==='small')){
+      const c = a.type==='blob'?a:b, s = a.type==='small'?a:b;
+      c._dead = true; s._dead = true;
+      if (aliveCount() < MAX_BALLS){
+        const heavy = makeBall({ x:c.x, y:c.y, r:Math.max(11,c.r), vx:(c.vx+s.vx)/2*0.6, vy:(c.vy+s.vy)/2*0.6, type:'amberHeavy' });
+        balls.push(heavy);
       }
-      a._dead=true; b._dead=true;
       return;
     }
 
-    // Small + Small (white) -> Spawner
+    // Cyan Swift (fast) creation chance: Small + Small (10% instead of Spawner)
     if (a.type==='small' && b.type==='small'){
+      const chance = Math.random() < 0.10;
       const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
       const nr=Math.sqrt(a.r*a.r + b.r*b.r);
       a._dead=true; b._dead=true;
-      if (balls.filter(bb=>!bb._dead).length < MAX_BALLS){
-        const sp = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9,nr), type:'spawner' });
-        sp.jellyTimer=16; sp.jellyPhase=0; balls.push(sp);
+      if (aliveCount() < MAX_BALLS){
+        if (chance){
+          const swift = makeBall({ x:nx, y:ny, vx:nvx*1.4, vy:nvy*1.4, r:Math.max(7.5,nr*0.9), type:'cyanSwift' });
+          balls.push(swift);
+        } else {
+          const sp = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9,nr), type:'spawner' });
+          sp.jellyTimer=16; sp.jellyPhase=0; balls.push(sp);
+        }
       }
       return;
     }
 
-    // default bounce
+    // Cyan Swift + Small → Green Seeker (hunter)
+    if ((a.type==='cyanSwift' && b.type==='small') || (b.type==='cyanSwift' && a.type==='small')){
+      const c = a.type==='cyanSwift'?a:b, s = a.type==='small'?a:b;
+      c._dead = true; s._dead = true;
+      if (aliveCount() < MAX_BALLS){
+        const g = makeBall({ x:(c.x+s.x)/2, y:(c.y+s.y)/2, r:10, vx:(c.vx+s.vx)/2, vy:(c.vy+s.vy)/2, type:'greenSeeker' });
+        balls.push(g);
+      }
+      return;
+    }
+
+    // Original + Small → small chance Violet Ghost
+    if ((a.type==='original' && b.type==='small') || (b.type==='small' && a.type==='original')){
+      if (Math.random() < 0.05){
+        const o = a.type==='original'?a:b, s = a.type==='small'?a:b;
+        s._dead = true;
+        if (aliveCount() < MAX_BALLS){
+          balls.push(makeBall({ x:(o.x+s.x)/2, y:(o.y+s.y)/2, r:9, vx:(o.vx+s.vx)/2, vy:(o.vy+s.vy)/2, type:'violetGhost' }));
+        }
+        return;
+      }
+    }
+
+    // default elastic-ish bounce
     const nx = dx/(dist||1), ny=dy/(dist||1);
     const p = 2*(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny)/2;
     a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
     a.squashTimer=b.squashTimer=8; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
   }
 
-  // Anti-orbit nudge
+  function aliveCount(){ return balls.filter(b=>!b._dead).length; }
+
+  // Anti-orbit nudge for smalls near spawners/originals
   function antiOrbit(b){
     if (b.type!=='small') return;
     const near = balls.find(x=>!x._dead && (x.type==='spawner'||x.type==='original') && Math.hypot(x.x-b.x,x.y-b.y) < (x.r + b.r + 18));
@@ -577,13 +633,48 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     }
   }
 
+  // Drawing helpers
+  function drawTrail(trail, color){
+    ctx.save(); ctx.globalAlpha = 0.35;
+    for (let i=0;i<trail.length;i++){
+      const t = trail[i];
+      const a = (i+1)/trail.length;
+      ctx.beginPath(); ctx.arc(t.x, t.y, t.r*a*0.9, 0, Math.PI*2);
+      ctx.fillStyle = color; ctx.fill();
+    }
+    ctx.restore();
+  }
+
   function drawBall(b){
     let sx=1, sy=1;
     if (b.squashTimer>0){ const t=b.squashTimer/8, amt=0.35*Math.sin(t*Math.PI); if(b.squashAxis==='x'){sx=1+amt;sy=1-amt;} else {sy=1+amt;sx=1-amt;} }
     if (b.jellyTimer>0){ const wob=0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
     if (b.balloonTimer>0){ const t=b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI); if(b.balloonAxis==='x'){sx*=1+bow;sy*=1-bow*0.6;} else {sy*=1+bow;sx*=1-bow*0.6;} }
 
+    // Trails for Cyan Swift & Seeker
+    if (b.type==='cyanSwift' || b.type==='greenSeeker'){
+      b.trail.push({x:b.x, y:b.y, r:Math.max(4,b.r*0.6)});
+      if (b.trail.length>10) b.trail.shift();
+      drawTrail(b.trail, b.type==='cyanSwift' ? 'rgba(123,233,240,.6)' : 'rgba(122,255,180,.55)');
+    } else { b.trail.length = 0; }
+
     ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
+
+    // Special shapes
+    if (b.type==='shard'){
+      // triangle shard
+      ctx.rotate((b.life%360) * Math.PI/180);
+      ctx.beginPath();
+      const R = b.r;
+      ctx.moveTo(R,0);
+      ctx.lineTo(-R*0.6, R*0.6);
+      ctx.lineTo(-R*0.6,-R*0.6);
+      ctx.closePath();
+      ctx.fillStyle='rgba(250,240,255,.95)';
+      ctx.fill();
+      ctx.restore();
+      return;
+    }
 
     // glow
     ctx.beginPath(); ctx.arc(0,0,b.r+3,0,Math.PI*2);
@@ -591,68 +682,146 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     if (b.type==='redSmall' || b.type==='redBig' || b.type==='redBigDot') glow='rgba(255,77,77,.35)';
     if (b.type==='blob') glow='rgba(255,138,214,.35)';
     if (b.type==='blackBig') glow='rgba(60,60,60,.45)';
+    if (b.type==='cyanSwift') glow='rgba(123,233,240,.35)';
+    if (b.type==='amberHeavy') glow='rgba(255,210,120,.35)';
+    if (b.type==='violetGhost') glow='rgba(190,140,255,.28)';
+    if (b.type==='greenSeeker') glow='rgba(120,255,190,.35)';
+    if (b.type==='crimsonNova') glow='rgba(255,90,120,.45)';
     ctx.fillStyle=glow; ctx.fill();
 
-    // core
+    // core (circles)
+    if (b.type==='crimsonNova'){
+      ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
+      ctx.fillStyle='#ff5a78'; ctx.fill();
+      ctx.lineWidth=2; ctx.strokeStyle='rgba(255,220,230,.8)'; ctx.stroke();
+      ctx.restore(); return;
+    }
+
     ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
     let core='#ffffff';
     if (b.type==='redSmall' || b.type==='redBig' || b.type==='redBigDot') core='#ff4d4d';
     if (b.type==='blob') core='#ff8ad6';
     if (b.type==='blackBig') core='#111111';
+    if (b.type==='cyanSwift') core='#6feaf2';
+    if (b.type==='amberHeavy') core='#ffc864';
+    if (b.type==='violetGhost') core='rgba(190,140,255,.75)';
+    if (b.type==='greenSeeker') core='#79ffb8';
     ctx.fillStyle=core; ctx.fill();
 
+    // dotted big reds center
     if (b.type==='redBigDot'){
       ctx.beginPath(); ctx.arc(0,0, Math.max(2.5, b.r*0.35), 0, Math.PI*2);
       ctx.fillStyle='#0c0c0c'; ctx.fill();
     }
 
+    // rings
     if (b.type==='original'){
       ctx.lineWidth=2; ctx.strokeStyle='rgba(143,220,255,.7)';
       ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
     } else if (b.type==='spawner'){
       ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.9)';
       ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
+    } else if (b.type==='amberHeavy'){
+      ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.85)';
+      ctx.beginPath(); ctx.arc(0,0,b.r+4,0,Math.PI*2); ctx.stroke();
     }
+
     ctx.restore();
+  }
+
+  // Seeker AI
+  function steerSeeker(b){
+    let target=null, best=1e9;
+    for (const r of balls){
+      if (r._dead) continue;
+      if (r.type==='redSmall' || r.type==='redBig' || r.type==='redBigDot'){
+        const d = (r.x-b.x)*(r.x-b.x) + (r.y-b.y)*(r.y-b.y);
+        if (d<best){ best=d; target=r; }
+      }
+    }
+    if (target){
+      const dx=target.x-b.x, dy=target.y-b.y, len=Math.max(1,Math.hypot(dx,dy));
+      b.vx += (dx/len)*0.12; b.vy += (dy/len)*0.12;
+      // clamp speed
+      const sp = Math.hypot(b.vx,b.vy); if (sp>5.5){ const f=5.5/sp; b.vx*=f; b.vy*=f; }
+    }
+  }
+
+  // Spawners / heavies support
+  function periodicBehaviors(){
+    for (const b of balls){
+      if (b._dead) continue;
+      if (b.type==='amberHeavy'){
+        if ((b.life % 120) === 0 && aliveCount() < MAX_BALLS){
+          const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
+          balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6),
+                                r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
+        }
+      }
+      if (b.type==='crimsonNova'){
+        if (b.life > 120){ // explode into shards
+          b._dead = true;
+          const shardN = 6 + Math.floor(Math.random()*5);
+          for (let k=0;k<shardN;k++){
+            const ang = (Math.PI*2)*k/shardN + Math.random()*0.2;
+            const sp = 3.8 + Math.random()*1.6;
+            const sh = makeBall({ x:b.x, y:b.y, r:6, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'shard' });
+            balls.push(sh);
+          }
+        }
+      }
+    }
   }
 
   // MAIN LOOP with PAUSE
   function step(){
-    if (!GAME_PAUSED){
-      const W=window.innerWidth, H=window.innerHeight;
-      const rects=getRects();
-      const noWhitesMode = whitesCount()===0;
+    const W=window.innerWidth, H=window.innerHeight;
+    const rects=getRects();
 
-      for(const b of balls){
+    if (!GAME_PAUSED){
+      for (const b of balls){
         if (b._dead) continue;
+        b.life++;
+        // Move
         b.x+=b.vx; b.y+=b.vy;
-        if (b.type==='original') {
-          const speed=Math.hypot(b.vx,b.vy), cap=(b.hasFast?9:4), accel=0.002;
-          const ns=Math.min(cap, speed*(1+accel)); if(ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
+
+        // Behavior tweaks
+        if (b.type==='original') accelerateOriginal(b);
+        if (b.type==='cyanSwift'){ b.vx*=1.003; b.vy*=1.003; } // tiny accel
+        if (b.type==='violetGhost'){ b.vx*=1.001; b.vy*=1.001; } // low drag
+        if (b.type==='greenSeeker') steerSeeker(b);
+
+        // Randomness for reds
+        if (b.type && b.type.startsWith('red') && Math.random()<0.02){
+          b.vx += (Math.random()-.5)*0.5; b.vy += (Math.random()-.5)*0.5;
         }
-        if (b.type.startsWith('red') && Math.random()<(noWhitesMode?0.035:0.02)){
-          b.vx += (Math.random()-.5)*0.6; b.vy += (Math.random()-.5)*0.6;
-        }
-        antiOrbit(b);
+
+        // Collisions vs world
         bounceWall(b,W,H);
         for(const R of rects) collideWithRect(b,R);
+
+        // Timers
         if (b.squashTimer>0) b.squashTimer--;
         if (b.jellyTimer>0)  b.jellyTimer--;
         if (b.balloonTimer>0) b.balloonTimer--;
       }
 
+      // periodic systems (breeding, novas)
+      periodicBehaviors();
+
       // collisions
       const grid=buildGrid();
       const pairs=nearbyPairs(grid);
-      for(const [i,j] of pairs){ handleBallVsBall(i,j, whitesCount()===0); }
+      for(const [i,j] of pairs){ handleBallVsBall(i,j); }
 
       // cleanup
       for(let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
     }
 
-    // draw even when paused (so badge, background still visible)
+    // draw (always)
     ctx.clearRect(0,0,canvas.width,canvas.height);
     for(const b of balls) drawBall(b);
+
     updateBallCount();
     requestAnimationFrame(step);
   }
@@ -660,23 +829,11 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
 
   function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy)<=b.r+5; }
 
-  // Global click: scoring + spawning + Brosimum boost
+  // Click: +1 if ball, -1 if miss; spawner/original spawn small (soft-capped)
   document.addEventListener('click',(e)=>{
     if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
-
     const x=e.clientX, y=e.clientY;
     let handled=false;
-
-    // Brosimum ON: fill to 19 white balls on ANY click (ignores pause for the fill)
-    if (BROSIUM_BOOST){
-      let alive = balls.filter(bb=>!bb._dead).length;
-      while (alive < MAX_BALLS){
-        const ang=Math.random()*Math.PI*2, spd=1.2+Math.random()*1.6;
-        balls.push(makeBall({ x:x+Math.cos(ang)*8, y:y+Math.sin(ang)*8, r:6.5, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
-        alive++;
-      }
-      updateBallCount();
-    }
 
     if (!GAME_PAUSED){
       for (const b of balls){
@@ -694,7 +851,7 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
             b._clicks=(b._clicks||0)+1;
             if (b._clicks>=15){ b.hasFast=true; const s=Math.hypot(b.vx,b.vy); if (s<7){ const F=7/(s||1); b.vx*=F; b.vy*=F; } }
           }
-          if ((b.type==='spawner' || b.type==='original') && balls.filter(bb=>!bb._dead).length < MAX_BALLS){
+          if ((b.type==='spawner' || b.type==='original') && aliveCount() < MAX_BALLS){
             const ang=Math.random()*Math.PI*2, spd=1.6+Math.random()*1.6;
             balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6), r:Math.max(5,Math.round(b.r*0.6)), vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
             updateBallCount();
@@ -705,6 +862,18 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
       if (!handled) addScore(-1);
     }
   });
+
+  // Utility spawners (used by powertool & explosions)
+  function spawnWhites(cx,cy,n){
+    let created=0;
+    while (aliveCount() < MAX_BALLS && created < n){
+      const ang=Math.random()*Math.PI*2, sp=1.2+Math.random()*1.6;
+      balls.push(makeBall({ x:cx+Math.cos(ang)*8, y:cy+Math.sin(ang)*8, r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
+      created++;
+    }
+    updateBallCount();
+  }
+  window.spawnWhitesAt = spawnWhites;
 
 })();
 </script>
