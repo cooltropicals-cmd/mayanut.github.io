@@ -6,61 +6,83 @@
 <title>MayaNut</title>
 <style>
   :root{
-    --ink:#0b1230; --ink-dim:#40527a;
+    --ink:#0b1230;
     --panel:rgba(255,255,255,.55); --line:rgba(0,0,0,.12);
-    --accent:#ffb36b; --accent2:#ffd86b;
-    --inputBG:rgba(255,255,255,.8); --inputLine:rgba(0,0,0,.18);
+    --gold1:#ffd37a; --gold2:#ffefb0;
+    --bg1:#fff3d6; --bg2:#ffe3e8; --bg3:#e1f2ff; --bg4:#f1fff9; --bg5:#f7fff7;
+    --inputBG:rgba(255,255,255,.9); --inputLine:rgba(0,0,0,.18);
   }
+
   html,body{height:100%}
   body{
     margin:0;color:var(--ink);
     font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex;flex-direction:column;min-height:100%;
-    /* Tropical, lighter sky with orange/pink/yellow/blue up top */
     background:
       radial-gradient(1200px 600px at 80% -10%, rgba(255,214,102,.45), transparent 60%),
       radial-gradient(900px 500px at 20% -8%, rgba(255,146,170,.40), transparent 60%),
       radial-gradient(1000px 600px at 50% 0%, rgba(140,212,255,.38), transparent 65%),
-      linear-gradient(180deg, #fff3d6 0%, #ffe3e8 16%, #e1f2ff 36%, #f1fff9 52%, #f7fff7 100%);
+      linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 16%, var(--bg3) 36%, var(--bg4) 52%, var(--bg5) 100%);
     overflow-x:hidden;
   }
 
+  /* Top bar */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
-  .brand{font-weight:800;color:#0c1a41;display:flex;align-items:center;gap:6px;user-select:none}
-  .brand small{font-size:11px;opacity:.95;vertical-align:top}
-  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#233257; opacity:.9}
+  .brand{
+    font-weight:900;letter-spacing:.2px;display:flex;align-items:center;gap:6px;user-select:none;
+    background:linear-gradient(90deg,var(--gold1),var(--gold2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+    /* black outline around the entire wordmark including TM */
+    -webkit-text-stroke: 1px #000;
+    text-shadow:
+      0 1px 0 rgba(0,0,0,.4),
+      0 0 0 #000; /* fallback for non-webkit */
+  }
+  .brand small{
+    font-size:11px;vertical-align:top;
+    background:linear-gradient(90deg,var(--gold1),var(--gold2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-stroke: 0.8px #000;
+  }
   .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:#0c1a41;text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
   .nav a:hover{border:1px solid var(--line);background:rgba(255,255,255,.8)}
 
-  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(255,255,255,.7);
-    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
-
+  /* Hero + chat */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
-  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;color:#0c1a41;margin:6px 0 14px}
-  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .title{
+    font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;margin:6px 0 14px;
+    background:linear-gradient(90deg,var(--gold1),var(--gold2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-stroke: 1.5px #000;
+    text-shadow:0 10px 30px rgba(255,211,122,.25);
+  }
+  .title small{
+    font-size:.35em;margin-left:4px;vertical-align:super;
+    background:linear-gradient(90deg,var(--gold1),var(--gold2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+    -webkit-text-stroke: 1px #000;
+  }
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
   .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#0b1230;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
-  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(255,255,255,.65);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(255,255,255,.8);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
   .msg{text-align:left;margin:6px 0;color:#0b1230}
   .msg strong{color:#0c1a41}
 
-  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:16px;padding:18px}
+  /* Sections */
+  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(255,255,255,.8);border:1px solid var(--line);border-radius:16px;padding:18px}
   .section h3{margin:0 0 8px;color:#0c1a41}
   .section p{margin:8px 0 0;color:#233257}
 
-  footer{width:100%;color:#233257;border-top:1px solid var(--line);background:rgba(255,255,255,.7);text-align:center;font-size:13px;padding:12px 8px}
+  footer{width:100%;color:#233257;border-top:1px solid var(--line);background:rgba(255,255,255,.75);text-align:center;font-size:13px;padding:12px 8px}
 
-  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
+  /* Background dust canvas (purely decorative, non-clickable) */
+  #dustLayer{position:fixed;inset:0;z-index:0;pointer-events:none}
 </style>
 </head>
 <body>
 
-<header class="topbar">
+<header class="topbar" role="banner">
   <div class="brand">MayaNut<small>™</small></div>
-  <div class="brandInfo">Cells: <b id="ballCount">1</b>/500</div>
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     <a href="#home" id="navHome">MayaNut</a>
     <a href="#buy"  id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
@@ -68,23 +90,23 @@
   </nav>
 </header>
 
-<div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
-
 <main id="home" class="stage">
   <div class="panel">
-    <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
-    <div class="chatbar"><input id="chatInput" placeholder='Try: /spawn 100 dust · /spawn 10 small · /fill · Space = pause' aria-label="Type what you want and press Enter" /></div>
+    <h1 class="title">MayaNut<small>™</small></h1>
+    <div class="chatbar" role="search">
+      <input id="chatInput" placeholder="Ask about MayaNut products or type anything…" aria-label="Type what you want and press Enter" />
+    </div>
     <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
 </main>
 
-<section id="buy" class="section">
-  <h3>Buy</h3>
+<section id="buy" class="section" aria-labelledby="buyTitle">
+  <h3 id="buyTitle">Buy</h3>
   <p>Search Through Our Wonderful Products — real items coming soon.</p>
 </section>
 
-<section id="about" class="section">
-  <h3>About</h3>
+<section id="about" class="section" aria-labelledby="aboutTitle">
+  <h3 id="aboutTitle">About</h3>
   <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
     <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
     farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
@@ -93,347 +115,95 @@
 
 <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
 
-<canvas id="ballLayer"></canvas>
+<!-- Decorative, non-interactive background -->
+<canvas id="dustLayer"></canvas>
 
 <script>
-/* ===== Chat + Commands + Space pause ===== */
+/* ===== Simple chat log (kept; no game) ===== */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
-const pausedBadge = document.getElementById('pausedBadge');
-let GAME_PAUSED = false;
-
 function say(role, text){
   const el=document.createElement('div'); el.className='msg';
   el.innerHTML=`<strong>${role}:</strong> ${text}`;
   logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
 }
-function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display = GAME_PAUSED ? '' : 'none'; }
-
 input.addEventListener('keydown', e=>{
   if(e.key==='Enter'){
-    const raw=input.value.trim(); if(!raw) return; say('You', raw); input.value='';
-    if (raw.startsWith('/')) { handleCommand(raw.slice(1)); return; }
-    if (raw.toLowerCase()==='pause'){ setPaused(true); say('MayaNut','Paused. Type /resume or press Space.'); return; }
-    say('MayaNut','Commands: /spawn N [dust|small], /fill, /clear, /pause, /resume');
+    const v=input.value.trim(); if(!v) return;
+    say('You', v);
+    const low=v.toLowerCase();
+    if (low.includes('buy')||low.includes('product')) {
+      say('MayaNut','Head to the Buy section below (products coming soon).');
+      document.getElementById('buy').scrollIntoView({behavior:'smooth'});
+    } else if (low.includes('about')) {
+      say('MayaNut','Scroll to the About section to learn more about us.');
+      document.getElementById('about').scrollIntoView({behavior:'smooth'});
+    } else {
+      say('MayaNut','Thanks! We’ll use your feedback to improve our shop.');
+    }
+    input.value='';
   }
 });
-document.addEventListener('keydown', (e)=>{
-  if(e.code==='Space'){
-    const ae=document.activeElement;
-    if (ae && (ae===input || ae.tagName==='INPUT' || ae.tagName==='TEXTAREA')) return;
-    e.preventDefault();
-    setPaused(!GAME_PAUSED);
-  }
-});
-function handleCommand(cmd){
-  const parts = cmd.trim().split(/\s+/); const name=(parts[0]||'').toLowerCase();
-  const num = Number.isFinite(parseInt(parts[1],10)) ? Math.max(1,parseInt(parts[1],10)) : 1;
-  const kind=(parts[2]||'dust').toLowerCase();
-  if(name==='pause'){ setPaused(true); say('MayaNut','Paused.'); return; }
-  if(['resume','unpause','continue'].includes(name)){ setPaused(false); say('MayaNut','Resumed.'); return; }
-  if(name==='spawn'){ const ok=window.GameSpawn(num, kind); say('MayaNut',`Spawned ${ok} ${kind}.`); return; }
-  if(name==='fill'){ const ok=window.GameFill(); say('MayaNut',`Filled ${ok} dust.`); return; }
-  if(name==='clear'){ const c=window.GameClear(); say('MayaNut',`Cleared ${c} cells.`); return; }
-  say('MayaNut','Commands: /spawn N [dust|small], /fill, /clear, /pause, /resume');
-}
+document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'}); input.focus(); });
+document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
+document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-/* ===== Engine: ONLY Dust & Small. 16 dust → 1 small. Smalls self-line into chains. ===== */
+/* ===== Decorative dust field (non-interactive) ===== */
 (function(){
-  const canvas=document.getElementById('ballLayer');
-  const ctx=canvas.getContext('2d');
+  const canvas = document.getElementById('dustLayer');
+  const ctx = canvas.getContext('2d');
+
   function resize(){
-    const dpr=Math.max(1,Math.min(2,devicePixelRatio||1));
-    canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
-    canvas.width=innerWidth*dpr; canvas.height=innerHeight*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    canvas.style.width=innerWidth+'px';
+    canvas.style.height=innerHeight+'px';
+    canvas.width=Math.round(innerWidth*dpr);
+    canvas.height=Math.round(innerHeight*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   resize(); addEventListener('resize', resize);
 
-  // Types
-  const DUST='dust', SMALL='small';
+  const DUST_COUNT = 240;
+  const BASE_SIZE  = 1.6;
+  const SPEED_MIN  = 0.08, SPEED_MAX = 0.35;
+  const SPECKS = [];
 
-  // Caps
-  const MAX_CELLS=500;
-
-  // Radii
-  const R_DUST=2;
-  const R_SMALL=14;
-
-  // Chain config (keep lines, avoid clumps)
-  const LINK_DIST = R_SMALL*2.0;          // desired spacing between linked smalls
-  const ALIGN_PULL = 0.20;                // strength to pull nodes onto the chain line
-  const SPRING_STIFF = 0.12;              // spring between neighbors
-  const SPRING_DAMP = 0.86;               // friction on spring movement
-  const AVOID_FORCE = 0.08;               // anti-clump repulsion between non-linked smalls
-  const AVOID_RANGE = R_SMALL*2.4;        // range to repel
-  const MERGE_SNAP = R_DUST*2.2;          // dust-dust merge threshold
-
-  // State
-  const nodes=[];          // all bodies
-  const chains=[];         // arrays of SMALL nodes, ordered
-  let nextChainId=1;
-
-  const scoreEl=document.getElementById('score'), countEl=document.getElementById('ballCount');
-  let score=0; const addScore=d=>{score+=d; scoreEl.textContent=score;};
-  const alive=()=>nodes.filter(n=>!n._dead).length; const updateCount=()=>countEl.textContent=alive();
-
-  // Helpers
-  function makeNode(x,y,type=DUST,vx=(Math.random()-.5)*2,vy=(Math.random()-.5)*2){
-    const r = (type===DUST)?R_DUST:R_SMALL;
-    return {x,y,vx,vy,r,type,_dead:false,count:(type===DUST?1:1), chainId:null, squashT:0, squashAxis:'x'};
+  function spawnSpeck(){
+    const r = (Math.random()*0.9 + 0.55) * BASE_SIZE;
+    const x = Math.random()*innerWidth;
+    const y = Math.random()*innerHeight;
+    const a = Math.random()*Math.PI*2;
+    const s = SPEED_MIN + Math.random()*(SPEED_MAX-SPEED_MIN);
+    const huePick = Math.random();
+    let col = 'rgba(255,255,255,.55)';
+    if (huePick < 0.25) col = 'rgba(255,214,120,.50)';
+    else if (huePick < 0.50) col = 'rgba(255,170,190,.45)';
+    else if (huePick < 0.75) col = 'rgba(164,214,255,.45)';
+    else col = 'rgba(240,255,210,.40)';
+    return {x,y,r,vx:Math.cos(a)*s,vy:Math.sin(a)*s,col,t:Math.random()*6.28, tw: (4+Math.random()*6)};
   }
-  function add(n){ if(alive()>=MAX_CELLS) return false; nodes.push(n); return true; }
-
-  // Seed a few dust & small
-  for(let i=0;i<80;i++) add(makeNode(Math.random()*innerWidth, Math.random()*innerHeight, DUST));
-  for(let i=0;i<6;i++) add(makeNode(innerWidth*0.45+Math.random()*60, innerHeight*0.42+Math.random()*60, SMALL));
-
-  // Obstacles (text/boxes)
-  function rects(){
-    const els=[document.getElementById('heroTitle'), document.getElementById('chatInput'),
-               document.getElementById('buy'), document.getElementById('about'), document.querySelector('.topbar')].filter(Boolean);
-    return els.map(el=>{ const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height}; });
-  }
-  function collideRect(b,R){
-    const nx=Math.max(R.x, Math.min(b.x, R.x+R.w));
-    const ny=Math.max(R.y, Math.min(b.y, R.y+R.h));
-    const dx=b.x-nx, dy=b.y-ny; if(dx*dx+dy*dy>b.r*b.r) return;
-    const cx=R.x+R.w/2, cy=R.y+R.h/2;
-    const ox=(R.w/2+b.r)-Math.abs(b.x-cx);
-    const oy=(R.h/2+b.r)-Math.abs(b.y-cy);
-    if(ox<oy){ b.vx*=-1; b.x+=(b.vx>0?1:-1)*Math.max(1,ox*.6); b.squashT=10; b.squashAxis='x'; }
-    else     { b.vy*=-1; b.y+=(b.vy>0?1:-1)*Math.max(1,oy*.6); b.squashT=10; b.squashAxis='y'; }
-  }
-  function bounceWalls(b){
-    if(b.x-b.r<0){ b.x=b.r; b.vx=Math.abs(b.vx); b.squashT=10; b.squashAxis='x'; }
-    if(b.x+b.r>innerWidth){ b.x=innerWidth-b.r; b.vx=-Math.abs(b.vx); b.squashT=10; b.squashAxis='x'; }
-    if(b.y-b.r<0){ b.y=b.r; b.vy=Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
-    if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
-  }
-
-  // Chain management
-  function createChain(a,b){
-    const id=nextChainId++; a.chainId=id; b.chainId=id;
-    const ch=[a,b]; ch.id=id; chains.push(ch); return ch;
-  }
-  function getChain(id){ return chains.find(c=>c.id===id); }
-  function appendToClosestEnd(ch, node){
-    const first=ch[0], last=ch[ch.length-1];
-    const df=Math.hypot(node.x-first.x,node.y-first.y);
-    const dl=Math.hypot(node.x-last.x,node.y-last.y);
-    if(df<dl){ ch.unshift(node); }
-    else { ch.push(node); }
-    node.chainId=ch.id;
-  }
-  function tryLinkSmalls(a,b){
-    if(a.chainId==null && b.chainId==null){ createChain(a,b); return true; }
-    if(a.chainId!=null && b.chainId==null){ appendToClosestEnd(getChain(a.chainId), b); return true; }
-    if(a.chainId==null && b.chainId!=null){ appendToClosestEnd(getChain(b.chainId), a); return true; }
-    if(a.chainId!=null && b.chainId!=null && a.chainId!==b.chainId){
-      // merge by connecting the nearer ends to keep a line
-      const A=getChain(a.chainId), B=getChain(b.chainId);
-      const endsA=[A[0],A[A.length-1]], endsB=[B[0],B[B.length-1]];
-      // pick the pair of ends with smallest distance
-      let best=[0,0,Infinity];
-      for(let i=0;i<2;i++) for(let j=0;j<2;j++){
-        const d=Math.hypot(endsA[i].x-endsB[j].x, endsA[i].y-endsB[j].y);
-        if(d<best[2]) best=[i,j,d];
-      }
-      // orient so we connect end-to-end
-      if(best[0]===0) A.reverse();
-      if(best[1]!==0) B.reverse();
-      // merge
-      const id=A.id;
-      for(const n of B){ n.chainId=id; A.push(n); }
-      // remove old B
-      const idx=chains.indexOf(B); if(idx>=0) chains.splice(idx,1);
-      return true;
-    }
-    return false;
-  }
-
-  // Relax chains to a straight line with equal spacing
-  function relaxChains(){
-    for(const ch of chains){
-      if(ch.length<2) continue;
-      // light springs between neighbors
-      for(let i=0;i<ch.length-1;i++){
-        const a=ch[i], b=ch[i+1]; const dx=b.x-a.x, dy=b.y-a.y;
-        const d=Math.hypot(dx,dy)||.0001, nx=dx/d, ny=dy/d, err=d-LINK_DIST, push=err*SPRING_STIFF;
-        a.x += nx*push; a.y += ny*push; a.vx*=SPRING_DAMP; a.vy*=SPRING_DAMP;
-        b.x -= nx*push; b.y -= ny*push; b.vx*=SPRING_DAMP; b.vy*=SPRING_DAMP;
-      }
-      // alignment: project each node to evenly spaced points on the end-to-end axis
-      const start=ch[0], end=ch[ch.length-1];
-      const ax=end.x-start.x, ay=end.y-start.y;
-      const len=Math.hypot(ax,ay)||1; const ux=ax/len, uy=ay/len;
-      for(let i=0;i<ch.length;i++){
-        const targetX = start.x + ux*(i*LINK_DIST);
-        const targetY = start.y + uy*(i*LINK_DIST);
-        const n=ch[i];
-        n.x += (targetX - n.x)*ALIGN_PULL;
-        n.y += (targetY - n.y)*ALIGN_PULL;
-      }
-    }
-  }
-
-  // Anti-clump repulsion for smalls that are NOT neighbors in a chain
-  function antiClump(){
-    const smalls = nodes.filter(n=>!n._dead && n.type===SMALL);
-    for(let i=0;i<smalls.length;i++){
-      for(let j=i+1;j<smalls.length;j++){
-        const a=smalls[i], b=smalls[j];
-        // If both are in same chain and adjacent, skip
-        if(a.chainId && a.chainId===b.chainId){
-          const ch=getChain(a.chainId); const ia=ch.indexOf(a), ib=ch.indexOf(b);
-          if(Math.abs(ia-ib)===1) continue;
-        }
-        const dx=b.x-a.x, dy=b.y-a.y; const d=Math.hypot(dx,dy)||.0001;
-        if(d<AVOID_RANGE){
-          const nx=dx/d, ny=dy/d, push=(AVOID_RANGE-d)*AVOID_FORCE;
-          a.x -= nx*push; a.y -= ny*push;
-          b.x += nx*push; b.y += ny*push;
-        }
-      }
-    }
-  }
-
-  // Dust merge logic: 16 dust → 1 small
-  function mergeDust(a,b){
-    const total=a.count + b.count;
-    a._dead=true; b._dead=true;
-    if(total>=16){
-      const n=makeNode((a.x+b.x)/2, (a.y+b.y)/2, SMALL, (a.vx+b.vx)/2, (a.vy+b.vy)/2);
-      add(n);
-    }else{
-      const d=makeNode((a.x+b.x)/2, (a.y+b.y)/2, DUST, (a.vx+b.vx)/2, (a.vy+b.vy)/2);
-      d.count = total;
-      add(d);
-    }
-  }
-
-  // Pair interactions
-  function handlePair(a,b){
-    if(a._dead||b._dead) return;
-    const dx=b.x-a.x, dy=b.y-a.y; const d=Math.hypot(dx,dy);
-    if(d>a.r+b.r) return;
-
-    // Dust + Dust → accumulate toward small
-    if(a.type===DUST && b.type===DUST){
-      if(d<MERGE_SNAP){ mergeDust(a,b); return; }
-    }
-
-    // Small + Small → link into chain (energy from dust made them sticky)
-    if(a.type===SMALL && b.type===SMALL){
-      tryLinkSmalls(a,b);
-      // small elastic bounce, but gentle (so lines can form)
-      const nx=dx/(d||1), ny=dy/(d||1);
-      const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny)*0.6;
-      a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-      a.squashT=b.squashT=10; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
-      return;
-    }
-
-    // Dust + Small → bounce (no absorption in this version)
-    const nx=dx/(d||1), ny=dy/(d||1);
-    const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
-    a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-    a.squashT=b.squashT=10; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
-  }
-
-  // Click to launch
-  document.addEventListener('click', e=>{
-    if (e.target.closest('a,button,input,textarea,[contenteditable]')) return;
-    const x=e.clientX, y=e.clientY; let hit=false;
-    for(const b of nodes){
-      if(Math.hypot(b.x-x,b.y-y) < b.r+6){
-        hit=true; const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
-        const kick=5.4; b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
-        b.squashT=10; b.squashAxis=Math.abs(dx)>Math.abs(dy)?'x':'y';
-        if(GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; }
-      }
-    }
-    addScore(hit?1:-1);
-  });
-
-  // Public API
-  window.GameFill=function(){
-    let added=0; while(alive()<MAX_CELLS){ if(!add(makeNode(Math.random()*innerWidth,Math.random()*innerHeight,DUST))) break; added++; }
-    updateCount(); return added;
-  };
-  window.GameClear=function(){ const c=alive(); nodes.length=0; chains.length=0; updateCount(); return c; };
-  window.GameSpawn=function(n=1, kind='dust'){
-    const t = (kind==='small')?SMALL:DUST; let added=0;
-    for(let i=0;i<n;i++){ if(alive()>=MAX_CELLS) break;
-      const x=innerWidth*0.5+(Math.random()*200-100), y=innerHeight*0.44+(Math.random()*200-100);
-      if(add(makeNode(x,y,t))) added++;
-    }
-    updateCount(); return added;
-  };
+  for(let i=0;i<DUST_COUNT;i++) SPECKS.push(spawnSpeck());
 
   function step(){
-    if(!GAME_PAUSED){
-      const rs=rects();
-      // integrate
-      for(const n of nodes){
-        if(n._dead) continue;
-        n.x+=n.vx; n.y+=n.vy;
-        // mild drag to settle chains
-        n.vx*=0.995; n.vy*=0.995;
-        bounceWalls(n); for(const R of rs) collideRect(n,R);
-        if(n.squashT>0) n.squashT--;
-      }
-      // interactions
-      for(let i=0;i<nodes.length;i++){
-        for(let j=i+1;j<nodes.length;j++){
-          handlePair(nodes[i],nodes[j]);
-        }
-      }
-      // structure forces
-      relaxChains();
-      antiClump();
-
-      // cleanup
-      for(let i=nodes.length-1;i>=0;i--) if(nodes[i]._dead) nodes.splice(i,1);
-      updateCount();
-    }
-
-    // draw
     ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const p of SPECKS){
+      p.t += 0.02;
+      const tw = 0.35*Math.sin(p.t/p.tw);
+      const r = Math.max(0.4, p.r + tw);
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -20) p.x = innerWidth+20;
+      if (p.x > innerWidth+20) p.x = -20;
+      if (p.y < -20) p.y = innerHeight+20;
+      if (p.y > innerHeight+20) p.y = -20;
 
-    // draw chains as subtle lines
-    ctx.strokeStyle='rgba(20,40,80,0.45)'; ctx.lineWidth=2;
-    for(const ch of chains){
-      if(ch.length<2) continue;
-      ctx.beginPath(); ctx.moveTo(ch[0].x,ch[0].y);
-      for(const n of ch) ctx.lineTo(n.x,n.y);
-      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+      ctx.fillStyle = p.col;
+      ctx.fill();
     }
-
-    // draw nodes (dust + small) with squash/stretch
-    for(const n of nodes){
-      let sx=1, sy=1;
-      if(n.squashT>0){ const t=n.squashT/10, amt=.35*Math.sin(t*Math.PI); if(n.squashAxis==='x'){sx=1+amt; sy=1-amt;} else {sy=1+amt; sx=1-amt;} }
-      ctx.save(); ctx.translate(n.x,n.y); ctx.scale(sx,sy);
-
-      if(n.type===DUST){
-        ctx.fillStyle='#ffffff';
-        ctx.beginPath(); ctx.arc(0,0,R_DUST,0,Math.PI*2); ctx.fill();
-      }else{
-        ctx.fillStyle='rgba(255,255,255,.96)';
-        ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(12,26,65,.35)';
-        ctx.beginPath(); ctx.arc(0,0,R_SMALL+1.5,0,Math.PI*2); ctx.stroke();
-      }
-
-      ctx.restore();
-    }
-
     requestAnimationFrame(step);
   }
   step();
-
-  // HUD init
-  updateCount();
 })();
 </script>
 </body>
