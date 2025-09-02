@@ -12,7 +12,6 @@
     --accent:#8fdcff; --accent2:#c79bff;
     --gold:#f7d27a;         /* lighter, shinier gold */
     --gold-deep:#d9b65a;    /* darker edge for outline */
-    --water:#bfefff;        /* clear light blue */
   }
   html,body{height:100%}
   body{
@@ -49,7 +48,7 @@
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
   .panel{width:min(960px,92vw);text-align:center}
 
-  /* Hero logo sits above the chat bar */
+  /* Hero logo */
   .heroLogo{ width:min(560px,80vw); margin:6px auto 10px; display:block; }
 
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
@@ -70,13 +69,13 @@
       radial-gradient(circle at 30% 105%, #fdf497 0%, #fdf497 5%, rgba(255,220,90,.9) 45%),
       radial-gradient(circle at 90% 10%, #fcedf0 0%, #fcedf0 20%, transparent 40%),
       linear-gradient(45deg,#405de6,#5851db,#833ab4,#c13584,#e1306c,#fd1d1d);
-    box-shadow:0 0 0 1px rgba(255,255,255,.35) inset}
-  .ig:after{content:"";display:block;width:8px;height:8px;border:2px solid #fff;border-radius:50%;position:relative;top:4px;left:4px}
+    box-shadow:0 0 0 1px rgba(255,255,255,.35) inset; position:relative}
+  .ig:after{content:"";display:block;width:8px;height:8px;border:2px solid #fff;border-radius:50%;position:absolute;top:4px;left:4px}
   .ig:before{content:"";position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;top:3px;left:10px}
 
-  /* Canvas for background dust/drops/water */
+  /* Canvases: water behind content, flora above content (non-clickable) */
   #fx{position:fixed; inset:0; z-index:0; pointer-events:none}
-  /* Put content above effects */
+  #flora{position:fixed; inset:0; z-index:2; pointer-events:none}
   .content{position:relative; z-index:1}
 </style>
 </head>
@@ -92,12 +91,15 @@
   </nav>
 </header>
 
+<!-- Background water/drops -->
 <canvas id="fx"></canvas>
+<!-- Foreground plants (branches/leaves) -->
+<canvas id="flora"></canvas>
 
 <div class="content">
   <main id="home" class="stage">
     <div class="panel">
-      <!-- GOLD SVG LOGO (transparent bg) with Brosimum canopy on the "t" -->
+      <!-- Gold SVG logo with tree canopy on the “t” -->
       <svg class="heroLogo" viewBox="0 0 1200 280" aria-label="MayaNut logo">
         <defs>
           <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
@@ -109,26 +111,21 @@
             <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,.45)"/>
           </filter>
         </defs>
-        <!-- outline -->
         <text x="50" y="190" font-family="Poppins, Inter, system-ui, sans-serif"
               font-weight="900" font-size="180"
               fill="url(#goldGrad)" stroke="#000" stroke-width="8" filter="url(#logoShadow)">
           MayaNu
         </text>
-        <!-- draw the 't' stem separate so we can add canopy -->
         <text x="950" y="190" font-family="Poppins, Inter, system-ui, sans-serif"
               font-weight="900" font-size="180"
               fill="url(#goldGrad)" stroke="#000" stroke-width="8" filter="url(#logoShadow)">
           t
         </text>
-        <!-- canopy atop the 't' (simple rounded tree crown) -->
         <g transform="translate(1000,65)">
           <path d="M-40,20 C-90,20 -95,-30 -60,-50 C-20,-75 20,-75 60,-50 C95,-30 90,20 40,20 Z"
                 fill="#33b56b" stroke="#0b3d22" stroke-width="6" filter="url(#logoShadow)"/>
-          <!-- a couple of simple leaf shines -->
           <ellipse cx="-10" cy="-20" rx="20" ry="10" fill="rgba(255,255,255,.25)"/>
         </g>
-        <!-- TM -->
         <text x="1115" y="95" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="44"
               fill="url(#goldGrad)" stroke="#000" stroke-width="5" filter="url(#logoShadow)">™</text>
       </svg>
@@ -160,12 +157,12 @@
 
   <footer>
     © 2025 MayaNut LLC. All rights reserved.
-    <a class="ig" href="https://instagram.com/mayanut.co" title="@mayanut.co" target="_blank" rel="noopener" style="position:relative"></a>
+    <a class="ig" href="https://instagram.com/mayanut.co" title="@mayanut.co" target="_blank" rel="noopener"></a>
   </footer>
 </div>
 
 <script>
-/* ========= Simple assistant replies (unchanged behavior) ========= */
+/* ========= Simple assistant replies ========= */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 function say(role, text){
@@ -187,20 +184,23 @@ input.addEventListener('keydown', e=>{
   if(el) el.addEventListener('click', e=>{ e.preventDefault(); document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'}); });
 });
 
-/* ========= Background FX: rising mist → merging drops → pooled clear water with ripples ========= */
+/* ========= Background FX: mist → drops → pooled clear water (with ripples) ========= */
 (function(){
-  const canvas=document.getElementById('fx');
-  const ctx=canvas.getContext('2d');
+  const waterCanvas=document.getElementById('fx');
+  const wctx=waterCanvas.getContext('2d');
 
-  function resize(){
+  function resizeCanvas(c, ctx){
     const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
-    canvas.style.width=innerWidth+'px';
-    canvas.style.height=innerHeight+'px';
-    canvas.width=Math.round(innerWidth*dpr);
-    canvas.height=Math.round(innerHeight*dpr);
+    c.style.width=innerWidth+'px';
+    c.style.height=innerHeight+'px';
+    c.width=Math.round(innerWidth*dpr);
+    c.height=Math.round(innerHeight*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  resize(); addEventListener('resize', resize);
+  function resizeAll(){ resizeCanvas(waterCanvas,wctx); resizeCanvas(floraCanvas,fctx); seedsDirty=true; }
+  window.addEventListener('resize', resizeAll);
+
+  resizeCanvas(waterCanvas,wctx);
 
   // ----- particles (mist & drops) -----
   const MIST_COUNT = 120;
@@ -212,23 +212,19 @@ input.addEventListener('keydown', e=>{
   }
   for(let i=0;i<MIST_COUNT;i++) mist.push(spawnMist());
 
-  function spawnDrop(x,y,area){ // area ~ r^2
-    const r=Math.sqrt(Math.max(6, area))/2.2; // keep visually modest
+  function spawnDrop(x,y,area){
+    const r=Math.sqrt(Math.max(6, area))/2.2;
     const vx=(Math.random()-.5)*0.6, vy=1.2+Math.random()*0.6;
     return {x,y,r,vx,vy};
   }
 
-  // Mist fusion → drop creation near mid/top
   function maybeMistFuse(m){
-    // when mist enters top half, chance to fuse with neighbors
     if (m.y < innerHeight*0.48){
-      // quick neighbor pick
       const k = Math.floor(Math.random()*5)+3;
       for(let i=0;i<k;i++){
         const n = mist[(Math.random()*mist.length)|0];
         const dx=n.x - m.x, dy=n.y - m.y, d2=dx*dx+dy*dy;
-        if (d2 < 14){ // close enough → make a drop
-          // remove a few mists and create one drop
+        if (d2 < 14){
           const cx=(m.x+n.x)/2, cy=(m.y+n.y)/2;
           drops.push(spawnDrop(cx, cy, 70));
           m.y = innerHeight + 40; n.y = innerHeight + 40; // recycle
@@ -238,15 +234,14 @@ input.addEventListener('keydown', e=>{
     }
   }
 
-  // ----- pooled water state (slow rise) -----
+  // ----- pooled water state -----
   let waterVolume = 0;                 // increases as drops merge
-  const WATER_PER_AREA = 0.0025;       // controls rise speed (smaller = slower)
-  const baseWaveAmp = 6;               // gentle surface waves
-  const ripples=[]; // {x,t} waves from clicks
+  const WATER_PER_AREA = 0.0020;       // a bit slower rise
+  const baseWaveAmp = 6;
+  const ripples=[]; // {x,t}
 
-  // Carve water around obstacles (logo, chat, log, sections, topbar)
   function obstacles(){
-    const ids=['home','buy','about']; // we’ll carve around key blocks + topbar + hero SVG + chat + log
+    const ids=['home','buy','about'];
     const rects=[];
     const topbar=document.querySelector('.topbar'); if(topbar){ const r=topbar.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:10}); }
     const hero=document.querySelector('.heroLogo'); if(hero){ const r=hero.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:18}); }
@@ -258,7 +253,7 @@ input.addEventListener('keydown', e=>{
     return rects;
   }
 
-  function roundRectPath(r){ // {x,y,w,h,rad}
+  function roundRectPath(ctx,r){
     const rr = Math.min(r.rad, Math.min(r.w,r.h)/2);
     ctx.beginPath();
     ctx.moveTo(r.x+rr, r.y);
@@ -273,29 +268,36 @@ input.addEventListener('keydown', e=>{
     ctx.closePath();
   }
 
-  // Click → ripple if clicking the pooled water
   document.addEventListener('click', (e)=>{
     const x=e.clientX, y=e.clientY;
-    const h = Math.min(innerHeight*0.9, waterVolume); // current flat level before waves
+    const h = Math.min(innerHeight*0.9, waterVolume);
     const surfaceY = innerHeight - h;
-    if (y >= surfaceY-6){ ripples.push({x, t:0}); }
+    if (y >= surfaceY-6){ ripples.push({x,d:0,t:0}); }
   });
 
-  function step(){
+  function surfaceWave(x, t){
+    let w = Math.sin((x*0.01)+t*1.2)*baseWaveAmp*0.2 + Math.sin((x*0.004)-t*0.8)*baseWaveAmp*0.15;
+    for (const r of ripples){
+      const dist = Math.abs(x - r.x);
+      const k = 0.02;
+      const A = 9*(1 - r.t);
+      w += A * Math.sin(k*dist - r.t*8) * Math.exp(-0.012*dist);
+    }
+    return w;
+  }
+
+  function stepWater(){
     // mist
     for(const m of mist){
       m.y += m.vy; m.x += (Math.random()-.5)*0.2;
       if (m.y < innerHeight*0.5 && Math.random()<0.03) maybeMistFuse(m);
-      if (m.y < -20 || m.x<-40 || m.x>innerWidth+40){ // recycle top/side escapes
-        Object.assign(m, spawnMist());
-      }
+      if (m.y < -20 || m.x<-40 || m.x>innerWidth+40){ Object.assign(m, spawnMist()); }
     }
 
-    // drops (fall + merge mid-air)
+    // drops
     for(let i=0;i<drops.length;i++){
       const d=drops[i];
-      d.x += d.vx; d.y += d.vy; d.vy += 0.01; // tiny gravity
-      // merge mid-air (area preserving)
+      d.x += d.vx; d.y += d.vy; d.vy += 0.01;
       for(let j=i+1;j<drops.length;j++){
         const e=drops[j]; if(!e) continue;
         const dx=e.x-d.x, dy=e.y-d.y, R=d.r+e.r;
@@ -303,109 +305,253 @@ input.addEventListener('keydown', e=>{
           const area = Math.PI*(d.r*d.r + e.r*e.r);
           d.r = Math.sqrt(area/Math.PI);
           d.x = (d.x+e.x)/2; d.y = (d.y+e.y)/2;
-          // small momentum average
           d.vx = (d.vx+e.vx)/2; d.vy = (d.vy+e.vy)/2;
           drops.splice(j,1); j--;
         }
       }
-      // merge at surface
       const targetH = Math.min(innerHeight*0.9, waterVolume);
       const surfaceY = innerHeight - targetH + surfaceWave(d.x, performance.now()/1000);
       if (d.y + d.r >= surfaceY){
-        // add volume based on area; slower rise factor keeps it calm
         waterVolume = Math.min(innerHeight*0.9, waterVolume + d.r*d.r*WATER_PER_AREA);
-        // ripple on impact
         ripples.push({x:d.x, t:0});
         drops.splice(i,1); i--;
       }
     }
 
-    // ripples progress
     for (let i=ripples.length-1;i>=0;i--){
       ripples[i].t += 0.016;
       if (ripples[i].t>1.4) ripples.splice(i,1);
     }
   }
 
-  function surfaceWave(x, t){
-    // base soft waves + ripple rings
-    let w = Math.sin((x*0.01)+t*1.2)*baseWaveAmp*0.2 + Math.sin((x*0.004)-t*0.8)*baseWaveAmp*0.15;
-    for (const r of ripples){
-      const dist = Math.abs(x - r.x);
-      const k = 0.02;                        // wave number
-      const A = 9*(1 - r.t);                 // fade amplitude
-      w += A * Math.sin(k*dist - r.t*8) * Math.exp(-0.012*dist);
-    }
-    return w;
-  }
+  function drawWater(){
+    wctx.clearRect(0,0,waterCanvas.width,waterCanvas.height);
 
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    // white rising mist at the bottom
+    // mist
     for(const m of mist){
-      ctx.globalAlpha = m.alpha;
-      ctx.fillStyle='#ffffff';
-      ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI*2); ctx.fill();
+      wctx.globalAlpha = m.alpha;
+      wctx.fillStyle='#ffffff';
+      wctx.beginPath(); wctx.arc(m.x, m.y, m.r, 0, Math.PI*2); wctx.fill();
     }
-    ctx.globalAlpha = 1;
+    wctx.globalAlpha = 1;
 
-    // falling drops
+    // drops
     for(const d of drops){
-      const grad=ctx.createRadialGradient(d.x- d.r*0.4, d.y- d.r*0.5, d.r*0.2, d.x, d.y, d.r);
+      const grad=wctx.createRadialGradient(d.x- d.r*0.4, d.y- d.r*0.5, d.r*0.2, d.x, d.y, d.r);
       grad.addColorStop(0,'rgba(255,255,255,.85)');
       grad.addColorStop(1,'rgba(180,220,255,.65)');
-      ctx.fillStyle=grad;
-      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2); ctx.fill();
+      wctx.fillStyle=grad;
+      wctx.beginPath(); wctx.arc(d.x,d.y,d.r,0,Math.PI*2); wctx.fill();
     }
 
-    // pooled water (clear, with waves)
+    // pooled water
     const h = Math.min(innerHeight*0.9, waterVolume);
     if (h>0.5){
       const baseY = innerHeight - h;
 
-      // Build a surface path with waves
-      ctx.beginPath();
-      ctx.moveTo(0, innerHeight);
-      ctx.lineTo(0, baseY + surfaceWave(0, performance.now()/1000));
+      wctx.beginPath();
+      wctx.moveTo(0, innerHeight);
+      wctx.lineTo(0, baseY + surfaceWave(0, performance.now()/1000));
       const step = Math.max(2, innerWidth/160);
       for (let x=step; x<=innerWidth; x+=step){
-        ctx.lineTo(x, baseY + surfaceWave(x, performance.now()/1000));
+        wctx.lineTo(x, baseY + surfaceWave(x, performance.now()/1000));
       }
-      ctx.lineTo(innerWidth, innerHeight);
-      ctx.closePath();
+      wctx.lineTo(innerWidth, innerHeight);
+      wctx.closePath();
 
-      // Fill water
-      const g=ctx.createLinearGradient(0, baseY-40, 0, innerHeight);
+      const g=wctx.createLinearGradient(0, baseY-40, 0, innerHeight);
       g.addColorStop(0, 'rgba(195,235,255,.55)');
       g.addColorStop(1, 'rgba(150,210,255,.75)');
-      ctx.fillStyle=g;
-      ctx.fill();
+      wctx.fillStyle=g;
+      wctx.fill();
 
-      // Carve around obstacles so water flows around boxes/logo
-      ctx.globalCompositeOperation='destination-out';
+      // carve around boxes/logo
+      wctx.globalCompositeOperation='destination-out';
       const obs = obstacles();
-      for(const r of obs){
-        roundRectPath(r);
-        ctx.fillStyle='rgba(0,0,0,0.9)';
-        ctx.fill();
-      }
-      ctx.globalCompositeOperation='source-over';
+      for(const r of obs){ roundRectPath(wctx,r); wctx.fillStyle='rgba(0,0,0,0.9)'; wctx.fill(); }
+      wctx.globalCompositeOperation='source-over';
 
-      // subtle surface highlight
-      ctx.strokeStyle='rgba(255,255,255,.35)';
-      ctx.lineWidth=1.5;
-      ctx.beginPath();
+      // surface highlight
+      wctx.strokeStyle='rgba(255,255,255,.35)';
+      wctx.lineWidth=1.5;
+      wctx.beginPath();
       for (let x=0; x<=innerWidth; x+=step){
         const y = baseY + surfaceWave(x, performance.now()/1000);
-        if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        if (x===0) wctx.moveTo(x,y); else wctx.lineTo(x,y);
       }
-      ctx.stroke();
+      wctx.stroke();
     }
   }
 
-  function loop(){ step(); draw(); requestAnimationFrame(loop); }
-  loop();
+  /* ================== FLORA LAYER (branches & leaves) ================== */
+  const floraCanvas=document.getElementById('flora');
+  const fctx=floraCanvas.getContext('2d');
+  resizeCanvas(floraCanvas,fctx);
+
+  let seedsDirty=true;
+  const plants=[]; // array of plant objects
+
+  function makeSeed(x,y,angle){
+    return {
+      x,y, baseX:x, baseY:y,
+      angle, // initial direction (outward from box)
+      segments:[{x1:x,y1:y,angle, len:0, target:24, phase:Math.random()*Math.PI*2}],
+      leaves:[],     // {x,y,angle,side}
+      touched:false, // touched by water → start growing
+      grown:false,   // once coverage threshold reached
+      totalLen:0
+    };
+  }
+
+  function placeSeeds(){
+    plants.length=0;
+    const obs = obstacles();
+    // pick a few outward-facing spots around each box
+    for (const r of obs){
+      const spots = [
+        {x:r.x + r.w*0.15, y:r.y - 6, angle:-Math.PI/2},     // top edge up
+        {x:r.x + r.w*0.85, y:r.y - 6, angle:-Math.PI/2},
+        {x:r.x - 6,        y:r.y + r.h*0.3, angle:Math.PI},  // left edge left
+        {x:r.x + r.w + 6,  y:r.y + r.h*0.7, angle:0},        // right edge right
+        {x:r.x + r.w*0.25, y:r.y + r.h + 6, angle:Math.PI/2} // bottom edge down
+      ];
+      spots.forEach(s=>{
+        // slight jitter so it feels scattered
+        plants.push(makeSeed(s.x + (Math.random()*6-3), s.y + (Math.random()*6-3), s.angle + (Math.random()*0.4-0.2)));
+      });
+    }
+  }
+
+  function waterSurfaceYAt(x){
+    const h = Math.min(innerHeight*0.9, waterVolume);
+    const baseY = innerHeight - h;
+    return baseY + surfaceWave(x, performance.now()/1000);
+  }
+
+  function growPlants(dt){
+    // growth rate
+    const rate = 18 * dt;          // pixels per second feel
+    const branchChance = 0.12;     // branching probability when segment nearly complete
+    const maxSegments = 900;       // safety cap across page
+    let globalSegments = 0;
+
+    for (const p of plants){
+      globalSegments += p.segments.length;
+
+      // water touch check
+      if (!p.touched){
+        if (p.baseY >= waterSurfaceYAt(p.baseX) - 3) p.touched = true;
+      }
+      if (!p.touched) continue;
+
+      // once many plants large, mark grown for breeze animation (visual only)
+      if (!p.grown && p.totalLen > 2400) p.grown = true;
+
+      // extend segments
+      for (const seg of p.segments){
+        if (seg.len < seg.target){
+          seg.len = Math.min(seg.target, seg.len + rate);
+          p.totalLen += rate;
+          // add leaves along segment as it grows (alternating sides)
+          if (Math.random()<0.25){
+            const t = seg.len/seg.target;
+            const px = seg.x1 + Math.cos(seg.angle)*seg.len;
+            const py = seg.y1 + Math.sin(seg.angle)*seg.len;
+            p.leaves.push({x:px, y:py, angle:seg.angle + (Math.random()*0.6-0.3), side: ((p.leaves.length%2)===0?1:-1)});
+          }
+        } else {
+          // maybe branch
+          if (globalSegments < maxSegments && Math.random() < branchChance){
+            const px = seg.x1 + Math.cos(seg.angle)*seg.len;
+            const py = seg.y1 + Math.sin(seg.angle)*seg.len;
+            const a1 = seg.angle + (Math.random()<0.5? -0.7: 0.7);   // alternating fork
+            const childLen = 18 + Math.random()*26;
+            p.segments.push({x1:px,y1:py,angle:a1,len:0,target:childLen,phase:Math.random()*Math.PI*2});
+            globalSegments++;
+          }
+        }
+      }
+    }
+  }
+
+  function swayPlants(time, dt){
+    // gentle breeze sway once “grown”
+    for (const p of plants){
+      if (!p.grown) continue;
+      for (const seg of p.segments){
+        const sway = 0.02 * Math.sin(time*0.9 + seg.phase);
+        seg.angle += sway * dt; // subtle continuous motion
+      }
+      for (const lf of p.leaves){
+        lf.angle += 0.03 * Math.sin(time*1.1 + (lf.x+lf.y)*0.001) * dt;
+      }
+    }
+  }
+
+  function drawLeaf(ctx, x,y, angle, side){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(angle);
+    const w = 10, h = 20;
+    ctx.scale(1, side); // alternate side mirroring
+    const grad = ctx.createLinearGradient(0,-h,0,h);
+    grad.addColorStop(0,'#2aa45c');
+    grad.addColorStop(1,'#1f7b45');
+    ctx.fillStyle=grad;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.quadraticCurveTo(w*0.8,-h*0.2, 0,-h);
+    ctx.quadraticCurveTo(-w*0.8,-h*0.2, 0,0);
+    ctx.fill();
+    // vein
+    ctx.strokeStyle='rgba(255,255,255,.25)';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,-h); ctx.lineTo(0,0); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPlants(){
+    fctx.clearRect(0,0,floraCanvas.width,floraCanvas.height);
+
+    // stems
+    fctx.lineCap='round';
+    for (const p of plants){
+      fctx.strokeStyle='#1c6b3b';
+      fctx.lineWidth=3;
+      for (const seg of p.segments){
+        const x2 = seg.x1 + Math.cos(seg.angle)*seg.len;
+        const y2 = seg.y1 + Math.sin(seg.angle)*seg.len;
+        fctx.beginPath(); fctx.moveTo(seg.x1, seg.y1); fctx.lineTo(x2, y2); fctx.stroke();
+      }
+    }
+    // leaves on top
+    for (const p of plants){
+      for (const lf of p.leaves){
+        drawLeaf(fctx, lf.x, lf.y, lf.angle, lf.side);
+      }
+    }
+  }
+
+  // build seeds after layout is ready
+  function ensureSeeds(){ if(seedsDirty){ seedsDirty=false; placeSeeds(); } }
+
+  /* ================== MAIN LOOP (water + plants) ================== */
+  let last=performance.now();
+  function loop(now){
+    const dt=Math.min(0.033,(now-last)/1000); last=now;
+
+    ensureSeeds();
+
+    stepWater();
+    growPlants(dt);
+    swayPlants(now/1000, dt);
+
+    drawWater();
+    drawPlants();
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
 })();
 </script>
 </body>
