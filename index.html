@@ -6,7 +6,8 @@
 <title>MayaNut</title>
 
 <!-- Favicon: inline SVG (gold “MN” on deep green) + optional PNG fallback -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23fff0b5'/%3E%3Cstop offset='50%25' stop-color='%23ffd46b'/%3E%3Cstop offset='100%25' stop-color='%23f3ac3a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%230f2f1d'/%3E%3Ctext x='9' y='46' font-family='Poppins, Inter, Arial, sans-serif' font-weight='900' font-size='34' fill='url(%23g)'%3EMN%3C/text%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23fff0b5'/%3E%3Cstop offset='50%25' stop-color='%23ffd46b'/%3E%3Cstop offset='100%25' stop-color='%23f3ac3a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%230f2f1d'/%3E%3Ctext x='9' y='46' font-family='Poppins, Inter, Arial, sans-serif' font-weight='900' font-size='34' fill='url(%23g)'%3EMN%3C/text%3E%3C/svg%3E" />
 <link rel="icon" type="image/png" href="favicon.png" sizes="32x32" />
 
 <style>
@@ -25,35 +26,43 @@
     overflow-x:hidden;
   }
 
-  /* Animated blurred green background layers (lava-lamp style) */
-  .bg, .bg2, .bg3 {
-    position:fixed; inset:-25% -25% -25% -25%;
+  /* Animated blurred green background layers (more motion, lava-lamp style) */
+  .bg, .bg2, .bg3, .bg4 {
+    position:fixed; inset:-28% -28% -28% -28%;
     z-index:-1; pointer-events:none;
-    filter: blur(30px) saturate(115%) brightness(105%);
+    filter: blur(34px) saturate(115%) brightness(105%);
   }
   .bg {
     background:
-      radial-gradient(40% 45% at 20% 30%, rgba(110,190,120,.35), transparent 60%),
-      radial-gradient(35% 40% at 80% 25%, rgba(165,230,170,.28), transparent 60%);
-    animation: driftA 50s ease-in-out infinite;
+      radial-gradient(40% 45% at 20% 25%, rgba(110,190,120,.38), transparent 60%),
+      radial-gradient(36% 42% at 78% 18%, rgba(165,230,170,.30), transparent 60%);
+    animation: driftA 42s ease-in-out infinite;
   }
   .bg2 {
     background:
-      radial-gradient(38% 42% at 25% 75%, rgba(70,150,95,.30), transparent 60%),
-      radial-gradient(30% 35% at 75% 70%, rgba(125,200,140,.28), transparent 60%);
-    animation: driftB 65s ease-in-out infinite;
+      radial-gradient(38% 42% at 28% 78%, rgba(70,150,95,.30), transparent 60%),
+      radial-gradient(34% 38% at 76% 72%, rgba(125,200,140,.28), transparent 60%);
+    animation: driftB 55s ease-in-out infinite;
     mix-blend-mode: screen;
   }
   .bg3 {
     background:
-      radial-gradient(30% 34% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
-      radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
-    animation: driftC 80s ease-in-out infinite;
+      radial-gradient(30% 34% at 36% 10%, rgba(185,255,185,.22), transparent 60%),
+      radial-gradient(28% 30% at 64% 46%, rgba(90,160,105,.24), transparent 60%);
+    animation: driftC 68s ease-in-out infinite;
+    opacity:.9;
+  }
+  .bg4 {
+    background:
+      radial-gradient(26% 30% at 14% 54%, rgba(60,120,85,.26), transparent 60%),
+      radial-gradient(26% 28% at 86% 54%, rgba(170,230,180,.24), transparent 60%);
+    animation: driftD 60s ease-in-out infinite reverse;
     opacity:.85;
   }
-  @keyframes driftA {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,20px) scale(1.05)} 100%{transform:translate(0,0) scale(1)}}
-  @keyframes driftB {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(25px,-25px) scale(1.07)} 100%{transform:translate(0,0) scale(1)}}
-  @keyframes driftC {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,15px) scale(1.04)} 100%{transform:translate(0,0) scale(1)}}
+  @keyframes driftA {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-44px,28px) scale(1.06)} 100%{transform:translate(0,0) scale(1)}}
+  @keyframes driftB {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(36px,-30px) scale(1.08)} 100%{transform:translate(0,0) scale(1)}}
+  @keyframes driftC {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-28px,22px) scale(1.05)} 100%{transform:translate(0,0) scale(1)}}
+  @keyframes driftD {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(26px,18px) scale(1.04)} 100%{transform:translate(0,0) scale(1)}}
 
   /* Top bar */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
@@ -63,17 +72,18 @@
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
+  /* Hero */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
   .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 12px}
 
   /* Chat */
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
-  .chatbar input{flex:1;height:44px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .chatbar input{flex:1;height:46px;padding:12px 14px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
   .chatbar input::placeholder{color:#cfe8ff}
   .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
 
-  /* Common questions — rectangular, professional; expand on hover */
+  /* Common questions (rectangular, pro) */
   .quickQ{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px auto 0;width:min(760px,92vw)}
   .chip{
     display:inline-block;padding:12px 16px;border-radius:12px;
@@ -112,7 +122,7 @@
 </head>
 <body>
 
-<div class="bg"></div><div class="bg2"></div><div class="bg3"></div>
+<div class="bg"></div><div class="bg2"></div><div class="bg3"></div><div class="bg4"></div>
 
 <!-- Unified gold logo with tight ™ -->
 <svg width="0" height="0" style="position:absolute">
@@ -152,14 +162,14 @@
     <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
 
     <div class="chatbar" role="search">
-      <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
+      <input id="chatInput" placeholder="Ask about MayaNut™ (Ramón/Breadnut) or our products" aria-label="Type what you want and press Enter" />
     </div>
 
     <!-- Common questions -->
-    <div class="quickQ">
-      <button class="chip" data-q="What is MayaNut™?">What is MayaNut™?</button>
-      <button class="chip" data-q="Shop MayaNut™ Products">Shop MayaNut™ Products</button>
-      <button class="chip" data-q="Tell Me More About MayaNut">Tell Me More About MayaNut</button>
+    <div class="quickQ" aria-label="Common questions">
+      <button class="chip" data-q="What is MayaNut?">What is MayaNut™?</button>
+      <button class="chip" data-q="Shop products">Shop MayaNut™ Products</button>
+      <button class="chip" data-q="Tell me more about the tree">Tell Me More About MayaNut</button>
     </div>
 
     <div class="log" id="chatLog" aria-live="polite"></div>
@@ -181,17 +191,16 @@
   <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
 </section>
 
-<!-- NEW: Core Memory / Training -->
 <section id="core" class="section" aria-labelledby="coreTitle">
   <h3 id="coreTitle">Core Memory (Chatbot Training)</h3>
-  <p><strong>Why it matters in agriculture:</strong> MayaNut™ comes from the tropical tree <em>Brosimum alicastrum</em> (also called Ramón, Breadnut, Ojoche, Oox). The tree is drought-resilient, perennial, and supports agroforestry systems by providing shade, leaf litter for soils, wildlife food, and long-term carbon storage.</p>
+  <p><strong>Why it matters in agriculture:</strong> MayaNut™ comes from the tropical tree <em>Brosimum alicastrum</em> (Ramón, Breadnut, Ojoche, Oox). The tree is drought-resilient, perennial, and supports agroforestry systems by providing shade, leaf litter for soils, wildlife food, and long-term carbon storage.</p>
   <ul>
-    <li><strong>Seed contents:</strong> Naturally caffeine-free; rich in complex carbohydrates, dietary fiber, and plant protein, with minerals commonly reported such as calcium, potassium, and iron. Seeds are traditionally roasted for a beverage or milled into flour for drinks and baked goods.</li>
-    <li><strong>Rising potential in U.S. agriculture:</strong> As consumers seek climate-smart, resilient crops, MayaNut™ offers a perennial tree crop alternative that can complement orchards and agroforestry in warm regions.</li>
-    <li><strong>South Florida initiative:</strong> MayaNut LLC is actively introducing and cultivating MayaNut™ in South Florida—piloting plantings, evaluating varieties, and developing value-added foods and beverages.</li>
-    <li><strong>Conservation focus:</strong> Wild populations face pressure from deforestation and disturbance; fruit and seedlings can be damaged where invasive/feral pigs forage. We work to conserve and propagate the species while creating economic value that incentivizes protection.</li>
+    <li><strong>Seed contents:</strong> Caffeine-free; known for complex carbohydrates, dietary fiber, and plant protein, with commonly cited minerals like calcium, potassium, and iron. Traditionally roasted for a beverage or milled into flour.</li>
+    <li><strong>Rising potential in U.S. agriculture:</strong> Climate-smart, perennial tree crop with growing interest for warm regions.</li>
+    <li><strong>South Florida initiative:</strong> MayaNut LLC is pioneering cultivation, varietal evaluation, and value-added foods & beverages.</li>
+    <li><strong>Conservation:</strong> Wild stands face pressure from deforestation and disturbance (e.g., feral pigs). We conserve and propagate while building markets that incentivize protection.</li>
   </ul>
-  <p><strong>Our mission:</strong> We conserve <em>Brosimum alicastrum</em> and cultivate it for the betterment of humanity—restoring soils, diversifying diets, and building resilient, regenerative food systems.</p>
+  <p><strong>Mission:</strong> Conserve <em>Brosimum alicastrum</em> and cultivate it for the betterment of humanity—restoring soils, diversifying diets, and building resilient, regenerative food systems.</p>
 </section>
 
 <footer>
@@ -204,61 +213,189 @@
 </footer>
 
 <script>
-/* ===== Minimal chat with topic guard + quick questions + core memory ===== */
-const input=document.getElementById('chatInput');
-const logBox=document.getElementById('chatLog');
-function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+/* ========= Friendly “mini-AI” chatbot with on-page data center ========= */
 
-const allowTokens=['mayanut','maya nut','mayan nut','brosimum alicastrum','brosiumum alicastrum','brosimum','ramon','breadnut','mayan breadnut','ojoche','oox','ox','product','products','flour','drink','drinks','snack','snacks','buy','shop','core','training','conserve','conservation'];
-const offTopic=[
-  "I can only help with MayaNut™ and our products.",
-  "I'm focused on MayaNut™ topics—ask about the tree, uses, or shopping!",
-  "Let’s stay on-topic: MayaNut™ or product questions only.",
-  "I answer questions about MayaNut™ and our offerings."
-];
-
-const CORE_MEMORY = `MayaNut™ comes from the tree Brosimum alicastrum (Ramón, Breadnut, Ojoche, Oox). It’s a drought-resilient, perennial agroforestry species. Seeds are caffeine-free and known for complex carbs, fiber, plant protein, and minerals (commonly noted: calcium, potassium, iron). Traditional uses include roasted beverages and flour for drinks/baked goods. In the U.S., MayaNut™ shows promise as a climate-smart perennial crop; MayaNut LLC is pioneering cultivation and products in South Florida. We also focus on conservation as forests face pressure and feral pigs disturb fruit/seedlings. Mission: conserve and cultivate for soil health, biodiversity, nutrition, and resilient food systems.`;
-
-function isOnTopic(t){return allowTokens.some(k=>t.toLowerCase().includes(k));}
-
-function handleUser(q){
-  q=q.trim(); if(!q) return;
-  say('You', q);
-
-  if(!isOnTopic(q)){ say('MayaNut', offTopic[Math.floor(Math.random()*offTopic.length)]); return; }
-
-  if(/what\s+is\s+mayanut/i.test(q)){
-    say('MayaNut',"MayaNut™ is the seed of *Brosimum alicastrum* (Ramón/Breadnut). It’s caffeine-free and used as a roasted beverage or flour—nutritious, versatile, and great for agroforestry.");
-    return;
-  }
-  if(/shop|buy|product/i.test(q)){
-    say('MayaNut',"We're launching products soon! Explore Flour, Drinks, and Snacks in the Buy section.");
-    document.getElementById('buy').scrollIntoView({behavior:'smooth'});
-    return;
-  }
-  if(/core|training|mission|conserv/i.test(q)){
-    say('MayaNut', CORE_MEMORY);
-    document.getElementById('core').scrollIntoView({behavior:'smooth'});
-    return;
-  }
-
-  // default on-topic help
-  say('MayaNut',"Ask about cultivation, nutrition, history, conservation, or MayaNut™ products. For a full overview, type “core”.");
+const input  = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+function say(role, text){
+  const el=document.createElement('div'); el.className='msg';
+  el.innerHTML=`<strong>${role}:</strong> ${text}`;
+  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
 }
 
-input.addEventListener('keydown',e=>{
-  if(e.key==='Enter'){ handleUser(input.value); input.value=''; }
+/* --- Data Center: intents, patterns, and multiple answer variations --- */
+const KB = {
+  synonyms: {
+    "mayanut":["maya nut","mayan nut","mayanut","maya-nut","ramon","ramón","breadnut","mayan breadnut","ojoche","oox","ox","brosimum alicastrum","brosimum","b. alicastrum"],
+  },
+  intents: [
+    {
+      id:"definition",
+      patterns:[
+        /what\s+is\s+(mayanut|maya\s*nut|ram[oó]n|breadnut|ojoche|oox)/i,
+        /(tell|teach)\s+me\s+about\s+(mayanut|maya\s*nut|ram[oó]n|breadnut|ojoche|oox)/i,
+        /(explain|define)\s+(mayanut|maya\s*nut)/i
+      ],
+      replies:[
+        "MayaNut™ is the seed of the tropical tree <em>Brosimum alicastrum</em>—also known as Ramón or Breadnut. It’s caffeine-free and traditionally roasted for a beverage or milled into flour.",
+        "The short version: MayaNut™ comes from <em>Brosimum alicastrum</em> (aka Ramón/Breadnut). People roast it for a coffee-like drink and grind it into a nutritious flour.",
+        "MayaNut™ = seeds of <em>Brosimum alicastrum</em> (Ramón/Breadnut). It’s naturally caffeine-free, with uses ranging from roasted drinks to flour for baked goods."
+      ]
+    },
+    {
+      id:"nutrition",
+      patterns:[
+        /(nutrition|healthy|nutrient|protein|fiber|vitamin|mineral)/i,
+        /(good\s+for|benefits)\s+(you|me|health)/i
+      ],
+      replies:[
+        "MayaNut™ is known for complex carbs, dietary fiber, and plant protein, with commonly cited minerals like calcium, potassium, and iron—naturally caffeine-free.",
+        "Nutritionally, MayaNut™ offers fiber and plant protein plus minerals often reported such as calcium, potassium, and iron. It’s a gentle, caffeine-free option.",
+        "Think fiber + plant protein + minerals (e.g., calcium/potassium/iron), and no caffeine. That’s MayaNut™ in a nutshell."
+      ]
+    },
+    {
+      id:"uses",
+      patterns:[
+        /(how|ways)\s+(to\s+)?use/i,
+        /(cook|bake|recipe|brew|drink)/i
+      ],
+      replies:[
+        "Common uses: roast the seeds for a coffee-like beverage, or mill them into flour for drinks, pancakes, and baked goods.",
+        "You can roast for a warm beverage or grind into flour for smoothies, breads, and cookies—lots of room to experiment.",
+        "Brew it like a coffee-style drink, or use the flour in baking and blended drinks. Versatile and caffeine-free."
+      ]
+    },
+    {
+      id:"cultivation",
+      patterns:[
+        /(grow|cultivat|plant|orchard|agroforestry|shade|soil|drought)/i,
+      ],
+      replies:[
+        "The tree is drought-resilient and great for agroforestry—providing shade, leaf litter for soil health, wildlife food, and long-term carbon storage.",
+        "In cultivation, <em>Brosimum alicastrum</em> fits well into agroforestry: resilient, perennial shade, and helpful leaf litter for soils.",
+        "It’s a hardy, perennial tree that supports regenerative systems—useful in mixed plantings and shade agroforestry."
+      ]
+    },
+    {
+      id:"conservation",
+      patterns:[
+        /(conserv|deforest|protect|endanger|pig|feral)/i
+      ],
+      replies:[
+        "We’re focused on conserving wild stands threatened by deforestation and disturbance (including feral pigs). Cultivation and products help incentivize protection.",
+        "Conservation matters: forests face pressure and pigs disturb fruit/seedlings. Our approach is to conserve, propagate, and build demand for protection.",
+        "We conserve <em>Brosimum alicastrum</em> through propagation and market development—so protecting trees has real value."
+      ]
+    },
+    {
+      id:"products",
+      patterns:[
+        /(shop|buy|product|store|where.*get|order)/i
+      ],
+      replies:[
+        "Products are coming soon! Check the Buy section—Flour, Drinks, and Snacks are on the way.",
+        "We’re preparing launches. In the meantime, see the Buy cards below for what’s next.",
+        "Soon! Head to the Buy section to preview Flour, Drinks, and Snacks."
+      ],
+      onMatch: () => document.getElementById('buy').scrollIntoView({behavior:'smooth'})
+    },
+    {
+      id:"core",
+      patterns:[
+        /(core|training|mission|why|impact)/i
+      ],
+      replies:[
+        "MayaNut™ supports climate-smart, perennial agriculture. We’re bringing it to South Florida and conserving the species along the way.",
+        "Our mission: conserve <em>Brosimum alicastrum</em> and cultivate it for resilient, regenerative food systems.",
+        "Climate-smart, perennial, nutritious—and we’re pioneering it in South Florida while protecting wild stands."
+      ],
+      onMatch: () => document.getElementById('core').scrollIntoView({behavior:'smooth'})
+    }
+  ],
+  offTopic:[
+    "I stay laser-focused on MayaNut™ (Ramón/Breadnut) and our products. Try asking about the tree, uses, nutrition, or shopping.",
+    "I’m here for MayaNut™ topics only—think cultivation, conservation, nutrition, and products.",
+    "Let’s keep it to MayaNut™ (aka Ramón/Breadnut/Ojoche/Oox) and what we’re building in South Florida.",
+    "I can help with MayaNut™ and our offerings—ask about the species, uses, or Buy section."
+  ],
+  softOpeners:[
+    "Great question:",
+    "Quick take:",
+    "Here’s a helpful overview:",
+    "Short answer:",
+    "Glad you asked:"
+  ]
+};
+
+/* --- NLU helpers --- */
+const canonMap = new Map(); // word -> canonical
+Object.entries(KB.synonyms).forEach(([canon, alts])=>{
+  alts.forEach(a=>canonMap.set(a.toLowerCase(), canon));
+  canonMap.set(canon.toLowerCase(), canon);
 });
 
-document.querySelectorAll('.chip').forEach(c=>{
-  c.addEventListener('click',()=>handleUser(c.dataset.q||c.textContent));
+function normalize(text){
+  let t = text.toLowerCase().trim();
+  // replace synonyms with canonical token
+  for(const [alt,canon] of canonMap.entries()){
+    const esc = alt.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    t = t.replace(new RegExp(`\\b${esc}\\b`, 'g'), canon);
+  }
+  return t;
+}
+
+function detectIntent(text){
+  const n = normalize(text);
+  for(const intent of KB.intents){
+    for(const p of intent.patterns){
+      if(p.test(n)) return intent;
+    }
+  }
+  // On-topic fallback: if we see any canonical MayaNut mention
+  if (/\bmayanut\b|\bbrosimum alicastrum\b/.test(n)){
+    return { id:"definition", replies: KB.intents.find(i=>i.id==="definition").replies };
+  }
+  return null;
+}
+
+function respond(intent){
+  const opener = KB.softOpeners[Math.floor(Math.random()*KB.softOpeners.length)];
+  const reply  = intent.replies[Math.floor(Math.random()*intent.replies.length)];
+  say('MayaNut', `${opener} ${reply}`);
+  if (intent.onMatch) intent.onMatch();
+}
+
+/* --- Chat wiring --- */
+function handleUser(raw){
+  const q = (raw||'').trim(); if(!q) return;
+  say('You', q);
+
+  const intent = detectIntent(q);
+  if (intent){
+    respond(intent);
+  } else {
+    say('MayaNut', KB.offTopic[Math.floor(Math.random()*KB.offTopic.length)]);
+  }
+}
+
+const inputEl = document.getElementById('chatInput');
+inputEl.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){ handleUser(inputEl.value); inputEl.value=''; }
 });
 
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click', ()=> handleUser(chip.dataset.q||chip.textContent));
+});
+
+/* --- Smooth nav --- */
 ['navHome','navBuy','navAbout','navCore'].forEach(id=>{
   const el=document.getElementById(id);
   if(el) el.addEventListener('click',e=>{
     e.preventDefault();
-    document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});
+    const targetId = el.textContent.toLowerCase();
+    const target   = document.getElementById(targetId);
+    if(target) target.scrollIntoView({behavior:'smooth'});
   });
 });
 </script>
