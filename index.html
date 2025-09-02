@@ -26,30 +26,24 @@
     overflow-x:hidden;
   }
 
-  /* Animated green "lava lamp" blobs */
+  /* Animated green background */
   .bg, .bg2, .bg3 {
     position:fixed; inset:-25% -25% -25% -25%;
     z-index:-1; pointer-events:none;
     filter: blur(30px) saturate(115%) brightness(105%);
   }
-  .bg {
-    background: radial-gradient(40% 45% at 20% 30%, rgba(110,190,120,.35), transparent 60%),
-                radial-gradient(35% 40% at 80% 25%, rgba(165,230,170,.28), transparent 60%);
-    animation: driftA 50s ease-in-out infinite;
-  }
-  .bg2 {
-    background: radial-gradient(38% 42% at 25% 75%, rgba(70,150,95,.30), transparent 60%),
-                radial-gradient(30% 35% at 75% 70%, rgba(125,200,140,.28), transparent 60%);
-    animation: driftB 65s ease-in-out infinite; mix-blend-mode: screen;
-  }
-  .bg3 {
-    background: radial-gradient(30% 34% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
-                radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
-    animation: driftC 80s ease-in-out infinite; opacity:.85;
-  }
-  @keyframes driftA { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,20px) scale(1.05)} 100%{transform:translate(0,0) scale(1)} }
-  @keyframes driftB { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(25px,-25px) scale(1.07)} 100%{transform:translate(0,0) scale(1)} }
-  @keyframes driftC { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,15px) scale(1.04)} 100%{transform:translate(0,0) scale(1)} }
+  .bg {background: radial-gradient(40% 45% at 20% 30%, rgba(110,190,120,.35), transparent 60%),
+                        radial-gradient(35% 40% at 80% 25%, rgba(165,230,170,.28), transparent 60%);
+        animation: driftA 50s ease-in-out infinite;}
+  .bg2 {background: radial-gradient(38% 42% at 25% 75%, rgba(70,150,95,.30), transparent 60%),
+                        radial-gradient(30% 35% at 75% 70%, rgba(125,200,140,.28), transparent 60%);
+        animation: driftB 65s ease-in-out infinite; mix-blend-mode: screen;}
+  .bg3 {background: radial-gradient(30% 34% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
+                        radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
+        animation: driftC 80s ease-in-out infinite; opacity:.85;}
+  @keyframes driftA {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,20px) scale(1.05)} 100%{transform:translate(0,0) scale(1)}}
+  @keyframes driftB {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(25px,-25px) scale(1.07)} 100%{transform:translate(0,0) scale(1)}}
+  @keyframes driftC {0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-20px,15px) scale(1.04)} 100%{transform:translate(0,0) scale(1)}}
 
   /* Top bar */
   .topbar {
@@ -61,10 +55,8 @@
   .brandLogo { display:block; height:28px; width:auto; }
 
   .nav { display:flex; gap:18px; align-items:center }
-  .nav a {
-    color:var(--ink); text-decoration:none; font-weight:700; font-size:14px;
-    padding:8px 12px; border-radius:10px; border:1px solid transparent;
-  }
+  .nav a { color:var(--ink); text-decoration:none; font-weight:700; font-size:14px;
+    padding:8px 12px; border-radius:10px; border:1px solid transparent; }
   .nav a:hover { border-color:var(--line); background:rgba(255,255,255,.06) }
 
   .stage { flex:1; display:flex; align-items:center; justify-content:center; padding-top:88px; padding-bottom:80px }
@@ -73,28 +65,19 @@
 
   /* Chat */
   .chatbar { display:flex; align-items:center; gap:10px; justify-content:center; margin:0 auto; width:min(760px,92vw) }
-  .chatbar input {
-    flex:1; height:44px; padding:10px 12px; font-size:15px; color:#e9eeff;
-    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none;
-  }
+  .chatbar input { flex:1; height:44px; padding:10px 12px; font-size:15px; color:#e9eeff;
+    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none; }
   .chatbar input::placeholder { color:#cfe8ff }
   .chatbar input:focus { border-color:rgba(143,220,255,.75); box-shadow:0 0 0 3px rgba(143,220,255,.25) }
 
-  /* Common question chips */
-  .quickQ {
-    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
-    margin:10px auto 0; width:min(760px,92vw);
-  }
-  .chip {
-    display:inline-flex; align-items:center; justify-content:center;
-    padding:10px 14px; border-radius:999px;
-    color:#0b1a0f; background:linear-gradient(180deg,#e9ffd6,#c8f1b5);
-    border:1px solid rgba(255,255,255,.35);
-    font-weight:700; font-size:14px; cursor:pointer;
-    transition:transform .15s ease, filter .15s ease;
-    user-select:none;
-  }
-  .chip:hover { transform:translateY(-1px); filter:brightness(1.05) }
+  /* Common question buttons styled like text boxes */
+  .quickQ { display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    margin:10px auto 0; width:min(760px,92vw); }
+  .chip { display:inline-block; padding:10px 14px; border-radius:12px;
+    color:#e9eeff; background:var(--inputBG); border:1px solid var(--inputLine);
+    font-weight:600; font-size:14px; cursor:pointer;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease; }
+  .chip:hover { transform:translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.25) }
   .chip:active { transform:translateY(0) scale(.98) }
 
   .log { width:min(760px,92vw); margin:12px auto 0; background:rgba(8,12,30,.55); border:1px solid var(--line); border-radius:14px; padding:12px; max-height:42vh; overflow:auto }
@@ -119,11 +102,9 @@
 </head>
 <body>
 
-<div class="bg"></div>
-<div class="bg2"></div>
-<div class="bg3"></div>
+<div class="bg"></div><div class="bg2"></div><div class="bg3"></div>
 
-<!-- Logo symbol (gold wordmark with tight ™) -->
+<!-- Unified gold logo with TM -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
@@ -136,136 +117,44 @@
     </filter>
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
       <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif" font-weight="900" font-size="180" fill="url(#mn-gold)" filter="url(#mn-shadow)">
-        <tspan>MayaNut</tspan>
-        <tspan dx="-10" dy="-68" font-size="64">™</tspan>
+        <tspan>MayaNut</tspan><tspan dx="-10" dy="-68" font-size="64">™</tspan>
       </text>
     </symbol>
   </defs>
 </svg>
 
-<header class="topbar" role="banner">
-  <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
-  <nav class="nav" aria-label="Primary">
-    <a href="#home" id="navHome">MayaNut</a>
-    <a href="#buy" id="navBuy">Buy</a>
-    <a href="#about" id="navAbout">About</a>
-    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
-  </nav>
+<header class="topbar"><svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
+  <nav class="nav"><a href="#home" id="navHome">MayaNut</a><a href="#buy" id="navBuy">Buy</a><a href="#about" id="navAbout">About</a><a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a></nav>
 </header>
 
 <main id="home" class="stage">
   <div class="panel">
     <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
-
-    <div class="chatbar">
-      <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Ask about MayaNut or products" />
-    </div>
-
-    <!-- NEW: Common questions chips -->
-    <div class="quickQ" aria-label="Common questions">
-      <button class="chip" data-q="What is MayaNut™?">What is MayaNut™?</button>
-      <button class="chip" data-q="Shop MayaNut™ Products">Shop MayaNut™ Products</button>
-      <button class="chip" data-q="Tell me more about MayaNut">Tell Me More About MayaNut</button>
-    </div>
-
-    <div class="log" id="chatLog" aria-live="polite"></div>
+    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" /></div>
+    <div class="quickQ"><button class="chip" data-q="What is MayaNut™?">What is MayaNut™?</button><button class="chip" data-q="Shop MayaNut™ Products">Shop MayaNut™ Products</button><button class="chip" data-q="Tell Me More About MayaNut">Tell Me More About MayaNut</button></div>
+    <div class="log" id="chatLog"></div>
   </div>
 </main>
 
-<section id="buy" class="section" aria-labelledby="buyTitle"><h3 id="buyTitle">Buy</h3>
-  <p>Search Through Our Wonderful Products — real items coming soon.</p>
-  <div class="cards">
-    <a class="card" href="#home">Flour</a>
-    <a class="card" href="#home">Drinks</a>
-    <a class="card" href="#home">Snacks</a>
-  </div>
-</section>
+<section id="buy" class="section"><h3>Buy</h3><p>Search Through Our Wonderful Products — real items coming soon.</p><div class="cards"><a class="card" href="#home">Flour</a><a class="card" href="#home">Drinks</a><a class="card" href="#home">Snacks</a></div></section>
 
-<section id="about" class="section" aria-labelledby="aboutTitle"><h3 id="aboutTitle">About</h3>
-  <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
-</section>
+<section id="about" class="section"><h3>About</h3><p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p></section>
 
-<footer>
-  © 2025 MayaNut LLC. All rights reserved.
-  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
-  </a>
-</footer>
+<footer>© 2025 MayaNut LLC. All rights reserved.<a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg></a></footer>
 
 <script>
-/* Smooth nav */
-['navHome','navBuy','navAbout'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) el.addEventListener('click',e=>{
-    e.preventDefault();
-    document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});
-  });
-});
-
-/* Chat with topic filter (MayaNut & products only) */
-const input = document.getElementById('chatInput');
-const logBox = document.getElementById('chatLog');
-function say(role,text){
-  const el=document.createElement('div');
-  el.className='msg';
-  el.innerHTML=`<strong>${role}:</strong> ${text}`;
-  logBox.appendChild(el);
-  logBox.scrollTop=logBox.scrollHeight;
-}
-
-/* Allowed keywords: MayaNut synonyms + product terms */
-const allowTokens = [
-  'mayanut','maya nut','mayan nut',
-  'brosimum alicastrum','brosiumum alicastrum','brosimum',
-  'ramon','breadnut','mayan breadnut','ojoche','oox','ox',
-  'product','products','flour','drink','drinks','snack','snacks','buy','shop'
-];
-
-/* Variety of off-topic responses */
-const offTopic = [
-  "I can only help with MayaNut™ (a.k.a. Ramón/Breadnut/Ojoche/Oox) and our products. Try asking about the tree, uses, or shopping!",
-  "Heads up — I’m focused on MayaNut™ topics and products only. Ask me about Brosimum alicastrum, benefits, recipes, or what we sell.",
-  "Let’s keep it on-topic: MayaNut™ (Ramón/Breadnut) and our products. What would you like to know?",
-  "I’m here for MayaNut™ questions and shopping help. Try anything about the species, cultivation, nutrition, or our offerings.",
-  "Sorry — I only answer questions about MayaNut™ (synonyms welcome) and our products. Fire away!"
-];
-function isOnTopic(text){
-  const t = text.toLowerCase();
-  return allowTokens.some(k => t.includes(k));
-}
-function handleUser(text){
-  const q = (text||'').trim();
-  if(!q) return;
-  say('You', q);
-
-  if(!isOnTopic(q)){
-    const msg = offTopic[Math.floor(Math.random()*offTopic.length)];
-    say('MayaNut', msg);
-    return;
-  }
-
-  // Very simple canned replies (you can flesh these out later)
-  if (/what\s+is\s+mayanut/i.test(q)) {
-    say('MayaNut', "MayaNut™ is the seed of the tropical tree *Brosimum alicastrum* (also known as Ramón/Breadnut/Ojoche). It’s naturally caffeine-free, nutritious, and traditionally roasted for beverages and foods.");
-  } else if (/shop|buy|product/i.test(q)) {
-    say('MayaNut', "We’re launching products soon! Explore Flour, Drinks, and Snacks in the Buy section — they link back for now while we set up the store.");
-    document.getElementById('buy').scrollIntoView({behavior:'smooth'});
-  } else {
-    say('MayaNut', "Happy to help! Ask about cultivation, nutrition, history, or how we use MayaNut™ in products.");
-  }
-}
-
-/* Input enter */
-input.addEventListener('keydown', e=>{
-  if(e.key==='Enter'){ handleUser(input.value); input.value=''; }
-});
-
-/* Quick question chips -> send immediately */
-document.querySelectorAll('.chip').forEach(chip=>{
-  chip.addEventListener('click', ()=>{
-    handleUser(chip.dataset.q || chip.textContent.trim());
-  });
-});
+const input=document.getElementById('chatInput');const logBox=document.getElementById('chatLog');
+function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+const allowTokens=['mayanut','maya nut','mayan nut','brosimum alicastrum','brosiumum alicastrum','brosimum','ramon','breadnut','mayan breadnut','ojoche','oox','ox','product','products','flour','drink','drinks','snack','snacks','buy','shop'];
+const offTopic=["I can only help with MayaNut™ and our products.","I'm focused on MayaNut™ topics. Ask about the tree, uses, or shopping!","Let's stay on-topic: MayaNut™ or products only.","I answer questions about MayaNut™ and our offerings."];
+function isOnTopic(t){return allowTokens.some(k=>t.toLowerCase().includes(k));}
+function handleUser(q){q=q.trim();if(!q)return;say('You',q);if(!isOnTopic(q)){say('MayaNut',offTopic[Math.floor(Math.random()*offTopic.length)]);return;}
+if(/what\s+is\s+mayanut/i.test(q))say('MayaNut',"MayaNut™ is the seed of the *Brosimum alicastrum* tree, also called Ramón or Breadnut. It's nutritious and traditionally roasted for drinks and foods.");
+else if(/shop|buy|product/i.test(q)){say('MayaNut',"We're launching products soon! Check Flour, Drinks, Snacks in the Buy section.");document.getElementById('buy').scrollIntoView({behavior:'smooth'});}
+else say('MayaNut',"Ask about cultivation, nutrition, history, or MayaNut™ products!");}
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){handleUser(input.value);input.value='';}});
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>handleUser(c.dataset.q||c.textContent)));
+['navHome','navBuy','navAbout'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('click',e=>{e.preventDefault();document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});});});
 </script>
 </body>
 </html>
