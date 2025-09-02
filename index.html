@@ -6,10 +6,11 @@
   <title>MayaNut AI</title>
   <style>
     :root{
-      /* Shell pink / orange background you liked */
+      /* Shell pink / orange base */
       --bg1:#ffd6a6; --bg2:#ffeab3; --bg3:#ffd1e3;
+      --topBlue:#cfe9ff;             /* soft sky blue */
       --panel:rgba(255,255,255,.72); --line:rgba(0,0,0,.08);
-      --card:#ffffff; --ink:#0f172a; --muted:#64748b; --logo:#384252;
+      --card:#ffffff; --ink:#0f172a; --muted:#64748b;
       --shadow:0 18px 40px rgba(15,23,42,.18);
       --focus:#111827;
     }
@@ -19,7 +20,9 @@
       margin:0;color:var(--ink);
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
       display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden;position:relative;
+      /* Top blue fade (0–25%), then your original background stack */
       background:
+        linear-gradient(180deg, var(--topBlue) 0%, rgba(207,233,255,0) 25%),
         radial-gradient(1200px 800px at 20% -10%, var(--bg3) 0%, transparent 60%),
         radial-gradient(1100px 700px at 80% -10%, var(--bg1) 0%, transparent 60%),
         linear-gradient(180deg, var(--bg2) 0%, #fff 85%);
@@ -42,37 +45,44 @@
       padding:8px 14px;border-radius:10px;transition:background .18s;
     }
     .nav-item:hover{ background:rgba(0,0,0,.06) }
-    .logo{ position:fixed; top:10px; left:14px; z-index:11; font-size:24px; font-weight:800; letter-spacing:.2px; color:var(--logo) }
-    .logo sup{ font-size:10px; vertical-align:top; margin-left:2px; color:var(--logo) }
+
+    /* LOGO (inline SVG) */
+    .logo{
+      position:fixed; top:8px; left:12px; z-index:11; width:170px; height:40px;
+      display:flex; align-items:center; justify-content:flex-start;
+    }
+    .logo svg{ width:100%; height:100% }
 
     /* LAYOUT */
     .stage{ width:100%; height:100%; padding-top:78px; display:flex; justify-content:center; align-items:center }
-    .wrap{ width:min(980px,94%); display:flex; gap:24px; align-items:stretch } /* stretch makes flag match chat height */
+    .wrap{ width:min(980px,94%); display:flex; gap:24px; align-items:stretch }
 
-    /* FLAG (matches chat height) */
+    /* FLAG (same height as chat panel) */
     .flag{
       width:240px; min-width:240px; display:flex; align-items:center; justify-content:center;
       border-radius:12px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,.18);
       border:1px solid var(--line); background:#fff;
     }
-    .flag img{
-      width:100%; height:100%; object-fit:cover;
-    }
+    .flag img{ width:100%; height:100%; object-fit:cover; }
 
-    /* CHAT (light mode) */
+    /* CHAT – thin input on top, messages below */
     .chat{
-      flex:1; display:flex; flex-direction:column; gap:12px;
+      flex:1; display:flex; flex-direction:column; gap:10px;
       background:var(--card); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow);
-      padding:18px; min-width:300px; max-width:720px;
+      padding:14px; min-width:300px; max-width:720px;
     }
-    .log{
-      background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:12px;
-      flex:1; overflow:auto; color:#0f172a; font-size:16px; line-height:1.6; min-height:300px;
-    }
+    /* thin single-line input */
     .input{
-      width:100%; padding:12px; border:1px solid #d1d5db; border-radius:12px; outline:none; font-size:15px; color:#0f172a; background:#fff;
+      width:100%; height:38px; padding:8px 10px; border:1px solid #d1d5db; border-radius:10px;
+      outline:none; font-size:15px; color:#0f172a; background:#fff;
     }
     .input:focus{ border-color:#9ca3af; box-shadow:0 0 0 3px rgba(17,24,39,.08) }
+
+    /* messages underneath */
+    .log{
+      background:#f8fafc; border:1px solid #e5e7eb; border-radius:10px; padding:10px;
+      flex:1; overflow:auto; color:#0f172a; font-size:16px; line-height:1.6; min-height:250px;
+    }
 
     /* PANELS (light styling) */
     .panel{
@@ -87,6 +97,7 @@
     @media (max-width:760px){
       .flag{display:none}
       .log{max-height:320px}
+      .logo{width:150px}
     }
   </style>
 </head>
@@ -97,7 +108,26 @@
     <a href="#" class="nav-item" id="productsTab">Products</a>
     <a href="#" class="nav-item" id="aboutTab">About MayaNut</a>
   </div>
-  <div class="logo">MayaNut<sup>™</sup></div>
+
+  <!-- Inline SVG Logo with subtle flare on the “M” and a tiny sparkle -->
+  <div class="logo" aria-label="MayaNut logo">
+    <svg viewBox="0 0 520 130" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Sparkle accent -->
+      <g opacity="0.9">
+        <path d="M42 18 L46 30 L58 34 L46 38 L42 50 L38 38 L26 34 L38 30 Z" fill="#ffaf3f"/>
+      </g>
+      <!-- Wordmark -->
+      <path d="M70 96 V38 h14 l18 28 18-28h14v58h-14V62l-18 26h-0.5L84 62v34H70Z" fill="#223046"/>
+      <!-- “Maya” -->
+      <text x="160" y="96" font-family="Inter, system-ui, Arial" font-weight="800" font-size="54" fill="#223046" letter-spacing=".5">Maya</text>
+      <!-- subtle flare on the “N” via custom path -->
+      <path d="M320 96 V38 h16 l40 40 V38h14v58h-16l-40-40v40h-14Z" fill="#223046"/>
+      <!-- “ut” -->
+      <text x="394" y="96" font-family="Inter, system-ui, Arial" font-weight="800" font-size="54" fill="#223046" letter-spacing=".5">ut</text>
+      <!-- ™ -->
+      <text x="482" y="52" font-family="Inter, system-ui, Arial" font-weight="700" font-size="18" fill="#223046">™</text>
+    </svg>
+  </div>
 
   <!-- STAGE -->
   <div class="stage">
@@ -107,10 +137,10 @@
         <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="American Flag">
       </div>
 
-      <!-- Chat -->
+      <!-- Chat: thin input on top, conversation below -->
       <section class="chat" aria-label="Chat with MayaNut AI">
+        <input id="chatInput" class="input" placeholder="Type your question and press Enter" aria-label="Type a message"/>
         <div class="log" id="chatLog" aria-live="polite"></div>
-        <input id="chatInput" class="input" placeholder="Ask what you want to buy" aria-label="Type a message and press Enter"/>
       </section>
     </div>
   </div>
@@ -130,8 +160,8 @@
     <h3>About MayaNut</h3>
     <p id="companyText">
       <strong>MayaNut</strong> is a company based in <strong>South Florida</strong>, promoting the cultivation and appreciation
-      of <em>Brosimum alicastrum</em> — the Maya Nut (also called Breadnut). We champion sustainable agroforestry and
-      regenerative farming practices that help restore soils, support biodiversity, and provide resilient, nutritious food.
+      of <em>Brosimum alicastrum</em> — the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
+      farming practices that help restore soils, support biodiversity, and provide resilient, nutritious food.
     </p>
     <p id="treeText">
       The Maya Nut is naturally caffeine-free and versatile: its roasted seed makes a rich, chocolatey beverage,
@@ -146,12 +176,12 @@
   </section>
 
   <script>
-    /* ===== Offline chatbot with name + domain rule ===== */
+    /* ===== Offline chatbot with domain rule and thin-input UX ===== */
     const BOT_NAME = "MayaNut AI";
 
     const mayaSynonyms = ["mayanut","maya nut","breadnut","brosimum","brosimum alicastrum","ramon","ojoche","guaimaro","capomo"];
     const BUY_TRIG = ["buy","product page","products","shop","purchase","order","take me to products","take me to the product page"];
-    const COMPANY_TRIG = ["company","about us","about mayanut","who are you","when founded","where based","where are you based","where located"];
+    const COMPANY_TRIG = ["company","about us","about mayanut","who are you","where based","where are you based","where located"];
     const SOCIAL_TRIG = ["instagram","social","social media","ig"];
     const TREE_TRIG = ["tree","brosimum","brosimum alicastrum","what is mayanut","tell me about mayanut","what is breadnut","what is ramon"];
     const DOMAIN_TRIG = [
