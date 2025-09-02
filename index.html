@@ -149,7 +149,7 @@ function handleCommand(cmd){
   say('MayaNut', 'Commands: /spawn N [small|spawner|factory|red], /fill, /clear, /pause, /resume');
 }
 
-/* ===== Game Engine (repel chains; bonded-spawner rules; 500 cap) ===== */
+/* ===== Game Engine (factories spawn orbiters; directional bonding) ===== */
 (function(){
   const canvas=document.getElementById('ballLayer');
   const ctx=canvas.getContext('2d');
@@ -169,14 +169,19 @@ function handleCommand(cmd){
   const R_FACTORY=26;  // biggest solid
   const R_RED=8;
 
+  // Params
   const FACTORY_INTERVAL=200;     // factory spawn rate
   const ORBIT_RADIUS_PAD = 18;    // orbit gap from host edge
-  const CHAIN_REPEL_MIN = 14;     // min spacing between bonded chain nodes
-  const CHAIN_REPEL_STRENGTH = 0.12; // repel force strength
+  const CHAIN_REPEL_MIN = 14;     // min spacing for bonded chains
+  const CHAIN_REPEL_STRENGTH = 0.12;
+  const SNAP_STRENGTH = 0.08;     // spring strength for bond points
+  const SNAP_DAMP = 0.85;         // damping on snap correction
+  const ANGLE_TOL = 0.52;         // ~30 degrees in radians
 
   // State
   const balls=[];      // all balls
-  const chains=[];     // arrays of bonded orbiters (stagnant)
+  const chains=[];     // orbit-bonded small chains (still allowed)
+  const links=[];      // explicit directional links for big-big & big-medium
   let score=0; const scoreEl=document.getElementById('score');
   const countEl=document.getElementById('ballCount');
   const aliveCount=()=>balls.filter(b=>!b._dead).length;
@@ -188,13 +193,12 @@ function handleCommand(cmd){
     const r = type===SMALL?R_SMALL : type===SPAWNER?R_SPAWNER : type===FACTORY?R_FACTORY : R_RED;
     return {
       x,y,vx,vy,r,type,_dead:false,
-      // orbit/chain
       orbit:null, chain:null,
-      // meta
       cooldown:0,
-      bondedToFactory:false,  // NEW: medium is bonded to a factory
-      hostFactory:null,       // pointer to factory it bonded to
-      // squash/stretch
+      bondedToFactory:false,
+      hostFactory:null,
+      // directional bond slots for FACTORY
+      slots: type===FACTORY ? {top:null,bottom:null,left:null,right:null} : null,
       squashT:0, squashAxis:'x'
     };
   }
@@ -209,7 +213,7 @@ function handleCommand(cmd){
   addBall(seedFactory);
   for(let i=0;i<14;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
 
-  // UI rects to bounce off
+  // Helpers
   function rects(){
     const els=[document.getElementById('heroTitle'), document.getElementById('chatInput'),
                document.getElementById('buy'), document.getElementById('about'), document.querySelector('.topbar')].filter(Boolean);
@@ -232,116 +236,167 @@ function handleCommand(cmd){
     if(b.y-b.r<0){ b.y=b.r; b.vy=Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
     if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
   }
+  const nearAngle=(ang, target, tol=ANGLE_TOL)=>{
+    let d = Math.abs(((ang - target + Math.PI) % (2*Math.PI)) - Math.PI);
+    return d <= tol;
+  };
 
-  // Bonding chains: orbiters around same host colliding → bond into stagnant chain
+  // Orbit-bond chains (smalls around same host)
   function bondOrbitersIfCollide(a,b){
     if(!(a.orbit && b.orbit)) return false;
-    if(a.orbit !== b.orbit) return false; // must share host (factory or spawner)
-    // make a chain of orbiters
-    if(!a.chain && !b.chain){
-      const chain=[a,b]; a.chain=b.chain=chain; chains.push(chain);
-    } else if(a.chain && !b.chain){ a.chain.push(b); b.chain=a.chain; }
+    if(a.orbit !== b.orbit) return false;
+    if(!a.chain && !b.chain){ const chain=[a,b]; a.chain=b.chain=chain; chains.push(chain); }
+    else if(a.chain && !b.chain){ a.chain.push(b); b.chain=a.chain; }
     else if(!a.chain && b.chain){ b.chain.push(a); a.chain=b.chain; }
-    // stop moving/orbiting once bonded
-    a.orbit=b.orbit=null;
-    a.vx=a.vy=b.vx=b.vy=0;
-    return true;
+    a.orbit=b.orbit=null; a.vx=a.vy=b.vx=b.vy=0; return true;
   }
-
-  // Repel inside each chain to avoid clumping
   function repelChains(){
     for(const ch of chains){
       const n=ch.length; if(n<2) continue;
-      for(let i=0;i<n;i++){
-        for(let j=i+1;j<n;j++){
-          const a=ch[i], b=ch[j];
-          if(a._dead||b._dead) continue;
-          const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||0.0001;
-          const min = Math.max(CHAIN_REPEL_MIN, (a.r+b.r)*0.8);
-          if(d<min){
-            const push = (min-d)*CHAIN_REPEL_STRENGTH;
-            const nx=dx/d, ny=dy/d;
-            a.x-=nx*push; a.y-=ny*push;
-            b.x+=nx*push; b.y+=ny*push;
-          }
+      for(let i=0;i<n;i++) for(let j=i+1;j<n;j++){
+        const a=ch[i], b=ch[j]; if(a._dead||b._dead) continue;
+        const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||0.0001;
+        const min=Math.max(CHAIN_REPEL_MIN,(a.r+b.r)*0.8);
+        if(d<min){
+          const push=(min-d)*CHAIN_REPEL_STRENGTH, nx=dx/d, ny=dy/d;
+          a.x-=nx*push; a.y-=ny*push; b.x+=nx*push; b.y+=ny*push;
         }
       }
     }
   }
 
-  // Collisions + promotions with new logic
+  // Directional links
+  function addLink(a,b,slotA,slotB,dist){
+    links.push({a,b,slotA,slotB,dist});
+    if(a.slots && slotA) a.slots[slotA]=b;
+    if(b.slots && slotB) b.slots[slotB]=a;
+  }
+  function snapLinks(){
+    for(const L of links){
+      const {a,b,slotA,slotB,dist}=L;
+      if(a._dead||b._dead) continue;
+
+      // desired anchors
+      function anchorFor(node, slot){
+        if(!node || node.type!==FACTORY) return {x:node.x,y:node.y};
+        const r=node.r;
+        if(slot==='top')    return {x:node.x, y:node.y - r};
+        if(slot==='bottom') return {x:node.x, y:node.y + r};
+        if(slot==='left')   return {x:node.x - r, y:node.y};
+        if(slot==='right')  return {x:node.x + r, y:node.y};
+        return {x:node.x,y:node.y};
+      }
+      const A = slotA?anchorFor(a,slotA):{x:a.x,y:a.y};
+      const B = slotB?anchorFor(b,slotB):{x:b.x,y:b.y};
+
+      // current vector
+      let dx = (B.x - A.x), dy = (B.y - A.y);
+      const d = Math.hypot(dx,dy) || 0.0001;
+      const nx=dx/d, ny=dy/d;
+      const target = dist;
+      const err = d - target;
+
+      // move each node half the error back along the axis (spring)
+      const push = err * SNAP_STRENGTH;
+      // apply to real centers
+      a.x += nx*push; a.y += ny*push; a.vx *= SNAP_DAMP; a.vy *= SNAP_DAMP;
+      b.x -= nx*push; b.y -= ny*push; b.vx *= SNAP_DAMP; b.vy *= SNAP_DAMP;
+    }
+  }
+
+  // Collisions + promotions + directional bonding
   function handlePair(a,b){
     if(a._dead||b._dead) return;
     const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy);
     if(d>a.r+b.r) return;
 
-    // Small + Small -> Spawner (unconditional)
+    // Small + Small -> Spawner
     if(a.type===SMALL && b.type===SMALL){
       if(aliveCount()>=MAX_BALLS) return;
       a._dead=b._dead=true;
-      const sp = makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-      addBall(sp);
+      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
       return;
     }
 
-    // Spawner + Spawner -> Factory (ONLY if neither is bonded to a factory)
+    // Spawner + Spawner -> Factory (only if neither bonded to a factory)
     if(a.type===SPAWNER && b.type===SPAWNER){
-      if(a.bondedToFactory || b.bondedToFactory) {
-        // bonded spawners never form new factories—just bounce
-      } else {
-        if(aliveCount()<MAX_BALLS){
-          a._dead=b._dead=true;
-          const f = makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-          addBall(f);
-          return;
-        }
+      if(!(a.bondedToFactory || b.bondedToFactory) && aliveCount()<MAX_BALLS){
+        a._dead=b._dead=true;
+        addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
+        return;
       }
     }
 
-    // Factory + Small:
-    // Always convert that Small -> Spawner and mark it as bonded to THIS factory (prevents factory explosion).
+    // Factory + Small → Small becomes Spawner (bonded to that factory)
     if((a.type===FACTORY && b.type===SMALL) || (b.type===FACTORY && a.type===SMALL)){
-      const fac = a.type===FACTORY?a:b;
-      const sml = a.type===SMALL?a:b;
-      // turn into a bonded spawner
-      sml.type=SPAWNER; sml.r=R_SPAWNER;
-      sml.bondedToFactory=true; sml.hostFactory=fac;
+      const fac=a.type===FACTORY?a:b, sml=a.type===SMALL?a:b;
+      sml.type=SPAWNER; sml.r=R_SPAWNER; sml.bondedToFactory=true; sml.hostFactory=fac;
       sml.orbit=null; sml.vx=sml.vy=0;
-      // snap near factory edge
-      const ang=Math.atan2(sml.y-fac.y,sml.x-fac.x);
-      const dist=fac.r+ORBIT_RADIUS_PAD;
+      const ang=Math.atan2(sml.y-fac.y,sml.x-fac.x), dist=fac.r+ORBIT_RADIUS_PAD;
       sml.x=fac.x+Math.cos(ang)*dist; sml.y=fac.y+Math.sin(ang)*dist;
       return;
     }
 
-    // Small + (bonded) Spawner → create another Spawner (no promotions to Factory here)
+    // Small + (bonded) Spawner → another bonded Spawner (no factory promotion)
     if((a.type===SMALL && b.type===SPAWNER && b.bondedToFactory) ||
        (b.type===SMALL && a.type===SPAWNER && a.bondedToFactory)){
       const bonded = a.type===SPAWNER?a:b;
       const sml = a.type===SMALL?a:b;
-      sml.type=SPAWNER; sml.r=R_SPAWNER;
-      sml.bondedToFactory=true; sml.hostFactory=bonded.hostFactory||null;
+      sml.type=SPAWNER; sml.r=R_SPAWNER; sml.bondedToFactory=true; sml.hostFactory=bonded.hostFactory||null;
       sml.orbit=null; sml.vx=sml.vy=0;
-      // place it gently beside the bonded one
-      const ang=Math.random()*Math.PI*2;
-      const dist=(bonded.hostFactory?bonded.hostFactory.r:bonded.r) + ORBIT_RADIUS_PAD + 8;
-      sml.x=(bonded.hostFactory?bonded.hostFactory.x:bonded.x) + Math.cos(ang)*dist;
-      sml.y=(bonded.hostFactory?bonded.hostFactory.y:bonded.y) + Math.sin(ang)*dist;
+      const host = bonded.hostFactory || bonded;
+      const ang=Math.random()*Math.PI*2, dist=(host.r + ORBIT_RADIUS_PAD + 8);
+      sml.x=host.x+Math.cos(ang)*dist; sml.y=host.y+Math.sin(ang)*dist;
       return;
     }
 
-    // If orbiters of the same host hit, they become a stagnant chain
+    // Directional bonding:
+    // 1) FACTORY–FACTORY only at TOP/BOTTOM (near vertical line)
+    if(a.type===FACTORY && b.type===FACTORY){
+      const ang = Math.atan2(dy,dx); // angle from a to b
+      const sumR = a.r + b.r + 6;
+      if(nearAngle(ang, Math.PI/2) && !a.slots.bottom && !b.slots.top){
+        // b should sit below a
+        addLink(a,b,'bottom','top',sumR);
+        return;
+      }
+      if(nearAngle(ang, -Math.PI/2) && !a.slots.top && !b.slots.bottom){
+        // b should sit above a
+        addLink(a,b,'top','bottom',sumR);
+        return;
+      }
+      // otherwise just bounce
+    }
+
+    // 2) FACTORY–SPAWNER only at LEFT/RIGHT of FACTORY (near horizontal line)
+    if((a.type===FACTORY && b.type===SPAWNER) || (b.type===FACTORY && a.type===SPAWNER)){
+      const fac = a.type===FACTORY?a:b;
+      const spn = a.type===SPAWNER?a:b;
+      const ang = Math.atan2(spn.y-fac.y, spn.x-fac.x);
+      const sumR = fac.r + spn.r + 4;
+      if(nearAngle(ang, 0) && !fac.slots.right){ // right side
+        addLink(fac, spn, 'right', null, sumR);
+        spn.bondedToFactory = true; spn.hostFactory = fac;
+        return;
+      }
+      if(nearAngle(ang, Math.PI) && !fac.slots.left){ // left side
+        addLink(fac, spn, 'left', null, sumR);
+        spn.bondedToFactory = true; spn.hostFactory = fac;
+        return;
+      }
+      // else: no bond; normal bounce below
+    }
+
+    // Orbiters around same host collide → make stagnant chain
     if (bondOrbitersIfCollide(a,b)) {
       a.squashT=b.squashT=10; a.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y'; b.squashAxis=a.squashAxis;
       return;
     }
 
-    // Red interactions (simple: reds delete smalls; bounce off bigger)
+    // Red interactions (simple)
     if(a.type===RED || b.type===RED){
-      const r = a.type===RED?a:b;
-      const o = a.type===RED?b:a;
-      if(o.type===SMALL){ o._dead=true; }
-      else { r.vx*=-0.9; r.vy*=-0.9; }
+      const r = a.type===RED?a:b, o = a.type===RED?b:a;
+      if(o.type===SMALL){ o._dead=true; } else { r.vx*=-0.9; r.vy*=-0.9; }
       r.squashT=10; r.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
       return;
     }
@@ -358,7 +413,6 @@ function handleCommand(cmd){
     if (e.target.closest('a,button,input,textarea,[contenteditable]')) return;
     const x=e.clientX, y=e.clientY;
 
-    // fold chain if clicking an end
     for(const ch of chains){
       if(ch.length>2){
         const f=ch[0], l=ch[ch.length-1];
@@ -379,7 +433,7 @@ function handleCommand(cmd){
         hit=true; const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
         const kick=5.2; b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
         b.squashT=10; b.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
-        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; } // small nudge if paused
+        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; }
       }
     }
     addScore(hit?1:-1);
@@ -408,7 +462,7 @@ function handleCommand(cmd){
     updateCount(); return added;
   };
   window.GameClear = function(){
-    const c=aliveCount(); balls.length=0; chains.length=0; updateCount(); return c;
+    const c=aliveCount(); balls.length=0; chains.length=0; links.length=0; updateCount(); return c;
   };
 
   function update(){
@@ -440,12 +494,12 @@ function handleCommand(cmd){
           const dist = Math.hypot(s.x-b.x, s.y-b.y);
           const desired = b.r + ORBIT_RADIUS_PAD;
           if (dist < desired + 14 && dist > desired - 22){
-            s.orbit = b; // capture into orbit
+            s.orbit = b;
           }
         }
       }
 
-      // Factory spawns new smalls slowly
+      // Factories spawn smalls slowly
       if(b.type===FACTORY){
         b.cooldown++;
         if(b.cooldown>FACTORY_INTERVAL && aliveCount()<MAX_BALLS){
@@ -464,7 +518,9 @@ function handleCommand(cmd){
       }
     }
 
-    // spread chains slightly to avoid clumps
+    // spring snap for directional links
+    snapLinks();
+    // de-clump orbit chains
     repelChains();
 
     // cleanup
@@ -476,8 +532,29 @@ function handleCommand(cmd){
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // Chains (stagnant links)
-    ctx.strokeStyle='rgba(255,255,255,0.45)';
+    // Draw explicit links first
+    ctx.strokeStyle='rgba(255,255,255,0.55)';
+    ctx.lineWidth=2;
+    for(const L of links){
+      const {a,b,slotA,slotB}=L;
+      if(a._dead||b._dead) continue;
+
+      function anchor(node, slot){
+        if(!node || node.type!==FACTORY || !slot) return {x:node.x,y:node.y};
+        const r=node.r;
+        if(slot==='top')    return {x:node.x, y:node.y - r};
+        if(slot==='bottom') return {x:node.x, y:node.y + r};
+        if(slot==='left')   return {x:node.x - r, y:node.y};
+        if(slot==='right')  return {x:node.x + r, y:node.y};
+        return {x:node.x,y:node.y};
+      }
+      const A=anchor(a,slotA), B=anchor(b,slotB);
+      ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
+    }
+
+    // Chains (stagnant links of smalls)
+    ctx.strokeStyle='rgba(255,255,255,0.35)';
+    ctx.lineWidth=1.5;
     for(const ch of chains){
       if(ch.length<2) continue;
       ctx.beginPath(); ctx.moveTo(ch[0].x,ch[0].y);
@@ -489,8 +566,7 @@ function handleCommand(cmd){
     for(const b of balls){
       let sx=1, sy=1;
       if (b.squashT>0){
-        const t=b.squashT/10;
-        const amt=0.35*Math.sin(t*Math.PI);
+        const t=b.squashT/10, amt=0.35*Math.sin(t*Math.PI);
         if(b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
       }
       ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
@@ -506,6 +582,13 @@ function handleCommand(cmd){
       } else if(b.type===FACTORY){
         ctx.fillStyle='rgba(255,255,255,0.95)';
         ctx.beginPath(); ctx.arc(0,0,R_FACTORY,0,Math.PI*2); ctx.fill();
+
+        // little marks for available slots (subtle)
+        ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
+        if(!b.slots.top){    ctx.beginPath(); ctx.moveTo(0,-R_FACTORY); ctx.lineTo(0,-R_FACTORY-6); ctx.stroke(); }
+        if(!b.slots.bottom){ ctx.beginPath(); ctx.moveTo(0,R_FACTORY);  ctx.lineTo(0,R_FACTORY+6); ctx.stroke(); }
+        if(!b.slots.left){   ctx.beginPath(); ctx.moveTo(-R_FACTORY,0); ctx.lineTo(-R_FACTORY-6,0); ctx.stroke(); }
+        if(!b.slots.right){  ctx.beginPath(); ctx.moveTo(R_FACTORY,0);  ctx.lineTo(R_FACTORY+6,0); ctx.stroke(); }
       } else if(b.type===RED){
         ctx.fillStyle='#ff4d4d';
         ctx.beginPath(); ctx.arc(0,0,R_RED,0,Math.PI*2); ctx.fill();
@@ -515,6 +598,7 @@ function handleCommand(cmd){
     }
   }
 
+  // Click handling (folding chains + launching) is in the outer scope:
   function loop(){ update(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
