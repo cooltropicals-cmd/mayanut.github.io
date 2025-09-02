@@ -9,15 +9,23 @@
     --ink:#eef3ff; --ink-dim:#cbd6f2;
     --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-    --gold1:#ffcc66; --gold2:#ffb347; --gold3:#ff9933; --gold4:#ffd27a;
-    --water:#a0d2ff; --waterDeep:#78b8f8;
+
+    /* Lighter, sunnier golds */
+    --gold1:#fff0b3; /* highlight */
+    --gold2:#ffe08a;
+    --gold3:#ffd45e;
+    --gold4:#ffc241; /* warm base */
+
+    --waterTop: rgba(150,210,255,0.22);
+    --waterBottom: rgba(95,160,245,0.32);
   }
+
   html,body{height:100%}
   body{
     margin:0;color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex;flex-direction:column;min-height:100%;
-    /* *** Keep the new tropical background exactly as before *** */
+    /* Tropical background kept */
     background:
       radial-gradient(1000px 600px at 15% -10%, rgba(255,182,146,.25), transparent 60%),
       radial-gradient(1200px 700px at 85% 0%, rgba(159,218,255,.22), transparent 65%),
@@ -26,7 +34,7 @@
     overflow-x:hidden;
   }
 
-  /* Gentle tropical flares (unchanged) */
+  /* Soft color flares */
   .bg-wave, .bg-wave2 {
     position:fixed; inset:-15% -15% auto -15%; height:65vh; z-index:-1; pointer-events:none;
     filter: blur(22px) saturate(120%) brightness(110%);
@@ -49,22 +57,22 @@
   @keyframes drift { 0%{transform:translateY(0) translateX(0) scale(1)} 50%{transform:translateY(14px) translateX(-12px) scale(1.03)} 100%{transform:translateY(0) translateX(0) scale(1)} }
   @keyframes drift2{ 0%{transform:translateY(0) translateX(0) scale(1.02)} 50%{transform:translateY(10px) translateX(10px) scale(1.05)} 100%{transform:translateY(0) translateX(0) scale(1.02)} }
 
-  /* Top bar with orangey-gold brand + black outline (™ gold too) */
+  /* Top bar with lighter gold brand + black outline (™ gold too) */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
   .brand{
     font-weight:900; letter-spacing:.2px; display:flex; align-items:baseline; gap:6px; user-select:none;
     color:transparent;
-    background: linear-gradient(180deg, var(--gold4), var(--gold1), var(--gold2), var(--gold3));
+    background: linear-gradient(180deg, var(--gold1), var(--gold2), var(--gold3), var(--gold4));
     -webkit-background-clip:text; background-clip:text;
-    -webkit-text-stroke: 2px #000; text-shadow: 0 2px 0 rgba(0,0,0,.6);
+    -webkit-text-stroke: 2px #000; text-shadow: 0 2px 0 rgba(0,0,0,.55);
     font-size: 22px;
   }
   .brand small{
     color:transparent;
-    background: linear-gradient(180deg, var(--gold4), var(--gold2));
+    background: linear-gradient(180deg, var(--gold1), var(--gold3));
     -webkit-background-clip:text; background-clip:text;
     -webkit-text-stroke: 1.5px #000;
-    font-size: 12px; vertical-align:top; margin-left:2px;
+    font-size: 12px; vertical-align:top; margin-left:2px
   }
 
   .nav{display:flex;gap:18px;align-items:center}
@@ -77,13 +85,13 @@
   .title{
     margin:6px 0 14px; font-weight:900; line-height:1.05; font-size:clamp(44px,6vw,68px);
     color:transparent;
-    background: linear-gradient(180deg, var(--gold4), var(--gold1), var(--gold2), var(--gold3));
+    background: linear-gradient(180deg, var(--gold1), var(--gold2), var(--gold3), var(--gold4));
     -webkit-background-clip:text; background-clip:text;
-    -webkit-text-stroke: 3px #000; text-shadow: 0 3px 0 rgba(0,0,0,.6), 0 10px 28px rgba(0,0,0,.35);
+    -webkit-text-stroke: 3px #000; text-shadow: 0 3px 0 rgba(0,0,0,.55), 0 10px 28px rgba(0,0,0,.35);
   }
   .title small{
     color:transparent;
-    background: linear-gradient(180deg, var(--gold4), var(--gold2));
+    background: linear-gradient(180deg, var(--gold1), var(--gold3));
     -webkit-background-clip:text; background-clip:text;
     -webkit-text-stroke: 2px #000;
     font-size:.35em; vertical-align:super; margin-left:4px
@@ -112,7 +120,7 @@
 
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* Canvases */
+  /* Canvases (visual only) */
   #dustLayer{position:fixed; inset:0; z-index:-2; pointer-events:none}
   #waterLayer{position:fixed; inset:0; z-index:-1; pointer-events:none}
 </style>
@@ -187,12 +195,12 @@ document.getElementById('navHome').addEventListener('click', e=>{ e.preventDefau
 document.getElementById('navBuy').addEventListener('click',  e=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
 document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-/* ===== Dust → Drop → Puddle → Rising Water (visual only) =====
-   - White "dust" specks rise from bottom.
-   - When two dust specks collide, the survivor grows (squash/stretch bounce).
-   - After reaching Stage 5 size, it becomes a light-blue drop and falls.
-   - Drops splat into small puddle ripples and add to a slow global water level.
-   - Over a long session, a calm water fill rises; performance stays smooth.
+/* ===== Dust → Drop → Wavy Water Surface =====
+   Changes:
+   - Brighter gold brand (above).
+   - Drops now collide with the animated water *surface* (not page bottom).
+   - Much slower water rise.
+   - Subtle wavy surface so it doesn’t look flat.
 */
 (function(){
   const dustCV = document.getElementById('dustLayer');
@@ -200,7 +208,7 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
   const dctx = dustCV.getContext('2d');
   const wctx = waterCV.getContext('2d');
 
-  let W=innerWidth, H=innerHeight, DPR=1;
+  let W=innerWidth, H=innerHeight, DPR=1, t0=performance.now();
   function resize(){
     DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
     W = innerWidth; H = innerHeight;
@@ -214,36 +222,38 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
   resize(); addEventListener('resize', resize);
 
   // Dust stages 1..5 (5 == water drop size)
-  const STAGE_RADII = [0, 1.2, 1.8, 2.6, 3.6, 6.0]; // px at 1x (visually modest; 5 becomes drop)
+  const STAGE_RADII = [0, 1.2, 1.8, 2.6, 3.6, 6.0];
   const DUST_CAP = 520;
-  const MERGE_CELL = 20;     // grid cell for collisions
+  const MERGE_CELL = 20;
   const RISE_MIN = 0.18, RISE_MAX = 0.55;
   const PERTURB = 0.05;
 
-  // Water dynamics
-  let waterLevel = 0.0;         // 0..1 of viewport height
-  const WATER_INCR = 0.0018;    // per drop (small; takes time to fill)
-  const WATER_DECAY = 0.000001; // minuscule downward drift if desired (kept tiny)
-  const puddles = [];           // splat ripples: {x,y,r,alpha,life}
+  // Water dynamics (slower rise)
+  let waterLevel = 0.0;             // 0..1 of viewport height
+  const WATER_INCR = 0.00025;       // <-- much slower
+  const WATER_DECAY = 0.0;          // no decay now
 
-  // Entities
-  const dust = [];  // rising specks: {x,y,vx,vy,stage,squashT,squashAxis}
-  const drops = []; // falling drops: {x,y,vx,vy,r,squashT,squashAxis}
+  // Wavy surface
+  const WAVE_A = 5.0;               // amplitude px
+  const WAVE_K = 2*Math.PI/320;     // wavelength
+  const WAVE_SPEED = 0.6;           // phase speed
+
+  const puddles = [];               // surface ripples: {x,y,r,alpha,life}
+  const dust = [];                  // rising specks
+  const drops = [];                 // falling drops
 
   function spawnDust(n=1){
     for(let i=0;i<n;i++){
       if (dust.length >= DUST_CAP) return;
       const x = Math.random()*W;
-      const y = H - Math.random()*H*0.25; // bottom 25%
+      const y = H - Math.random()*H*0.25;
       const vx = (Math.random()-.5)*0.08;
       const vy = - (RISE_MIN + Math.random()*(RISE_MAX-RISE_MIN));
       dust.push({x,y,vx,vy,stage:1,squashT:0,squashAxis:'y'});
     }
   }
-  // Seed a bunch
   spawnDust((DUST_CAP*0.8)|0);
 
-  // Spatial hash for dust collisions
   function buildGrid(){
     const grid = new Map();
     for (let i=0;i<dust.length;i++){
@@ -260,47 +270,32 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
   function collideDust(){
     const grid = buildGrid();
     const visited = new Set();
-
-    for (const [key, idxs] of grid.entries()){
+    for (const idxs of grid.values()){
       for (let a=0; a<idxs.length; a++){
-        const i = idxs[a];
-        if (visited.has(i)) continue;
+        const i = idxs[a]; if (visited.has(i)) continue;
         const p = dust[i];
         for (let b=a+1; b<idxs.length; b++){
-          const j = idxs[b];
-          if (visited.has(j)) continue;
+          const j = idxs[b]; if (visited.has(j)) continue;
           const q = dust[j];
           const rA = STAGE_RADII[p.stage], rB = STAGE_RADII[q.stage];
           const dx = q.x - p.x, dy = q.y - p.y;
-          const d2 = dx*dx + dy*dy;
-          const rr = (rA + rB + 1.2); // slight cushion
-          if (d2 <= rr*rr){
-            // squash & stretch on impact
-            p.squashT = 10; q.squashT = 10;
+          const rr = (rA + rB + 1.2);
+          if (dx*dx + dy*dy <= rr*rr){
+            p.squashT = q.squashT = 10;
             const axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-            p.squashAxis = axis; q.squashAxis = axis;
+            p.squashAxis = q.squashAxis = axis;
 
-            // One absorbs the other (choose bigger stage, else random)
-            const absorbP = (p.stage>=q.stage) ? true : false;
-            const eater = absorbP ? p : q;
-            const meal  = absorbP ? q : p;
+            const eater = (p.stage>=q.stage) ? p : q;
+            const meal  = (p.stage>=q.stage) ? q : p;
 
-            if (eater.stage < 5){
-              eater.stage++;
-            } else {
-              // Already stage 5? Turn into drop immediately
-              // (rare, but keeps logic tight)
-            }
+            if (eater.stage < 5) eater.stage++;
 
-            // Remove meal; small rebound
-            meal.stage = 0;
-            meal.x = -9999; // yank out of bounds; removed later
+            meal.stage = 0; meal.x = -9999;
             visited.add(i); visited.add(j);
 
             eater.vx += (Math.random()-.5)*0.08;
             eater.vy -= Math.random()*0.06;
 
-            // If eater reaches 5 -> become a drop
             if (eater.stage >= 5){
               const r = STAGE_RADII[5];
               drops.push({
@@ -308,67 +303,66 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
                 vx: (Math.random()-.5)*0.2, vy: Math.abs(eater.vy)*0.2 + 0.4,
                 r, squashT: 0, squashAxis:'y'
               });
-              // Reset eater to respawn as tiny dust near bottom to keep density
-              eater.stage = 0;
-              eater.x = -9999;
+              eater.stage = 0; eater.x = -9999;
             }
           }
         }
       }
     }
-    // Remove dead dust (stage 0 and offscreen marker)
     for (let i=dust.length-1;i>=0;i--){
       if (dust[i].stage === 0 || dust[i].x < -500) dust.splice(i,1);
     }
   }
 
   function updateDust(){
-    // maintain pleasant density
     if (dust.length < DUST_CAP) spawnDust(4);
-
     for (const p of dust){
-      // rise with gentle side drift
       p.x += p.vx + Math.sin((p.x + p.y + performance.now()*0.001))*PERTURB;
       p.y += p.vy;
-
-      // slower upward speed as they get larger (heavier)
       p.y += -0.02*(p.stage-1);
-
-      // squash timer decay
       if (p.squashT>0) p.squashT--;
-
-      // recycle off top
       if (p.y < -10 || p.x < -20 || p.x > W+20){
         p.x = Math.random()*W;
         p.y = H - Math.random()*H*0.2;
         p.vx = (Math.random()-.5)*0.08;
         p.vy = - (RISE_MIN + Math.random()*(RISE_MAX-RISE_MIN));
-        p.stage = 1;
-        p.squashT = 0;
+        p.stage = 1; p.squashT = 0;
       }
     }
     collideDust();
   }
 
-  function updateDropsAndWater(){
-    // Update falling drops with gravity and squash on bounces
+  function surfaceYBase(){ return H - Math.floor(H * waterLevel); }
+  function surfaceAt(x, time){
+    const y0 = surfaceYBase();
+    // animated sine wave
+    return y0 + WAVE_A * Math.sin(WAVE_K * x + time * WAVE_SPEED);
+  }
+
+  function updateDropsAndWater(time){
     for (let i=drops.length-1;i>=0;i--){
       const d = drops[i];
       d.vy += 0.06;
       d.x  += d.vx*0.98;
       d.y  += d.vy;
 
-      // boundaries
+      // side walls
       if (d.x < d.r) { d.x=d.r; d.vx=Math.abs(d.vx); d.squashT=10; d.squashAxis='x'; }
       if (d.x > W-d.r) { d.x=W-d.r; d.vx=-Math.abs(d.vx); d.squashT=10; d.squashAxis='x'; }
 
-      // floor hit -> puddle + water rise + split back into dust
-      if (d.y + d.r >= H - 6){
-        // puddle ripple
-        puddles.push({x:d.x, y:H-3, r:8, alpha:0.8, life:0});
-        // add some water level; clamp
+      // collide with the *surface* (wavy)
+      const ySurf = surfaceAt(d.x, time);
+      if (d.y + d.r >= ySurf){
+        // place right on surface
+        d.y = ySurf - d.r*0.5;
+
+        // surface “splash” ripple (at surface, not bottom)
+        puddles.push({x:d.x, y:ySurf, r:8, alpha:0.8, life:0});
+
+        // slower water rise
         waterLevel = Math.min(1, waterLevel + WATER_INCR);
-        // split into 5 new dust near bottom
+
+        // split back into dust near bottom (keeps cycle)
         for(let k=0;k<5;k++){
           const x = d.x + (Math.random()*6-3);
           const y = H - 2 - Math.random()*8;
@@ -377,19 +371,18 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
         drops.splice(i,1);
         continue;
       }
+
       if (d.squashT>0) d.squashT--;
     }
 
-    // Update puddle ripples (cheap)
     for (let i=puddles.length-1;i>=0;i--){
       const p = puddles[i];
       p.life++;
-      p.r += 0.8;
-      p.alpha *= 0.985;
-      if (p.alpha < 0.02 || p.r > 120) puddles.splice(i,1);
+      p.r += 0.9;
+      p.alpha *= 0.986;
+      if (p.alpha < 0.02 || p.r > 140) puddles.splice(i,1);
     }
 
-    // Very slow decay if you want (kept tiny)
     waterLevel = Math.max(0, waterLevel - WATER_DECAY);
   }
 
@@ -397,15 +390,13 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
     dctx.clearRect(0,0,W,H);
     for (const p of dust){
       if (p.stage<1) continue;
-      // squash/stretch
       let sx=1, sy=1;
       if (p.squashT>0){
         const t = p.squashT/10;
-        const amt = 0.45*Math.sin(t*Math.PI); // extra bouncy
+        const amt = 0.45*Math.sin(t*Math.PI);
         if (p.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
       }
       dctx.save(); dctx.translate(p.x,p.y); dctx.scale(sx,sy);
-      // brightness by height (whiter near bottom)
       const hT = Math.max(0, Math.min(1, p.y / H));
       const alpha = 0.25 + (0.75*(1-hT));
       dctx.globalAlpha = alpha;
@@ -414,7 +405,6 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
       dctx.restore();
     }
 
-    // Draw drops
     for (const d of drops){
       let sx=1, sy=1;
       if (d.squashT>0){
@@ -426,7 +416,6 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
       dctx.globalAlpha = 0.92;
       dctx.fillStyle = 'rgba(160,210,255,.95)';
       dctx.beginPath(); dctx.arc(0,0,d.r,0,Math.PI*2); dctx.fill();
-      // tiny highlight
       dctx.globalAlpha = 0.75;
       dctx.fillStyle = '#ffffff';
       dctx.beginPath(); dctx.arc(-d.r*0.35, -d.r*0.35, d.r*0.25, 0, Math.PI*2); dctx.fill();
@@ -435,45 +424,72 @@ document.getElementById('navAbout').addEventListener('click',e=>{ e.preventDefau
     dctx.globalAlpha = 1;
   }
 
-  function drawWater(){
+  function drawWater(time){
     wctx.clearRect(0,0,W,H);
     if (waterLevel <= 0) return;
 
-    const h = Math.floor(H * waterLevel);
-    const y0 = H - h;
+    const y0 = surfaceYBase();
 
-    // base water fill (vertical gradient)
+    // Fill water area under a wavy surface path
+    wctx.save();
+    wctx.beginPath();
+    // start at left surface
+    wctx.moveTo(0, surfaceAt(0, time));
+    const steps = 36; // enough to look smooth but cheap
+    const dx = W/steps;
+    for(let s=1; s<=steps; s++){
+      const x = s*dx;
+      wctx.lineTo(x, surfaceAt(x, time));
+    }
+    // close path down to bottom edges
+    wctx.lineTo(W, H);
+    wctx.lineTo(0, H);
+    wctx.closePath();
+
+    // gradient fill
     const grad = wctx.createLinearGradient(0, y0, 0, H);
-    grad.addColorStop(0, 'rgba(140,190,255,0.22)');
-    grad.addColorStop(1, 'rgba(85,150,240,0.32)');
+    grad.addColorStop(0,  var(--waterTop));
+    grad.addColorStop(1,  var(--waterBottom));
     wctx.fillStyle = grad;
-    wctx.fillRect(0, y0, W, h);
+    wctx.fill();
 
-    // subtle top sheen
-    wctx.globalAlpha = 0.25;
-    wctx.fillStyle = 'rgba(255,255,255,0.6)';
-    wctx.fillRect(0, y0, W, 2);
-    wctx.globalAlpha = 1;
+    // subtle surface sheen line
+    wctx.lineWidth = 1.5;
+    wctx.strokeStyle = 'rgba(255,255,255,0.45)';
+    wctx.beginPath();
+    wctx.moveTo(0, surfaceAt(0, time));
+    for(let s=1; s<=steps; s++){
+      const x = s*dx;
+      wctx.lineTo(x, surfaceAt(x, time));
+    }
+    wctx.stroke();
 
-    // puddle ripples on top
-    wctx.strokeStyle = 'rgba(200,230,255,0.35)';
+    // surface ripples
     for (const p of puddles){
       wctx.globalAlpha = p.alpha;
-      wctx.lineWidth = 1.5;
+      wctx.lineWidth = 1.2;
+      wctx.strokeStyle = 'rgba(200,230,255,0.35)';
       wctx.beginPath(); wctx.arc(p.x, p.y, p.r, 0, Math.PI*2); wctx.stroke();
       wctx.globalAlpha = 1;
     }
+
+    wctx.restore();
   }
 
-  function step(){
+  function loop(){
+    const now = performance.now();
+    const time = (now - t0)/1000;
+
+    // physics
     updateDust();
-    updateDropsAndWater();
-  }
-  function draw(){
+    updateDropsAndWater(time);
+
+    // draw
     drawDust();
-    drawWater();
+    drawWater(time);
+
+    requestAnimationFrame(loop);
   }
-  function loop(){ step(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
 </script>
