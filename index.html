@@ -9,11 +9,10 @@
     --ink:#eaf2ff; --ink-dim:#c6d0ea;
     --panel:rgba(12,16,34,.45); --line:rgba(255,255,255,.12);
     --accent:#99b7ff; --accent2:#c79bff;
+    --gleam1:#9ff3ff; --gleam2:#73e8e8; --gleam3:#d7e4f2; /* cyan/turquoise/silver */
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
     --shadow:0 18px 40px rgba(0,0,0,.45);
-    --galaxy1: rgba(156,124,255,.22); --galaxy2: rgba(85,180,255,.20); --galaxy3: rgba(255,170,220,.16);
-    --danger:#ff4d4d; --pink:#ff8ad6;
-    --gold: rgba(255,220,130,.9);
+    --danger:#ff4d4d; --pink:#ff8ad6; --gold:rgba(255,220,130,.9);
   }
 
   html,body{height:100%}
@@ -22,6 +21,9 @@
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
     background:
+      /* top gleam overlay */
+      linear-gradient(180deg, rgba(159,243,255,.30) 0%, rgba(115,232,232,.22) 8%, rgba(215,228,242,.16) 14%, rgba(0,0,0,0) 22%),
+      /* galaxy fields */
       radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
       radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
       radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
@@ -29,34 +31,19 @@
     overflow-x:hidden;
   }
 
-  /* Stars + twinkle */
-  .stars,.stars2,.stars3{position:fixed; inset:0; pointer-events:none; background-repeat:repeat; animation:twinkle 6s ease-in-out infinite}
-  .stars{opacity:.75;background-image:
-      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9) 99%, transparent),
-      radial-gradient(1.5px 1.5px at 70% 20%, rgba(255,255,255,.8) 99%, transparent),
-      radial-gradient(1.8px 1.8px at 40% 80%, rgba(255,255,255,.85) 99%, transparent),
-      radial-gradient(1.2px 1.2px at 85% 65%, rgba(255,255,255,.75) 99%, transparent)}
-  .stars2{opacity:.6; animation-delay:1.2s;background-image:
-      radial-gradient(1.5px 1.5px at 10% 70%, rgba(255,255,255,.8) 99%, transparent),
-      radial-gradient(2px 2px at 55% 50%, rgba(255,255,255,.9) 99%, transparent),
-      radial-gradient(1.3px 1.3px at 92% 40%, rgba(255,255,255,.7) 99%, transparent)}
-  .stars3{opacity:.55; animation-delay:2.2s;background-image:
-      radial-gradient(1.6px 1.6px at 32% 54%, rgba(255,255,255,.7) 99%, transparent),
-      radial-gradient(1.2px 1.2px at 76% 78%, rgba(255,255,255,.65) 99%, transparent),
-      radial-gradient(1.0px 1.0px at 15% 12%, rgba(255,255,255,.6) 99%, transparent)}
-  @keyframes twinkle{0%,100%{opacity:.55;filter:brightness(1)}50%{opacity:.95;filter:brightness(1.25)}}
+  /* (Removed star layers for a cleaner, faster look) */
 
-  /* Spinning galaxies */
+  /* Spinning galaxies kept */
   .galaxy{position:fixed; pointer-events:none; border-radius:50%; filter:blur(1px) saturate(120%) brightness(1.05); mix-blend-mode:screen; opacity:.35; animation:spin 140s linear infinite}
   .galaxy.g1{width:540px;height:540px;left:6%;top:10%;background:
-      radial-gradient(closest-side, var(--galaxy2), transparent 70%),
-      radial-gradient(closest-side, var(--galaxy1), transparent 40%)}
+      radial-gradient(closest-side, rgba(85,180,255,.22), transparent 70%),
+      radial-gradient(closest-side, rgba(156,124,255,.20), transparent 40%)}
   .galaxy.g2{width:420px;height:420px;right:8%;top:18%;background:
-      radial-gradient(closest-side, var(--galaxy3), transparent 70%),
-      radial-gradient(closest-side, var(--galaxy2), transparent 40%);animation-duration:160s;animation-direction:reverse}
+      radial-gradient(closest-side, rgba(255,170,220,.20), transparent 70%),
+      radial-gradient(closest-side, rgba(85,180,255,.18), transparent 40%);animation-duration:160s;animation-direction:reverse}
   .galaxy.g3{width:600px;height:600px;left:50%;bottom:-8%;transform:translateX(-50%);background:
-      radial-gradient(closest-side, var(--galaxy1), transparent 70%),
-      radial-gradient(closest-side, var(--galaxy3), transparent 40%);animation-duration:180s}
+      radial-gradient(closest-side, rgba(156,124,255,.20), transparent 70%),
+      radial-gradient(closest-side, rgba(255,170,220,.18), transparent 40%);animation-duration:180s}
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
   /* Top bar */
@@ -91,24 +78,14 @@
   /* Sections */
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px);box-shadow:var(--shadow)}
   .section h3{margin:0 0 8px;color:#fff}
-  .section p{margin:8px 0 0;color:var(--ink-dim)}
+  .section p{margin:8px 0 0;color:#cfe1ff}
+  .muted{color:#c6d0ea; font-size:13px}
 
   /* Footer */
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);backdrop-filter:blur(6px);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* Canvas + overlays */
+  /* Canvas */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
-  #gameOver{
-    position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center;
-    background:rgba(0,0,0,.45); backdrop-filter: blur(2px); color:#fff; text-align:center;
-  }
-  #gameOver .card{
-    background:rgba(10,14,34,.9); border:1px solid var(--line); border-radius:16px; padding:18px 20px; box-shadow:var(--shadow);
-    width:min(420px,92vw)
-  }
-  #gameOver h2{margin:0 0 10px}
-  #gameOver .row{display:flex; gap:10px; justify-content:center; margin-top:12px}
-  #gameOver button{cursor:pointer; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.08); color:var(--ink)}
 
   /* Auth modal */
   .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter: blur(2px); display:none; align-items:center; justify-content:center; z-index:12000;}
@@ -119,19 +96,13 @@
   .modal .row{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
   .modal button{padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.08); color:var(--ink); cursor:pointer}
   .closeX{position:absolute; right:16px; top:12px; cursor:pointer; opacity:.9}
-  .muted{color:#c6d0ea; font-size:12px; margin-top:8px}
-
-  /* Bonus star */
-  .starPulse{ animation: star 1.5s ease-in-out infinite }
-  @keyframes star{ 0%,100%{filter:brightness(1)} 50%{filter:brightness(1.4)} }
 
   @media (max-width:720px){.nav a{padding:6px 10px}}
 </style>
 </head>
 <body>
 
-  <!-- Stars & Galaxies -->
-  <div class="stars"></div><div class="stars2"></div><div class="stars3"></div>
+  <!-- Galaxies (kept), no stars -->
   <div class="galaxy g1"></div><div class="galaxy g2"></div><div class="galaxy g3"></div>
 
   <!-- Top bar -->
@@ -167,7 +138,7 @@
   <section id="buy" class="section" aria-labelledby="buyTitle">
     <h3 id="buyTitle">Buy</h3>
     <p>Search Through Our Wonderful Products — real items coming soon. For now, try typing what you’d like above.</p>
-    <ul>
+    <ul class="muted">
       <li>MayaNut Flour — placeholder</li>
       <li>MayaNut Drink — placeholder</li>
       <li>MayaNut Snacks — placeholder</li>
@@ -180,28 +151,21 @@
     <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
       <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
       farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
-    <p>The roasted seed makes a rich, chocolatey, naturally caffeine-free beverage, and the flour is naturally
-      gluten-free—great for pancakes, cookies, breads, and energy bars. With a smooth, nutty flavor, it pairs
-      beautifully with cinnamon, vanilla, cacao, and tropical fruits.</p>
+    <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
+  </section>
+
+  <!-- Game CTA -->
+  <section id="game" class="section" aria-labelledby="gameTitle">
+    <h3 id="gameTitle">The Game</h3>
+    <p>Sign in to save your score, get on the Leaderboard today!</p>
+    <p class="muted">Tip: Spawners become trembling pink blobs. Two blobs make red balls. Some big reds form with a rare black dot—pair two dotted reds for a surprise!</p>
   </section>
 
   <!-- Footer -->
   <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
 
-  <!-- Canvas + Overlays -->
+  <!-- Canvas -->
   <canvas id="ballLayer"></canvas>
-
-  <div id="gameOver">
-    <div class="card">
-      <h2>Game Over</h2>
-      <p id="finalScoreText">Your score: 0</p>
-      <div class="row">
-        <button id="playAgainBtn">Play Again</button>
-        <button id="saveScoreBtn">Save Score</button>
-      </div>
-      <p class="muted" id="saveStatus"></p>
-    </div>
-  </div>
 
   <!-- Auth modal -->
   <div id="authModalBack" class="modalBack" aria-hidden="true">
@@ -222,9 +186,7 @@
   </div>
 
 <script>
-/* =========================
-   AI Chat (brand-safe helpers)
-   ========================= */
+/* ===== Chat (brand-safe helpers) ===== */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 function say(role, text){
@@ -258,23 +220,17 @@ document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDef
 document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
 document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-/* =========================
-   Firebase Auth + Cloud score (ready for production)
-   ========================= */
-// TODO: Replace with your Firebase config from the Firebase Console
+/* ===== Firebase hooks (paste your config + function URL to go online) ===== */
 const FIREBASE_CONFIG = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
   projectId: "YOUR_PROJECT_ID",
   appId: "YOUR_APP_ID"
 };
-// TODO: Replace with your deployed Cloud Function URL (submitScore)
 const SCORE_FN_URL = "https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/submitScore";
 
 window.mnAuth = {
-  ready:false,
-  user:null,
-  bestScoreLocal: Number(localStorage.getItem('mn_best') || 0),
+  ready:false, user:null,
   async init(){
     try{
       const [{ initializeApp }] = await Promise.all([
@@ -287,74 +243,40 @@ window.mnAuth = {
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
       ]);
+
       this._auth = getAuth(app);
       this._db = getFirestore(app);
-      this._create = createUserWithEmailAndPassword;
-      this._signin = signInWithEmailAndPassword;
-      this._signout = signOut;
       this._doc = doc; this._getDoc = getDoc; this._setDoc = setDoc;
+      this._create = createUserWithEmailAndPassword; this._signin = signInWithEmailAndPassword; this._signout = signOut;
 
-      onAuthStateChanged(this._auth, async (user)=>{
-        this.user = user || null;
-        if (user){
-          const ref = this._doc(this._db, "users", user.uid);
-          const snap = await this._getDoc(ref);
-          if (!snap.exists()){
-            await this._setDoc(ref, {
-              email: user.email, displayName: user.email.split("@")[0],
-              createdAt: new Date(), bestScore: this.bestScoreLocal || 0, bonuses: {}
-            });
-          } else {
-            const bs = snap.data()?.bestScore || 0;
-            if (bs > this.bestScoreLocal){
-              this.bestScoreLocal = bs; localStorage.setItem('mn_best', String(bs));
-            }
-          }
-          authInfo.textContent = `Signed in as ${user.email} · Best: ${this.bestScoreLocal}`;
-        } else {
-          authInfo.textContent = `Guest mode. Sign in to save scores across devices.`;
-        }
+      onAuthStateChanged(this._auth, async (u)=>{
+        this.user = u || null;
+        authInfo.textContent = u ? `Signed in as ${u.email}` : `Guest mode. Sign in to save scores.`;
       });
       this.ready = true;
-    }catch(e){
-      console.warn("Firebase not initialized (offline mode).", e);
-      this.ready = false;
-    }
+    }catch(e){ console.warn("Firebase offline/disabled.", e); this.ready=false; }
   },
   async signUp(email, pass){ if(!this.ready) return; await this._create(this._auth, email, pass); },
   async signIn(email, pass){ if(!this.ready) return; await this._signin(this._auth, email, pass); },
   async signOut(){ if(!this.ready) return; await this._signout(this._auth); },
   async submitScore(score, extras={}){
     try{
-      if (score <= 0) return { ok:false, offline:true };
-      let headers = { "Content-Type":"application/json" };
-      if (this.user){
-        const token = await this._auth.currentUser.getIdToken(false);
-        headers.Authorization = `Bearer ${token}`;
-      } else {
-        // require login for cloud save
-        return { ok:false, needLogin:true };
-      }
-      const r = await fetch(SCORE_FN_URL, { method:"POST", headers, body: JSON.stringify({ score, sessionStats: extras })});
+      if (!this.user) return { ok:false, needLogin:true };
+      const token = await this._auth.currentUser.getIdToken(false);
+      const r = await fetch(SCORE_FN_URL, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
+        body: JSON.stringify({ score, sessionStats: extras })
+      });
       const data = await r.json();
       if (!r.ok) throw new Error(data?.error||"submit failed");
-
-      // update local best
-      const prev = Number(localStorage.getItem('mn_best') || 0);
-      if (score > prev){ localStorage.setItem('mn_best', String(score)); }
       return { ok:true, data };
-    }catch(e){
-      console.warn("Cloud submit failed, keeping local only.", e);
-      // local best fallback
-      const prev = Number(localStorage.getItem('mn_best') || 0);
-      if (score > prev){ localStorage.setItem('mn_best', String(score)); }
-      return { ok:false, offline:true };
-    }
+    }catch(e){ console.warn("Cloud save failed.", e); return { ok:false, offline:true }; }
   }
 };
 mnAuth.init();
 
-/* Auth UI wiring */
+/* Auth UI */
 const accountBtn = document.getElementById('accountBtn');
 const authModalBack = document.getElementById('authModalBack');
 const closeAuth = document.getElementById('closeAuth');
@@ -368,51 +290,32 @@ const authInfo  = document.getElementById('authInfo');
 accountBtn.addEventListener('click', ()=>{ authModalBack.style.display='flex'; authModalBack.setAttribute('aria-hidden','false'); });
 closeAuth.addEventListener('click', ()=>{ authModalBack.style.display='none'; authModalBack.setAttribute('aria-hidden','true'); });
 authModalBack.addEventListener('click', (e)=>{ if(e.target===authModalBack){ closeAuth.click(); }});
+signUpBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signUp(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Account created. Signed in."; }catch(e){ authInfo.textContent="Sign up failed: "+e.message; }});
+signInBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signIn(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Signed in."; }catch(e){ authInfo.textContent="Sign in failed: "+e.message; }});
+signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); authInfo.textContent="Signed out."; }catch(e){ authInfo.textContent="Error: "+e.message; }});
 
-signUpBtn.addEventListener('click', async ()=>{
-  try{ await mnAuth.signUp(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Account created. Signed in."; }
-  catch(e){ authInfo.textContent="Sign up failed: " + e.message; }
-});
-signInBtn.addEventListener('click', async ()=>{
-  try{ await mnAuth.signIn(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Signed in."; }
-  catch(e){ authInfo.textContent="Sign in failed: " + e.message; }
-});
-signOutBtn.addEventListener('click', async ()=>{
-  try{ await mnAuth.signOut(); authInfo.textContent="Signed out."; }
-  catch(e){ authInfo.textContent="Error: " + e.message; }
-});
-
-/* =========================
-   Game Engine (19 cap, reds max 6, spawner→pink→reds pipeline)
-   ========================= */
+/* ===== Game engine: 19 cap, spawner→blob→reds, dotted reds, black balls, cyclic recovery ===== */
 (function(){
   const scoreEl = document.getElementById('score');
   const ballCountEl = document.getElementById('ballCount');
-  const gameOverEl = document.getElementById('gameOver');
-  const finalScoreText = document.getElementById('finalScoreText');
-  const playAgainBtn = document.getElementById('playAgainBtn');
-  const saveScoreBtn = document.getElementById('saveScoreBtn');
-  const saveStatus = document.getElementById('saveStatus');
-
-  let score = 0;
-  function addScore(d){ score += d; scoreEl.textContent = score; }
-
   const MAX_BALLS = 19;
-  const RED_MAX   = 6;
+  const RED_MAX = 6;
 
+  // Types: 'original' | 'small' | 'spawner' | 'blob' | 'redSmall' | 'redBig' | 'redBigDot' | 'blackBig'
   const canvas = document.getElementById('ballLayer');
   const ctx = canvas.getContext('2d');
 
   function resize(){
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = window.innerWidth, cssH = window.innerHeight;
-    canvas.style.width = cssW + 'px'; canvas.style.height = cssH + 'px';
-    canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
+    canvas.style.width = window.innerWidth+'px';
+    canvas.style.height = window.innerHeight+'px';
+    canvas.width = Math.round(window.innerWidth*dpr);
+    canvas.height= Math.round(window.innerHeight*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   resize(); window.addEventListener('resize', resize);
 
-  // Colliders (UI)
+  // UI rects
   const heroTitle = document.getElementById('heroTitle');
   const chatInput = document.getElementById('chatInput');
   const chatLog  = document.getElementById('chatLog');
@@ -433,39 +336,29 @@ signOutBtn.addEventListener('click', async ()=>{
     return rects;
   }
 
-  // Ball types: 'original' | 'small' | 'spawner' | 'blob' | 'redSmall' | 'redBig'
+  let score = 0;
+  const addScore = d => { score += d; scoreEl.textContent = score; };
+
   function tierToRadius(tier){ const t = Math.max(1, Math.min(15, tier|0)); return 8 + (4 * (t - 1) / 14); }
-
-  function makeBall(opts={}){
-    const {
-      x=window.innerWidth*0.6, y=window.innerHeight*0.3,
-      r=10, vx=3.2, vy=2.6, type='small', sizeTier=null, hasFast=false
-    } = opts;
-    return {
-      x,y,r,vx,vy,type,sizeTier,hasFast,
-      squashTimer:0, squashAxis:'y',
-      jellyTimer:0, jellyPhase:0,
-      balloonTimer:0, balloonAxis:'y',
-      repelTimer:0,              // red repel effect
-      _dead:false
-    };
+  function makeBall(o={}){
+    const {x=window.innerWidth*0.6, y=window.innerHeight*0.3, r=10, vx=3, vy=2, type='small', sizeTier=null, hasFast=false} = o;
+    return { x,y,r,vx,vy,type,sizeTier,hasFast, squashTimer:0, squashAxis:'y', jellyTimer:0, jellyPhase:0, balloonTimer:0, balloonAxis:'y', _dead:false };
   }
-
   const balls = [ makeBall({ type:'original', vx:1.1, vy:0.9, r:tierToRadius(7), sizeTier:7 }) ];
-  updateBallCount();
 
-  /* Spatial Hash for performance */
-  const CELL = 48;
+  function updateBallCount(){ ballCountEl.textContent = String(balls.filter(b=>!b._dead).length); }
+
+  // Spatial hashing
+  const CELL=48;
   function buildGrid(){
     const grid = new Map();
-    for (let i=0;i<balls.length;i++){
-      const b = balls[i]; if (b._dead) continue;
-      const minx = Math.floor((b.x - b.r)/CELL), maxx = Math.floor((b.x + b.r)/CELL);
-      const miny = Math.floor((b.y - b.r)/CELL), maxy = Math.floor((b.y + b.r)/CELL);
+    for(let i=0;i<balls.length;i++){
+      const b=balls[i]; if(b._dead) continue;
+      const minx=Math.floor((b.x-b.r)/CELL), maxx=Math.floor((b.x+b.r)/CELL);
+      const miny=Math.floor((b.y-b.r)/CELL), maxy=Math.floor((b.y+b.r)/CELL);
       for(let gx=minx; gx<=maxx; gx++){
         for(let gy=miny; gy<=maxy; gy++){
-          const key = gx+','+gy;
-          if(!grid.has(key)) grid.set(key, []);
+          const key=gx+','+gy; if(!grid.has(key)) grid.set(key,[]);
           grid.get(key).push(i);
         }
       }
@@ -473,263 +366,183 @@ signOutBtn.addEventListener('click', async ()=>{
     return grid;
   }
   function nearbyPairs(grid){
-    const seen = new Set(), pairs = [];
-    for (const ids of grid.values()){
-      for (let a=0;a<ids.length;a++){
-        for (let b=a+1;b<ids.length;b++){
-          const i=ids[a], j=ids[b], key = i<j ? `${i}-${j}` : `${j}-${i}`;
-          if (seen.has(key)) continue; seen.add(key); pairs.push([i,j]);
+    const seen=new Set(), pairs=[];
+    for(const ids of grid.values()){
+      for(let a=0;a<ids.length;a++){
+        for(let b=a+1;b<ids.length;b++){
+          const i=ids[a], j=ids[b], key = i<j?`${i}-${j}`:`${j}-${i}`;
+          if(seen.has(key)) continue; seen.add(key); pairs.push([i,j]);
         }
       }
     }
     return pairs;
   }
 
-  function bounceWall(b, W, H){
+  function bounceWall(b,W,H){
     if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
     if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
     if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
     if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
   }
-  function collideWithRect(b, R){
+  function collideWithRect(b,R){
     const nx = Math.max(R.x, Math.min(b.x, R.x + R.w));
     const ny = Math.max(R.y, Math.min(b.y, R.y + R.h));
-    const dx = b.x - nx, dy = b.y - ny;
-    if (dx*dx + dy*dy > b.r*b.r) return false;
-
-    const cx = R.x + R.w/2, cy = R.y + R.h/2;
-    const overlapX = (R.w/2 + b.r) - Math.abs(b.x - cx);
-    const overlapY = (R.h/2 + b.r) - Math.abs(b.y - cy);
-
-    if (overlapX < overlapY){
-      b.vx *= -1; b.x += (b.vx>0?1:-1)*Math.max(1,overlapX*0.6); b.squashTimer=8; b.squashAxis='x';
-    } else {
-      b.vy *= -1; b.y += (b.vy>0?1:-1)*Math.max(1,overlapY*0.6); b.squashTimer=8; b.squashAxis='y';
-    }
-
-    // Pink blobs (large) bend like balloons
-    if (b.type==='blob' && b.r>=12 && b.balloonTimer===0){
-      b.balloonTimer = 18;
-      b.balloonAxis = (overlapX < overlapY) ? 'x' : 'y';
-    }
+    const dx=b.x-nx, dy=b.y-ny;
+    if (dx*dx+dy*dy>b.r*b.r) return false;
+    const cx = R.x+R.w/2, cy=R.y+R.h/2;
+    const ox = (R.w/2 + b.r) - Math.abs(b.x - cx);
+    const oy = (R.h/2 + b.r) - Math.abs(b.y - cy);
+    if (ox < oy){ b.vx *= -1; b.x += (b.vx>0?1:-1)*Math.max(1,ox*0.6); b.squashTimer=8; b.squashAxis='x'; }
+    else { b.vy *= -1; b.y += (b.vy>0?1:-1)*Math.max(1,oy*0.6); b.squashTimer=8; b.squashAxis='y'; }
+    if (b.type==='blob' && b.r>=12 && b.balloonTimer===0){ b.balloonTimer=18; b.balloonAxis=(ox<oy)?'x':'y'; }
     return true;
   }
 
+  function count(predicate){ return balls.reduce((n,b)=> n + (!b._dead && predicate(b)?1:0), 0); }
+  function redsCount(){ return count(b=>b.type==='redSmall'||b.type==='redBig'||b.type==='redBigDot'); }
+  function whitesCount(){ return count(b=>b.type==='original'||b.type==='small'||b.type==='spawner'||b.type==='blob'); }
+
   function accelerateOriginal(b){
-    const speed = Math.hypot(b.vx, b.vy);
-    const cap = (b.hasFast ? 9 : 4);
+    const speed = Math.hypot(b.vx,b.vy);
+    const cap = (b.hasFast?9:4);
     const accel = 0.002;
-    const ns = Math.min(cap, speed * (1 + accel));
-    if (ns>0 && speed>0){ const f = ns/speed; b.vx*=f; b.vy*=f; }
+    const ns = Math.min(cap, speed*(1+accel));
+    if (ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
   }
 
-  function countType(fn){ return balls.reduce((n,b)=> n + (!b._dead && fn(b) ? 1 : 0), 0); }
+  function randomDottedChance(){ // 1 / N, N ∈ [19,44]
+    const N = Math.floor(Math.random()*(44-19+1)) + 19;
+    return Math.random() < (1/N);
+  }
 
-  function tryMergePairs(){
-    const grid = buildGrid();
-    const pairs = nearbyPairs(grid);
-    for (const [i,j] of pairs){
-      const a = balls[i], b = balls[j];
-      if (a._dead || b._dead) continue;
-      const dx = b.x - a.x, dy = b.y - a.y;
-      const dist = Math.hypot(dx,dy);
-      if (dist > a.r + b.r) continue;
+  function handleBallVsBall(i,j, noWhitesMode){
+    const a=balls[i], b=balls[j];
+    if (a._dead || b._dead) return;
+    const dx=b.x-a.x, dy=b.y-a.y;
+    const dist = Math.hypot(dx,dy);
+    if (dist > a.r + b.r) return;
 
-      // Red interactions
-      if (a.type==='redSmall' || a.type==='redBig' || b.type==='redSmall' || b.type==='redBig'){
-        redVsAny(a,b);
-        continue;
-      }
-
-      // Spawner + Spawner -> Pink blob
-      if ((a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original')){
-        // spawn one pink blob at midpoint, average velocity, trembling
-        const nx = (a.x + b.x)/2, ny = (a.y + b.y)/2;
-        const nvx= (a.vx + b.vx)/2, nvy= (a.vy + b.vy)/2;
-        const nr = Math.max(10, Math.sqrt(a.r*a.r + b.r*b.r));
-        a._dead = true; b._dead = true;
-        if (balls.length < MAX_BALLS){
-          const blob = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:nr, type:'blob' });
-          blob.jellyTimer = 30; blob.jellyPhase = 0;
-          balls.push(blob);
+    // Black interactions first (they're powerful)
+    if (a.type==='blackBig' || b.type==='blackBig'){
+      let black = a.type==='blackBig'?a:b;
+      let other = a.type==='blackBig'?b:a;
+      if (other.type==='redSmall'){ other._dead=true; return; }
+      if (other.type==='blackBig'){ // black vs black -> spawn small whites (cycle reset)
+        a._dead=true; b._dead=true;
+        const spawn=Math.min(3, MAX_BALLS - balls.filter(bb=>!bb._dead).length);
+        for(let k=0;k<spawn;k++){
+          const ang = Math.random()*Math.PI*2, sp=1.6+Math.random()*1.4;
+          balls.push(makeBall({ x:black.x+Math.cos(ang)*(black.r+6), y:black.y+Math.sin(ang)*(black.r+6), r:7, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
         }
-        continue;
+        return;
       }
-
-      // Pink blob + pink blob -> spawn small reds (up to RED_MAX total)
-      if (a.type==='blob' && b.type==='blob'){
-        const redsNow = countType(bb=>bb.type==='redSmall'||bb.type==='redBig');
-        const allowance = Math.max(0, RED_MAX - redsNow);
-        const spawn = Math.min(3, allowance); // 0..3 small reds
-        if (spawn>0){
-          const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
-          for (let k=0;k<spawn;k++){
-            const ang = Math.random()*Math.PI*2, sp = 2.2 + Math.random()*1.8;
-            balls.push(makeBall({
-              x: cx + Math.cos(ang)*(a.r+6),
-              y: cy + Math.sin(ang)*(a.r+6),
-              r: 7.5, vx: Math.cos(ang)*sp, vy: Math.sin(ang)*sp, type:'redSmall'
-            }));
-          }
-        }
-        a._dead = true; b._dead = true;
-        continue;
-      }
-
-      // Small + Small (white) -> Spawner
-      if (a.type==='small' && b.type==='small'){
-        const nx = (a.x + b.x)/2, ny = (a.y + b.y)/2;
-        const nvx= (a.vx + b.vx)/2, nvy= (a.vy + b.vy)/2;
-        const nr = Math.sqrt(a.r*a.r + b.r*b.r);
-        a._dead = true; b._dead = true;
-        if (balls.length < MAX_BALLS){
-          const sp = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9, nr), type:'spawner' });
-          sp.jellyTimer=16; sp.jellyPhase=0;
-          balls.push(sp);
-        }
-        continue;
-      }
-
-      // Otherwise: elastic-ish bounce + squash
-      const nx = dx / (dist||1), ny = dy / (dist||1);
-      const p = 2 * (a.vx*nx + a.vy*ny - b.vx*nx - b.vy*ny) / 2;
-      a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-      a.squashTimer = b.squashTimer = 8;
-      a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis = a.squashAxis;
+      // black vs white big (spawner/original/blob/small): bounce (don’t delete everything)
+      // mild knockback
+      other.vx *= -0.9; other.vy *= -0.9; return;
     }
-  }
 
-  function redVsAny(a,b){
-    // Ensure 'A' is red if one is
-    let red=a, other=b;
-    if (!(a.type==='redSmall' || a.type==='redBig')){ red=b; other=a; }
+    // Dotted big reds special merge: two dotted collide -> 50/50 big red or big black
+    if ((a.type==='redBigDot' && b.type==='redBigDot')){
+      a._dead=true; b._dead=true;
+      const makeBlack = Math.random() < 0.5;
+      const ang = Math.random()*Math.PI*2, sp=2+Math.random()*1.2, R=12;
+      balls.push(makeBall({ x:(a.x+b.x)/2, y:(a.y+b.y)/2, r:R, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type: makeBlack ? 'blackBig':'redBig' }));
+      return;
+    }
 
-    // Red vs red
-    if (other.type==='redSmall' || other.type==='redBig'){
+    // Red vs Red general (in noWhitesMode, red+red can drop small whites)
+    if ((a.type.startsWith('red') && b.type.startsWith('red'))){
       // small vs small -> one dies
-      if (red.type==='redSmall' && other.type==='redSmall'){
-        (Math.random()<0.5 ? red : other)._dead = true;
-      } else if (red.type==='redBig' && other.type==='redBig'){
-        // big vs big -> gentle merge bounce (keep both, slow them a bit)
-        red.vx*=0.85; red.vy*=0.85; other.vx*=0.85; other.vy*=0.85;
+      if (a.type==='redSmall' && b.type==='redSmall'){
+        (Math.random()<0.5?a:b)._dead = true;
+      } else if ((a.type==='redBig' || a.type==='redBigDot') && (b.type==='redBig' || b.type==='redBigDot')){
+        // gentle slow-down bounce
+        a.vx*=0.9; a.vy*=0.9; b.vx*=0.9; b.vy*=0.9;
       } else {
         // big vs small -> small dies
-        (other.type==='redSmall' ? other : red)._dead = true;
+        (a.type==='redSmall'?a:b)._dead = true;
+      }
+      // If no whites left, a portion of red-red impacts shed a white seed
+      if (noWhitesMode && balls.filter(bb=>!bb._dead).length < MAX_BALLS && Math.random()<0.35){
+        const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2, ang=Math.random()*Math.PI*2, sp=1.5+Math.random();
+        balls.push(makeBall({ x:cx, y:cy, r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
       }
       return;
     }
 
-    // Red vs spawner/original/small/blob (white team)
-    if (red.type==='redSmall'){
-      // red small vs spawner: red dies (your rule)
-      if (other.type==='spawner' || other.type==='original'){
-        red._dead = true; return;
-      }
-      // red small vs white (small/blob) -> eats it and becomes big red
-      if (other.type==='small' || other.type==='blob'){
-        other._dead = true;
-        red.type='redBig'; red.r = Math.max(red.r, 10.5);
-        red.vx*=0.95; red.vy*=0.95; // heavier feel
-        return;
-      }
-    } else if (red.type==='redBig'){
-      // big red deletes any white, including spawner/original
-      if (other.type!=='redSmall' && other.type!=='redBig'){
-        other._dead = true;
-        // knockback
+    // Red vs White
+    if (a.type.startsWith('red') || b.type.startsWith('red')){
+      let red = a.type.startsWith('red')?a:b;
+      let w   = a.type.startsWith('red')?b:a;
+
+      if (red.type==='redSmall'){
+        if (w.type==='spawner' || w.type==='original'){
+          // small red dies on spawners/originals (resilience)
+          red._dead = true; return;
+        }
+        if (w.type==='small' || w.type==='blob'){
+          // eats white → becomes big red (maybe dotted)
+          w._dead = true;
+          red.type = randomDottedChance() ? 'redBigDot' : 'redBig';
+          red.r = Math.max(red.r, 10.5);
+          red.vx*=0.95; red.vy*=0.95;
+          return;
+        }
+      } else { // big red or dotted hits any white → delete white
+        if (w.type!=='blackBig'){ w._dead = true; }
         red.vx*=0.98; red.vy*=0.98;
         return;
       }
     }
-  }
 
-  function updateBallCount(){ ballCountEl.textContent = String(balls.filter(b=>!b._dead).length); }
-
-  function drawBall(b){
-    // effects
-    let sx=1, sy=1;
-    if (b.squashTimer>0){ const t=b.squashTimer/8, amt=0.35*Math.sin(t*Math.PI); if(b.squashAxis==='x'){sx=1+amt;sy=1-amt;} else {sy=1+amt;sx=1-amt;} }
-    if (b.jellyTimer>0){ const wob=0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
-    if (b.balloonTimer>0){ const t=b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI); if(b.balloonAxis==='x'){sx*=1+bow;sy*=1-bow*0.6;} else {sy*=1+bow;sx*=1-bow*0.6;} }
-
-    ctx.save(); ctx.translate(b.x, b.y); ctx.scale(sx, sy);
-
-    // glow & core
-    ctx.beginPath(); ctx.arc(0,0,b.r+3,0,Math.PI*2);
-    if (b.type==='redSmall' || b.type==='redBig') ctx.fillStyle='rgba(255,77,77,.35)';
-    else if (b.type==='blob') ctx.fillStyle='rgba(255,138,214,.35)';
-    else ctx.fillStyle='rgba(255,255,255,.40)';
-    ctx.fill();
-
-    ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
-    if (b.type==='redSmall' || b.type==='redBig') ctx.fillStyle='#ff4d4d';
-    else if (b.type==='blob') ctx.fillStyle='#ff8ad6';
-    else ctx.fillStyle='#ffffff';
-    ctx.fill();
-
-    // rings
-    if (b.type==='original'){
-      ctx.lineWidth=2; ctx.strokeStyle='rgba(153,183,255,.7)';
-      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
-    } else if (b.type==='spawner'){
-      ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.9)';
-      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
+    // Spawner + Spawner -> Pink blob
+    if ((a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original')){
+      const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
+      const nr = Math.max(10, Math.sqrt(a.r*a.r + b.r*b.r));
+      a._dead=true; b._dead=true;
+      if (balls.filter(bb=>!bb._dead).length < MAX_BALLS){
+        const blob = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:nr, type:'blob' });
+        blob.jellyTimer=28; blob.jellyPhase=0; balls.push(blob);
+      }
+      return;
     }
 
-    // bonus star visual (draw as little star when repelTimer>0)
-    if (b.repelTimer>0 && (b.type==='redSmall' || b.type==='redBig')){
-      ctx.beginPath(); ctx.arc(0,0, b.r+7, 0, Math.PI*2);
-      ctx.strokeStyle='rgba(255,255,255,.4)'; ctx.lineWidth=1.2; ctx.stroke();
+    // Blob + Blob -> spawn small reds (respect RED_MAX)
+    if (a.type==='blob' && b.type==='blob'){
+      const allowance = Math.max(0, RED_MAX - redsCount());
+      const spawn = Math.min(3, allowance);
+      if (spawn>0){
+        const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2;
+        for(let k=0;k<spawn;k++){
+          const ang=Math.random()*Math.PI*2, sp=2.2+Math.random()*1.6;
+          balls.push(makeBall({ x:cx+Math.cos(ang)*(a.r+6), y:cy+Math.sin(ang)*(a.r+6), r:7.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'redSmall' }));
+        }
+      }
+      a._dead=true; b._dead=true;
+      return;
     }
 
-    ctx.restore();
-  }
-
-  // Occasional bonus star (click for +5 and red repel)
-  let star = null; // {x,y,r,life}
-  function maybeSpawnStar(){
-    if (star || Math.random() > 0.004) return;
-    star = { x: 40 + Math.random()*(window.innerWidth-80), y: 120 + Math.random()*(window.innerHeight-200), r: 10, life: 100 };
-  }
-  function drawStar(){
-    if (!star) return;
-    const {x,y,r} = star;
-    ctx.save(); ctx.translate(x,y);
-    ctx.beginPath();
-    for (let i=0;i<10;i++){
-      const ang = i * Math.PI/5;
-      const rr = (i%2===0) ? r : r*0.45;
-      ctx.lineTo(Math.cos(ang)*rr, Math.sin(ang)*rr);
+    // Small + Small (white) -> Spawner
+    if (a.type==='small' && b.type==='small'){
+      const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
+      const nr=Math.sqrt(a.r*a.r + b.r*b.r);
+      a._dead=true; b._dead=true;
+      if (balls.filter(bb=>!bb._dead).length < MAX_BALLS){
+        const sp = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9,nr), type:'spawner' });
+        sp.jellyTimer=16; sp.jellyPhase=0; balls.push(sp);
+      }
+      return;
     }
-    ctx.closePath();
-    ctx.fillStyle='rgba(255,255,200,.9)';
-    ctx.fill();
-    ctx.restore();
-    if (--star.life <= 0) star=null;
+
+    // default bounce
+    const nx = dx/(dist||1), ny=dy/(dist||1);
+    const p = 2*(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny)/2;
+    a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
+    a.squashTimer=b.squashTimer=8; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
   }
 
-  function checkGameOver(){
-    const anyFriendly = balls.some(b=>!b._dead && (b.type==='original'||b.type==='small'||b.type==='spawner'||b.type==='blob'));
-    if (!anyFriendly){
-      finalScoreText.textContent = `Your score: ${score}`;
-      gameOverEl.style.display='flex';
-
-      // Save if logged in (silent), otherwise button offers manual login/save
-      saveStatus.textContent = '';
-    }
-  }
-
-  playAgainBtn.addEventListener('click', ()=>location.reload());
-  saveScoreBtn.addEventListener('click', async ()=>{
-    saveStatus.textContent = 'Saving...';
-    const res = await mnAuth.submitScore(score, { maxBalls:MAX_BALLS, redsMax:RED_MAX });
-    if (res.ok) saveStatus.textContent = 'Saved! Best score updated if higher.';
-    else if (res.needLogin) saveStatus.textContent = 'Please sign in to save your score.';
-    else saveStatus.textContent = 'Offline – saved locally.';
-  });
-
+  // Anti-orbit nudge
   function antiOrbit(b){
-    // If a small ball lingers near a spawner/original, nudge it away randomly
     if (b.type!=='small') return;
     const near = balls.find(x=>!x._dead && (x.type==='spawner'||x.type==='original') && Math.hypot(x.x-b.x,x.y-b.y) < (x.r + b.r + 18));
     if (near){
@@ -738,109 +551,128 @@ signOutBtn.addEventListener('click', async ()=>{
     }
   }
 
+  // Draw
+  function drawBall(b){
+    let sx=1, sy=1;
+    if (b.squashTimer>0){ const t=b.squashTimer/8, amt=0.35*Math.sin(t*Math.PI); if(b.squashAxis==='x'){sx=1+amt;sy=1-amt;} else {sy=1+amt;sx=1-amt;} }
+    if (b.jellyTimer>0){ const wob=0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
+    if (b.balloonTimer>0){ const t=b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI); if(b.balloonAxis==='x'){sx*=1+bow;sy*=1-bow*0.6;} else {sy*=1+bow;sx*=1-bow*0.6;} }
+
+    ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
+
+    // glow
+    ctx.beginPath(); ctx.arc(0,0,b.r+3,0,Math.PI*2);
+    let glow='rgba(255,255,255,.40)';
+    if (b.type==='redSmall' || b.type==='redBig' || b.type==='redBigDot') glow='rgba(255,77,77,.35)';
+    if (b.type==='blob') glow='rgba(255,138,214,.35)';
+    if (b.type==='blackBig') glow='rgba(60,60,60,.45)';
+    ctx.fillStyle=glow; ctx.fill();
+
+    // core
+    ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
+    let core='#ffffff';
+    if (b.type==='redSmall' || b.type==='redBig' || b.type==='redBigDot') core='#ff4d4d';
+    if (b.type==='blob') core='#ff8ad6';
+    if (b.type==='blackBig') core='#111111';
+    ctx.fillStyle=core; ctx.fill();
+
+    // dotted red center
+    if (b.type==='redBigDot'){
+      ctx.beginPath(); ctx.arc(0,0, Math.max(2.5, b.r*0.35), 0, Math.PI*2);
+      ctx.fillStyle='#0c0c0c'; ctx.fill();
+    }
+
+    // rings: original/spawner accents
+    if (b.type==='original'){
+      ctx.lineWidth=2; ctx.strokeStyle='rgba(153,183,255,.7)';
+      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
+    } else if (b.type==='spawner'){
+      ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.9)';
+      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
+  // Loop
   function step(){
-    const W = window.innerWidth, H = window.innerHeight;
-    const rects = getRects();
+    const W=window.innerWidth, H=window.innerHeight;
+    const rects=getRects();
+    const noWhitesMode = whitesCount()===0;
 
-    // Move, UI walls
-    for (const b of balls){
+    for(const b of balls){
       if (b._dead) continue;
-      b.x += b.vx; b.y += b.vy;
-
-      // Gradual speedup for original
-      if (b.type==='original') accelerateOriginal(b);
-
-      // Small randomness for reds to avoid laser efficiency
-      if (b.type==='redSmall' || b.type==='redBig'){
-        if (Math.random()<0.02){ b.vx += (Math.random()-.5)*0.6; b.vy += (Math.random()-.5)*0.6; }
-        if (b.repelTimer>0){ b.repelTimer--; }
+      b.x+=b.vx; b.y+=b.vy;
+      if (b.type==='original'){ // gradual accel
+        const speed=Math.hypot(b.vx,b.vy), cap=(b.hasFast?9:4), accel=0.002;
+        const ns=Math.min(cap, speed*(1+accel)); if(ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
+      }
+      // Reds add randomness; in no-whites mode, a bit more drift to mix
+      if (b.type.startsWith('red') && Math.random()<(noWhitesMode?0.035:0.02)){
+        b.vx += (Math.random()-.5)*0.6; b.vy += (Math.random()-.5)*0.6;
       }
 
-      // Anti-orbit
+      // anti orbit
       antiOrbit(b);
 
-      bounceWall(b, W, H);
-      for (const R of rects) collideWithRect(b, R);
+      bounceWall(b,W,H);
+      for(const R of rects) collideWithRect(b,R);
 
-      // timers
       if (b.squashTimer>0) b.squashTimer--;
       if (b.jellyTimer>0)  b.jellyTimer--;
       if (b.balloonTimer>0) b.balloonTimer--;
     }
 
-    // Collisions & merges
-    tryMergePairs();
+    // collisions
+    const grid=buildGrid();
+    const pairs=nearbyPairs(grid);
+    for(const [i,j] of pairs){ handleBallVsBall(i,j, whitesCount()===0); }
 
-    // Cleanup
-    for (let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
+    // cleanup
+    for(let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
 
-    // Draw
+    // draw
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    for (const b of balls) drawBall(b);
-
-    // Star
-    maybeSpawnStar(); drawStar();
+    for(const b of balls) drawBall(b);
 
     updateBallCount();
-    checkGameOver();
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 
-  function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy) <= b.r + 5; }
+  // Click rules: +1 if ball, -1 if miss; spawner/original can spawn small (cap 19)
+  function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy)<=b.r+5; }
 
-  // Click: +1 if ball, -1 if miss, no change if input
-  document.addEventListener('click', (e)=>{
+  document.addEventListener('click',(e)=>{
     if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
-
     const x=e.clientX, y=e.clientY;
-
-    // Star click?
-    if (star && Math.hypot(star.x - x, star.y - y) <= star.r+6){
-      addScore(5); star=null;
-      // apply repel to reds briefly
-      for (const r of balls){ if (!r._dead && (r.type==='redSmall'||r.type==='redBig')) r.repelTimer = 120; }
-      return;
-    }
-
-    // Click on any ball (prefer friendlies)
     let handled=false;
     for (const b of balls){
       if (b._dead) continue;
       if (hitBallAt(x,y,b)){
-        addScore(1);
-        handled=true;
+        addScore(1); handled=true;
+        const dx=b.x-x, dy=b.y-y, L=Math.max(1,Math.hypot(dx,dy));
+        let px=(dx/L)*4.8, py=(dy/L)*4.8;
+        const cap=(b.type==='original' && b.hasFast)?9:4;
+        const sp=Math.hypot(px,py), f=Math.min(cap,sp)/(sp||1);
+        b.vx = px*f; b.vy = py*f;
 
-        // push
-        const dx=b.x-x, dy=b.y-y, len=Math.max(1,Math.hypot(dx,dy));
-        let pushX=(dx/len)*4.8, pushY=(dy/len)*4.8;
-        const cap = (b.type==='original' && b.hasFast) ? 9 : 4;
-        const sp=Math.hypot(pushX,pushY), f=Math.min(cap,sp)/(sp||1);
-        b.vx = pushX*f; b.vy = pushY*f;
-
-        // Original leveling to 15
+        // original tiering
         if (b.type==='original'){
           if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
-          b._clicks = (b._clicks||0)+1;
-          if (b._clicks>=15){ b.hasFast=true; const curS=Math.hypot(b.vx,b.vy); if (curS<7){ const F=7/(curS||1); b.vx*=F; b.vy*=F; } }
+          b._clicks=(b._clicks||0)+1;
+          if (b._clicks>=15){ b.hasFast=true; const s=Math.hypot(b.vx,b.vy); if (s<7){ const F=7/(s||1); b.vx*=F; b.vy*=F; } }
         }
 
-        // Spawners and Original can spawn a new small (respect 19 cap)
-        if ((b.type==='spawner' || b.type==='original') && balls.length < MAX_BALLS){
+        // spawn small from spawner/original
+        if ((b.type==='spawner' || b.type==='original') && balls.filter(bb=>!bb._dead).length < MAX_BALLS){
           const ang=Math.random()*Math.PI*2, spd=1.6+Math.random()*1.6;
-          balls.push(makeBall({
-            x: b.x + Math.cos(ang)*(b.r+6),
-            y: b.y + Math.sin(ang)*(b.r+6),
-            r: Math.max(5, Math.round(b.r * 0.6)),
-            vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, type:'small'
-          }));
+          balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6), r:Math.max(5,Math.round(b.r*0.6)), vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
           updateBallCount();
         }
-
         break;
       }
     }
-    // Miss
     if (!handled) addScore(-1);
   });
 
