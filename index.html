@@ -7,9 +7,9 @@
 <style>
   :root{
     --ink:#eaf2ff; --ink-dim:#c6d0ea;
-    --panel:rgba(12,16,34,.45); --line:rgba(255,255,255,.12);
-    --accent:#99b7ff; --accent2:#c79bff;
-    --gleam1:#9ff3ff; --gleam2:#73e8e8; --gleam3:#d7e4f2; /* cyan/turquoise/silver */
+    --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
+    --accent:#8fdcff; --accent2:#c79bff;
+    --turq1:#7be9f0; --turq2:#4fd0df; --silver:#dfe9f4;
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
     --shadow:0 18px 40px rgba(0,0,0,.45);
     --danger:#ff4d4d; --pink:#ff8ad6; --gold:rgba(255,220,130,.9);
@@ -20,30 +20,58 @@
     margin:0;color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
+    /* Base galaxy */
     background:
-      /* top gleam overlay */
-      linear-gradient(180deg, rgba(159,243,255,.30) 0%, rgba(115,232,232,.22) 8%, rgba(215,228,242,.16) 14%, rgba(0,0,0,0) 22%),
-      /* galaxy fields */
       radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
       radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
       radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
-      linear-gradient(180deg, #0a0f2c 0%, #12163f 40%, #1c1f54 100%);
+      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
     overflow-x:hidden;
   }
 
-  /* (Removed star layers for a cleaner, faster look) */
+  /* Subtle animated gaseous/flare overlay */
+  .bg-wave, .bg-wave2 {
+    position:fixed; inset:-20% -20% auto -20%;
+    height:70vh; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(65% 80% at 20% 30%, rgba(123,233,240,.30), transparent 65%),
+      radial-gradient(55% 70% at 70% 25%, rgba(79,208,223,.22), transparent 60%),
+      radial-gradient(40% 60% at 50% 60%, rgba(223,233,244,.18), transparent 60%);
+    filter: blur(22px) saturate(120%) brightness(110%);
+    animation: drift 28s ease-in-out infinite;
+  }
+  .bg-wave2{
+    height:60vh;
+    top:0;
+    background:
+      radial-gradient(60% 70% at 35% -10%, rgba(139,226,255,.22), transparent 60%),
+      radial-gradient(55% 65% at 80% 10%, rgba(111,219,240,.24), transparent 60%),
+      radial-gradient(40% 55% at 10% 40%, rgba(215,228,242,.16), transparent 60%);
+    animation: drift2 36s ease-in-out infinite;
+    mix-blend-mode:screen;
+  }
+  @keyframes drift {
+    0%{ transform: translateY(0) translateX(0) scale(1) }
+    50%{ transform: translateY(14px) translateX(-12px) scale(1.03) }
+    100%{ transform: translateY(0) translateX(0) scale(1) }
+  }
+  @keyframes drift2 {
+    0%{ transform: translateY(0) translateX(0) scale(1.02) }
+    50%{ transform: translateY(10px) translateX(10px) scale(1.05) }
+    100%{ transform: translateY(0) translateX(0) scale(1.02) }
+  }
 
-  /* Spinning galaxies kept */
-  .galaxy{position:fixed; pointer-events:none; border-radius:50%; filter:blur(1px) saturate(120%) brightness(1.05); mix-blend-mode:screen; opacity:.35; animation:spin 140s linear infinite}
-  .galaxy.g1{width:540px;height:540px;left:6%;top:10%;background:
-      radial-gradient(closest-side, rgba(85,180,255,.22), transparent 70%),
-      radial-gradient(closest-side, rgba(156,124,255,.20), transparent 40%)}
+  /* Spinning galaxies (subtle) */
+  .galaxy{position:fixed; pointer-events:none; border-radius:50%; filter:blur(1px) saturate(120%) brightness(1.05); mix-blend-mode:screen; opacity:.30; animation:spin 140s linear infinite}
+  .galaxy.g1{width:540px;height:540px;left:6%;top:14%;background:
+      radial-gradient(closest-side, rgba(111,219,240,.22), transparent 70%),
+      radial-gradient(closest-side, rgba(156,124,255,.18), transparent 40%)}
   .galaxy.g2{width:420px;height:420px;right:8%;top:18%;background:
-      radial-gradient(closest-side, rgba(255,170,220,.20), transparent 70%),
-      radial-gradient(closest-side, rgba(85,180,255,.18), transparent 40%);animation-duration:160s;animation-direction:reverse}
+      radial-gradient(closest-side, rgba(255,170,220,.18), transparent 70%),
+      radial-gradient(closest-side, rgba(111,219,240,.18), transparent 40%);animation-duration:160s;animation-direction:reverse}
   .galaxy.g3{width:600px;height:600px;left:50%;bottom:-8%;transform:translateX(-50%);background:
-      radial-gradient(closest-side, rgba(156,124,255,.20), transparent 70%),
-      radial-gradient(closest-side, rgba(255,170,220,.18), transparent 40%);animation-duration:180s}
+      radial-gradient(closest-side, rgba(156,124,255,.18), transparent 70%),
+      radial-gradient(closest-side, rgba(159,243,255,.16), transparent 40%);animation-duration:180s}
   @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
   /* Top bar */
@@ -54,7 +82,7 @@
   .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
-  .btn{cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--ink);}
+  .btn{cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.10);color:var(--ink);}
 
   /* Score */
   .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
@@ -69,8 +97,8 @@
 
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
   .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none;box-shadow:var(--shadow)}
-  .chatbar input::placeholder{color:#bec8e6}
-  .chatbar input:focus{border-color:rgba(160,188,255,.75);box-shadow:0 0 0 3px rgba(153,183,255,.25)}
+  .chatbar input::placeholder{color:#bfe7ff}
+  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
   .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);max-height:42vh;overflow:auto}
   .msg{text-align:left;margin:6px 0;color:#eaf2ff}
   .msg strong{color:#cfe1ff}
@@ -78,7 +106,7 @@
   /* Sections */
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px);box-shadow:var(--shadow)}
   .section h3{margin:0 0 8px;color:#fff}
-  .section p{margin:8px 0 0;color:#cfe1ff}
+  .section p{margin:8px 0 0;color:#cfe9ff}
   .muted{color:#c6d0ea; font-size:13px}
 
   /* Footer */
@@ -94,7 +122,7 @@
   .modal label{display:block; font-size:13px; margin:8px 0 4px; color:#cfe1ff}
   .modal input{width:100%; padding:10px; border:1px solid var(--inputLine); border-radius:10px; background:var(--inputBG); color:#eaf2ff;}
   .modal .row{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
-  .modal button{padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.08); color:var(--ink); cursor:pointer}
+  .modal button{padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.10); color:var(--ink); cursor:pointer}
   .closeX{position:absolute; right:16px; top:12px; cursor:pointer; opacity:.9}
 
   @media (max-width:720px){.nav a{padding:6px 10px}}
@@ -102,7 +130,11 @@
 </head>
 <body>
 
-  <!-- Galaxies (kept), no stars -->
+  <!-- Animated top gaseous overlays -->
+  <div class="bg-wave"></div>
+  <div class="bg-wave2"></div>
+
+  <!-- Subtle galaxies -->
   <div class="galaxy g1"></div><div class="galaxy g2"></div><div class="galaxy g3"></div>
 
   <!-- Top bar -->
@@ -119,7 +151,7 @@
   </header>
 
   <!-- Score -->
-  <div id="scoreHUD" class="score">Score: <b id="score">0</b></div>
+  <div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
 
   <!-- Hero + Chat -->
   <main id="home" class="stage">
@@ -154,11 +186,12 @@
     <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
   </section>
 
-  <!-- Game CTA -->
+  <!-- Game CTA + objective + hotkeys -->
   <section id="game" class="section" aria-labelledby="gameTitle">
     <h3 id="gameTitle">The Game</h3>
     <p>Sign in to save your score, get on the Leaderboard today!</p>
-    <p class="muted">Tip: Spawners become trembling pink blobs. Two blobs make red balls. Some big reds form with a rare black dot—pair two dotted reds for a surprise!</p>
+    <p class="muted"><strong>Objective:</strong> Grow and protect white balls. Spawners → pink blobs → reds → dotted reds → black balls → back to whites. Keep the ecosystem alive!</p>
+    <p class="muted"><strong>Hotkeys:</strong> Space = Pause/Play · Type <em>pause</em>/<em>unpause</em>/<em>resume</em>/<em>continue</em> in chat to control · Type <em>Brosimum</em> to toggle a 19-ball spawn cheat.</p>
   </section>
 
   <!-- Footer -->
@@ -186,9 +219,12 @@
   </div>
 
 <script>
-/* ===== Chat (brand-safe helpers) ===== */
+/* ===== Chat (brand helpers + pause/unpause + Brosimum toggle) ===== */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
+const pausedBadge = document.getElementById('pausedBadge');
+let BROSIUM_BOOST = false;
+let GAME_PAUSED = false;
 function say(role, text){
   const el = document.createElement('div');
   el.className = 'msg';
@@ -196,15 +232,35 @@ function say(role, text){
   logBox.appendChild(el);
   logBox.scrollTop = logBox.scrollHeight;
 }
+function setPaused(v){
+  GAME_PAUSED = !!v;
+  pausedBadge.style.display = GAME_PAUSED ? '' : 'none';
+}
+function togglePause(){ setPaused(!GAME_PAUSED); }
+
 function handleMessage(v){
   const t = (v||'').trim(); if(!t) return; say('You', t);
   const low = t.toLowerCase();
+
+  // Pause / resume controls
+  if (['pause'].includes(low)){ setPaused(true); say('MayaNut','Paused. Type "unpause", "resume", "continue", or press Space to play.'); return; }
+  if (['unpause','resume','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
+
+  // Brosimum cheat toggle
+  if (low === 'brosimum'){
+    BROSIUM_BOOST = !BROSIUM_BOOST;
+    say('MayaNut', BROSIUM_BOOST ? 'Brosimum boost ON — each click fills to 19 white balls.' : 'Brosimum boost OFF.');
+    return;
+  }
+
+  // Domain answers
   const domainTriggers = [
     "domain for sale","is this domain for sale","sell this domain","sell the domain",
     "buy this domain","buy the domain","is the domain for sale","are you selling the domain",
     "is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"
   ];
   if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
+
   if (low.includes('buy') || low.includes('product') || low.includes('shop')) {
     say('MayaNut','Head to the Buy section below for our upcoming products. (Placeholders for now.)');
     document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return;
@@ -216,77 +272,62 @@ function handleMessage(v){
   say('MayaNut', "Tell me what you want and I’ll point you in the right direction.");
 }
 input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ handleMessage(input.value); input.value = ''; }});
+document.addEventListener('keydown', (e)=>{
+  if (e.code === 'Space'){
+    // ignore if typing in the chat box
+    const ae = document.activeElement;
+    if (ae && (ae === input || ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) return;
+    e.preventDefault();
+    togglePause();
+  }
+});
 document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'}); input.focus(); });
 document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
 document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-/* ===== Firebase hooks (paste your config + function URL to go online) ===== */
-const FIREBASE_CONFIG = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
-};
+/* ===== Firebase hooks (fill to enable) ===== */
+const FIREBASE_CONFIG = { apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT_ID.firebaseapp.com", projectId:"YOUR_PROJECT_ID", appId:"YOUR_APP_ID" };
 const SCORE_FN_URL = "https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/submitScore";
-
 window.mnAuth = {
   ready:false, user:null,
   async init(){
     try{
-      const [{ initializeApp }] = await Promise.all([
-        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js")
-      ]);
+      const [{ initializeApp }] = await Promise.all([ import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js") ]);
       const app = initializeApp(FIREBASE_CONFIG);
-
       const [{ getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut },
              { getFirestore, doc, getDoc, setDoc } ] = await Promise.all([
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
       ]);
-
-      this._auth = getAuth(app);
-      this._db = getFirestore(app);
-      this._doc = doc; this._getDoc = getDoc; this._setDoc = setDoc;
-      this._create = createUserWithEmailAndPassword; this._signin = signInWithEmailAndPassword; this._signout = signOut;
-
-      onAuthStateChanged(this._auth, async (u)=>{
-        this.user = u || null;
-        authInfo.textContent = u ? `Signed in as ${u.email}` : `Guest mode. Sign in to save scores.`;
-      });
-      this.ready = true;
-    }catch(e){ console.warn("Firebase offline/disabled.", e); this.ready=false; }
+      this._auth=getAuth(app); this._db=getFirestore(app);
+      this._doc=doc; this._getDoc=getDoc; this._setDoc=setDoc;
+      this._create=createUserWithEmailAndPassword; this._signin=signInWithEmailAndPassword; this._signout=signOut;
+      onAuthStateChanged(this._auth, u=>{ this.user=u||null; authInfo.textContent = u?`Signed in as ${u.email}`:'Guest mode. Sign in to save scores.'; });
+      this.ready=true;
+    }catch(e){ console.warn("Firebase disabled/offline.", e); }
   },
   async signUp(email, pass){ if(!this.ready) return; await this._create(this._auth, email, pass); },
   async signIn(email, pass){ if(!this.ready) return; await this._signin(this._auth, email, pass); },
   async signOut(){ if(!this.ready) return; await this._signout(this._auth); },
-  async submitScore(score, extras={}){
-    try{
-      if (!this.user) return { ok:false, needLogin:true };
-      const token = await this._auth.currentUser.getIdToken(false);
-      const r = await fetch(SCORE_FN_URL, {
-        method:"POST",
-        headers:{ "Content-Type":"application/json", Authorization:`Bearer ${token}` },
-        body: JSON.stringify({ score, sessionStats: extras })
-      });
-      const data = await r.json();
-      if (!r.ok) throw new Error(data?.error||"submit failed");
-      return { ok:true, data };
-    }catch(e){ console.warn("Cloud save failed.", e); return { ok:false, offline:true }; }
-  }
+  async submitScore(score, extras={}){ try{
+    if(!this.user) return {ok:false, needLogin:true};
+    const token = await this._auth.currentUser.getIdToken(false);
+    const r = await fetch(SCORE_FN_URL,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({score,sessionStats:extras})});
+    const data = await r.json(); if(!r.ok) throw new Error(data?.error||"submit failed"); return {ok:true,data};
+  }catch(e){ console.warn("Cloud save failed.", e); return {ok:false, offline:true};}}
 };
 mnAuth.init();
 
 /* Auth UI */
-const accountBtn = document.getElementById('accountBtn');
-const authModalBack = document.getElementById('authModalBack');
-const closeAuth = document.getElementById('closeAuth');
-const signUpBtn = document.getElementById('signUpBtn');
-const signInBtn = document.getElementById('signInBtn');
-const signOutBtn = document.getElementById('signOutBtn');
-const authEmail = document.getElementById('authEmail');
-const authPass = document.getElementById('authPass');
-const authInfo  = document.getElementById('authInfo');
-
+const accountBtn=document.getElementById('accountBtn');
+const authModalBack=document.getElementById('authModalBack');
+const closeAuth=document.getElementById('closeAuth');
+const signUpBtn=document.getElementById('signUpBtn');
+const signInBtn=document.getElementById('signInBtn');
+const signOutBtn=document.getElementById('signOutBtn');
+const authEmail=document.getElementById('authEmail');
+const authPass=document.getElementById('authPass');
+const authInfo=document.getElementById('authInfo');
 accountBtn.addEventListener('click', ()=>{ authModalBack.style.display='flex'; authModalBack.setAttribute('aria-hidden','false'); });
 closeAuth.addEventListener('click', ()=>{ authModalBack.style.display='none'; authModalBack.setAttribute('aria-hidden','true'); });
 authModalBack.addEventListener('click', (e)=>{ if(e.target===authModalBack){ closeAuth.click(); }});
@@ -294,7 +335,7 @@ signUpBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signUp(authEma
 signInBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signIn(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Signed in."; }catch(e){ authInfo.textContent="Sign in failed: "+e.message; }});
 signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); authInfo.textContent="Signed out."; }catch(e){ authInfo.textContent="Error: "+e.message; }});
 
-/* ===== Game engine: 19 cap, spawner→blob→reds, dotted reds, black balls, cyclic recovery ===== */
+/* ===== Game engine (pause/resume + Brosimum boost + existing rules) ===== */
 (function(){
   const scoreEl = document.getElementById('score');
   const ballCountEl = document.getElementById('ballCount');
@@ -410,10 +451,7 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     if (ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
   }
 
-  function randomDottedChance(){ // 1 / N, N ∈ [19,44]
-    const N = Math.floor(Math.random()*(44-19+1)) + 19;
-    return Math.random() < (1/N);
-  }
+  function randomDottedChance(){ const N = Math.floor(Math.random()*(44-19+1)) + 19; return Math.random() < (1/N); }
 
   function handleBallVsBall(i,j, noWhitesMode){
     const a=balls[i], b=balls[j];
@@ -422,12 +460,12 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     const dist = Math.hypot(dx,dy);
     if (dist > a.r + b.r) return;
 
-    // Black interactions first (they're powerful)
+    // Black interactions
     if (a.type==='blackBig' || b.type==='blackBig'){
       let black = a.type==='blackBig'?a:b;
       let other = a.type==='blackBig'?b:a;
       if (other.type==='redSmall'){ other._dead=true; return; }
-      if (other.type==='blackBig'){ // black vs black -> spawn small whites (cycle reset)
+      if (other.type==='blackBig'){
         a._dead=true; b._dead=true;
         const spawn=Math.min(3, MAX_BALLS - balls.filter(bb=>!bb._dead).length);
         for(let k=0;k<spawn;k++){
@@ -436,12 +474,10 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
         }
         return;
       }
-      // black vs white big (spawner/original/blob/small): bounce (don’t delete everything)
-      // mild knockback
       other.vx *= -0.9; other.vy *= -0.9; return;
     }
 
-    // Dotted big reds special merge: two dotted collide -> 50/50 big red or big black
+    // Two dotted big reds → 50/50 big red / big black
     if ((a.type==='redBigDot' && b.type==='redBigDot')){
       a._dead=true; b._dead=true;
       const makeBlack = Math.random() < 0.5;
@@ -450,19 +486,15 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
       return;
     }
 
-    // Red vs Red general (in noWhitesMode, red+red can drop small whites)
+    // Red vs Red (and red → seed if no whites)
     if ((a.type.startsWith('red') && b.type.startsWith('red'))){
-      // small vs small -> one dies
       if (a.type==='redSmall' && b.type==='redSmall'){
         (Math.random()<0.5?a:b)._dead = true;
       } else if ((a.type==='redBig' || a.type==='redBigDot') && (b.type==='redBig' || b.type==='redBigDot')){
-        // gentle slow-down bounce
         a.vx*=0.9; a.vy*=0.9; b.vx*=0.9; b.vy*=0.9;
       } else {
-        // big vs small -> small dies
         (a.type==='redSmall'?a:b)._dead = true;
       }
-      // If no whites left, a portion of red-red impacts shed a white seed
       if (noWhitesMode && balls.filter(bb=>!bb._dead).length < MAX_BALLS && Math.random()<0.35){
         const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2, ang=Math.random()*Math.PI*2, sp=1.5+Math.random();
         balls.push(makeBall({ x:cx, y:cy, r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
@@ -474,28 +506,22 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     if (a.type.startsWith('red') || b.type.startsWith('red')){
       let red = a.type.startsWith('red')?a:b;
       let w   = a.type.startsWith('red')?b:a;
-
       if (red.type==='redSmall'){
-        if (w.type==='spawner' || w.type==='original'){
-          // small red dies on spawners/originals (resilience)
-          red._dead = true; return;
-        }
+        if (w.type==='spawner' || w.type==='original'){ red._dead = true; return; }
         if (w.type==='small' || w.type==='blob'){
-          // eats white → becomes big red (maybe dotted)
           w._dead = true;
           red.type = randomDottedChance() ? 'redBigDot' : 'redBig';
           red.r = Math.max(red.r, 10.5);
           red.vx*=0.95; red.vy*=0.95;
           return;
         }
-      } else { // big red or dotted hits any white → delete white
+      } else {
         if (w.type!=='blackBig'){ w._dead = true; }
-        red.vx*=0.98; red.vy*=0.98;
-        return;
+        red.vx*=0.98; red.vy*=0.98; return;
       }
     }
 
-    // Spawner + Spawner -> Pink blob
+    // Spawner + Spawner -> blob
     if ((a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original')){
       const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
       const nr = Math.max(10, Math.sqrt(a.r*a.r + b.r*b.r));
@@ -507,7 +533,7 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
       return;
     }
 
-    // Blob + Blob -> spawn small reds (respect RED_MAX)
+    // Blob + Blob -> spawn small reds (cap 6)
     if (a.type==='blob' && b.type==='blob'){
       const allowance = Math.max(0, RED_MAX - redsCount());
       const spawn = Math.min(3, allowance);
@@ -551,7 +577,6 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     }
   }
 
-  // Draw
   function drawBall(b){
     let sx=1, sy=1;
     if (b.squashTimer>0){ const t=b.squashTimer/8, amt=0.35*Math.sin(t*Math.PI); if(b.squashAxis==='x'){sx=1+amt;sy=1-amt;} else {sy=1+amt;sx=1-amt;} }
@@ -576,104 +601,109 @@ signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); au
     if (b.type==='blackBig') core='#111111';
     ctx.fillStyle=core; ctx.fill();
 
-    // dotted red center
     if (b.type==='redBigDot'){
       ctx.beginPath(); ctx.arc(0,0, Math.max(2.5, b.r*0.35), 0, Math.PI*2);
       ctx.fillStyle='#0c0c0c'; ctx.fill();
     }
 
-    // rings: original/spawner accents
     if (b.type==='original'){
-      ctx.lineWidth=2; ctx.strokeStyle='rgba(153,183,255,.7)';
+      ctx.lineWidth=2; ctx.strokeStyle='rgba(143,220,255,.7)';
       ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
     } else if (b.type==='spawner'){
       ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.9)';
       ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
     }
-
     ctx.restore();
   }
 
-  // Loop
+  // MAIN LOOP with PAUSE
   function step(){
-    const W=window.innerWidth, H=window.innerHeight;
-    const rects=getRects();
-    const noWhitesMode = whitesCount()===0;
+    if (!GAME_PAUSED){
+      const W=window.innerWidth, H=window.innerHeight;
+      const rects=getRects();
+      const noWhitesMode = whitesCount()===0;
 
-    for(const b of balls){
-      if (b._dead) continue;
-      b.x+=b.vx; b.y+=b.vy;
-      if (b.type==='original'){ // gradual accel
-        const speed=Math.hypot(b.vx,b.vy), cap=(b.hasFast?9:4), accel=0.002;
-        const ns=Math.min(cap, speed*(1+accel)); if(ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
+      for(const b of balls){
+        if (b._dead) continue;
+        b.x+=b.vx; b.y+=b.vy;
+        if (b.type==='original') {
+          const speed=Math.hypot(b.vx,b.vy), cap=(b.hasFast?9:4), accel=0.002;
+          const ns=Math.min(cap, speed*(1+accel)); if(ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
+        }
+        if (b.type.startsWith('red') && Math.random()<(noWhitesMode?0.035:0.02)){
+          b.vx += (Math.random()-.5)*0.6; b.vy += (Math.random()-.5)*0.6;
+        }
+        antiOrbit(b);
+        bounceWall(b,W,H);
+        for(const R of rects) collideWithRect(b,R);
+        if (b.squashTimer>0) b.squashTimer--;
+        if (b.jellyTimer>0)  b.jellyTimer--;
+        if (b.balloonTimer>0) b.balloonTimer--;
       }
-      // Reds add randomness; in no-whites mode, a bit more drift to mix
-      if (b.type.startsWith('red') && Math.random()<(noWhitesMode?0.035:0.02)){
-        b.vx += (Math.random()-.5)*0.6; b.vy += (Math.random()-.5)*0.6;
-      }
 
-      // anti orbit
-      antiOrbit(b);
+      // collisions
+      const grid=buildGrid();
+      const pairs=nearbyPairs(grid);
+      for(const [i,j] of pairs){ handleBallVsBall(i,j, whitesCount()===0); }
 
-      bounceWall(b,W,H);
-      for(const R of rects) collideWithRect(b,R);
-
-      if (b.squashTimer>0) b.squashTimer--;
-      if (b.jellyTimer>0)  b.jellyTimer--;
-      if (b.balloonTimer>0) b.balloonTimer--;
+      // cleanup
+      for(let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
     }
 
-    // collisions
-    const grid=buildGrid();
-    const pairs=nearbyPairs(grid);
-    for(const [i,j] of pairs){ handleBallVsBall(i,j, whitesCount()===0); }
-
-    // cleanup
-    for(let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
-
-    // draw
+    // draw even when paused (so badge, background still visible)
     ctx.clearRect(0,0,canvas.width,canvas.height);
     for(const b of balls) drawBall(b);
-
     updateBallCount();
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 
-  // Click rules: +1 if ball, -1 if miss; spawner/original can spawn small (cap 19)
   function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy)<=b.r+5; }
 
+  // Global click: scoring + spawning + Brosimum boost
   document.addEventListener('click',(e)=>{
     if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
+
     const x=e.clientX, y=e.clientY;
     let handled=false;
-    for (const b of balls){
-      if (b._dead) continue;
-      if (hitBallAt(x,y,b)){
-        addScore(1); handled=true;
-        const dx=b.x-x, dy=b.y-y, L=Math.max(1,Math.hypot(dx,dy));
-        let px=(dx/L)*4.8, py=(dy/L)*4.8;
-        const cap=(b.type==='original' && b.hasFast)?9:4;
-        const sp=Math.hypot(px,py), f=Math.min(cap,sp)/(sp||1);
-        b.vx = px*f; b.vy = py*f;
 
-        // original tiering
-        if (b.type==='original'){
-          if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
-          b._clicks=(b._clicks||0)+1;
-          if (b._clicks>=15){ b.hasFast=true; const s=Math.hypot(b.vx,b.vy); if (s<7){ const F=7/(s||1); b.vx*=F; b.vy*=F; } }
-        }
-
-        // spawn small from spawner/original
-        if ((b.type==='spawner' || b.type==='original') && balls.filter(bb=>!bb._dead).length < MAX_BALLS){
-          const ang=Math.random()*Math.PI*2, spd=1.6+Math.random()*1.6;
-          balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6), r:Math.max(5,Math.round(b.r*0.6)), vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
-          updateBallCount();
-        }
-        break;
+    // Brosimum ON: fill to 19 white balls on ANY click (ignores pause for the fill)
+    if (BROSIUM_BOOST){
+      let alive = balls.filter(bb=>!bb._dead).length;
+      while (alive < MAX_BALLS){
+        const ang=Math.random()*Math.PI*2, spd=1.2+Math.random()*1.6;
+        balls.push(makeBall({ x:x+Math.cos(ang)*8, y:y+Math.sin(ang)*8, r:6.5, vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
+        alive++;
       }
+      updateBallCount();
     }
-    if (!handled) addScore(-1);
+
+    if (!GAME_PAUSED){
+      for (const b of balls){
+        if (b._dead) continue;
+        if (hitBallAt(x,y,b)){
+          addScore(1); handled=true;
+          const dx=b.x-x, dy=b.y-y, L=Math.max(1,Math.hypot(dx,dy));
+          let px=(dx/L)*4.8, py=(dy/L)*4.8;
+          const cap=(b.type==='original' && b.hasFast)?9:4;
+          const sp=Math.hypot(px,py), f=Math.min(cap,sp)/(sp||1);
+          b.vx = px*f; b.vy = py*f;
+
+          if (b.type==='original'){
+            if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
+            b._clicks=(b._clicks||0)+1;
+            if (b._clicks>=15){ b.hasFast=true; const s=Math.hypot(b.vx,b.vy); if (s<7){ const F=7/(s||1); b.vx*=F; b.vy*=F; } }
+          }
+          if ((b.type==='spawner' || b.type==='original') && balls.filter(bb=>!bb._dead).length < MAX_BALLS){
+            const ang=Math.random()*Math.PI*2, spd=1.6+Math.random()*1.6;
+            balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6), r:Math.max(5,Math.round(b.r*0.6)), vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
+            updateBallCount();
+          }
+          break;
+        }
+      }
+      if (!handled) addScore(-1);
+    }
   });
 
 })();
