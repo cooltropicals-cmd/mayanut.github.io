@@ -6,116 +6,85 @@
 <title>MayaNut</title>
 <style>
   :root{
-    --ink:#eaf2ff; --ink-dim:#c6d0ea;
-    --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
+    --ink:#eef3ff;
+    --panel:rgba(12,16,34,.55);
+    --line:rgba(255,255,255,.14);
     --accent:#8fdcff; --accent2:#c79bff;
-    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-    --gold1:#ffec99; --gold2:#ffd65a; --gold3:#ffb800;
-    --goldOutline:#0c0c0c;
-    --waterTop:#66ccff; --waterMid:#2a71ff; --waterBottom:#1e3a8a;
+    --gold:#f7d27a;         /* lighter, shinier gold */
+    --gold-deep:#d9b65a;    /* darker edge for outline */
+    --water:#bfefff;        /* clear light blue */
   }
-
   html,body{height:100%}
   body{
-    margin:0;color:var(--ink);
+    margin:0; color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
-    /* Tropical dusk base */
     background:
-      radial-gradient(1000px 600px at 15% -10%, rgba(255,176,113,.25), transparent 60%),
-      radial-gradient(1100px 680px at 85% 0%, rgba(255,128,197,.20), transparent 65%),
-      radial-gradient(900px 500px at 50% 120%, rgba(101,178,255,.18), transparent 60%),
-      linear-gradient(180deg, #09122a 0%, #132154 40%, #1a2a6b 100%);
+      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.30), transparent 60%),
+      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.24), transparent 65%),
+      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.20), transparent 60%),
+      linear-gradient(180deg, #101a33 0%, #15204a 40%, #1b2b63 100%);
     overflow-x:hidden;
   }
 
-  /* soft sunrise glow at the very top */
-  .top-glow{
-    position:fixed; inset:0 0 auto 0; height:42vh; pointer-events:none; z-index:-1;
-    background:
-      radial-gradient(60% 60% at 50% 0%, rgba(255,206,120,.28), transparent 60%),
-      radial-gradient(45% 45% at 75% 5%, rgba(255,160,227,.22), transparent 60%),
-      radial-gradient(55% 60% at 25% 8%, rgba(126,230,255,.22), transparent 60%);
-    filter: blur(18px) saturate(115%);
-  }
-
   /* Top bar */
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
   .brand{
-    font-weight:900; letter-spacing:.3px; display:flex; align-items:flex-end; gap:6px; user-select:none;
-    /* Shiny gold gradient with outline */
-    background:linear-gradient(180deg,var(--gold1),var(--gold2) 40%,var(--gold3) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    -webkit-text-stroke: 1.2px var(--goldOutline);
-    text-shadow:
-      0 1px 0 rgba(0,0,0,.35),
-      0 6px 18px rgba(0,0,0,.35);
-    font-size: 20px;
+    font-weight:900; letter-spacing:.2px; display:flex; align-items:center; gap:6px; user-select:none;
+    -webkit-text-stroke:1px #000; color:transparent;
+    background:linear-gradient(180deg, #fff6bf 0%, var(--gold) 45%, var(--gold-deep) 100%);
+    -webkit-background-clip:text; background-clip:text;
+    text-shadow:0 2px 6px rgba(0,0,0,.3);
   }
-  .brand small{
-    font-size:12px; line-height:1; margin-left:2px;
-    background:linear-gradient(180deg,var(--gold1),var(--gold2),var(--gold3));
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    -webkit-text-stroke: 1px var(--goldOutline);
+  .brand small{font-size:11px; margin-left:2px; display:inline-block;
+    color:transparent; -webkit-text-stroke:1px #000;
+    background:linear-gradient(180deg,#fff6bf 0%, var(--gold) 45%, var(--gold-deep) 100%);
+    -webkit-background-clip:text; background-clip:text;
   }
 
   .nav{display:flex;gap:18px;align-items:center}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
-  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
+  .nav a:hover{border:1px solid var(--line);background:rgba(255,255,255,.06)}
 
-  /* Hero + chat (kept minimal) */
-  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
-  .panel{width:min(900px,92vw);text-align:center}
-  .title{font-weight:1000;font-size:clamp(44px,6vw,72px);line-height:1.05;letter-spacing:.6px;margin:6px 0 14px}
-  .title .gold{
-    background:linear-gradient(180deg,var(--gold1),var(--gold2) 45%,var(--gold3) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    -webkit-text-stroke: 1.5px var(--goldOutline);
-    text-shadow: 0 10px 28px rgba(0,0,0,.35);
-  }
-  .title small{
-    font-size:.35em; vertical-align:super; margin-left:4px;
-    background:linear-gradient(180deg,var(--gold1),var(--gold2),var(--gold3));
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    -webkit-text-stroke: 1px var(--goldOutline);
-  }
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
+  .panel{width:min(960px,92vw);text-align:center}
+
+  /* Hero logo sits above the chat bar */
+  .heroLogo{ width:min(560px,80vw); margin:6px auto 10px; display:block; }
 
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
-  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
-  .chatbar input::placeholder{color:#bfe7ff}
+  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:12px;outline:none}
+  .chatbar input::placeholder{color:#cfe3ff}
   .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
 
-  /* Sections */
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
+  .msg strong{color:#cfe1ff}
+
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
   .section h3{margin:0 0 8px;color:#fff}
   .section p{margin:8px 0 0;color:#cfe9ff}
 
-  /* Footer with Instagram icon */
-  footer{
-    width:100%;color:#c9d3ef;border-top:1px solid var(--line);
-    background:rgba(10,14,34,.55);backdrop-filter:blur(6px);
-    display:flex; align-items:center; justify-content:center; gap:12px;
-    font-size:13px; padding:12px 8px; position:relative;
-  }
-  .ig-link{
-    position:absolute; right:14px; top:50%; transform:translateY(-50%);
-    display:inline-flex; align-items:center; justify-content:center;
-    width:22px; height:22px; border-radius:6px;
-  }
-  .ig-link svg{transition:transform .2s ease, filter .2s ease; filter:drop-shadow(0 0 0 rgba(255,255,255,0))}
-  .ig-link:hover svg{transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .ig{display:inline-block;width:16px;height:16px;border-radius:4px;background:
+      radial-gradient(circle at 30% 105%, #fdf497 0%, #fdf497 5%, rgba(255,220,90,.9) 45%),
+      radial-gradient(circle at 90% 10%, #fcedf0 0%, #fcedf0 20%, transparent 40%),
+      linear-gradient(45deg,#405de6,#5851db,#833ab4,#c13584,#e1306c,#fd1d1d);
+    box-shadow:0 0 0 1px rgba(255,255,255,.35) inset}
+  .ig:after{content:"";display:block;width:8px;height:8px;border:2px solid #fff;border-radius:50%;position:relative;top:4px;left:4px}
+  .ig:before{content:"";position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;top:3px;left:10px}
 
-  /* Canvas for ambient effect */
-  #fxLayer{position:fixed; inset:0; z-index:0; pointer-events:none}
+  /* Canvas for background dust/drops/water */
+  #fx{position:fixed; inset:0; z-index:0; pointer-events:none}
+  /* Put content above effects */
+  .content{position:relative; z-index:1}
 </style>
 </head>
 <body>
 
-<div class="top-glow"></div>
-
-<header class="topbar" role="banner">
+<header class="topbar">
   <div class="brand">MayaNut<small>™</small></div>
-  <nav class="nav" aria-label="Primary">
+  <nav class="nav">
     <a href="#home" id="navHome">MayaNut</a>
     <a href="#buy"  id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
@@ -123,278 +92,319 @@
   </nav>
 </header>
 
-<main id="home" class="stage">
-  <div class="panel">
-    <h1 class="title"><span class="gold">MayaNut</span><small>™</small></h1>
-    <div class="chatbar" role="search">
-      <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
+<canvas id="fx"></canvas>
+
+<div class="content">
+  <main id="home" class="stage">
+    <div class="panel">
+      <!-- GOLD SVG LOGO (transparent bg) with Brosimum canopy on the "t" -->
+      <svg class="heroLogo" viewBox="0 0 1200 280" aria-label="MayaNut logo">
+        <defs>
+          <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="#fff6bf"/>
+            <stop offset="50%" stop-color="#f7d27a"/>
+            <stop offset="100%" stop-color="#d9b65a"/>
+          </linearGradient>
+          <filter id="logoShadow" x="-10%" y="-20%" width="120%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,.45)"/>
+          </filter>
+        </defs>
+        <!-- outline -->
+        <text x="50" y="190" font-family="Poppins, Inter, system-ui, sans-serif"
+              font-weight="900" font-size="180"
+              fill="url(#goldGrad)" stroke="#000" stroke-width="8" filter="url(#logoShadow)">
+          MayaNu
+        </text>
+        <!-- draw the 't' stem separate so we can add canopy -->
+        <text x="950" y="190" font-family="Poppins, Inter, system-ui, sans-serif"
+              font-weight="900" font-size="180"
+              fill="url(#goldGrad)" stroke="#000" stroke-width="8" filter="url(#logoShadow)">
+          t
+        </text>
+        <!-- canopy atop the 't' (simple rounded tree crown) -->
+        <g transform="translate(1000,65)">
+          <path d="M-40,20 C-90,20 -95,-30 -60,-50 C-20,-75 20,-75 60,-50 C95,-30 90,20 40,20 Z"
+                fill="#33b56b" stroke="#0b3d22" stroke-width="6" filter="url(#logoShadow)"/>
+          <!-- a couple of simple leaf shines -->
+          <ellipse cx="-10" cy="-20" rx="20" ry="10" fill="rgba(255,255,255,.25)"/>
+        </g>
+        <!-- TM -->
+        <text x="1115" y="95" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="44"
+              fill="url(#goldGrad)" stroke="#000" stroke-width="5" filter="url(#logoShadow)">™</text>
+      </svg>
+
+      <div class="chatbar">
+        <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
+      </div>
+      <div class="log" id="chatLog" aria-live="polite"></div>
     </div>
-    <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
-  </div>
-</main>
+  </main>
 
-<section id="buy" class="section" aria-labelledby="buyTitle">
-  <h3 id="buyTitle">Buy</h3>
-  <p>Search Through Our Wonderful Products — real items coming soon.</p>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px">
-    <a href="#home" style="text-decoration:none;">
-      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
-        Product A (placeholder)
-      </div>
-    </a>
-    <a href="#home" style="text-decoration:none;">
-      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
-        Product B (placeholder)
-      </div>
-    </a>
-    <a href="#home" style="text-decoration:none;">
-      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
-        Product C (placeholder)
-      </div>
-    </a>
-  </div>
-</section>
+  <section id="buy" class="section" aria-labelledby="buyTitle">
+    <h3 id="buyTitle">Buy</h3>
+    <p>Search Through Our Wonderful Products — real items coming soon.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px">
+      <a href="#home" style="display:block;padding:18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);text-decoration:none;color:var(--ink);text-align:center">MayaNut Flour — placeholder</a>
+      <a href="#home" style="display:block;padding:18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);text-decoration:none;color:var(--ink);text-align:center">MayaNut Drink — placeholder</a>
+      <a href="#home" style="display:block;padding:18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);text-decoration:none;color:var(--ink);text-align:center">MayaNut Snacks — placeholder</a>
+    </div>
+  </section>
 
-<section id="about" class="section" aria-labelledby="aboutTitle">
-  <h3 id="aboutTitle">About</h3>
-  <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
-    <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
-    farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
-  <p><strong>August Kokus is the current CEO of MayaNut™.</strong></p>
-</section>
+  <section id="about" class="section" aria-labelledby="aboutTitle">
+    <h3 id="aboutTitle">About</h3>
+    <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
+      <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
+      farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
+    <p><strong>August Kokus</strong> is the current CEO of MayaNut™.</p>
+  </section>
 
-<footer>
-  <span>© 2025 MayaNut LLC. All rights reserved.</span>
-  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <!-- simple white Instagram glyph -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
-    </svg>
-  </a>
-</footer>
-
-<!-- Ambient FX canvas -->
-<canvas id="fxLayer"></canvas>
+  <footer>
+    © 2025 MayaNut LLC. All rights reserved.
+    <a class="ig" href="https://instagram.com/mayanut.co" title="@mayanut.co" target="_blank" rel="noopener" style="position:relative"></a>
+  </footer>
+</div>
 
 <script>
-/* ========= Simple helper nav (smooth scroll) ========= */
-document.getElementById('navHome').addEventListener('click', e=>{e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'});});
-document.getElementById('navBuy').addEventListener('click',  e=>{e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'});});
-document.getElementById('navAbout').addEventListener('click',e=>{e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'});});
+/* ========= Simple assistant replies (unchanged behavior) ========= */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+function say(role, text){
+  const el=document.createElement('div'); el.className='msg';
+  el.innerHTML=`<strong>${role}:</strong> ${text}`;
+  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
+}
+input.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const t=input.value.trim(); if(!t) return; say('You',t); input.value='';
+    const low=t.toLowerCase();
+    if (low.includes('buy')||low.includes('product')){ say('MayaNut','Head to the Buy section below (placeholders for now).'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
+    if (low.includes('about')||low.includes('company')){ say('MayaNut','See the About section for our mission and leadership.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
+    say('MayaNut',"Tell me what you want and I’ll point you in the right direction.");
+  }
+});
+['navHome','navBuy','navAbout'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('click', e=>{ e.preventDefault(); document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'}); });
+});
 
-/* ========= Ambient “dust → merge → raindrop → water” effect =========
-   - Dust rises from the bottom (denser & whiter near the bottom).
-   - In the top half, nearby dust specks merge; when merged mass >= 5,
-     the particle turns into a light-blue raindrop.
-   - Raindrops fall; when they hit the current water surface (not page bottom),
-     they splash and slightly raise the water level.
-   - Water level rises *very slowly* over time; visually a calm gradient
-     with a gentle sine-wave surface.
-   - Entire layer is non-interactive (pointer-events:none).
-*/
+/* ========= Background FX: rising mist → merging drops → pooled clear water with ripples ========= */
 (function(){
-  const canvas = document.getElementById('fxLayer');
-  const ctx = canvas.getContext('2d');
+  const canvas=document.getElementById('fx');
+  const ctx=canvas.getContext('2d');
 
-  let W=innerWidth, H=innerHeight, DPR=Math.min(2, devicePixelRatio||1);
   function resize(){
-    W=innerWidth; H=innerHeight; DPR=Math.min(2, devicePixelRatio||1);
-    canvas.style.width=W+'px'; canvas.style.height=H+'px';
-    canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
+    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    canvas.style.width=innerWidth+'px';
+    canvas.style.height=innerHeight+'px';
+    canvas.width=Math.round(innerWidth*dpr);
+    canvas.height=Math.round(innerHeight*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
   }
   resize(); addEventListener('resize', resize);
 
-  // Particles
-  const DUST_MAX = 260;     // cap dust for performance
-  const DROP_MAX = 60;
-  const dust = [];
-  const drops = [];
-  const ripples = [];       // splash rings on water surface
+  // ----- particles (mist & drops) -----
+  const MIST_COUNT = 120;
+  const mist=[];  // tiny white specks rising
+  const drops=[]; // falling water drops (merge mid-air & at surface)
 
-  // Water
-  let waterHeight = H*0.06; // start with a shallow film
-  let t = 0;
+  function spawnMist(){
+    return {x:Math.random()*innerWidth, y:innerHeight + Math.random()*60, r:1+Math.random()*1.2, vy:-(0.15+Math.random()*0.25), alpha:0.6+Math.random()*0.3};
+  }
+  for(let i=0;i<MIST_COUNT;i++) mist.push(spawnMist());
 
-  // Create dust speck
-  function newDust(x, y, mass=1){
-    const r = 0.8 + Math.min(4, mass)*0.4;
-    const vy = - (0.25 + Math.random()*0.35) * (1/(1+mass*0.12)); // slower as it gets heavier
-    const vx = (Math.random()*0.4-0.2);
-    return {x, y, vx, vy, mass, r, type:'dust'};
+  function spawnDrop(x,y,area){ // area ~ r^2
+    const r=Math.sqrt(Math.max(6, area))/2.2; // keep visually modest
+    const vx=(Math.random()-.5)*0.6, vy=1.2+Math.random()*0.6;
+    return {x,y,r,vx,vy};
   }
 
-  // Create droplet from a merged dust
-  function newDrop(x, y, mass){
-    const r = Math.min(8, 2 + mass*0.6);
-    return {x, y, vx:(Math.random()*0.6-0.3), vy:0.3 + Math.random()*0.4, r, type:'drop'};
-  }
-
-  // Start with a white haze near the bottom
-  function seedDust(){
-    while (dust.length < DUST_MAX){
-      const y = H - waterHeight - Math.random()*H*0.3;
-      const x = Math.random()*W;
-      dust.push(newDust(x,y,1));
-    }
-  }
-  seedDust();
-
-  // Merge logic for top half
-  function tryMerge(i,j){
-    const a=dust[i], b=dust[j];
-    if (!a || !b) return;
-    const dx=b.x-a.x, dy=b.y-a.y, d2=dx*dx+dy*dy;
-    const maxR = (a.r+b.r)+6;
-    if (d2 <= maxR*maxR && a.y < H*0.5 && b.y < H*0.5){
-      // merge b into a
-      a.mass += b.mass;
-      a.r = 0.8 + Math.min(4, a.mass)*0.4;
-      // keep position as weighted average
-      a.x = (a.x*a.mass + b.x*b.mass)/(a.mass + b.mass);
-      a.y = (a.y*a.mass + b.y*b.mass)/(a.mass + b.mass);
-      // tiny upward nudge
-      a.vy -= 0.02;
-      dust.splice(j,1);
-      // if heavy enough, turn into a raindrop
-      if (a.mass >= 5){
-        drops.push(newDrop(a.x, a.y, a.mass));
-        dust.splice(i,1);
+  // Mist fusion → drop creation near mid/top
+  function maybeMistFuse(m){
+    // when mist enters top half, chance to fuse with neighbors
+    if (m.y < innerHeight*0.48){
+      // quick neighbor pick
+      const k = Math.floor(Math.random()*5)+3;
+      for(let i=0;i<k;i++){
+        const n = mist[(Math.random()*mist.length)|0];
+        const dx=n.x - m.x, dy=n.y - m.y, d2=dx*dx+dy*dy;
+        if (d2 < 14){ // close enough → make a drop
+          // remove a few mists and create one drop
+          const cx=(m.x+n.x)/2, cy=(m.y+n.y)/2;
+          drops.push(spawnDrop(cx, cy, 70));
+          m.y = innerHeight + 40; n.y = innerHeight + 40; // recycle
+          break;
+        }
       }
     }
   }
 
-  // Surface ripple
-  function addRipple(x){
-    ripples.push({x, r:2, a:1});
+  // ----- pooled water state (slow rise) -----
+  let waterVolume = 0;                 // increases as drops merge
+  const WATER_PER_AREA = 0.0025;       // controls rise speed (smaller = slower)
+  const baseWaveAmp = 6;               // gentle surface waves
+  const ripples=[]; // {x,t} waves from clicks
+
+  // Carve water around obstacles (logo, chat, log, sections, topbar)
+  function obstacles(){
+    const ids=['home','buy','about']; // we’ll carve around key blocks + topbar + hero SVG + chat + log
+    const rects=[];
+    const topbar=document.querySelector('.topbar'); if(topbar){ const r=topbar.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:10}); }
+    const hero=document.querySelector('.heroLogo'); if(hero){ const r=hero.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:18}); }
+    const chat=document.getElementById('chatInput'); if(chat){ const r=chat.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:12}); }
+    const log=document.getElementById('chatLog'); if(log){ const r=log.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:14}); }
+    ids.forEach(id=>{ const el=document.getElementById(id); if(!el) return;
+      const r=el.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:16});
+    });
+    return rects;
   }
+
+  function roundRectPath(r){ // {x,y,w,h,rad}
+    const rr = Math.min(r.rad, Math.min(r.w,r.h)/2);
+    ctx.beginPath();
+    ctx.moveTo(r.x+rr, r.y);
+    ctx.lineTo(r.x+r.w-rr, r.y);
+    ctx.quadraticCurveTo(r.x+r.w, r.y, r.x+r.w, r.y+rr);
+    ctx.lineTo(r.x+r.w, r.y+r.h-rr);
+    ctx.quadraticCurveTo(r.x+r.w, r.y+r.h, r.x+r.w-rr, r.y+r.h);
+    ctx.lineTo(r.x+rr, r.y+r.h);
+    ctx.quadraticCurveTo(r.x, r.y+r.h, r.x, r.y+r.h-rr);
+    ctx.lineTo(r.x, r.y+rr);
+    ctx.quadraticCurveTo(r.x, r.y, r.x+rr, r.y);
+    ctx.closePath();
+  }
+
+  // Click → ripple if clicking the pooled water
+  document.addEventListener('click', (e)=>{
+    const x=e.clientX, y=e.clientY;
+    const h = Math.min(innerHeight*0.9, waterVolume); // current flat level before waves
+    const surfaceY = innerHeight - h;
+    if (y >= surfaceY-6){ ripples.push({x, t:0}); }
+  });
 
   function step(){
-    t += 0.016;
-
-    // very slow “evaporation/condensation” cycle: water rises gently
-    waterHeight += 0.002;               // slow rise
-    if (waterHeight > H*0.45) waterHeight = H*0.45; // cap so we still see the page
-
-    const surfaceY = H - waterHeight;
-
-    // Update dust
-    for (let i = dust.length-1; i>=0; i--){
-      const p = dust[i];
-      p.x += p.vx + Math.sin((p.y+t)*0.02)*0.02; // subtle breeze
-      p.y += p.vy;
-      // wrap horizontally a bit
-      if (p.x < -10) p.x = W+10;
-      if (p.x > W+10) p.x = -10;
-
-      // if dust rises above very top, recycle near bottom
-      if (p.y < -20){
-        p.x = Math.random()*W;
-        p.y = surfaceY + Math.random()*H*0.3;
-        p.mass = 1; p.r = 1.2; p.vy = - (0.25 + Math.random()*0.35);
+    // mist
+    for(const m of mist){
+      m.y += m.vy; m.x += (Math.random()-.5)*0.2;
+      if (m.y < innerHeight*0.5 && Math.random()<0.03) maybeMistFuse(m);
+      if (m.y < -20 || m.x<-40 || m.x>innerWidth+40){ // recycle top/side escapes
+        Object.assign(m, spawnMist());
       }
     }
 
-    // Merge pass (coarse: sample neighbors in a simple grid-ish way)
-    // To keep it cheap, check every nth dust against a few following ones
-    for (let i=0;i<dust.length;i+=3){
-      const a=dust[i]; if (!a) continue;
-      for (let j=i+1;j<Math.min(i+6, dust.length);j++){
-        tryMerge(i,j);
+    // drops (fall + merge mid-air)
+    for(let i=0;i<drops.length;i++){
+      const d=drops[i];
+      d.x += d.vx; d.y += d.vy; d.vy += 0.01; // tiny gravity
+      // merge mid-air (area preserving)
+      for(let j=i+1;j<drops.length;j++){
+        const e=drops[j]; if(!e) continue;
+        const dx=e.x-d.x, dy=e.y-d.y, R=d.r+e.r;
+        if (dx*dx+dy*dy <= R*R){
+          const area = Math.PI*(d.r*d.r + e.r*e.r);
+          d.r = Math.sqrt(area/Math.PI);
+          d.x = (d.x+e.x)/2; d.y = (d.y+e.y)/2;
+          // small momentum average
+          d.vx = (d.vx+e.vx)/2; d.vy = (d.vy+e.vy)/2;
+          drops.splice(j,1); j--;
+        }
+      }
+      // merge at surface
+      const targetH = Math.min(innerHeight*0.9, waterVolume);
+      const surfaceY = innerHeight - targetH + surfaceWave(d.x, performance.now()/1000);
+      if (d.y + d.r >= surfaceY){
+        // add volume based on area; slower rise factor keeps it calm
+        waterVolume = Math.min(innerHeight*0.9, waterVolume + d.r*d.r*WATER_PER_AREA);
+        // ripple on impact
+        ripples.push({x:d.x, t:0});
+        drops.splice(i,1); i--;
       }
     }
 
-    // Update drops (fall; splash at *surface*, not the bottom)
-    for (let i=drops.length-1;i>=0;i--){
-      const d = drops[i];
-      d.vy += 0.015;            // gravity
-      d.x += d.vx;
-      d.y += d.vy;
-
-      // surface collision
-      const surfaceH = surfaceY + Math.sin((d.x*0.01 + t*1.5))*2; // gentle wave
-      if (d.y + d.r >= surfaceH){
-        // splash & add to water height slightly
-        addRipple(d.x);
-        waterHeight += 0.25;    // each drop raises a tiny bit (still slow overall)
-        drops.splice(i,1);
-      }
-
-      // keep within horizontal
-      if (d.x < -20 || d.x > W+20){ drops.splice(i,1); }
-    }
-
-    // Ripples expand & fade
+    // ripples progress
     for (let i=ripples.length-1;i>=0;i--){
-      const r = ripples[i];
-      r.r += 1.4;
-      r.a -= 0.018;
-      if (r.a <= 0) ripples.splice(i,1);
+      ripples[i].t += 0.016;
+      if (ripples[i].t>1.4) ripples.splice(i,1);
     }
+  }
 
-    // Refill dust if we dropped below target
-    if (dust.length < DUST_MAX){
-      const y = surfaceY + Math.random()*H*0.3;
-      dust.push(newDust(Math.random()*W, y, 1));
+  function surfaceWave(x, t){
+    // base soft waves + ripple rings
+    let w = Math.sin((x*0.01)+t*1.2)*baseWaveAmp*0.2 + Math.sin((x*0.004)-t*0.8)*baseWaveAmp*0.15;
+    for (const r of ripples){
+      const dist = Math.abs(x - r.x);
+      const k = 0.02;                        // wave number
+      const A = 9*(1 - r.t);                 // fade amplitude
+      w += A * Math.sin(k*dist - r.t*8) * Math.exp(-0.012*dist);
     }
-    // Limit drops
-    if (drops.length > DROP_MAX) drops.splice(0, drops.length - DROP_MAX);
+    return w;
   }
 
   function draw(){
-    ctx.clearRect(0,0,W,H);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    const surfaceY = H - waterHeight;
+    // white rising mist at the bottom
+    for(const m of mist){
+      ctx.globalAlpha = m.alpha;
+      ctx.fillStyle='#ffffff';
+      ctx.beginPath(); ctx.arc(m.x, m.y, m.r, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
 
-    // 1) Dust field (denser white near bottom, fades upward)
-    for (const p of dust){
-      const fade = Math.max(0, Math.min(1, (p.y - (surfaceY-160)) / 220)); // 0 at near surface, 1 higher up
-      const alpha = 0.25 + (1-fade)*0.35; // brighter at bottom
-      ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+    // falling drops
+    for(const d of drops){
+      const grad=ctx.createRadialGradient(d.x- d.r*0.4, d.y- d.r*0.5, d.r*0.2, d.x, d.y, d.r);
+      grad.addColorStop(0,'rgba(255,255,255,.85)');
+      grad.addColorStop(1,'rgba(180,220,255,.65)');
+      ctx.fillStyle=grad;
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2); ctx.fill();
     }
 
-    // 2) Drops (light blue)
-    for (const d of drops){
-      const grad = ctx.createRadialGradient(d.x, d.y-d.r*0.4, d.r*0.2, d.x, d.y, d.r*1.1);
-      grad.addColorStop(0, 'rgba(180,225,255,0.95)');
-      grad.addColorStop(1, 'rgba(120,190,255,0.75)');
-      ctx.fillStyle = grad;
-      ctx.beginPath(); ctx.ellipse(d.x, d.y, d.r, d.r*1.15, 0, 0, Math.PI*2); ctx.fill();
-    }
+    // pooled water (clear, with waves)
+    const h = Math.min(innerHeight*0.9, waterVolume);
+    if (h>0.5){
+      const baseY = innerHeight - h;
 
-    // 3) Water body (gradient + gentle wave line)
-    const g = ctx.createLinearGradient(0, surfaceY, 0, H);
-    g.addColorStop(0, 'rgba(102,204,255,0.55)');
-    g.addColorStop(0.6, 'rgba(42,113,255,0.35)');
-    g.addColorStop(1, 'rgba(30,58,138,0.28)');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, surfaceY, W, H - surfaceY);
-
-    // wave line
-    ctx.beginPath();
-    for (let x=0;x<=W;x+=6){
-      const y = surfaceY + Math.sin((x*0.01) + t*1.5)*2 + Math.sin((x*0.035)+t*0.9)*1.0;
-      if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle='rgba(255,255,255,0.35)';
-    ctx.lineWidth=1.5;
-    ctx.stroke();
-
-    // 4) Ripples on the surface
-    for (const r of ripples){
-      ctx.strokeStyle = `rgba(255,255,255,${(0.45*r.a).toFixed(3)})`;
-      ctx.lineWidth=1;
+      // Build a surface path with waves
       ctx.beginPath();
-      const y = surfaceY + Math.sin((r.x*0.01) + t*1.5)*2; // align to wave
-      ctx.ellipse(r.x, y, r.r, r.r*0.55, 0, 0, Math.PI*2);
+      ctx.moveTo(0, innerHeight);
+      ctx.lineTo(0, baseY + surfaceWave(0, performance.now()/1000));
+      const step = Math.max(2, innerWidth/160);
+      for (let x=step; x<=innerWidth; x+=step){
+        ctx.lineTo(x, baseY + surfaceWave(x, performance.now()/1000));
+      }
+      ctx.lineTo(innerWidth, innerHeight);
+      ctx.closePath();
+
+      // Fill water
+      const g=ctx.createLinearGradient(0, baseY-40, 0, innerHeight);
+      g.addColorStop(0, 'rgba(195,235,255,.55)');
+      g.addColorStop(1, 'rgba(150,210,255,.75)');
+      ctx.fillStyle=g;
+      ctx.fill();
+
+      // Carve around obstacles so water flows around boxes/logo
+      ctx.globalCompositeOperation='destination-out';
+      const obs = obstacles();
+      for(const r of obs){
+        roundRectPath(r);
+        ctx.fillStyle='rgba(0,0,0,0.9)';
+        ctx.fill();
+      }
+      ctx.globalCompositeOperation='source-over';
+
+      // subtle surface highlight
+      ctx.strokeStyle='rgba(255,255,255,.35)';
+      ctx.lineWidth=1.5;
+      ctx.beginPath();
+      for (let x=0; x<=innerWidth; x+=step){
+        const y = baseY + surfaceWave(x, performance.now()/1000);
+        if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
       ctx.stroke();
     }
   }
 
-  function loop(){
-    step(); draw(); requestAnimationFrame(loop);
-  }
+  function loop(){ step(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
 </script>
