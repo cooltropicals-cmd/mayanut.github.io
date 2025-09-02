@@ -28,7 +28,9 @@
   }
 
   /* Stars + twinkle */
-  .stars,.stars2,.stars3{position:fixed; inset:0; pointer-events:none; background-repeat:repeat; animation:twinkle 6s ease-in-out infinite}
+  .stars,.stars2,.stars3{
+    position:fixed; inset:0; pointer-events:none; background-repeat:repeat; animation:twinkle 6s ease-in-out infinite
+  }
   .stars{opacity:.75;background-image:
       radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.9) 99%, transparent),
       radial-gradient(1.5px 1.5px at 70% 20%, rgba(255,255,255,.8) 99%, transparent),
@@ -65,6 +67,10 @@
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
+  /* Score badge */
+  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
+    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px; box-shadow:var(--shadow)}
+
   /* Hero + chat */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
@@ -88,7 +94,7 @@
   /* Footer */
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);backdrop-filter:blur(6px);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* Ball canvas (on top of content) */
+  /* Ball layer */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
 
   @media (max-width:720px){.nav a{padding:6px 10px}}
@@ -110,18 +116,18 @@
     </nav>
   </header>
 
+  <!-- Score -->
+  <div id="scoreHUD" class="score">Score: <b id="score">0</b></div>
+
   <!-- Hero + Chat -->
   <main id="home" class="stage">
     <div class="panel">
-      <!-- Title WITH ™ above chat bar -->
       <h1 id="heroTitle" class="title">
         <span class="glow">MayaNut</span><small>™</small>
       </h1>
-
       <div class="chatbar" role="search">
         <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
       </div>
-
       <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
     </div>
   </main>
@@ -155,7 +161,7 @@
   <canvas id="ballLayer"></canvas>
 
 <script>
-  /* ===== Minimal chat behavior (unchanged) ===== */
+  /* ===== Minimal chat behavior ===== */
   const input = document.getElementById('chatInput');
   const logBox = document.getElementById('chatLog');
 
@@ -198,8 +204,11 @@
   document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
   document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-  /* ===== Bouncing balls (squash & stretch, spawning from original) ===== */
+  /* ===== Game: accelerating original ball, size tiers, spawn-on-click, 15-click fast phase ===== */
   (function(){
+    const scoreEl = document.getElementById('score');
+    let score = 0; const addScore = d => { score += d; scoreEl.textContent = score; };
+
     const canvas = document.getElementById('ballLayer');
     const ctx = canvas.getContext('2d');
 
@@ -212,7 +221,7 @@
     }
     resize(); window.addEventListener('resize', resize);
 
-    // Elements to collide with
+    // Colliders
     const heroTitle = document.getElementById('heroTitle');
     const chatInput = document.getElementById('chatInput');
     const chatLog  = document.getElementById('chatLog');
@@ -233,32 +242,39 @@
       return rects;
     }
 
-    // Ball structure
-    function makeBall({x, y, r=10, vx=3.2, vy=2.6, original=false}={}){
+    // Ball factory
+    function makeBall(opts={}){
+      const {
+        x=window.innerWidth*0.6, y=window.innerHeight*0.3,
+        r=10, vx=3.2, vy=2.6, original=false
+      } = opts;
       return {
-        x, y, r, vx, vy, original,
-        squashTimer: 0,           // frames remaining for squash/stretch
-        squashAxis: 'y'           // 'x' or 'y' depending on collision
+        x,y,r,vx,vy, original,
+        squashTimer:0, squashAxis:'y',
+        hasFast:false,               // only meaningful for original
+        sizeTier: original ? 7 : null, // 7/15 at start
+        clickCount: 0                // count clicks on this ball
       };
     }
 
-    // Initial (original) ball
-    const balls = [
-      makeBall({ x: window.innerWidth*0.6, y: window.innerHeight*0.3, r: 10, vx: 3.2, vy: 2.6, original: true })
-    ];
+    // Original ball radius by tier (1..15) -> map 8..12px (15 slightly bigger than old 10)
+    function tierToRadius(tier){
+      const t = Math.max(1, Math.min(15, tier|0));
+      return 8 + (4 * (t - 1) / 14); // 8..12
+    }
+
+    const balls = [ makeBall({ original:true, vx:1.1, vy:0.9, r:tierToRadius(7) }) ];
     const MAX_BALLS = 15;
 
+    // Physics helpers
     function bounceWall(b, W, H){
-      let hit = false;
-      if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer = 8; b.squashAxis = 'x'; hit = true; }
-      if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer = 8; b.squashAxis = 'x'; hit = true; }
-      if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer = 8; b.squashAxis = 'y'; hit = true; }
-      if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer = 8; b.squashAxis = 'y'; hit = true; }
-      return hit;
+      if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer = 8; b.squashAxis='x'; }
+      if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer = 8; b.squashAxis='x'; }
+      if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer = 8; b.squashAxis='y'; }
+      if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer = 8; b.squashAxis='y'; }
     }
 
     function collideWithRect(b, R){
-      // circle-rect hit test
       const nx = Math.max(R.x, Math.min(b.x, R.x + R.w));
       const ny = Math.max(R.y, Math.min(b.y, R.y + R.h));
       const dx = b.x - nx, dy = b.y - ny;
@@ -268,105 +284,150 @@
       const overlapX = (R.w/2 + b.r) - Math.abs(b.x - cx);
       const overlapY = (R.h/2 + b.r) - Math.abs(b.y - cy);
 
-      if (overlapX < overlapY){
-        b.vx *= -1;
-        b.x += (b.vx>0? 1:-1) * Math.max(1, overlapX*0.6);
-        b.squashTimer = 8; b.squashAxis = 'x';
-      } else {
-        b.vy *= -1;
-        b.y += (b.vy>0? 1:-1) * Math.max(1, overlapY*0.6);
-        b.squashTimer = 8; b.squashAxis = 'y';
-      }
+      if (overlapX < overlapY){ b.vx *= -1; b.x += (b.vx>0? 1:-1)*Math.max(1,overlapX*0.6); b.squashTimer=8; b.squashAxis='x'; }
+      else { b.vy *= -1; b.y += (b.vy>0? 1:-1)*Math.max(1,overlapY*0.6); b.squashTimer=8; b.squashAxis='y'; }
       return true;
     }
 
+    // Gradual acceleration; original speeds up over time until cap
+    function accelerate(b){
+      const speed = Math.hypot(b.vx, b.vy);
+      const cap = (b.original && b.hasFast) ? 9 : 4; // fast after 15 clicks
+      const accel = (b.original ? 0.002 : 0.0); // original gradually speeds up
+      const ns = Math.min(cap, speed * (1 + accel));
+      if (ns > 0 && speed > 0){
+        const f = ns / speed;
+        b.vx *= f; b.vy *= f;
+      }
+    }
+
+    // Drawing
+    function drawBall(b){
+      // squash/stretch
+      let sx=1, sy=1;
+      if (b.squashTimer>0){
+        const t = b.squashTimer/8;
+        const amt = 0.35 * Math.sin(t * Math.PI);
+        if (b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
+      }
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.scale(sx, sy);
+      // glow
+      ctx.beginPath(); ctx.arc(0, 0, b.r+3, 0, Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,.40)'; ctx.fill();
+      // core
+      ctx.beginPath(); ctx.arc(0, 0, b.r, 0, Math.PI*2);
+      ctx.fillStyle='#ffffff'; ctx.fill();
+      if (b.original){
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(153,183,255,.7)';
+        ctx.beginPath(); ctx.arc(0, 0, b.r+5, 0, Math.PI*2); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // Main loop
     function step(){
       const W = window.innerWidth, H = window.innerHeight;
-
-      // Move & collide
       const rects = getRects();
+
       for (const b of balls){
+        // move
         b.x += b.vx; b.y += b.vy;
+        // accelerate original
+        if (b.original) accelerate(b);
+        // walls + UI
         bounceWall(b, W, H);
-        for (const R of rects){ collideWithRect(b, R); }
-        if (b.squashTimer > 0) b.squashTimer--;
+        for (const R of rects) collideWithRect(b, R);
+        if (b.squashTimer>0) b.squashTimer--;
       }
 
-      // Draw
+      // draw
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      for (const b of balls){
-        // squash/stretch factors
-        let sx = 1, sy = 1;
-        if (b.squashTimer > 0){
-          const t = b.squashTimer / 8; // 1 -> 0
-          const amt = 0.35 * Math.sin(t * Math.PI); // springy feel
-          if (b.squashAxis === 'x'){ sx = 1.0 + amt; sy = 1.0 - amt; }
-          else { sy = 1.0 + amt; sx = 1.0 - amt; }
-        }
-
-        ctx.save();
-        ctx.translate(b.x, b.y);
-        ctx.scale(sx, sy);
-
-        // glow
-        ctx.beginPath(); ctx.arc(0, 0, b.r+3, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(255,255,255,.40)'; ctx.fill();
-        // core
-        ctx.beginPath(); ctx.arc(0, 0, b.r, 0, Math.PI*2);
-        ctx.fillStyle = '#ffffff'; ctx.fill();
-
-        // mark original ball with a faint ring
-        if (b.original){
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = 'rgba(153,183,255,.7)';
-          ctx.beginPath(); ctx.arc(0, 0, b.r+5, 0, Math.PI*2); ctx.stroke();
-        }
-        ctx.restore();
-      }
+      for (const b of balls) drawBall(b);
 
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
 
-    // Spawn control: only spawn when clicking the ORIGINAL ball.
-    // Clicking anything else stops the streak implicitly (no spawn).
+    // Utility
+    function hitBallAt(x,y,b){
+      const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy) <= b.r + 5;
+    }
+
+    // Clicks & scoring:
+    //  - If click inside text input: ignore (no points)
+    //  - If click original ball: +1, increase tier (max 15), maybe spawn mini, fast-mode at 15
+    //  - If click a small ball (after fast mode): +1 and grow that ball each click up to near big size
+    //  - Elsewhere: -1
     document.addEventListener('click', (e)=>{
-      // Ignore clicks inside text inputs/areas/contenteditable
-      if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) return; // no points
+      const x = e.clientX, y = e.clientY;
 
-      // check if click hits the original ball
-      const orig = balls.find(b => b.original);
-      if (!orig) return;
+      const orig = balls.find(b=>b.original);
+      let handled = false;
 
-      const dx = orig.x - e.clientX, dy = orig.y - e.clientY;
-      const dist = Math.hypot(dx, dy);
+      // Original hit?
+      if (orig && hitBallAt(x,y,orig)){
+        addScore(+1);
+        // gentle push away
+        const dx = orig.x - x, dy = orig.y - y, len=Math.max(1,Math.hypot(dx,dy));
+        let pushX = (dx/len)*4.8, pushY=(dy/len)*4.8;
+        const s = Math.hypot(pushX,pushY), cap = (orig.hasFast?9:4);
+        const f = Math.min(cap, s) / (s||1);
+        orig.vx = pushX*f; orig.vy = pushY*f;
 
-      if (dist <= orig.r + 5){
-        // push original slightly away
-        const len = Math.max(1, dist);
-        let pushX = (dx / len) * 4.8;
-        let pushY = (dy / len) * 4.8;
-        const speed = Math.hypot(pushX, pushY);
-        const cap = Math.min(orig.maxSpeed || 6.5, speed);
-        const f = cap / speed;
-        orig.vx = pushX * f; orig.vy = pushY * f;
-
-        // spawn a new smaller ball in a random direction (up to MAX_BALLS)
-        if (balls.length < MAX_BALLS){
-          const angle = Math.random() * Math.PI * 2;
-          const speed2 = 2.2 + Math.random()*2.2;
-          const newBall = makeBall({
-            x: orig.x + Math.cos(angle) * (orig.r + 6),
-            y: orig.y + Math.sin(angle) * (orig.r + 6),
-            r: Math.max(5, Math.round(orig.r * 0.75)),
-            vx: Math.cos(angle) * speed2,
-            vy: Math.sin(angle) * speed2,
-            original: false
-          });
-          balls.push(newBall);
+        // Level up size tier to 15
+        if (orig.sizeTier<15){
+          orig.sizeTier++;
+          orig.r = tierToRadius(orig.sizeTier);
         }
-      } else {
-        // clicked not on original ball -> do nothing (streak stops naturally)
+
+        // Spawn a mini (limit total balls)
+        if (balls.length < MAX_BALLS){
+          const angle = Math.random()*Math.PI*2;
+          const speed2 = 1.6 + Math.random()*1.6;
+          balls.push(makeBall({
+            x: orig.x + Math.cos(angle)*(orig.r+6),
+            y: orig.y + Math.sin(angle)*(orig.r+6),
+            r: Math.max(5, Math.round(orig.r * 0.6)),
+            vx: Math.cos(angle)*speed2,
+            vy: Math.sin(angle)*speed2,
+            original:false
+          }));
+        }
+
+        // Count toward fast phase
+        orig.clickCount++;
+        if (orig.clickCount >= 15){
+          orig.hasFast = true; // acceleration cap will climb to 9
+          // Give it an immediate boost
+          const sp = Math.hypot(orig.vx, orig.vy);
+          if (sp < 7){ const f = 7 / (sp||1); orig.vx*=f; orig.vy*=f; }
+        }
+
+        handled = true;
+      }
+
+      // If not original, check small balls
+      if (!handled){
+        // If we're in fast phase, smalls grow when clicked
+        const small = balls.find(b=>!b.original && hitBallAt(x,y,b));
+        if (small){
+          addScore(+1);
+          const big = orig;
+          if (big && big.hasFast){
+            const maxR = Math.max(6, big.r - 1);        // "till they reach the side of the big one"
+            small.r = Math.min(maxR, small.r + Math.max(0.8, big.r*0.08));
+          }
+          handled = true;
+        }
+      }
+
+      // Missed everything → -1
+      if (!handled){
+        addScore(-1);
       }
     });
   })();
