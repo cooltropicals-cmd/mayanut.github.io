@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      background: radial-gradient(circle at top, #1e3c72, #2a5298);
+      background: linear-gradient(180deg,#1e3c72 0%,#2a5298 100%);
       color: #fff;
       font-family: sans-serif;
       overflow: hidden;
@@ -15,11 +15,24 @@
     #topbar {
       position: fixed;
       top: 0; left: 0; right: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.5);
       padding: 10px;
       display: flex;
       justify-content: space-between;
       z-index: 10;
+      align-items: center;
+    }
+    #tabs {
+      display: flex;
+      gap: 20px;
+    }
+    #tabs a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #tabs a:hover {
+      text-decoration: underline;
     }
     #gameCanvas {
       display: block;
@@ -28,22 +41,47 @@
       position: fixed;
       bottom: 0; left: 0; right: 0;
       padding: 10px;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.5);
       display: flex;
+      z-index: 10;
     }
     #chat input {
       flex: 1;
       padding: 8px;
       font-size: 16px;
+      border: none;
+      outline: none;
+      border-radius: 4px;
     }
+    .textbox {
+      position: absolute;
+      padding: 10px 15px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 6px;
+      pointer-events: none;
+      font-weight: bold;
+    }
+    #buyBox { top: 100px; left: 50px; }
+    #aboutBox { top: 100px; right: 50px; }
   </style>
 </head>
 <body>
   <div id="topbar">
     <div>MayaNut™</div>
+    <div id="tabs">
+      <a href="#">MayaNut</a>
+      <a href="#">Buy</a>
+      <a href="#">About</a>
+      <a href="https://instagram.com/mayanut.co" target="_blank">Instagram</a>
+    </div>
     <div>Score: <span id="score">0</span></div>
   </div>
+
+  <div id="buyBox" class="textbox">Buy Section</div>
+  <div id="aboutBox" class="textbox">About Section</div>
+
   <canvas id="gameCanvas"></canvas>
+
   <div id="chat">
     <input id="chatInput" placeholder="Type commands like /spawn 20 white...">
   </div>
@@ -59,6 +97,15 @@
       canvas.width = W; canvas.height = H;
     });
 
+    // UI elements for bouncing
+    function getTextBoxes() {
+      return [
+        document.getElementById("buyBox").getBoundingClientRect(),
+        document.getElementById("aboutBox").getBoundingClientRect(),
+        document.getElementById("topbar").getBoundingClientRect()
+      ];
+    }
+
     // Game variables
     let balls = [];
     let chains = [];
@@ -73,7 +120,7 @@
       FACTORY: "factory"
     };
 
-    // Create a ball
+    // Create ball
     function makeBall(x,y,type=TYPES.SMALL){
       let r = type===TYPES.SMALL?6:type===TYPES.SPAWNER?12:20;
       return {
@@ -83,12 +130,11 @@
         r,
         type,
         orbiting:null,
-        bonded:false,
-        dead:false
+        bonded:false
       };
     }
 
-    // Spawn command
+    // Spawn balls
     function spawnBalls(n,type){
       let added=0;
       for(let i=0;i<n;i++){
@@ -117,69 +163,61 @@
       }
     });
 
-    // Clicking ends of chains folds into circle
+    // Clicking sends ball flying
     canvas.addEventListener("click",e=>{
       const mx=e.clientX,my=e.clientY;
-      for(const chain of chains){
-        if(chain.length>2){
-          let start=chain[0], end=chain[chain.length-1];
-          if(Math.hypot(start.x-mx,start.y-my)<start.r+5 ||
-             Math.hypot(end.x-mx,end.y-my)<end.r+5){
-            // fold into circle
-            const cx=chain.reduce((s,b)=>s+b.x,0)/chain.length;
-            const cy=chain.reduce((s,b)=>s+b.y,0)/chain.length;
-            const radius=chain.length*3;
-            chain.forEach((b,i)=>{
-              const angle=(i/chain.length)*Math.PI*2;
-              b.x=cx+Math.cos(angle)*radius;
-              b.y=cy+Math.sin(angle)*radius;
-            });
-          }
+      for(const b of balls){
+        const d=Math.hypot(b.x-mx,b.y-my);
+        if(d<b.r+2){
+          b.vx=(b.x-mx)/2;
+          b.vy=(b.y-my)/2;
         }
       }
     });
 
-    // Physics + logic
+    // Physics & logic
     function update(){
-      // Move
+      const boxes = getTextBoxes();
       for(const b of balls){
-        if(b.dead) continue;
         b.x+=b.vx; b.y+=b.vy;
+
+        // Bounce on edges
         if(b.x<b.r||b.x>W-b.r) b.vx*=-1;
         if(b.y<b.r||b.y>H-b.r) b.vy*=-1;
+
+        // Bounce on text boxes
+        for(const box of boxes){
+          if(b.x>b.r+box.left && b.x<box.right-b.r &&
+             b.y>b.r+box.top && b.y<box.bottom-b.r){
+            b.vx*=-1; b.vy*=-1;
+          }
+        }
       }
 
-      // Collisions
+      // Collisions: small+small → spawner
       for(let i=0;i<balls.length;i++){
         for(let j=i+1;j<balls.length;j++){
           const a=balls[i], b=balls[j];
-          if(a.dead||b.dead) continue;
           const d=Math.hypot(a.x-b.x,a.y-b.y);
           if(d<a.r+b.r){
-            // small+small -> spawner
             if(a.type===TYPES.SMALL && b.type===TYPES.SMALL){
-              a.dead=true; b.dead=true;
-              balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,TYPES.SPAWNER));
+              a.type=b.type=TYPES.SPAWNER;
+              a.r=b.r=12;
             }
-            // spawner+spawner -> factory
-            if(a.type===TYPES.SPAWNER && b.type===TYPES.SPAWNER){
-              a.dead=true; b.dead=true;
-              balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,TYPES.FACTORY));
+            else if(a.type===TYPES.SPAWNER && b.type===TYPES.SPAWNER){
+              a.type=b.type=TYPES.FACTORY;
+              a.r=b.r=20;
             }
-            // orbiting behavior
-            if(a.type===TYPES.SMALL && b.type!==TYPES.SMALL){
-              a.orbiting=b;
-            }
-            if(b.type===TYPES.SMALL && a.type!==TYPES.SMALL){
-              b.orbiting=a;
-            }
+            // Orbiting
+            if(a.type!==TYPES.SMALL && b.type===TYPES.SMALL) b.orbiting=a;
+            if(b.type!==TYPES.SMALL && a.type===TYPES.SMALL) a.orbiting=b;
           }
         }
       }
 
       // Orbit motion
       for(const b of balls){
-        if(b.orbiting && !b.orbiting.dead){
+        if(b.orbiting){
           const center=b.orbiting;
           const angle=Math.atan2(b.y-center.y,b.x-center.x)+0.05;
           const dist=center.r+20;
@@ -188,13 +226,12 @@
         }
       }
 
-      // Chain formation: orbiting orbits bond
+      // Chains
       chains=[];
       let visited=new Set();
       for(const b of balls){
         if(b.orbiting && !visited.has(b)){
-          let chain=[];
-          let current=b;
+          let chain=[]; let current=b;
           while(current && current.orbiting && !visited.has(current)){
             chain.push(current);
             visited.add(current);
@@ -203,15 +240,12 @@
           if(chain.length>1) chains.push(chain);
         }
       }
-
-      // Remove dead
-      balls=balls.filter(b=>!b.dead);
     }
 
     // Draw
     function draw(){
       ctx.clearRect(0,0,W,H);
-      // Chains first
+      // Draw chains
       ctx.strokeStyle="rgba(255,255,255,0.5)";
       for(const chain of chains){
         ctx.beginPath();
@@ -219,12 +253,10 @@
         for(const b of chain) ctx.lineTo(b.x,b.y);
         ctx.stroke();
       }
-      // Balls
+      // Draw balls
       for(const b of balls){
         ctx.beginPath();
-        if(b.type===TYPES.SMALL) ctx.fillStyle="white";
-        else if(b.type===TYPES.SPAWNER) ctx.fillStyle="orange";
-        else if(b.type===TYPES.FACTORY) ctx.fillStyle="red";
+        ctx.fillStyle=b.type===TYPES.SMALL?"white":b.type===TYPES.SPAWNER?"orange":"red";
         ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
         ctx.fill();
       }
