@@ -72,7 +72,7 @@
 <main id="home" class="stage">
   <div class="panel">
     <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
-    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want (try /spawn 20 small)" aria-label="Type what you want and press Enter" /></div>
+    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want (try /spawn 6 triad)" aria-label="Type what you want and press Enter" /></div>
     <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
 </main>
@@ -146,10 +146,10 @@ function handleCommand(cmd){
   if (name==='fill'){ const ok=window.GameFill(); say('MayaNut', `Filled with ${ok} small.`); return; }
   if (name==='clear'){ const c=window.GameClear(); say('MayaNut', `Cleared ${c} balls.`); return; }
   if (name==='red'){ const ok=window.GameSpawn(10,'red'); say('MayaNut', `Spawned ${ok} red.`); return; }
-  say('MayaNut', 'Commands: /spawn N [small|spawner|factory|red], /fill, /clear, /pause, /resume');
+  say('MayaNut', 'Commands: /spawn N [small|spawner|factory|triad|red], /fill, /clear, /pause, /resume');
 }
 
-/* ===== Game Engine (repel chains; bonded-spawner rules; 500 cap) ===== */
+/* ===== Game Engine (TRIAD: big+medium+small; TRIAD↔TRIAD bonding; 500 cap) ===== */
 (function(){
   const canvas=document.getElementById('ballLayer');
   const ctx=canvas.getContext('2d');
@@ -157,26 +157,35 @@ function handleCommand(cmd){
   resize(); addEventListener('resize', resize);
 
   // Types
-  const SMALL='small', SPAWNER='spawner', FACTORY='factory', RED='red';
+  const SMALL='small', SPAWNER='spawner', FACTORY='factory', TRIAD='triad', RED='red';
 
   // Caps
   const MAX_BALLS=500;
   const RED_MAX=50;
 
-  // Sizes
-  const R_SMALL=3;     // tiny white dot
-  const R_SPAWNER=16;  // medium w/ ring
-  const R_FACTORY=26;  // biggest solid
+  // Radii
+  const R_SMALL=3;
+  const R_SPAWNER=16;
+  const R_FACTORY=26;
+  const R_TRIAD=28; // body radius of fused unit
+
   const R_RED=8;
 
-  const FACTORY_INTERVAL=200;     // factory spawn rate
-  const ORBIT_RADIUS_PAD = 18;    // orbit gap from host edge
-  const CHAIN_REPEL_MIN = 14;     // min spacing between bonded chain nodes
-  const CHAIN_REPEL_STRENGTH = 0.12; // repel force strength
+  // Behavior params
+  const ORBIT_RADIUS_PAD=18;               // orbit offset from host edge
+  const FACTORY_INTERVAL=200;              // littles from big
+  const TRIAD_INTERVAL=260;                // littles from triad
+  const ANGLE_TOL=0.38;                    // ~22° tolerance for N/S bonds
+  const LINK_STIFF=0.10, LINK_DAMP=0.85;   // springy links
+  const SPACING_T = R_TRIAD*2.05;          // preferred triad spacing
+  const RING_CLOSE_T = R_TRIAD*1.8;        // when ends of triad string meet → circle
 
   // State
-  const balls=[];      // all balls
-  const chains=[];     // arrays of bonded orbiters (stagnant)
+  const balls=[];       // all bodies (including TRIADs)
+  const links=[];       // N/S springs between TRIADs
+  const triChains=new Map(); // id -> nodes
+  let nextChainId=1;
+
   let score=0; const scoreEl=document.getElementById('score');
   const countEl=document.getElementById('ballCount');
   const aliveCount=()=>balls.filter(b=>!b._dead).length;
@@ -184,32 +193,36 @@ function handleCommand(cmd){
   function updateCount(){ countEl.textContent=aliveCount(); }
   function addScore(n){ score+=n; scoreEl.textContent=score; }
 
-  function makeBall(x,y,type=SMALL, vx=(Math.random()-.5)*2, vy=(Math.random()-.5)*2){
-    const r = type===SMALL?R_SMALL : type===SPAWNER?R_SPAWNER : type===FACTORY?R_FACTORY : R_RED;
-    return {
-      x,y,vx,vy,r,type,_dead:false,
-      // orbit/chain
-      orbit:null, chain:null,
-      // meta
-      cooldown:0,
-      bondedToFactory:false,  // NEW: medium is bonded to a factory
-      hostFactory:null,       // pointer to factory it bonded to
-      // squash/stretch
-      squashT:0, squashAxis:'x'
-    };
+  function makeBall(x,y,type=SMALL,vx=(Math.random()-.5)*2,vy=(Math.random()-.5)*2){
+    let r=R_SMALL;
+    if(type===SPAWNER) r=R_SPAWNER;
+    else if(type===FACTORY) r=R_FACTORY;
+    else if(type===TRIAD) r=R_TRIAD;
+    else if(type===RED) r=R_RED;
+
+    const b={x,y,vx,vy,r,type,_dead:false,
+             orbit:null,cooldown:0, squashT:0, squashAxis:'x'};
+
+    if(type===TRIAD){
+      b.slots={top:null,bottom:null};
+      b.chainId=null; b.isRing=false;
+      // offsets for visual medium + inner little
+      b.mediumOffset={x:r*0.75,y:0};
+      b.hasInnerDot=true;
+    }
+    return b;
   }
   function addBall(b){
-    if (aliveCount()>=MAX_BALLS) return false;
-    if (b.type===RED && redCount()>=RED_MAX) return false;
+    if(aliveCount()>=MAX_BALLS) return false;
+    if(b.type===RED && redCount()>=RED_MAX) return false;
     balls.push(b); return true;
   }
 
   // Seed
-  const seedFactory = makeBall(innerWidth*0.50, innerHeight*0.42, FACTORY, 0.6, 0.5);
-  addBall(seedFactory);
+  addBall(makeBall(innerWidth*0.46, innerHeight*0.42, FACTORY, 0.8, 0.6));
   for(let i=0;i<14;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
 
-  // UI rects to bounce off
+  // UI obstacles
   function rects(){
     const els=[document.getElementById('heroTitle'), document.getElementById('chatInput'),
                document.getElementById('buy'), document.getElementById('about'), document.querySelector('.topbar')].filter(Boolean);
@@ -219,7 +232,7 @@ function handleCommand(cmd){
     const nx=Math.max(R.x, Math.min(b.x, R.x+R.w));
     const ny=Math.max(R.y, Math.min(b.y, R.y+R.h));
     const dx=b.x-nx, dy=b.y-ny;
-    if(dx*dx+dy*dy > b.r*b.r) return;
+    if(dx*dx+dy*dy>b.r*b.r) return;
     const cx=R.x+R.w/2, cy=R.y+R.h/2;
     const ox=(R.w/2+b.r)-Math.abs(b.x-cx);
     const oy=(R.h/2+b.r)-Math.abs(b.y-cy);
@@ -233,228 +246,235 @@ function handleCommand(cmd){
     if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
   }
 
-  // Bonding chains: orbiters around same host colliding → bond into stagnant chain
-  function bondOrbitersIfCollide(a,b){
-    if(!(a.orbit && b.orbit)) return false;
-    if(a.orbit !== b.orbit) return false; // must share host (factory or spawner)
-    // make a chain of orbiters
-    if(!a.chain && !b.chain){
-      const chain=[a,b]; a.chain=b.chain=chain; chains.push(chain);
-    } else if(a.chain && !b.chain){ a.chain.push(b); b.chain=a.chain; }
-    else if(!a.chain && b.chain){ b.chain.push(a); a.chain=b.chain; }
-    // stop moving/orbiting once bonded
-    a.orbit=b.orbit=null;
-    a.vx=a.vy=b.vx=b.vy=0;
-    return true;
+  // Helpers for TRIAD strings
+  const nearAngle=(ang,target,tol=ANGLE_TOL)=>{
+    let d=Math.abs(((ang-target+Math.PI)%(2*Math.PI))-Math.PI);
+    return d<=tol;
+  };
+  function anchor(node,slot){
+    if(slot==='top')    return {x:node.x, y:node.y-node.r};
+    if(slot==='bottom') return {x:node.x, y:node.y+node.r};
+    return {x:node.x,y:node.y};
   }
-
-  // Repel inside each chain to avoid clumping
-  function repelChains(){
-    for(const ch of chains){
-      const n=ch.length; if(n<2) continue;
-      for(let i=0;i<n;i++){
-        for(let j=i+1;j<n;j++){
-          const a=ch[i], b=ch[j];
-          if(a._dead||b._dead) continue;
-          const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy)||0.0001;
-          const min = Math.max(CHAIN_REPEL_MIN, (a.r+b.r)*0.8);
-          if(d<min){
-            const push = (min-d)*CHAIN_REPEL_STRENGTH;
-            const nx=dx/d, ny=dy/d;
-            a.x-=nx*push; a.y-=ny*push;
-            b.x+=nx*push; b.y+=ny*push;
-          }
+  function ensureChain(n){
+    if(n.chainId!=null) return n.chainId;
+    const id=nextChainId++; n.chainId=id; triChains.set(id,[n]); return id;
+  }
+  function mergeChains(a,b){
+    if(a===b) return a;
+    const A=triChains.get(a)||[], B=triChains.get(b)||[];
+    const merged=[...A,...B]; const id=nextChainId++;
+    for(const n of merged) n.chainId=id;
+    triChains.delete(a); triChains.delete(b); triChains.set(id,merged);
+    return id;
+  }
+  function addLink(a,b,slotA,slotB,dist){
+    links.push({a,b,slotA,slotB,dist});
+    a.slots[slotA]=b; b.slots[slotB]=a;
+  }
+  function linkSpringRelax(){
+    for(const L of links){
+      const {a,b,slotA,slotB,dist}=L;
+      if(a._dead||b._dead) continue;
+      const A=anchor(a,slotA), B=anchor(b,slotB);
+      const dx=B.x-A.x, dy=B.y-A.y, d=Math.hypot(dx,dy)||0.0001;
+      const nx=dx/d, ny=dy/d, err=d-dist, push=err*LINK_STIFF;
+      a.x += nx*push; a.y += ny*push; a.vx*=LINK_DAMP; a.vy*=LINK_DAMP;
+      b.x -= nx*push; b.y -= ny*push; b.vx*=LINK_DAMP; b.vy*=LINK_DAMP;
+    }
+  }
+  function tryCloseTriadRings(){
+    for(const [id,arr] of [...triChains]){
+      if(!arr || arr.length<4) continue;
+      const first=arr[0], last=arr[arr.length-1];
+      const dx=last.x-first.x, dy=last.y-first.y;
+      if(Math.hypot(dx,dy)<=RING_CLOSE_T){
+        const cx=arr.reduce((s,n)=>s+n.x,0)/arr.length;
+        const cy=arr.reduce((s,n)=>s+n.y,0)/arr.length;
+        const radius=Math.max(R_TRIAD*1.5, (arr.length*SPACING_T)/(2*Math.PI));
+        for(let i=0;i<arr.length;i++){
+          const ang=(i/arr.length)*Math.PI*2;
+          const n=arr[i]; n.x=cx+Math.cos(ang)*radius; n.y=cy+Math.sin(ang)*radius; n.vx=n.vy=0; n.isRing=true;
         }
       }
     }
   }
 
-  // Collisions + promotions with new logic
+  // TRIAD fusion: a Factory + Spawner overlapping, with a Small inside Factory (or captured on Spawner) → single TRIAD
+  function maybeFormTriad(a,b){
+    let F=null,M=null;
+    if(a.type===FACTORY && b.type===SPAWNER){F=a;M=b;}
+    else if(b.type===FACTORY && a.type===SPAWNER){F=b;M=a;}
+    else return false;
+
+    // check little inside the big or tightly orbiting the spawner near the factory
+    let smallIdx=-1;
+    for(let i=0;i<balls.length;i++){
+      const s=balls[i]; if(s._dead||s.type!==SMALL) continue;
+      const insideBig = Math.hypot(s.x-F.x,s.y-F.y) <= F.r - R_SMALL*0.5;
+      const nearOrbit = (s.orbit===M) && (Math.hypot(M.x-F.x,M.y-F.y) < F.r + M.r + 6);
+      if(insideBig || nearOrbit){ smallIdx=i; break; }
+    }
+    if(smallIdx<0) return false;
+
+    const S=balls[smallIdx];
+    // consume parts → create triad at factory's location
+    F._dead=true; M._dead=true; S._dead=true;
+    const T=makeBall(F.x,F.y,TRIAD,(F.vx+M.vx)/2,(F.vy+M.vy)/2);
+    addBall(T);
+    return true;
+  }
+
+  // Pair interactions
   function handlePair(a,b){
     if(a._dead||b._dead) return;
     const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy);
     if(d>a.r+b.r) return;
 
-    // Small + Small -> Spawner (unconditional)
+    // Small + Small → Spawner
     if(a.type===SMALL && b.type===SMALL){
       if(aliveCount()>=MAX_BALLS) return;
       a._dead=b._dead=true;
-      const sp = makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-      addBall(sp);
+      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
       return;
     }
 
-    // Spawner + Spawner -> Factory (ONLY if neither is bonded to a factory)
+    // Spawner + Spawner → Factory
     if(a.type===SPAWNER && b.type===SPAWNER){
-      if(a.bondedToFactory || b.bondedToFactory) {
-        // bonded spawners never form new factories—just bounce
-      } else {
-        if(aliveCount()<MAX_BALLS){
-          a._dead=b._dead=true;
-          const f = makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-          addBall(f);
-          return;
-        }
+      if(aliveCount()>=MAX_BALLS) return;
+      a._dead=b._dead=true;
+      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
+      return;
+    }
+
+    // TRIAD formation takes priority if conditions met
+    if (maybeFormTriad(a,b)) return;
+
+    // orbit capture (keep littles on shell so they don't fall in)
+    if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY||b.type===TRIAD)) a.orbit=b;
+    if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY||a.type===TRIAD)) b.orbit=a;
+
+    // TRIAD ↔ TRIAD bonding (north/south only)
+    if (a.type===TRIAD && b.type===TRIAD){
+      const ang=Math.atan2(dy,dx);
+      if (nearAngle(ang, Math.PI/2) && !a.slots.bottom && !b.slots.top){
+        addLink(a,b,'bottom','top',SPACING_T);
+        const idA=ensureChain(a), idB=ensureChain(b);
+        const id=(idA===idB)?idA:mergeChains(idA,idB);
+        const arr=triChains.get(id); if(arr.indexOf(b)===-1) arr.splice(arr.indexOf(a)+1,0,b);
+        return;
+      }
+      if (nearAngle(ang, -Math.PI/2) && !a.slots.top && !b.slots.bottom){
+        addLink(a,b,'top','bottom',SPACING_T);
+        const idA=ensureChain(a), idB=ensureChain(b);
+        const id=(idA===idB)?idA:mergeChains(idA,idB);
+        const arr=triChains.get(id); if(arr.indexOf(a)===-1) arr.unshift(a); if(arr.indexOf(b)===-1) arr.unshift(b);
+        return;
       }
     }
 
-    // Factory + Small:
-    // Always convert that Small -> Spawner and mark it as bonded to THIS factory (prevents factory explosion).
-    if((a.type===FACTORY && b.type===SMALL) || (b.type===FACTORY && a.type===SMALL)){
-      const fac = a.type===FACTORY?a:b;
-      const sml = a.type===SMALL?a:b;
-      // turn into a bonded spawner
-      sml.type=SPAWNER; sml.r=R_SPAWNER;
-      sml.bondedToFactory=true; sml.hostFactory=fac;
-      sml.orbit=null; sml.vx=sml.vy=0;
-      // snap near factory edge
-      const ang=Math.atan2(sml.y-fac.y,sml.x-fac.x);
-      const dist=fac.r+ORBIT_RADIUS_PAD;
-      sml.x=fac.x+Math.cos(ang)*dist; sml.y=fac.y+Math.sin(ang)*dist;
-      return;
-    }
-
-    // Small + (bonded) Spawner → create another Spawner (no promotions to Factory here)
-    if((a.type===SMALL && b.type===SPAWNER && b.bondedToFactory) ||
-       (b.type===SMALL && a.type===SPAWNER && a.bondedToFactory)){
-      const bonded = a.type===SPAWNER?a:b;
-      const sml = a.type===SMALL?a:b;
-      sml.type=SPAWNER; sml.r=R_SPAWNER;
-      sml.bondedToFactory=true; sml.hostFactory=bonded.hostFactory||null;
-      sml.orbit=null; sml.vx=sml.vy=0;
-      // place it gently beside the bonded one
-      const ang=Math.random()*Math.PI*2;
-      const dist=(bonded.hostFactory?bonded.hostFactory.r:bonded.r) + ORBIT_RADIUS_PAD + 8;
-      sml.x=(bonded.hostFactory?bonded.hostFactory.x:bonded.x) + Math.cos(ang)*dist;
-      sml.y=(bonded.hostFactory?bonded.hostFactory.y:bonded.y) + Math.sin(ang)*dist;
-      return;
-    }
-
-    // If orbiters of the same host hit, they become a stagnant chain
-    if (bondOrbitersIfCollide(a,b)) {
-      a.squashT=b.squashT=10; a.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y'; b.squashAxis=a.squashAxis;
-      return;
-    }
-
-    // Red interactions (simple: reds delete smalls; bounce off bigger)
+    // Simple red behavior (optional)
     if(a.type===RED || b.type===RED){
-      const r = a.type===RED?a:b;
-      const o = a.type===RED?b:a;
-      if(o.type===SMALL){ o._dead=true; }
-      else { r.vx*=-0.9; r.vy*=-0.9; }
-      r.squashT=10; r.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
+      const r=a.type===RED?a:b, o=a.type===RED?b:a;
+      if(o.type===SMALL){ o._dead=true; } else { r.vx*=-0.9; r.vy*=-0.9; }
+      r.squashT=10; r.squashAxis=Math.abs(dx)>Math.abs(dy)?'x':'y';
       return;
     }
 
-    // Default elastic-ish bounce + squash
+    // Default bounce + squash
     const nx=dx/(d||1), ny=dy/(d||1);
     const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
     a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-    a.squashT=b.squashT=10; a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
+    a.squashT=b.squashT=10; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
   }
 
-  // Clicks: fold chain ends OR launch a hit ball
+  // Click: launch balls you hit
   document.addEventListener('click', e=>{
     if (e.target.closest('a,button,input,textarea,[contenteditable]')) return;
     const x=e.clientX, y=e.clientY;
-
-    // fold chain if clicking an end
-    for(const ch of chains){
-      if(ch.length>2){
-        const f=ch[0], l=ch[ch.length-1];
-        if(Math.hypot(f.x-x,f.y-y)<f.r+6 || Math.hypot(l.x-x,l.y-y)<l.r+6){
-          const cx=ch.reduce((s,b)=>s+b.x,0)/ch.length, cy=ch.reduce((s,b)=>s+b.y,0)/ch.length;
-          const radius=Math.max(18, ch.length*5);
-          ch.forEach((b,i)=>{ const ang=(i/ch.length)*Math.PI*2; b.x=cx+Math.cos(ang)*radius; b.y=cy+Math.sin(ang)*radius; b.vx=b.vy=0; });
-          addScore(1);
-          return;
-        }
-      }
-    }
-
-    // launch any ball we clicked
     let hit=false;
     for(const b of balls){
       if(Math.hypot(b.x-x,b.y-y) < b.r+6){
         hit=true; const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
         const kick=5.2; b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
-        b.squashT=10; b.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
-        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; } // small nudge if paused
+        b.squashT=10; b.squashAxis=Math.abs(dx)>Math.abs(dy)?'x':'y';
+        if(GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; }
       }
     }
-    addScore(hit?1:-1);
+    if(hit) addScore(1); else addScore(-1);
   });
 
-  // Public spawners for chat
-  window.GameSpawn = function(n=1, type='small'){
-    const t = type==='factory'?FACTORY : type==='spawner'?SPAWNER : type==='red'?RED : SMALL;
+  // Public API for chat
+  window.GameSpawn=function(n=1,type='small'){
+    const t = type==='factory'?FACTORY : type==='spawner'?SPAWNER : type==='triad'?TRIAD : type==='red'?RED : SMALL;
     let added=0;
     for(let i=0;i<n;i++){
       const atCap = aliveCount()>=MAX_BALLS || (t===RED && redCount()>=RED_MAX);
       if(atCap) break;
-      const x=innerWidth*0.5 + (Math.random()*120-60);
-      const y=innerHeight*0.45 + (Math.random()*120-60);
+      const x=innerWidth*0.5+(Math.random()*120-60);
+      const y=innerHeight*0.45+(Math.random()*120-60);
       if(addBall(makeBall(x,y,t))) added++;
     }
-    updateCount();
-    return added;
+    updateCount(); return added;
   };
-  window.GameFill = function(){
+  window.GameFill=function(){
     let added=0;
     while(aliveCount()<MAX_BALLS){
-      if(!addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL))) break;
+      if(!addBall(makeBall(Math.random()*innerWidth,Math.random()*innerHeight,SMALL))) break;
       added++;
     }
     updateCount(); return added;
   };
-  window.GameClear = function(){
-    const c=aliveCount(); balls.length=0; chains.length=0; updateCount(); return c;
+  window.GameClear=function(){
+    const c=aliveCount(); balls.length=0; links.length=0; triChains.clear(); updateCount(); return c;
   };
 
   function update(){
     if (GAME_PAUSED) return;
-    const rs = rects();
+    const rs=rects();
 
     for(const b of balls){
       if(b._dead) continue;
 
-      if(b.orbit){
-        // orbit around host
+      // Orbit motion (little around spawner/factory/triad), clamped to shell
+      if(b.type===SMALL && b.orbit){
         const c=b.orbit;
         const ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;
         const d=c.r + ORBIT_RADIUS_PAD;
-        b.x=c.x+Math.cos(ang)*d;
-        b.y=c.y+Math.sin(ang)*d;
-        b.vx*=0.95; b.vy*=0.95;
-      }else{
+        b.x=c.x+Math.cos(ang)*d; b.y=c.y+Math.sin(ang)*d;
+        b.vx*=0.92; b.vy*=0.92;
+      } else {
         b.x+=b.vx; b.y+=b.vy;
       }
 
       bounceWalls(b);
       for(const R of rs) collideRect(b,R);
 
-      // Spawner/Factory attract nearby smalls into orbit
-      if (b.type===SPAWNER || b.type===FACTORY){
+      // capture smalls into orbit
+      if (b.type===SPAWNER || b.type===FACTORY || b.type===TRIAD){
         for(const s of balls){
-          if(s._dead || s.type!==SMALL || s.orbit || s.chain) continue;
-          const dist = Math.hypot(s.x-b.x, s.y-b.y);
-          const desired = b.r + ORBIT_RADIUS_PAD;
-          if (dist < desired + 14 && dist > desired - 22){
-            s.orbit = b; // capture into orbit
-          }
+          if(s._dead||s.type!==SMALL||s.orbit) continue;
+          const dist=Math.hypot(s.x-b.x,s.y-b.y);
+          const desired=b.r+ORBIT_RADIUS_PAD;
+          if(dist<desired+14 && dist>desired-22) s.orbit=b;
         }
       }
 
-      // Factory spawns new smalls slowly
+      // producers
       if(b.type===FACTORY){
         b.cooldown++;
         if(b.cooldown>FACTORY_INTERVAL && aliveCount()<MAX_BALLS){
-          b.cooldown=0;
-          addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
+          b.cooldown=0; addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
+        }
+      }
+      if(b.type===TRIAD){
+        b.cooldown++;
+        if(b.cooldown>TRIAD_INTERVAL && aliveCount()<MAX_BALLS){
+          b.cooldown=0; addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
         }
       }
 
-      if (b.squashT>0) b.squashT--;
+      if(b.squashT>0) b.squashT--;
     }
 
     // collisions
@@ -464,8 +484,9 @@ function handleCommand(cmd){
       }
     }
 
-    // spread chains slightly to avoid clumps
-    repelChains();
+    // tidy strings + attempt ring closure
+    linkSpringRelax();
+    tryCloseTriadRings();
 
     // cleanup
     for(let i=balls.length-1;i>=0;i--) if(balls[i]._dead) balls.splice(i,1);
@@ -476,21 +497,20 @@ function handleCommand(cmd){
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // Chains (stagnant links)
-    ctx.strokeStyle='rgba(255,255,255,0.45)';
-    for(const ch of chains){
-      if(ch.length<2) continue;
-      ctx.beginPath(); ctx.moveTo(ch[0].x,ch[0].y);
-      for(const b of ch) ctx.lineTo(b.x,b.y);
-      ctx.stroke();
+    // draw triad links
+    ctx.strokeStyle='rgba(255,255,255,0.55)'; ctx.lineWidth=2;
+    for(const L of links){
+      const {a,b,slotA,slotB}=L;
+      if(a._dead||b._dead) continue;
+      const A=anchor(a,slotA), B=anchor(b,slotB);
+      ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
     }
 
-    // Balls with squash/stretch
+    // draw bodies
     for(const b of balls){
       let sx=1, sy=1;
-      if (b.squashT>0){
-        const t=b.squashT/10;
-        const amt=0.35*Math.sin(t*Math.PI);
+      if(b.squashT>0){
+        const t=b.squashT/10, amt=0.35*Math.sin(t*Math.PI);
         if(b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
       }
       ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
@@ -506,6 +526,25 @@ function handleCommand(cmd){
       } else if(b.type===FACTORY){
         ctx.fillStyle='rgba(255,255,255,0.95)';
         ctx.beginPath(); ctx.arc(0,0,R_FACTORY,0,Math.PI*2); ctx.fill();
+      } else if(b.type===TRIAD){
+        // big body
+        ctx.fillStyle='rgba(255,255,255,0.95)';
+        ctx.beginPath(); ctx.arc(0,0,R_TRIAD,0,Math.PI*2); ctx.fill();
+        // medium on the side
+        const off=b.mediumOffset;
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(off.x,off.y,R_SPAWNER-3,0,Math.PI*2); ctx.fill();
+        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,255,255,0.9)';
+        ctx.beginPath(); ctx.arc(off.x,off.y,R_SPAWNER-1,0,Math.PI*2); ctx.stroke();
+        // inner little
+        if(b.hasInnerDot){
+          ctx.fillStyle='#ffffff';
+          ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
+        }
+        // show free N/S “ports”
+        ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
+        if(!b.slots?.top){    ctx.beginPath(); ctx.moveTo(0,-R_TRIAD); ctx.lineTo(0,-R_TRIAD-6); ctx.stroke(); }
+        if(!b.slots?.bottom){ ctx.beginPath(); ctx.moveTo(0, R_TRIAD); ctx.lineTo(0, R_TRIAD+6); ctx.stroke(); }
       } else if(b.type===RED){
         ctx.fillStyle='#ff4d4d';
         ctx.beginPath(); ctx.arc(0,0,R_RED,0,Math.PI*2); ctx.fill();
