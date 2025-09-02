@@ -4,14 +4,19 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MayaNut</title>
+
+<!-- Favicon (use your provided image file) -->
+<link rel="icon" type="image/png" href="mayanut-favicon.png" />
+<link rel="apple-touch-icon" href="mayanut-favicon.png" />
+<meta name="theme-color" content="#143821" />
+<meta name="color-scheme" content="dark light" />
+
 <style>
   :root{
     --ink:#eef3ff;
     --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-    --gold1:#fff0b5;
-    --gold2:#ffd46b;
-    --gold3:#f3ac3a;
+    --gold1:#fff0b5; --gold2:#ffd46b; --gold3:#f3ac3a;
   }
 
   html,body{
@@ -22,27 +27,30 @@
     overflow-x:hidden;
   }
 
-  /* Animated blurred green background layers */
+  /* Animated blurred green background layers (gentle, prefers-reduced-motion respected) */
   .bg-blobs, .bg-blobs-2, .bg-blobs-3{
     position:fixed; inset:-20% -20% -20% -20%;
     z-index:-1; pointer-events:none; filter: blur(26px) saturate(115%);
   }
   .bg-blobs{
-    background:radial-gradient(35% 40% at 20% 25%, rgba(110,190,120,.35), transparent 60%),
-               radial-gradient(30% 35% at 75% 20%, rgba(165,230,170,.28), transparent 65%),
-               radial-gradient(28% 30% at 50% 60%, rgba(90,150,110,.32), transparent 60%);
+    background:
+      radial-gradient(35% 40% at 20% 25%, rgba(110,190,120,.35), transparent 60%),
+      radial-gradient(30% 35% at 75% 20%, rgba(165,230,170,.28), transparent 65%),
+      radial-gradient(28% 30% at 50% 60%, rgba(90,150,110,.32), transparent 60%);
     animation: drift1 48s ease-in-out infinite;
   }
   .bg-blobs-2{
-    background:radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.30), transparent 60%),
-               radial-gradient(30% 34% at 75% 70%, rgba(125,200,140,.28), transparent 60%),
-               radial-gradient(22% 26% at 50% 40%, rgba(160,220,160,.25), transparent 60%);
+    background:
+      radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.30), transparent 60%),
+      radial-gradient(30% 34% at 75% 70%, rgba(125,200,140,.28), transparent 60%),
+      radial-gradient(22% 26% at 50% 40%, rgba(160,220,160,.25), transparent 60%);
     animation: drift2 56s ease-in-out infinite;
     mix-blend-mode: screen;
   }
   .bg-blobs-3{
-    background:radial-gradient(22% 26% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
-               radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
+    background:
+      radial-gradient(22% 26% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
+      radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
     animation: drift3 62s ease-in-out infinite;
     opacity:.9;
   }
@@ -51,20 +59,36 @@
   @keyframes drift2 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(22px,-14px,0)}100%{transform:translate3d(0,0,0)}}
   @keyframes drift3 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-10px,10px,0)}100%{transform:translate3d(0,0,0)}}
 
+  @media (prefers-reduced-motion: reduce){
+    .bg-blobs, .bg-blobs-2, .bg-blobs-3{ animation: none; }
+  }
+
   /* Top bar */
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:30;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;background:var(--panel);
+    border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)
+  }
   .brandLogo{display:block;height:28px;width:auto}
 
-  .nav{display:flex;gap:18px;align-items:center}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
+  .nav{display:flex;gap:16px;align-items:center}
+  .nav a{
+    color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;
+    padding:8px 12px;border-radius:10px;border:1px solid transparent;transition:border-color .15s, background .15s
+  }
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
-  .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 12px}
+  .heroLogo{display:block;width:min(560px,80vw);margin:8px auto 14px}
 
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
-  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .chatbar input{
+    flex:1;height:44px;padding:10px 12px;font-size:15px;color:#e9eeff;
+    background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none;
+    transition:border-color .15s, box-shadow .15s
+  }
   .chatbar input::placeholder{color:#cfe8ff}
   .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
 
@@ -72,16 +96,28 @@
   .msg{text-align:left;margin:6px 0;color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
-  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
+  .section{
+    width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.50);
+    border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px)
+  }
   .section h3{margin:0 0 8px;color:#fff}
   .section p{margin:8px 0 0;color:#cfe9ff}
 
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
-  .card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;color:#eaf2ff;text-decoration:none;transition:transform .2s ease,background .2s ease,border-color .2s ease}
+  .card{
+    background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:16px;
+    text-align:center;color:#eaf2ff;text-decoration:none;transition:transform .2s ease,background .2s ease,border-color .2s ease
+  }
   .card:hover{transform:translateY(-3px);background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18)}
 
-  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;position:relative}
-  .ig-link{position:absolute;right:72px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px}
+  footer{
+    width:100%;color:#c9d3ef;border-top:1px solid var(--line);
+    background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;position:relative
+  }
+  .ig-link{
+    position:absolute;right:72px;top:50%;transform:translateY(-50%);
+    display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px
+  }
   .ig-link svg{filter:drop-shadow(0 0 0 rgba(255,255,255,0));transition:transform .2s ease,filter .2s ease}
   .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 </style>
@@ -92,7 +128,7 @@
 <div class="bg-blobs-2"></div>
 <div class="bg-blobs-3"></div>
 
-<!-- Unified gold logo with TM integrated & tight to the word -->
+<!-- Unified gold logo with ™ tightly integrated -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
@@ -104,14 +140,14 @@
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.35)"/>
     </filter>
 
-    <!-- CHANGED: single text with a tspan for ™ so it sits right next to the word -->
+    <!-- Single text with tspan so ™ is right up against the final 't' -->
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
       <text x="40" y="180"
             font-family="Poppins, Inter, system-ui, sans-serif"
             font-weight="900" font-size="180"
             fill="url(#mn-gold)" filter="url(#mn-shadow)">
         <tspan>MayaNut</tspan>
-        <!-- ™ tight to the word, slightly smaller & raised -->
+        <!-- Tight & slightly raised ™ (as requested earlier) -->
         <tspan dx="-25" dy="-75" font-size="60">™</tspan>
       </text>
     </symbol>
@@ -119,8 +155,8 @@
 </svg>
 
 <header class="topbar" role="banner">
-  <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
-  <nav class="nav">
+  <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
+  <nav class="nav" aria-label="Primary">
     <a href="#home" id="navHome">MayaNut</a>
     <a href="#buy" id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
@@ -130,13 +166,14 @@
 
 <main id="home" class="stage">
   <div class="panel">
-    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
-    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" /></div>
-    <div class="log" id="chatLog"></div>
+    <svg class="heroLogo" viewBox="0 0 1200 260" role="img" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
+    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Chat input" /></div>
+    <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
 </main>
 
-<section id="buy" class="section"><h3>Buy</h3>
+<section id="buy" class="section" aria-labelledby="buyTitle">
+  <h3 id="buyTitle">Buy</h3>
   <p>Search Through Our Wonderful Products — real items coming soon.</p>
   <div class="cards">
     <a class="card" href="#home">Flour</a>
@@ -145,23 +182,57 @@
   </div>
 </section>
 
-<section id="about" class="section"><h3>About</h3>
-  <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
+<section id="about" class="section" aria-labelledby="aboutTitle">
+  <h3 id="aboutTitle">About</h3>
+  <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida.
+     <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
 </section>
 
 <footer>
   © 2025 MayaNut LLC. All rights reserved.
-  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
+  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
+    <!-- simple white Instagram glyph -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
+    </svg>
   </a>
 </footer>
 
 <script>
-const input=document.getElementById('chatInput');
-const logBox=document.getElementById('chatLog');
-function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
-input.addEventListener('keydown',e=>{if(e.key==='Enter'){const t=input.value.trim();if(!t)return;say('You',t);input.value='';say('MayaNut',"I'm here to help with questions about MayaNut™ and our products!");}});
-['navHome','navBuy','navAbout'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('click',e=>{e.preventDefault();document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});} );});
+/* Tiny helper chat — unchanged behavior */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+function say(role, text){
+  const el = document.createElement('div');
+  el.className = 'msg';
+  el.innerHTML = `<strong>${role}:</strong> ${text}`;
+  logBox.appendChild(el);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+input.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const t = input.value.trim(); if(!t) return;
+    say('You', t); input.value='';
+    const low = t.toLowerCase();
+    if (low.includes('buy')||low.includes('product')||low.includes('shop')){
+      say('MayaNut','Head to the Buy section — placeholders for now.');
+      document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return;
+    }
+    if (low.includes('about')||low.includes('company')){
+      say('MayaNut','See the About section for our mission and leadership.');
+      document.getElementById('about').scrollIntoView({behavior:'smooth'}); return;
+    }
+    say('MayaNut',"I'm here to help with questions about MayaNut™ and our products!");
+  }
+});
+['navHome','navBuy','navAbout'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('click', e=>{
+    e.preventDefault();
+    document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});
+  });
+});
 </script>
 </body>
 </html>
