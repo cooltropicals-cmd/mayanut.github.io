@@ -1,488 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MayaNut</title>
-<style>
-  :root{
-    --ink:#eaf2ff; --ink-dim:#c6d0ea; --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
-    --accent:#8fdcff; --accent2:#c79bff; --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-  }
-  html,body{height:100%}
-  body{
-    margin:0;color:var(--ink);
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
-    display:flex; flex-direction:column; min-height:100%;
-    background:
-      linear-gradient(180deg, rgba(159,243,255,.30) 0%, rgba(115,232,232,.22) 8%, rgba(215,228,242,.16) 14%, rgba(0,0,0,0) 22%),
-      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
-      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
-      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
-      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
-    overflow-x:hidden;
-  }
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
-  .brand{font-weight:800;letter-spacing:.2px;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
-  .brand small{font-size:11px;opacity:.95;vertical-align:top}
-  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
-  .nav{display:flex;gap:18px;align-items:center}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
-  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
-  .btn{cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.10);color:var(--ink);}
-  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
-    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
-  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
-  .panel{width:min(900px,92vw);text-align:center}
-  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;letter-spacing:.6px;color:#fff;text-shadow:0 8px 28px rgba(0,0,0,.35);margin:6px 0 14px}
-  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 26px rgba(156,124,255,.25))}
-  .title small{font-size:.35em;color:#fff;opacity:.95;vertical-align:super;margin-left:4px}
-  .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
-  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
-  .chatbar input::placeholder{color:#bfe7ff}
-  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
-  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
-  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
-  .msg strong{color:#cfe1ff}
-  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
-  .section h3{margin:0 0 8px;color:#fff}
-  .section p{margin:8px 0 0;color:#cfe9ff}
-  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
-  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>MayaNut Game</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #1e3c72, #2a5298);
+      color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    #topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.4);
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    #gameCanvas {
+      display: block;
+    }
+    #chat {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+    }
+    #chat input {
+      flex: 1;
+      padding: 8px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar" role="banner">
-    <div class="brand">MayaNut<small>™</small></div>
-    <div class="brandInfo">Cells: <b id="ballCount">1</b>/<b id="ballCap">250</b> (+<b id="redCap">50</b> reds)</div>
-    <nav class="nav" aria-label="Primary">
-      <a href="#home" id="navHome">MayaNut</a>
-      <a href="#buy"  id="navBuy">Buy</a>
-      <a href="#about" id="navAbout">About</a>
-      <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
-    </nav>
-  </header>
+  <div id="topbar">
+    <div>MayaNut™</div>
+    <div>Score: <span id="score">0</span></div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+  <div id="chat">
+    <input id="chatInput" placeholder="Type commands like /spawn 20 gold...">
+  </div>
 
-  <div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    let W = window.innerWidth, H = window.innerHeight;
+    canvas.width = W; canvas.height = H;
 
-  <main id="home" class="stage">
-    <div class="panel">
-      <h1 id="heroTitle" class="title">
-        <span class="glow">MayaNut</span><small>™</small>
-      </h1>
-      <div class="chatbar" role="search">
-        <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
-      </div>
-      <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
-    </div>
-  </main>
+    // Resize handler
+    window.addEventListener("resize", () => {
+      W = window.innerWidth; H = window.innerHeight;
+      canvas.width = W; canvas.height = H;
+    });
 
-  <section id="buy" class="section">
-    <h3>Buy</h3>
-    <p>Search Through Our Wonderful Products — real items coming soon.</p>
-  </section>
+    // Game state
+    let score = 0;
+    const scoreEl = document.getElementById("score");
+    const colors = ["white","grey","blue","black","gold","doctor-green"];
+    let balls = [];
+    let lines = []; // gold connections
+    const maxBalls = 300;
 
-  <section id="about" class="section">
-    <h3>About</h3>
-    <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
-      <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
-      farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
-    <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
-  </section>
-
-  <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
-  <canvas id="ballLayer"></canvas>
-
-<script>
-/* --------- SAFE SFX (no crashes if Audio fails) --------- */
-(function(){
-  const SFX = {
-    ctx:null, master:null, enabled:true, ready:false,
-    ensure(){ if(this.ctx) return; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); this.master=this.ctx.createGain(); this.master.gain.value=0.28; this.master.connect(this.ctx.destination); this.ready=true; }catch(e){ this.ready=false; } },
-    resume(){ try{ this.ensure(); if(this.ctx&&this.ctx.state==='suspended') this.ctx.resume(); }catch{} },
-    toggle(){ this.enabled=!this.enabled; if(this.master) this.master.gain.value=this.enabled?0.28:0; const b=document.getElementById('audioToggle'); if(b) b.textContent=this.enabled?'🔊':'🔈'; },
-    env(t0,d){ if(!this.ready) return null; const c=this.ctx,g=c.createGain(); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(.22,t0+.01); g.gain.exponentialRampToValueAtTime(.001,t0+d); return g; },
-    blip(p=320,d=.09){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(p,t); o.frequency.exponentialRampToValueAtTime(p/2,t+d*.8); const g=this.env(t,d); if(!g) return; o.connect(g).connect(this.master); o.start(t); o.stop(t+d+.05); },
-    squish(d=.1){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,b=c.createBuffer(1,2048,c.sampleRate),ch=b.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*.5; const src=c.createBufferSource(); src.buffer=b; const f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.setValueAtTime(420,t); f.Q.setValueAtTime(5,t); const g=this.env(t,d); if(!g) return; src.connect(f).connect(g).connect(this.master); src.start(t); src.stop(t+d+.05); },
-    pop(){ this.blip(900,.06); }, tap(){ this.blip(220,.06); }
-  };
-  window.__SFX=SFX;
-  const unlock=()=>{SFX.ensure();SFX.resume();window.removeEventListener('pointerdown',unlock);window.removeEventListener('keydown',unlock);};
-  window.addEventListener('pointerdown',unlock,{once:true}); window.addEventListener('keydown',unlock,{once:true});
-  window.addEventListener('DOMContentLoaded',()=>{ const hud=document.getElementById('scoreHUD'); if(!hud) return; const b=document.createElement('button'); b.id='audioToggle'; b.textContent='🔊'; b.style.cssText='margin-left:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#eaf2ff;border-radius:8px;padding:2px 6px;cursor:pointer;'; b.onclick=()=>SFX.toggle(); hud.appendChild(b); });
-})();
-
-/* --------- Chat + Commands --------- */
-(function(){
-  const input = document.getElementById('chatInput');
-  const logBox = document.getElementById('chatLog');
-  const pausedBadge = document.getElementById('pausedBadge');
-  let GAME_PAUSED = false;
-  let lastMouse = {x: innerWidth/2, y: innerHeight/2};
-  document.addEventListener('mousemove', e=>{ lastMouse.x=e.clientX; lastMouse.y=e.clientY; });
-  function say(role, text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
-  function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display=GAME_PAUSED?'':''; }
-  function togglePause(){ setPaused(!GAME_PAUSED); }
-
-  function handleMessage(v){
-    const t=(v||'').trim(); if(!t) return; say('You',t);
-    const low = t.toLowerCase();
-    if (low==='pause'){ setPaused(true); say('MayaNut','Paused. Type "resume" or press Space.'); return; }
-    if (['unpause','resume','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
-    if (low==='brosimum'){ window.spawnWhitesAt(lastMouse.x,lastMouse.y,100); say('MayaNut','Brosimum: spawned white cells (to cap).'); return; }
-    if (low==='red'){ const ok=window.spawnRedAgent(lastMouse.x,lastMouse.y); say('MayaNut', ok ? 'Red agent deployed.' : 'Red limit reached.'); return; }
-
-    const domainTriggers=["domain for sale","is this domain for sale","sell this domain","sell the domain","buy this domain","buy the domain","is the domain for sale","are you selling the domain","is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"];
-    if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
-
-    if (low.includes('buy')||low.includes('product')||low.includes('shop')){ say('MayaNut','Head to the Buy section below (placeholders for now).'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
-    if (low.includes('about')||low.includes('company')){ say('MayaNut','We’re a South Florida company promoting the Maya Nut tree—see About below.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
-    say('MayaNut',"Tell me what you want and I’ll point you in the right direction.");
-  }
-  input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ handleMessage(input.value); input.value=''; }});
-  document.addEventListener('keydown', e=>{
-    if (e.code==='Space'){
-      const a=document.activeElement;
-      if (a && (a===input || a.tagName==='INPUT' || a.tagName==='TEXTAREA')) return;
-      e.preventDefault(); togglePause(); if (window.__SFX) __SFX.resume();
+    // Ball constructor
+    function makeBall(x,y,color){
+      return {
+        x,y,
+        vx:(Math.random()-0.5)*2,
+        vy:(Math.random()-0.5)*2,
+        r:8,
+        color,
+        chainId:null,
+        dead:false
+      };
     }
-  });
-  ['navHome','navBuy','navAbout'].forEach(id=>{
-    const el=document.getElementById(id);
-    if (el) el.addEventListener('click', e=>{ e.preventDefault(); document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'}); });
-  });
-})();
 
-/* --------- Biocells Engine (stable, capped, red extras) --------- */
-(function(){
-  const scoreEl = document.getElementById('score');
-  const countEl = document.getElementById('ballCount');
-  const baseCapEl = document.getElementById('ballCap');
-  const redCapEl  = document.getElementById('redCap');
-
-  const BASE_CAP = 250;           // main cells cap
-  const RED_EXTRA_CAP = 50;       // extra reds (beyond base)
-  baseCapEl.textContent = BASE_CAP;
-  redCapEl.textContent  = RED_EXTRA_CAP;
-
-  const canvas = document.getElementById('ballLayer');
-  const ctx = canvas.getContext('2d');
-
-  function resize(){
-    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
-    canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
-    canvas.width = Math.round(innerWidth*dpr);
-    canvas.height= Math.round(innerHeight*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  resize(); addEventListener('resize', resize);
-
-  const COLORS=['white','grey','blue','purple','green','black','gold'];
-  const STAGES=['little','medium','big'];
-
-  const TYPE_SUPERCELL='supercell';
-  const TYPE_LAPIS='lapis';
-  const TYPE_RED='redAgent';
-
-  // Data stores
-  const cells=[];         // normal cells
-  const supercells=[];    // ring objects
-  const reds=[];          // red agents (special cap)
-
-  // Helpers
-  const uiRects = () => {
-    const ids = ['heroTitle','chatInput','chatLog','.topbar','#buy','#about'];
-    const els = [
-      document.getElementById('heroTitle'),
-      document.getElementById('chatInput'),
-      document.getElementById('chatLog'),
-      document.querySelector('.topbar'),
-      document.getElementById('buy'),
-      document.getElementById('about')
-    ].filter(Boolean);
-    return els.map(el=>{const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height};});
-  };
-  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
-  function addScore(n){ const s=(parseInt(scoreEl.textContent)||0)+n; scoreEl.textContent=s; }
-
-  function radiusFor(color,stage){
-    const base={white:6,grey:7,blue:8,purple:9,green:10,black:11,gold:12}[color]||8;
-    const mul = {little:1,medium:1.25,big:1.55}[stage]||1;
-    return base*mul;
-  }
-
-  function makeCell(o={}){
-    const {x=innerWidth*.55,y=innerHeight*.35,
-           vx=(Math.random()-.5)*1.8,vy=(Math.random()-.5)*1.8,
-           color='white',stage='little'}=o;
-    return {x,y,vx,vy,color,stage,r:radiusFor(color,stage),life:0,breedCD:0,_dead:false,chain:false,docked:false};
-  }
-  function makeSupercell(cx,cy,r){
-    return {type:TYPE_SUPERCELL,x:cx,y:cy,r,greens:[],lapis:[],spawnCD:0,wobble:0,_dead:false};
-  }
-  function makeLapis(sc){
-    const ang=Math.random()*Math.PI*2, rad=sc.r*0.45;
-    return {type:TYPE_LAPIS,x:sc.x+Math.cos(ang)*rad,y:sc.y+Math.sin(ang)*rad,vx:(Math.random()-.5)*1.1,vy:(Math.random()-.5)*1.1,a:ang,r:6.5,life:0,parent:sc,_dead:false};
-  }
-  function makeRed(x,y){
-    const ang=Math.random()*Math.PI*2, sp=3+Math.random()*2;
-    return {type:TYPE_RED,x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,r:7.5,life:0,ttl:220,_dead:false};
-  }
-
-  // Initial seed
-  cells.push(makeCell({color:'white',stage:'medium',vx:1.1,vy:1}));
-
-  function nonRedCount(){ return cells.filter(c=>!c._dead).length + supercells.filter(s=>!s._dead).length + supercells.reduce((n,s)=>n+s.lapis.filter(l=>!l._dead).length,0); }
-  function redCount(){ return reds.filter(r=>!r._dead).length; }
-  function totalCount(){ return nonRedCount() + redCount(); }
-  function updateCount(){ countEl.textContent = totalCount(); }
-
-  // Physics
-  function bounce(obj,W,H){
-    if (obj.x - obj.r < 0){ obj.x=obj.r; obj.vx=Math.abs(obj.vx); if(window.__SFX) __SFX.tap(); }
-    if (obj.x + obj.r > W){ obj.x=W-obj.r; obj.vx=-Math.abs(obj.vx); if(window.__SFX) __SFX.tap(); }
-    if (obj.y - obj.r < 0){ obj.y=obj.r; obj.vy=Math.abs(obj.vy); if(window.__SFX) __SFX.tap(); }
-    if (obj.y + obj.r > H){ obj.y=H-obj.r; obj.vy=-Math.abs(obj.vy); if(window.__SFX) __SFX.tap(); }
-  }
-  function collideUI(obj, rects){
-    for(const R of rects){
-      const nx=clamp(obj.x,R.x,R.x+R.w), ny=clamp(obj.y,R.y,R.y+R.h);
-      const dx=obj.x-nx, dy=obj.y-ny;
-      if (dx*dx+dy*dy<=obj.r*obj.r){
-        const cx=R.x+R.w/2, cy=R.y+R.h/2;
-        const ox=(R.w/2+obj.r)-Math.abs(obj.x-cx), oy=(R.h/2+obj.r)-Math.abs(obj.y-cy);
-        if (ox<oy){ obj.vx*=-1; obj.x+=(obj.vx>0?1:-1)*Math.max(1,ox*.6); }
-        else      { obj.vy*=-1; obj.y+=(obj.vy>0?1:-1)*Math.max(1,oy*.6); }
-        if(window.__SFX) __SFX.squish(.08);
+    // Spawn helper
+    function spawnBalls(n,color){
+      let added = 0;
+      for(let i=0;i<n;i++){
+        if(balls.length >= maxBalls) break;
+        balls.push(makeBall(Math.random()*W, Math.random()*H, color));
+        added++;
       }
-    }
-  }
-
-  // Color ladder utils
-  const cIndex=c=>COLORS.indexOf(c);
-  const sIndex=s=>STAGES.indexOf(s);
-  function promoteStage(cell){
-    const si=sIndex(cell.stage), ci=cIndex(cell.color);
-    if (si<2){ cell.stage=STAGES[si+1]; cell.r=radiusFor(cell.color,cell.stage); return true; }
-    if (ci<COLORS.length-1){
-      const wasBlack=(cell.color==='black');
-      cell.color=COLORS[ci+1]; cell.stage='little'; cell.r=radiusFor(cell.color,cell.stage);
-      if (wasBlack && cell.color==='gold'){ // black->gold event: emit two green mediums
-        for(let i=0;i<2;i++){
-          if (nonRedCount()>=BASE_CAP) break;
-          const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
-          cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+8), y:cell.y+Math.sin(ang)*(cell.r+8),
-                               vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:'green',stage:'medium'}));
-        }
-        if(window.__SFX) __SFX.pop();
-      }
-      return true;
-    }
-    return false;
-  }
-  function demoteColor(cell){
-    const ci=cIndex(cell.color);
-    if (ci<=0){ cell._dead=true; return; }
-    cell.color=COLORS[ci-1];
-    cell.r=radiusFor(cell.color,cell.stage);
-  }
-
-  // Reproduction (only big)
-  function reproduce(cell){
-    if (cell.stage!=='big') return;
-    if (cell.breedCD>0){ cell.breedCD--; return; }
-    if (nonRedCount()>=BASE_CAP) return;
-    const cd={white:240,grey:260,blue:280,purple:300,green:340,black:380,gold:440}[cell.color]||300;
-    cell.breedCD=cd;
-    const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
-    cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+6), y:cell.y+Math.sin(ang)*(cell.r+6),
-                         vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:cell.color, stage:'little'}));
-    if(window.__SFX) __SFX.squish(.1);
-  }
-
-  // Gold bonding → chain → supercell (simplified, stable)
-  const CHAINS=new Map(); // id -> array of cell refs
-  let NEXT_CHAIN_ID=1;
-  function tryBondGold(a,b){
-    if (a.color!=='gold'||b.color!=='gold'||a.stage!=='big'||b.stage!=='big') return;
-    const d=Math.hypot(a.x-b.x,a.y-b.y); if (d>a.r+b.r+4) return;
-    const idA=a.chainId, idB=b.chainId;
-    if (idA==null && idB==null){
-      const id=NEXT_CHAIN_ID++; CHAINS.set(id,[a,b]); a.chainId=id; b.chainId=id;
-    } else if (idA!=null && idB==null){ CHAINS.get(idA).push(b); b.chainId=idA; }
-    else if (idA==null && idB!=null){ CHAINS.get(idB).push(a); a.chainId=idB; }
-    else if (idA!==idB){
-      const A=CHAINS.get(idA), B=CHAINS.get(idB); A.push(...B); for(const n of B) n.chainId=idA; CHAINS.delete(idB);
-    }
-  }
-  function closeChainsIfLoop(){
-    for (const [id,arr] of [...CHAINS]){
-      if (arr.length<4) continue;
-      const first=arr[0], last=arr[arr.length-1];
-      const dist=Math.hypot(first.x-last.x, first.y-last.y);
-      if (dist < first.r+last.r+6){
-        // build supercell at centroid
-        const cx=arr.reduce((s,n)=>s+n.x,0)/arr.length;
-        const cy=arr.reduce((s,n)=>s+n.y,0)/arr.length;
-        const avgR=arr.reduce((s,n)=>s+n.r,0)/arr.length;
-        const sc=makeSupercell(cx,cy,Math.max(28,avgR*1.8));
-        supercells.push(sc);
-        arr.forEach(n=>n._dead=true);
-        CHAINS.delete(id);
-      }
-    }
-  }
-
-  // Drawing
-  function drawCell(c){
-    ctx.save(); ctx.translate(c.x,c.y);
-    if (c.color==='gold'){
-      ctx.lineWidth=2.2; ctx.strokeStyle='rgba(255,220,130,.95)';
-      ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.stroke();
-    }else{
-      const col={white:'#ffffff',grey:'#cdd3dd',blue:'#79a7ff',purple:'#b29bff',green:'#79ffb8',black:'#141414'}[c.color]||'#fff';
-      ctx.fillStyle=col; ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.fill();
-    }
-    ctx.restore();
-  }
-  function drawSupercell(sc){
-    ctx.save(); ctx.translate(sc.x,sc.y);
-    sc.wobble += 0.06; const w=1+Math.sin(sc.wobble)*0.02; ctx.scale(w,1/w);
-    ctx.lineWidth=3; ctx.strokeStyle='rgba(255,220,130,.95)';
-    ctx.beginPath(); ctx.arc(0,0,sc.r,0,Math.PI*2); ctx.stroke();
-    ctx.restore();
-    for(const l of sc.lapis){ if(l._dead) continue; ctx.save(); ctx.translate(l.x,l.y); l.a+=0.015; ctx.rotate(l.a); ctx.scale(1.4,1); ctx.fillStyle='rgba(60,120,255,.9)'; ctx.beginPath(); ctx.arc(0,0,l.r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
-  }
-  function drawRed(r){ ctx.save(); ctx.translate(r.x,r.y); ctx.fillStyle='#ff4d4d'; ctx.beginPath(); ctx.arc(0,0,r.r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
-
-  // Click scoring
-  document.addEventListener('click', e=>{
-    const tgt=e.target; if (tgt.closest('input,textarea,[contenteditable="true"]')) return;
-    let hit=false; const x=e.clientX,y=e.clientY;
-    for (const c of cells){ if(c._dead) continue; if (Math.hypot(c.x-x,c.y-y)<=c.r+4){ hit=true; break; } }
-    addScore(hit?+1:-1);
-  });
-
-  // Loop
-  function step(){
-    const rects=uiRects(), W=innerWidth, H=innerHeight;
-
-    // Reds (cap 50)
-    for (const r of reds){ if(r._dead) continue;
-      r.life++; if (r.life>r.ttl){ r._dead=true; continue; }
-      r.x+=r.vx; r.y+=r.vy; r.vx*=0.995; r.vy*=0.995; bounce(r,W,H); collideUI(r,rects);
-      // First hit demotes a cell
-      for (const c of cells){ if(c._dead) continue; const d2=(c.x-r.x)*(c.x-r.x)+(c.y-r.y)*(c.y-r.y);
-        if (d2 <= (c.r+r.r)*(c.r+r.r)){ demoteColor(c); r._dead=true; if(window.__SFX) __SFX.pop(); break; } }
+      return added;
     }
 
-    // Lapis (inside supercells)
-    for (const sc of supercells){ if(sc._dead) continue;
-      for (const l of sc.lapis){ if(l._dead) continue;
-        l.life++; l.x+=l.vx; l.y+=l.vy;
-        const dx=l.x-sc.x, dy=l.y-sc.y, d=Math.hypot(dx,dy), maxR=sc.r*0.8;
-        if (d>maxR){ const nx=dx/d, ny=dy/d; l.x=sc.x+nx*maxR; l.y=sc.y+ny*maxR; l.vx*=-0.4; l.vy*=-0.4; }
+    // Supercell creation
+    function tryCreateSupercell(chain){
+      if(chain.length>=5 && chain.length<=8){
+        // Turn into one big supercell at centroid
+        let cx=0, cy=0;
+        chain.forEach(id => { cx+=balls[id].x; cy+=balls[id].y; balls[id].dead=true; });
+        cx/=chain.length; cy/=chain.length;
+        balls.push({x:cx,y:cy,vx:0,vy:0,r:30,color:"supercell",dead:false});
       }
     }
 
-    // Cells
-    for (const c of cells){ if(c._dead) continue;
-      c.life++; c.x+=c.vx; c.y+=c.vy;
-      const drag = {white:.998,grey:.998,blue:.999,purple:.999,green:.999,black:1.000,gold:1.000}[c.color]||.999;
-      c.vx*=drag; c.vy*=drag;
-      bounce(c,W,H); collideUI(c,rects);
-      reproduce(c);
-    }
-
-    // Cell vs cell
-    for (let i=0;i<cells.length;i++){
-      const a=cells[i]; if(a._dead) continue;
-      for (let j=i+1;j<cells.length;j++){
-        const b=cells[j]; if(b._dead) continue;
-        const dx=b.x-a.x, dy=b.y-a.y, d2=dx*dx+dy*dy, R=a.r+b.r;
-        if (d2<=R*R){
-          const d=Math.max(0.0001,Math.sqrt(d2)), nx=dx/d, ny=dy/d, overlap=R-d;
-          if (overlap>0){ a.x-=nx*overlap*.5; a.y-=ny*overlap*.5; b.x+=nx*overlap*.5; b.y+=ny*overlap*.5;
-            const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
-            a.vx-=p*nx; a.vy-=p*ny; b.vx+=p*nx; b.vy+=p*ny;
-            if (window.__SFX) __SFX.squish(.08);
+    // Chat commands
+    const chatInput=document.getElementById("chatInput");
+    chatInput.addEventListener("keydown",e=>{
+      if(e.key==="Enter"){
+        const text=chatInput.value.trim();
+        chatInput.value="";
+        if(text.startsWith("/")){
+          const parts=text.slice(1).split(" ");
+          const cmd=parts[0];
+          if(cmd==="spawn"){
+            const n=parseInt(parts[1])||1;
+            const color=parts[2]||"white";
+            if(colors.includes(color)||color==="red"||color==="supercell"){
+              const added=spawnBalls(n,color);
+              console.log(`Spawned ${added} ${color} balls`);
+            }
           }
-          // promotions on like-like small chance
-          if (a.color===b.color && a.stage===b.stage && a.stage!=='big' && Math.random()<0.18){ promoteStage(a); promoteStage(b); }
-          // neighbor influence tiny chance
-          const ai=cIndex(a.color), bi=cIndex(b.color);
-          if (Math.abs(ai-bi)===1 && Math.random()<0.05){ (ai>bi ? b : a).stage!=='big' && promoteStage(ai>bi?b:a); }
-          // gold bonding
-          tryBondGold(a,b);
         }
+      }
+    });
+
+    // Click scoring
+    canvas.addEventListener("click",e=>{
+      const mx=e.clientX,my=e.clientY;
+      let hit=false;
+      for(const b of balls){
+        if(!b.dead){
+          const d=Math.hypot(b.x-mx,b.y-my);
+          if(d<b.r){
+            hit=true; b.dead=true; score+=1;
+          }
+        }
+      }
+      if(!hit) score-=1;
+      scoreEl.textContent=score;
+    });
+
+    // Main loop
+    function update(){
+      // Physics
+      for(const b of balls){
+        if(b.dead) continue;
+        b.x+=b.vx; b.y+=b.vy;
+        if(b.x<b.r||b.x>W-b.r) b.vx*=-1;
+        if(b.y<b.r||b.y>H-b.r) b.vy*=-1;
+      }
+
+      // Gold line connections
+      lines=[];
+      let chains={};
+      for(let i=0;i<balls.length;i++){
+        const a=balls[i];
+        if(a.dead||a.color!=="gold") continue;
+        for(let j=i+1;j<balls.length;j++){
+          const b=balls[j];
+          if(b.dead||b.color!=="gold") continue;
+          const d=Math.hypot(a.x-b.x,a.y-b.y);
+          if(d<100){
+            lines.push([a,b]);
+            if(a.chainId==null && b.chainId==null){
+              const id=Math.random();
+              a.chainId=b.chainId=id;
+              chains[id]=[i,j];
+            } else if(a.chainId!=null && b.chainId==null){
+              b.chainId=a.chainId; chains[a.chainId].push(j);
+            } else if(a.chainId==null && b.chainId!=null){
+              a.chainId=b.chainId; chains[b.chainId].push(i);
+            } else if(a.chainId===b.chainId){
+              chains[a.chainId].push(j);
+            }
+          }
+        }
+      }
+      // Check for supercell formation
+      for(const id in chains){
+        tryCreateSupercell(chains[id]);
+      }
+
+      // Clean up dead
+      balls=balls.filter(b=>!b.dead);
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      // Draw lines first
+      ctx.strokeStyle="rgba(255,215,0,0.6)";
+      for(const [a,b] of lines){
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.stroke();
+      }
+      // Draw balls
+      for(const b of balls){
+        ctx.beginPath();
+        if(b.color==="supercell"){
+          ctx.strokeStyle="gold";
+          ctx.lineWidth=3;
+          ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+          ctx.stroke();
+          continue;
+        }
+        ctx.fillStyle=b.color==="doctor-green"?"lime":b.color;
+        ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+        ctx.fill();
       }
     }
 
-    // chains → supercells
-    closeChainsIfLoop();
-
-    // Supercell logic: dock greens, spawn lapis, then spawn gold
-    for (const sc of supercells){ if(sc._dead) continue;
-      // Dock greens
-      for (const c of cells){ if(c._dead || c.color!=='green') continue;
-        const d=Math.hypot(c.x-sc.x, c.y-sc.y);
-        if (d< sc.r+10 && d> sc.r-18){
-          const ang=Math.atan2(c.y-sc.y, c.x-sc.x); const rr=sc.r;
-          c.x=sc.x+Math.cos(ang)*rr; c.y=sc.y+Math.sin(ang)*rr; c.vx*=0.3; c.vy*=0.3; c.docked=true;
-          if (!sc.greens.includes(c)) sc.greens.push(c);
-        }
-      }
-      // Populate lapis if enough greens
-      const liveGreens = sc.greens.filter(g=>!g._dead).length;
-      if (liveGreens>=8){
-        if (sc.lapis.filter(l=>!l._dead).length<5){
-          if (sc.spawnCD<=0 && nonRedCount()<BASE_CAP){ sc.lapis.push(makeLapis(sc)); sc.spawnCD=170; if(window.__SFX) __SFX.tap(); }
-          else sc.spawnCD--;
-        } else {
-          if (sc.spawnCD<=0 && nonRedCount()<BASE_CAP){
-            const ang=Math.random()*Math.PI*2, r=sc.r+16;
-            cells.push(makeCell({x:sc.x+Math.cos(ang)*r, y:sc.y+Math.sin(ang)*r, color:'gold', stage:'little', vx:(Math.random()-.5)*1.4, vy:(Math.random()-.5)*1.4}));
-            sc.spawnCD=210; if(window.__SFX) __SFX.pop();
-          } else sc.spawnCD--;
-        }
-      }
+    function loop(){
+      update();
+      draw();
+      requestAnimationFrame(loop);
     }
+    loop();
 
-    // Cleanup
-    for (let i=cells.length-1;i>=0;i--) if (cells[i]._dead) cells.splice(i,1);
-    for (let i=reds.length-1;i>=0;i--) if (reds[i]._dead) reds.splice(i,1);
-    for (let i=supercells.length-1;i>=0;i--) if (supercells[i]._dead) supercells.splice(i,1);
-
-    // Draw
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    // under: supercells
-    for (const sc of supercells) drawSupercell(sc);
-    // cells
-    for (const c of cells) drawCell(c);
-    // top: reds
-    for (const r of reds) drawRed(r);
-
-    updateCount();
-    requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-
-  // Spawners exposed to chat
-  window.spawnWhitesAt = function(cx,cy,n){
-    let created=0;
-    while (nonRedCount()<BASE_CAP && created<n){
-      const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
-      cells.push(makeCell({x:cx+Math.cos(ang)*8,y:cy+Math.sin(ang)*8,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,color:'white',stage:'little'}));
-      created++;
-    }
-    if (window.__SFX) __SFX.squish(.1);
-    updateCount();
-  };
-  window.spawnRedAgent = function(x,y){
-    if (redCount()>=RED_EXTRA_CAP) return false;
-    reds.push(makeRed(x,y)); if (window.__SFX) __SFX.pop(); updateCount(); return true;
-  };
-})();
-</script>
+    // Initial spawn
+    spawnBalls(20,"white");
+  </script>
 </body>
 </html>
