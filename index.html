@@ -73,7 +73,7 @@
 <main id="home" class="stage">
   <div class="panel">
     <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
-    <div class="chatbar"><input id="chatInput" placeholder='Try commands: /spawn 50 dust · /spawn 8 medium · /spawn 1 redm' aria-label="Type what you want and press Enter" /></div>
+    <div class="chatbar"><input id="chatInput" placeholder='Try: /spawn 100 dust · /spawn 10 small · /fill · Space = pause' aria-label="Type what you want and press Enter" /></div>
     <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
 </main>
@@ -114,7 +114,7 @@ input.addEventListener('keydown', e=>{
     const raw=input.value.trim(); if(!raw) return; say('You', raw); input.value='';
     if (raw.startsWith('/')) { handleCommand(raw.slice(1)); return; }
     if (raw.toLowerCase()==='pause'){ setPaused(true); say('MayaNut','Paused. Type /resume or press Space.'); return; }
-    say('MayaNut','Commands: /spawn N [dust|medium|big|triad|redm], /fill, /clear, /pause, /resume');
+    say('MayaNut','Commands: /spawn N [dust|small], /fill, /clear, /pause, /resume');
   }
 });
 document.addEventListener('keydown', (e)=>{
@@ -134,42 +134,42 @@ function handleCommand(cmd){
   if(name==='spawn'){ const ok=window.GameSpawn(num, kind); say('MayaNut',`Spawned ${ok} ${kind}.`); return; }
   if(name==='fill'){ const ok=window.GameFill(); say('MayaNut',`Filled ${ok} dust.`); return; }
   if(name==='clear'){ const c=window.GameClear(); say('MayaNut',`Cleared ${c} cells.`); return; }
-  say('MayaNut','Commands: /spawn N [dust|medium|big|triad|redm], /fill, /clear, /pause, /resume');
+  say('MayaNut','Commands: /spawn N [dust|small], /fill, /clear, /pause, /resume');
 }
 
-/* ===== Engine: Dust→Medium (16), Medium→Big (8), TRIADs, Red-Medium bonds only to TRIAD ===== */
+/* ===== Engine: ONLY Dust & Small. 16 dust → 1 small. Smalls self-line into chains. ===== */
 (function(){
   const canvas=document.getElementById('ballLayer');
   const ctx=canvas.getContext('2d');
-  function resize(){ const dpr=Math.max(1,Math.min(2,devicePixelRatio||1)); canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px'; canvas.width=innerWidth*dpr; canvas.height=innerHeight*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  function resize(){
+    const dpr=Math.max(1,Math.min(2,devicePixelRatio||1));
+    canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
+    canvas.width=innerWidth*dpr; canvas.height=innerHeight*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
   resize(); addEventListener('resize', resize);
 
   // Types
-  const DUST='dust', MED='medium', BIG='big', TRIAD='triad', REDM='redm';
+  const DUST='dust', SMALL='small';
 
   // Caps
-  const MAX_BALLS=500;
+  const MAX_CELLS=500;
 
-  // Radii (requested: medium as big, small→medium, add tinier dust)
+  // Radii
   const R_DUST=2;
-  const R_MED=26;   // same as the old big
-  const R_BIG=36;   // larger than medium
-  const R_TRIAD=38; // fused unit body
-  const R_REDM=20;  // medium red
+  const R_SMALL=14;
 
-  // Production
-  const BIG_INTERVAL=180;     // big emits dust
-  const TRIAD_INTERVAL=240;   // triad emits dust
-
-  // TRIAD linking (strings)
-  const SPACING_T = R_TRIAD*2.05;
-  const LINK_STIFF=0.1, LINK_DAMP=0.86, ANGLE_TOL=0.38; // ~22°
-  const RING_CLOSE_T = R_TRIAD*1.8;
+  // Chain config (keep lines, avoid clumps)
+  const LINK_DIST = R_SMALL*2.0;          // desired spacing between linked smalls
+  const ALIGN_PULL = 0.20;                // strength to pull nodes onto the chain line
+  const SPRING_STIFF = 0.12;              // spring between neighbors
+  const SPRING_DAMP = 0.86;               // friction on spring movement
+  const AVOID_FORCE = 0.08;               // anti-clump repulsion between non-linked smalls
+  const AVOID_RANGE = R_SMALL*2.4;        // range to repel
+  const MERGE_SNAP = R_DUST*2.2;          // dust-dust merge threshold
 
   // State
-  const nodes=[];             // all bodies
-  const links=[];             // triad↔triad springs (north/south)
-  const triChains=new Map();  // id -> triad nodes
+  const nodes=[];          // all bodies
+  const chains=[];         // arrays of SMALL nodes, ordered
   let nextChainId=1;
 
   const scoreEl=document.getElementById('score'), countEl=document.getElementById('ballCount');
@@ -177,30 +177,15 @@ function handleCommand(cmd){
   const alive=()=>nodes.filter(n=>!n._dead).length; const updateCount=()=>countEl.textContent=alive();
 
   // Helpers
-  function nearAngle(ang,target,tol=ANGLE_TOL){ let d=Math.abs(((ang-target+Math.PI)%(2*Math.PI))-Math.PI); return d<=tol; }
-  function anchor(n,slot){ if(slot==='top') return {x:n.x,y:n.y-n.r}; if(slot==='bottom') return {x:n.x,y:n.y+n.r}; return {x:n.x,y:n.y}; }
-
   function makeNode(x,y,type=DUST,vx=(Math.random()-.5)*2,vy=(Math.random()-.5)*2){
-    let r = type===DUST?R_DUST : type===MED?R_MED : type===BIG?R_BIG : type===TRIAD?R_TRIAD : R_REDM;
-    const n={x,y,vx,vy,r,type,_dead:false,
-             count: (type===DUST?1:(type===MED?1:1)), // aggregation counters
-             orbit:null, cooldown:0, squashT:0, squashAxis:'x'};
-
-    if(type===TRIAD){
-      n.slots={top:null,bottom:null};
-      n.chainId=null; n.isRing=false;
-      n.mediumOffset={x:r*0.75,y:0};
-      n.hasInnerDot=true;
-      n.redBond=[]; // red-mediums attached on the sides (visual)
-    }
-    return n;
+    const r = (type===DUST)?R_DUST:R_SMALL;
+    return {x,y,vx,vy,r,type,_dead:false,count:(type===DUST?1:1), chainId:null, squashT:0, squashAxis:'x'};
   }
-  function add(n){ if(alive()>=MAX_BALLS) return false; nodes.push(n); return true; }
+  function add(n){ if(alive()>=MAX_CELLS) return false; nodes.push(n); return true; }
 
-  // Seed: one BIG, a few MED and dust
-  add(makeNode(innerWidth*0.5, innerHeight*0.42, BIG, 0.6, 0.5));
-  for(let i=0;i<6;i++) add(makeNode(Math.random()*innerWidth, Math.random()*innerHeight, MED));
-  for(let i=0;i<40;i++) add(makeNode(Math.random()*innerWidth, Math.random()*innerHeight, DUST));
+  // Seed a few dust & small
+  for(let i=0;i<80;i++) add(makeNode(Math.random()*innerWidth, Math.random()*innerHeight, DUST));
+  for(let i=0;i<6;i++) add(makeNode(innerWidth*0.45+Math.random()*60, innerHeight*0.42+Math.random()*60, SMALL));
 
   // Obstacles (text/boxes)
   function rects(){
@@ -225,124 +210,105 @@ function handleCommand(cmd){
     if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
   }
 
-  // Chain helpers
-  function ensureChain(n){ if(n.chainId!=null) return n.chainId; const id=nextChainId++; n.chainId=id; triChains.set(id,[n]); return id; }
-  function mergeChains(a,b){ if(a===b) return a; const A=triChains.get(a)||[], B=triChains.get(b)||[]; const merged=[...A,...B]; const id=nextChainId++; for(const n of merged) n.chainId=id; triChains.delete(a); triChains.delete(b); triChains.set(id,merged); return id; }
-  function addLink(a,b,slotA,slotB,dist){ links.push({a,b,slotA,slotB,dist}); a.slots[slotA]=b; b.slots[slotB]=a; }
-  function linkSpringRelax(){
-    for(const L of links){
-      const {a,b,slotA,slotB,dist}=L; if(a._dead||b._dead) continue;
-      const A=anchor(a,slotA), B=anchor(b,slotB);
-      const dx=B.x-A.x, dy=B.y-A.y, d=Math.hypot(dx,dy)||.0001;
-      const nx=dx/d, ny=dy/d, err=d-dist, push=err*LINK_STIFF;
-      a.x += nx*push; a.y += ny*push; a.vx*=LINK_DAMP; a.vy*=LINK_DAMP;
-      b.x -= nx*push; b.y -= ny*push; b.vx*=LINK_DAMP; b.vy*=LINK_DAMP;
+  // Chain management
+  function createChain(a,b){
+    const id=nextChainId++; a.chainId=id; b.chainId=id;
+    const ch=[a,b]; ch.id=id; chains.push(ch); return ch;
+  }
+  function getChain(id){ return chains.find(c=>c.id===id); }
+  function appendToClosestEnd(ch, node){
+    const first=ch[0], last=ch[ch.length-1];
+    const df=Math.hypot(node.x-first.x,node.y-first.y);
+    const dl=Math.hypot(node.x-last.x,node.y-last.y);
+    if(df<dl){ ch.unshift(node); }
+    else { ch.push(node); }
+    node.chainId=ch.id;
+  }
+  function tryLinkSmalls(a,b){
+    if(a.chainId==null && b.chainId==null){ createChain(a,b); return true; }
+    if(a.chainId!=null && b.chainId==null){ appendToClosestEnd(getChain(a.chainId), b); return true; }
+    if(a.chainId==null && b.chainId!=null){ appendToClosestEnd(getChain(b.chainId), a); return true; }
+    if(a.chainId!=null && b.chainId!=null && a.chainId!==b.chainId){
+      // merge by connecting the nearer ends to keep a line
+      const A=getChain(a.chainId), B=getChain(b.chainId);
+      const endsA=[A[0],A[A.length-1]], endsB=[B[0],B[B.length-1]];
+      // pick the pair of ends with smallest distance
+      let best=[0,0,Infinity];
+      for(let i=0;i<2;i++) for(let j=0;j<2;j++){
+        const d=Math.hypot(endsA[i].x-endsB[j].x, endsA[i].y-endsB[j].y);
+        if(d<best[2]) best=[i,j,d];
+      }
+      // orient so we connect end-to-end
+      if(best[0]===0) A.reverse();
+      if(best[1]!==0) B.reverse();
+      // merge
+      const id=A.id;
+      for(const n of B){ n.chainId=id; A.push(n); }
+      // remove old B
+      const idx=chains.indexOf(B); if(idx>=0) chains.splice(idx,1);
+      return true;
+    }
+    return false;
+  }
+
+  // Relax chains to a straight line with equal spacing
+  function relaxChains(){
+    for(const ch of chains){
+      if(ch.length<2) continue;
+      // light springs between neighbors
+      for(let i=0;i<ch.length-1;i++){
+        const a=ch[i], b=ch[i+1]; const dx=b.x-a.x, dy=b.y-a.y;
+        const d=Math.hypot(dx,dy)||.0001, nx=dx/d, ny=dy/d, err=d-LINK_DIST, push=err*SPRING_STIFF;
+        a.x += nx*push; a.y += ny*push; a.vx*=SPRING_DAMP; a.vy*=SPRING_DAMP;
+        b.x -= nx*push; b.y -= ny*push; b.vx*=SPRING_DAMP; b.vy*=SPRING_DAMP;
+      }
+      // alignment: project each node to evenly spaced points on the end-to-end axis
+      const start=ch[0], end=ch[ch.length-1];
+      const ax=end.x-start.x, ay=end.y-start.y;
+      const len=Math.hypot(ax,ay)||1; const ux=ax/len, uy=ay/len;
+      for(let i=0;i<ch.length;i++){
+        const targetX = start.x + ux*(i*LINK_DIST);
+        const targetY = start.y + uy*(i*LINK_DIST);
+        const n=ch[i];
+        n.x += (targetX - n.x)*ALIGN_PULL;
+        n.y += (targetY - n.y)*ALIGN_PULL;
+      }
     }
   }
-  function tryCloseTriadRings(){
-    for(const [id,arr] of [...triChains]){
-      if(!arr || arr.length<4) continue;
-      const first=arr[0], last=arr[arr.length-1];
-      if(Math.hypot(last.x-first.x,last.y-first.y)<=RING_CLOSE_T){
-        const cx=arr.reduce((s,n)=>s+n.x,0)/arr.length, cy=arr.reduce((s,n)=>s+n.y,0)/arr.length;
-        const radius=Math.max(R_TRIAD*1.6, (arr.length*SPACING_T)/(2*Math.PI));
-        for(let i=0;i<arr.length;i++){
-          const a=(i/arr.length)*Math.PI*2, n=arr[i];
-          n.x=cx+Math.cos(a)*radius; n.y=cy+Math.sin(a)*radius; n.vx=n.vy=0; n.isRing=true;
+
+  // Anti-clump repulsion for smalls that are NOT neighbors in a chain
+  function antiClump(){
+    const smalls = nodes.filter(n=>!n._dead && n.type===SMALL);
+    for(let i=0;i<smalls.length;i++){
+      for(let j=i+1;j<smalls.length;j++){
+        const a=smalls[i], b=smalls[j];
+        // If both are in same chain and adjacent, skip
+        if(a.chainId && a.chainId===b.chainId){
+          const ch=getChain(a.chainId); const ia=ch.indexOf(a), ib=ch.indexOf(b);
+          if(Math.abs(ia-ib)===1) continue;
+        }
+        const dx=b.x-a.x, dy=b.y-a.y; const d=Math.hypot(dx,dy)||.0001;
+        if(d<AVOID_RANGE){
+          const nx=dx/d, ny=dy/d, push=(AVOID_RANGE-d)*AVOID_FORCE;
+          a.x -= nx*push; a.y -= ny*push;
+          b.x += nx*push; b.y += ny*push;
         }
       }
     }
   }
 
-  // Fusion rules
-  function fuseDust(a,b){
-    // combine counts; if >=16 -> become MED
-    const total=a.count+b.count;
+  // Dust merge logic: 16 dust → 1 small
+  function mergeDust(a,b){
+    const total=a.count + b.count;
     a._dead=true; b._dead=true;
     if(total>=16){
-      const n=makeNode((a.x+b.x)/2,(a.y+b.y)/2,MED,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-      n.count=1; add(n);
+      const n=makeNode((a.x+b.x)/2, (a.y+b.y)/2, SMALL, (a.vx+b.vx)/2, (a.vy+b.vy)/2);
+      add(n);
     }else{
-      const d=makeNode((a.x+b.x)/2,(a.y+b.y)/2,DUST,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-      d.count=total; add(d);
+      const d=makeNode((a.x+b.x)/2, (a.y+b.y)/2, DUST, (a.vx+b.vx)/2, (a.vy+b.vy)/2);
+      d.count = total;
+      add(d);
     }
-  }
-  function fuseMedium(a,b){
-    // combine counts; if combined "medium units" >=8 -> BIG
-    const total=a.count+b.count;
-    a._dead=true; b._dead=true;
-    if(total>=8){
-      const n=makeNode((a.x+b.x)/2,(a.y+b.y)/2,BIG,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-      n.count=1; add(n);
-    }else{
-      const m=makeNode((a.x+b.x)/2,(a.y+b.y)/2,MED,(a.vx+b.vx)/2,(a.vy+b.vy)/2);
-      m.count=total; add(m);
-    }
-  }
-
-  // TRIAD formation: BIG + MED overlapping + at least 1 DUST inside big (or orbiting med near big)
-  function maybeFormTriad(a,b){
-    let F=null,M=null;
-    if(a.type===BIG && b.type===MED){F=a; M=b;}
-    else if(b.type===BIG && a.type===MED){F=b; M=a;}
-    else return false;
-
-    let foundDustIdx=-1;
-    for(let i=0;i<nodes.length;i++){
-      const s=nodes[i]; if(s._dead||s.type!==DUST) continue;
-      const insideBig = Math.hypot(s.x-F.x,s.y-F.y) <= F.r - R_DUST*0.5;
-      const nearMed   = Math.hypot(M.x-F.x,M.y-F.y) < F.r + M.r + 6;
-      if(insideBig || nearMed){ foundDustIdx=i; break; }
-    }
-    if(foundDustIdx<0) return false;
-
-    const S=nodes[foundDustIdx];
-    F._dead=true; M._dead=true; S._dead=true;
-    const T=makeNode(F.x,F.y,TRIAD,(F.vx+M.vx)/2,(F.vy+M.vy)/2);
-    add(T);
-    return true;
-  }
-
-  // TRIAD ↔ TRIAD north/south bonds
-  function tryTriadLink(a,b,dx,dy){
-    const ang=Math.atan2(dy,dx);
-    if(nearAngle(ang, Math.PI/2) && !a.slots.bottom && !b.slots.top){
-      addLink(a,b,'bottom','top',SPACING_T);
-      const idA=ensureChain(a), idB=ensureChain(b), id=(idA===idB)?idA:mergeChains(idA,idB);
-      const arr=triChains.get(id); if(arr.indexOf(b)===-1) arr.splice(arr.indexOf(a)+1,0,b);
-      return true;
-    }
-    if(nearAngle(ang, -Math.PI/2) && !a.slots.top && !b.slots.bottom){
-      addLink(a,b,'top','bottom',SPACING_T);
-      const idA=ensureChain(a), idB=ensureChain(b), id=(idA===idB)?idA:mergeChains(idA,idB);
-      const arr=triChains.get(id); if(arr.indexOf(a)===-1) arr.unshift(a); if(arr.indexOf(b)===-1) arr.unshift(b);
-      return true;
-    }
-    return false;
-  }
-
-  // RED-MED bonds ONLY to TRIAD (on side), not to anything else
-  function tryRedMBond(red, triad){
-    // attach on side, spaced by 40°
-    const step = Math.PI/4.5;
-    const start = -Math.PI/2 + step; // side-ish
-    for(let i=0;i<6;i++){
-      const ang = start + i*step;
-      const px = triad.x + Math.cos(ang)*(triad.r + R_REDM + 6);
-      const py = triad.y + Math.sin(ang)*(triad.r + R_REDM + 6);
-      // place if not overlapping other red attachments
-      let blocked=false;
-      for(const r of triad.redBond){
-        if(Math.hypot(px-r.x,py-r.y) < R_REDM*2-6){ blocked=true; break; }
-      }
-      if(!blocked){
-        red.x=px; red.y=py; red.vx=red.vy=0;
-        red.orbit=null; red._lockedTo=triad;
-        triad.redBond.push(red);
-        return true;
-      }
-    }
-    return false;
   }
 
   // Pair interactions
@@ -351,35 +317,23 @@ function handleCommand(cmd){
     const dx=b.x-a.x, dy=b.y-a.y; const d=Math.hypot(dx,dy);
     if(d>a.r+b.r) return;
 
-    // Dust + Dust merge toward MED
-    if(a.type===DUST && b.type===DUST){ fuseDust(a,b); return; }
-
-    // MED + MED merge toward BIG
-    if(a.type===MED && b.type===MED){ fuseMedium(a,b); return; }
-
-    // TRIAD formation takes priority
-    if (maybeFormTriad(a,b)) return;
-
-    // TRIAD ↔ TRIAD linking (north/south)
-    if(a.type===TRIAD && b.type===TRIAD){ if(tryTriadLink(a,b,dx,dy)) return; }
-
-    // RED-MED behavior: bonds ONLY to TRIAD, bounces off others
-    if(a.type===REDM || b.type===REDM){
-      const r = (a.type===REDM)?a:b;
-      const o = (a.type===REDM)?b:a;
-      if(o.type===TRIAD){
-        if(!r._lockedTo){ tryRedMBond(r,o); }
-        return;
-      }else{
-        // elastic bounce off non-triad
-        const nx=dx/(d||1), ny=dy/(d||1); const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
-        a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-        r.squashT=10; r.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y';
-        return;
-      }
+    // Dust + Dust → accumulate toward small
+    if(a.type===DUST && b.type===DUST){
+      if(d<MERGE_SNAP){ mergeDust(a,b); return; }
     }
 
-    // Default elastic-ish bounce + squash
+    // Small + Small → link into chain (energy from dust made them sticky)
+    if(a.type===SMALL && b.type===SMALL){
+      tryLinkSmalls(a,b);
+      // small elastic bounce, but gentle (so lines can form)
+      const nx=dx/(d||1), ny=dy/(d||1);
+      const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny)*0.6;
+      a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
+      a.squashT=b.squashT=10; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
+      return;
+    }
+
+    // Dust + Small → bounce (no absorption in this version)
     const nx=dx/(d||1), ny=dy/(d||1);
     const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
     a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
@@ -402,78 +356,41 @@ function handleCommand(cmd){
   });
 
   // Public API
+  window.GameFill=function(){
+    let added=0; while(alive()<MAX_CELLS){ if(!add(makeNode(Math.random()*innerWidth,Math.random()*innerHeight,DUST))) break; added++; }
+    updateCount(); return added;
+  };
+  window.GameClear=function(){ const c=alive(); nodes.length=0; chains.length=0; updateCount(); return c; };
   window.GameSpawn=function(n=1, kind='dust'){
-    const map={dust:DUST, medium:MED, med:MED, big:BIG, triad:TRIAD, redm:REDM};
-    const t=map[kind]||DUST;
-    let added=0;
-    for(let i=0;i<n;i++){
-      if(alive()>=MAX_BALLS) break;
-      const x=innerWidth*0.5 + (Math.random()*160-80);
-      const y=innerHeight*0.42 + (Math.random()*160-80);
+    const t = (kind==='small')?SMALL:DUST; let added=0;
+    for(let i=0;i<n;i++){ if(alive()>=MAX_CELLS) break;
+      const x=innerWidth*0.5+(Math.random()*200-100), y=innerHeight*0.44+(Math.random()*200-100);
       if(add(makeNode(x,y,t))) added++;
     }
     updateCount(); return added;
   };
-  window.GameFill=function(){
-    let added=0;
-    while(alive()<MAX_BALLS){
-      if(!add(makeNode(Math.random()*innerWidth, Math.random()*innerHeight, DUST))) break;
-      added++;
-    }
-    updateCount(); return added;
-  };
-  window.GameClear=function(){
-    const c=alive(); nodes.length=0; links.length=0; triChains.clear(); updateCount(); return c;
-  };
 
-  // Loop
   function step(){
     if(!GAME_PAUSED){
       const rs=rects();
-
+      // integrate
       for(const n of nodes){
         if(n._dead) continue;
-
-        // movement
-        if(n._lockedTo && n.type===REDM){
-          // keep glued near its triad slot (light wobble)
-          const t=n._lockedTo; if(!t || t._dead){ n._lockedTo=null; } // release if triad gone
-        }else{
-          n.x+=n.vx; n.y+=n.vy;
-        }
-
-        // big/triad produce dust slowly
-        if(n.type===BIG){
-          n.cooldown++;
-          if(n.cooldown>BIG_INTERVAL && alive()<MAX_BALLS){
-            n.cooldown=0;
-            add(makeNode(n.x+(Math.random()*24-12), n.y+(Math.random()*24-12), DUST));
-          }
-        }
-        if(n.type===TRIAD){
-          n.cooldown++;
-          if(n.cooldown>TRIAD_INTERVAL && alive()<MAX_BALLS){
-            n.cooldown=0;
-            add(makeNode(n.x+(Math.random()*24-12), n.y+(Math.random()*24-12), DUST));
-          }
-        }
-
-        // collisions with UI + walls
+        n.x+=n.vx; n.y+=n.vy;
+        // mild drag to settle chains
+        n.vx*=0.995; n.vy*=0.995;
         bounceWalls(n); for(const R of rs) collideRect(n,R);
-
         if(n.squashT>0) n.squashT--;
       }
-
-      // pairwise interactions
+      // interactions
       for(let i=0;i<nodes.length;i++){
         for(let j=i+1;j<nodes.length;j++){
-          handlePair(nodes[i], nodes[j]);
+          handlePair(nodes[i],nodes[j]);
         }
       }
-
-      // Relax linked triads + close rings
-      linkSpringRelax();
-      tryCloseTriadRings();
+      // structure forces
+      relaxChains();
+      antiClump();
 
       // cleanup
       for(let i=nodes.length-1;i>=0;i--) if(nodes[i]._dead) nodes.splice(i,1);
@@ -483,48 +400,29 @@ function handleCommand(cmd){
     // draw
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // triad links
-    ctx.strokeStyle='rgba(20,40,80,0.5)'; ctx.lineWidth=2;
-    for(const L of links){
-      const {a,b,slotA,slotB}=L; if(a._dead||b._dead) continue;
-      const A=anchor(a,slotA), B=anchor(b,slotB);
-      ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
+    // draw chains as subtle lines
+    ctx.strokeStyle='rgba(20,40,80,0.45)'; ctx.lineWidth=2;
+    for(const ch of chains){
+      if(ch.length<2) continue;
+      ctx.beginPath(); ctx.moveTo(ch[0].x,ch[0].y);
+      for(const n of ch) ctx.lineTo(n.x,n.y);
+      ctx.stroke();
     }
 
-    // nodes
+    // draw nodes (dust + small) with squash/stretch
     for(const n of nodes){
       let sx=1, sy=1;
       if(n.squashT>0){ const t=n.squashT/10, amt=.35*Math.sin(t*Math.PI); if(n.squashAxis==='x'){sx=1+amt; sy=1-amt;} else {sy=1+amt; sx=1-amt;} }
       ctx.save(); ctx.translate(n.x,n.y); ctx.scale(sx,sy);
 
       if(n.type===DUST){
-        ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(0,0,R_DUST,0,Math.PI*2); ctx.fill();
-      } else if(n.type===MED){
-        // medium is large (same as old big) with ring
-        ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(0,0,R_MED-2,0,Math.PI*2); ctx.fill();
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(12,26,65,.5)'; ctx.beginPath(); ctx.arc(0,0,R_MED,0,Math.PI*2); ctx.stroke();
-      } else if(n.type===BIG){
-        ctx.fillStyle='rgba(255,255,255,.95)'; ctx.beginPath(); ctx.arc(0,0,R_BIG,0,Math.PI*2); ctx.fill();
-      } else if(n.type===TRIAD){
-        // big body
-        ctx.fillStyle='rgba(255,255,255,.96)'; ctx.beginPath(); ctx.arc(0,0,R_TRIAD,0,Math.PI*2); ctx.fill();
-        // side medium
-        const off=n.mediumOffset; ctx.fillStyle='#ffffff';
-        ctx.beginPath(); ctx.arc(off.x,off.y,R_MED-4,0,Math.PI*2); ctx.fill();
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(12,26,65,.5)'; ctx.beginPath(); ctx.arc(off.x,off.y,R_MED-2,0,Math.PI*2); ctx.stroke();
-        // inner dust
-        if(n.hasInnerDot){ ctx.fillStyle='#ffffff'; ctx.beginPath(); ctx.arc(0,0,R_DUST,0,Math.PI*2); ctx.fill(); }
-        // show free N/S ports
-        ctx.strokeStyle='rgba(12,26,65,.35)'; ctx.lineWidth=1;
-        if(!n.slots.top){ ctx.beginPath(); ctx.moveTo(0,-R_TRIAD); ctx.lineTo(0,-R_TRIAD-6); ctx.stroke(); }
-        if(!n.slots.bottom){ ctx.beginPath(); ctx.moveTo(0, R_TRIAD); ctx.lineTo(0, R_TRIAD+6); ctx.stroke(); }
-        // draw bonded red mediums (already placed in world, but add a subtle tether)
-        for(const r of n.redBond){ if(r._dead) continue;
-          ctx.strokeStyle='rgba(255,77,77,.45)'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(r.x-n.x, r.y-n.y); ctx.stroke();
-        }
-      } else if(n.type===REDM){
-        ctx.fillStyle='#ff4d4d'; ctx.beginPath(); ctx.arc(0,0,R_REDM,0,Math.PI*2); ctx.fill();
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(12,26,65,.5)'; ctx.beginPath(); ctx.arc(0,0,R_REDM+2,0,Math.PI*2); ctx.stroke();
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(0,0,R_DUST,0,Math.PI*2); ctx.fill();
+      }else{
+        ctx.fillStyle='rgba(255,255,255,.96)';
+        ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
+        ctx.lineWidth=2; ctx.strokeStyle='rgba(12,26,65,.35)';
+        ctx.beginPath(); ctx.arc(0,0,R_SMALL+1.5,0,Math.PI*2); ctx.stroke();
       }
 
       ctx.restore();
@@ -534,23 +432,7 @@ function handleCommand(cmd){
   }
   step();
 
-  // Click launch already added; expose spawners
-  window.GameFill = function(){
-    let added=0; while(alive()<MAX_BALLS){ if(!add(makeNode(Math.random()*innerWidth,Math.random()*innerHeight,DUST))) break; added++; }
-    updateCount(); return added;
-  };
-  window.GameClear = function(){ const c=alive(); nodes.length=0; links.length=0; triChains.clear(); updateCount(); return c; };
-  window.GameSpawn = function(n=1, kind='dust'){
-    const map={dust:DUST, medium:MED, med:MED, big:BIG, triad:TRIAD, redm:REDM};
-    const t=map[kind]||DUST; let added=0;
-    for(let i=0;i<n;i++){ if(alive()>=MAX_BALLS) break;
-      const x=innerWidth*0.5+(Math.random()*160-80), y=innerHeight*0.45+(Math.random()*160-80);
-      if(add(makeNode(x,y,t))) added++;
-    }
-    updateCount(); return added;
-  };
-
-  // Update HUD count initially
+  // HUD init
   updateCount();
 })();
 </script>
