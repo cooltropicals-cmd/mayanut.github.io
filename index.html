@@ -12,6 +12,7 @@
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
     --shadow:0 18px 40px rgba(0,0,0,.45);
     --galaxy1: rgba(156,124,255,.22); --galaxy2: rgba(85,180,255,.20); --galaxy3: rgba(255,170,220,.16);
+    --danger:#ff4d4d;
   }
 
   html,body{height:100%}
@@ -61,6 +62,8 @@
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
   .brand{font-weight:800;letter-spacing:.2px;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
   .brand small{font-size:11px;opacity:.95;vertical-align:top}
+  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9} /* counter under logo */
+
   .nav{display:flex;gap:18px}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
@@ -92,8 +95,13 @@
   /* Footer */
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);backdrop-filter:blur(6px);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* Ball layer */
+  /* Ball layer + Game Over overlay */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
+  #gameOver{
+    position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.45); backdrop-filter: blur(2px); color:#fff; font-size:42px; font-weight:800;
+    text-shadow:0 8px 24px rgba(0,0,0,.65)
+  }
 
   @media (max-width:720px){.nav a{padding:6px 10px}}
 </style>
@@ -107,6 +115,7 @@
   <!-- Top bar -->
   <header class="topbar" role="banner">
     <div class="brand">MayaNut<small>™</small></div>
+    <div class="brandInfo">Balls: <b id="ballCount">1</b>/19</div>
     <nav class="nav" aria-label="Primary">
       <a href="#home" id="navHome">MayaNut</a>
       <a href="#buy"  id="navBuy">Buy</a>
@@ -155,8 +164,9 @@
   <!-- Footer -->
   <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
 
-  <!-- Ball overlay -->
+  <!-- Ball overlay + Game Over -->
   <canvas id="ballLayer"></canvas>
+  <div id="gameOver">Game Over</div>
 
 <script>
   /* ===== Minimal chat behavior ===== */
@@ -202,11 +212,14 @@
   document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
   document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
 
-  /* ===== Game: merges, jelly wobble, water-balloon pop at 15 units ===== */
+  /* ===== Game engine with spatial hashing & new rules ===== */
   (function(){
     const scoreEl = document.getElementById('score');
+    const ballCountEl = document.getElementById('ballCount');
+    const gameOverEl = document.getElementById('gameOver');
     let score = 0; const addScore = d => { score += d; scoreEl.textContent = score; };
 
+    const MAX_BALLS = 19;
     const canvas = document.getElementById('ballLayer');
     const ctx = canvas.getContext('2d');
 
@@ -241,37 +254,65 @@
     }
 
     /* ==== Ball model ==== */
-    function tierToRadius(tier){ // 1..15 -> ~8..12 px
-      const t = Math.max(1, Math.min(15, tier|0));
-      return 8 + (4 * (t - 1) / 14);
-    }
+    // types: 'original' | 'small' | 'spawner' | 'killer'
+    function tierToRadius(tier){ const t = Math.max(1, Math.min(15, tier|0)); return 8 + (4 * (t - 1) / 14); }
 
     function makeBall(opts={}){
       const {
         x=window.innerWidth*0.6, y=window.innerHeight*0.3,
-        r=10, vx=3.2, vy=2.6, original=false, canSpawnSmall=false,
-        massUnits=1
+        r=10, vx=3.2, vy=2.6, type='small', sizeTier=null, hasFast=false
       } = opts;
       return {
-        x,y,r,vx,vy, original, canSpawnSmall,
-        massUnits,
+        x,y,r,vx,vy, type, sizeTier, hasFast,
         squashTimer:0, squashAxis:'y',
-        jellyTimer:0, jellyPhase:0,           // merge wobble
-        balloonTimer:0, balloonAxis:'y',      // water-balloon bend before pop
-        hasFast:false,                        // original fast mode after 15 clicks
-        sizeTier: original ? 7 : null,
-        clickCount: 0
+        jellyTimer:0, jellyPhase:0,
+        balloonTimer:0, balloonAxis:'y',
+        _dead:false
       };
     }
 
-    // Start ball: slow, tier 7/15
-    const balls = [ makeBall({ original:true, vx:1.1, vy:0.9, r:tierToRadius(7), massUnits:7 }) ];
-    const MAX_BALLS = 15;
+    const balls = [ makeBall({ type:'original', vx:1.1, vy:0.9, r:tierToRadius(7), sizeTier:7, hasFast:false }) ];
+    updateBallCount();
 
+    /* ==== Spatial Hash (reduces O(n^2)) ==== */
+    const CELL = 48; // px
+    function buildGrid(){
+      const grid = new Map();
+      for (let i=0;i<balls.length;i++){
+        const b = balls[i]; if (b._dead) continue;
+        const minx = Math.floor((b.x - b.r)/CELL), maxx = Math.floor((b.x + b.r)/CELL);
+        const miny = Math.floor((b.y - b.r)/CELL), maxy = Math.floor((b.y + b.r)/CELL);
+        for(let gx=minx; gx<=maxx; gx++){
+          for(let gy=miny; gy<=maxy; gy++){
+            const key = gx+','+gy;
+            if(!grid.has(key)) grid.set(key, []);
+            grid.get(key).push(i);
+          }
+        }
+      }
+      return grid;
+    }
+    function nearbyPairs(grid){
+      const seen = new Set();
+      const pairs = [];
+      for (const ids of grid.values()){
+        for (let a=0;a<ids.length;a++){
+          for (let b=a+1;b<ids.length;b++){
+            const i=ids[a], j=ids[b];
+            const key = i<j ? (i+'-'+j) : (j+'-'+i);
+            if (seen.has(key)) continue;
+            seen.add(key); pairs.push([i,j]);
+          }
+        }
+      }
+      return pairs;
+    }
+
+    /* ==== Physics & collisions ==== */
     function bounceWall(b, W, H){
-      if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx);    b.squashTimer=8; b.squashAxis='x'; }
+      if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
       if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
-      if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy);    b.squashTimer=8; b.squashAxis='y'; }
+      if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
       if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
     }
 
@@ -291,9 +332,9 @@
         b.vy *= -1; b.y += (b.vy>0?1:-1)*Math.max(1,overlapY*0.6); b.squashTimer=8; b.squashAxis='y';
       }
 
-      // If this ball is a super merged ball (15 units), trigger balloon effect
-      if (!b.original && b.massUnits >= 15 && b.balloonTimer === 0){
-        b.balloonTimer = 20; // bend frames before popping
+      // water balloon bend for big merged (we’ll piggyback: spawners that grew large can bend)
+      if (b.type==='spawner' && b.r>=13 && b.balloonTimer===0){
+        b.balloonTimer = 20;
         b.balloonAxis = (overlapX < overlapY) ? 'x' : 'y';
       }
       return true;
@@ -307,79 +348,97 @@
       if (ns>0 && speed>0){ const f = ns/speed; b.vx*=f; b.vy*=f; }
     }
 
-    /* ==== Ball vs Ball merging ==== */
-    function tryMergePairs(){
-      // naive O(n^2) (n<=15)
-      for (let i=0;i<balls.length;i++){
-        for (let j=i+1;j<balls.length;j++){
-          const a = balls[i], b = balls[j];
-          if (a._dead || b._dead) continue;
+    function handleBallBall(i,j){
+      const a=balls[i], b=balls[j];
+      if (a._dead || b._dead) return;
 
-          // Only merge non-original balls
-          if (a.original || b.original) continue;
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const dist = Math.hypot(dx,dy);
+      if (dist > a.r + b.r) return;
 
-          const dx = b.x - a.x, dy = b.y - a.y;
-          const dist = Math.hypot(dx,dy);
-          if (dist <= a.r + b.r){
-            // Merge into 'a', remove 'b'
-            const ma = a.massUnits, mb = b.massUnits;
-            const mSum = ma + mb;
+      // If any is killer -> delete the other (non-red). Killers ignore each other.
+      if (a.type==='killer' && b.type!=='killer'){ b._dead = true; return; }
+      if (b.type==='killer' && a.type!=='killer'){ a._dead = true; return; }
+      if (a.type==='killer' && b.type==='killer'){ return; }
 
-            // Position: mass-weighted midpoint
-            a.x = (a.x*ma + b.x*mb) / mSum;
-            a.y = (a.y*ma + b.y*mb) / mSum;
-
-            // Velocity: momentum-ish
-            a.vx = (a.vx*ma + b.vx*mb) / mSum;
-            a.vy = (a.vy*ma + b.vy*mb) / mSum;
-
-            // Radius by area
-            a.r = Math.sqrt(a.r*a.r + b.r*b.r);
-            a.massUnits = mSum;
-
-            // Jelly wobble
-            a.jellyTimer = 16;
-            a.jellyPhase = 0;
-
-            // Mark b for removal
-            b._dead = true;
-
-            // Cap at 15 mass units for stability; keep extra as visual only
-            if (a.massUnits > 15) a.massUnits = 15;
-
-            // If it just reached 15, make it slightly larger than original's max radius
-            if (a.massUnits >= 15){
-              a.r = Math.max(a.r, 13); // a hair larger than the ~12px base max
-            }
-          }
-        }
+      // Spawner + Spawner -> Red Swarm (transform field into up to 19 red killers total)
+      if ( (a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original') ){
+        triggerRedSwarm( (a.x+b.x)/2, (a.y+b.y)/2 );
+        return;
       }
-      // cleanup
-      for (let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
+
+      // Small + Small -> merge into Spawner
+      if (a.type==='small' && b.type==='small'){
+        mergeIntoSpawner(i,j);
+        return;
+      }
+
+      // Otherwise, simple elastic-ish bounce
+      const nx = dx / (dist||1), ny = dy / (dist||1);
+      const p = 2 * (a.vx*nx + a.vy*ny - b.vx*nx - b.vy*ny) / 2;
+      a.vx -= p*nx; a.vy -= p*ny;
+      b.vx += p*nx; b.vy += p*ny;
+      a.squashTimer = b.squashTimer = 8;
+      a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y';
+      b.squashAxis = a.squashAxis;
     }
 
-    /* ==== Render ==== */
+    function mergeIntoSpawner(i,j){
+      const a=balls[i], b=balls[j];
+      // New spawner at mass-weighted midpoint (same mass so average), average velocity
+      const nx = (a.x + b.x)/2, ny = (a.y + b.y)/2;
+      const nvx = (a.vx + b.vx)/2, nvy = (a.vy + b.vy)/2;
+      const nr = Math.sqrt(a.r*a.r + b.r*b.r); // area-additive radius
+      a._dead = true; b._dead = true;
+      if (balls.length - (a._dead?1:0) - (b._dead?1:0) >= MAX_BALLS) return; // respect cap
+
+      balls.push(makeBall({
+        x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9, nr), type:'spawner'
+      }));
+      const sp = balls[balls.length-1];
+      sp.jellyTimer = 16; sp.jellyPhase = 0;
+    }
+
+    function triggerRedSwarm(cx,cy){
+      // Remove colliding spawners by marking everyone non-killer as dead first? No.
+      // We’ll keep existing balls and spawn red killers up to the cap (19 total).
+      // This keeps gameplay interesting and respects the global cap.
+      // If you prefer to ALWAYS have exactly 19 reds only, let me know and I’ll switch it.
+
+      // Count current balls; remove the two colliders handled by caller via dead flags if needed.
+      // Here we just spawn killers up to fill to MAX_BALLS.
+      let current = balls.filter(b=>!b._dead).length;
+      const toSpawn = Math.max(0, MAX_BALLS - current);
+      if (toSpawn === 0) return;
+
+      const radius = 7.5;
+      for (let i=0;i<toSpawn;i++){
+        const ang = Math.random()*Math.PI*2;
+        const spd = 2.5 + Math.random()*2.5;
+        balls.push(makeBall({
+          x: cx + Math.cos(ang)*(10+i*0.2),
+          y: cy + Math.sin(ang)*(10+i*0.2),
+          r: radius, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd,
+          type:'killer'
+        }));
+      }
+    }
+
+    /* ==== Drawing ==== */
     function drawBall(b){
-      // Squash/stretch (wall/UI)
+      // squash/stretch on wall/UI
       let sx=1, sy=1;
       if (b.squashTimer>0){
         const t = b.squashTimer/8;
         const amt = 0.35 * Math.sin(t * Math.PI);
         if (b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
       }
-
-      // Jelly wobble (merge)
-      if (b.jellyTimer>0){
-        const wobble = 0.15*Math.sin((b.jellyPhase+=0.35));
-        sx *= (1+wobble); sy *= (1-wobble);
-      }
-
-      // Balloon bend (pre-pop)
+      // jelly merge wobble
+      if (b.jellyTimer>0){ const wob = 0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
+      // balloon bend
       if (b.balloonTimer>0){
-        const t = b.balloonTimer/20;           // 1..0
-        const bow = 0.45*Math.sin((1-t)*Math.PI); // increasing bend then release
-        if (b.balloonAxis==='x'){ sx*=1+bow; sy*=1-bow*0.6; }
-        else { sy*=1+bow; sx*=1-bow*0.6; }
+        const t = b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI);
+        if (b.balloonAxis==='x'){ sx*=1+bow; sy*=1-bow*0.6; } else { sy*=1+bow; sx*=1-bow*0.6; }
       }
 
       ctx.save();
@@ -388,162 +447,124 @@
 
       // glow
       ctx.beginPath(); ctx.arc(0, 0, b.r+3, 0, Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,.40)'; ctx.fill();
+      ctx.fillStyle = (b.type==='killer') ? 'rgba(255,77,77,.35)' : 'rgba(255,255,255,.40)';
+      ctx.fill();
+
       // core
       ctx.beginPath(); ctx.arc(0, 0, b.r, 0, Math.PI*2);
-      ctx.fillStyle='#ffffff'; ctx.fill();
+      ctx.fillStyle = (b.type==='killer') ? '#ff4d4d' : '#ffffff';
+      ctx.fill();
 
-      // ring markers
-      if (b.original){
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(153,183,255,.7)';
+      // rings
+      if (b.type==='original' || b.type==='spawner'){
+        ctx.lineWidth=2; ctx.strokeStyle = (b.type==='spawner') ? 'rgba(255,220,130,.85)' : 'rgba(153,183,255,.7)';
         ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
-      } else if (b.massUnits>=15){
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,200,120,.8)';
-        ctx.beginPath(); ctx.arc(0,0,b.r+4,0,Math.PI*2); ctx.stroke();
       }
 
       ctx.restore();
     }
 
     /* ==== Loop ==== */
+    function updateBallCount(){ ballCountEl.textContent = String(balls.filter(b=>!b._dead).length); }
+    function checkGameOver(){
+      const anyWhite = balls.some(b=>!b._dead && b.type!=='killer');
+      if (!anyWhite){
+        gameOverEl.style.display='flex';
+        setTimeout(()=>location.reload(), 1800);
+      }
+    }
+
     function step(){
       const W = window.innerWidth, H = window.innerHeight;
       const rects = getRects();
 
+      // Move & walls/UI
       for (const b of balls){
-        // Move
+        if (b._dead) continue;
         b.x += b.vx; b.y += b.vy;
-
-        // Original gradual speed cap
-        if (b.original) accelerateOriginal(b);
-
-        // Walls + UI
+        if (b.type==='original'){ // gradual accel
+          const speed = Math.hypot(b.vx,b.vy);
+          const cap = (b.hasFast?9:4);
+          const accel = 0.002;
+          const ns = Math.min(cap, speed*(1+accel));
+          if (ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
+        }
         bounceWall(b, W, H);
         for (const R of rects) collideWithRect(b, R);
-
-        // Timers
         if (b.squashTimer>0) b.squashTimer--;
         if (b.jellyTimer>0)  b.jellyTimer--;
-        if (b.balloonTimer>0){
-          b.balloonTimer--;
-          // When balloon ends, POP -> split into regular balls that can spawn minis
-          if (b.balloonTimer===0 && !b.original && b.massUnits>=15){
-            popBall(b);
-          }
-        }
+        if (b.balloonTimer>0) b.balloonTimer--;
       }
 
-      // Ball merges
-      tryMergePairs();
+      // Ball-ball collisions using spatial hash
+      const grid = buildGrid();
+      const pairs = nearbyPairs(grid);
+      for (const [i,j] of pairs){ handleBallBall(i,j); }
+
+      // Cleanup
+      for (let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
 
       // Draw
       ctx.clearRect(0,0,canvas.width,canvas.height);
       for (const b of balls) drawBall(b);
 
+      updateBallCount();
+      checkGameOver();
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
 
-    /* ==== Pop into regular balls ==== */
-    function popBall(big){
-      // Remove the big one
-      big._dead = true;
+    /* ==== Input / scoring / spawning ==== */
+    function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy) <= b.r + 5; }
 
-      // How many fragments? up to 6, but not exceeding MAX_BALLS
-      const current = balls.filter(b=>!b._dead).length;
-      const capacity = Math.max(0, MAX_BALLS - current);
-      const pieces = Math.min(6, capacity);
-      if (pieces<=0) return;
-
-      // Base size similar to original non-merged minis
-      const baseR = 7.5;
-      for (let i=0;i<pieces;i++){
-        const angle = (Math.PI*2/pieces)*i + Math.random()*0.4;
-        const speed = 2 + Math.random()*2;
-        balls.push(makeBall({
-          x: big.x + Math.cos(angle)*(big.r+8),
-          y: big.y + Math.sin(angle)*(big.r+8),
-          r: baseR,
-          vx: Math.cos(angle)*speed,
-          vy: Math.sin(angle)*speed,
-          original:false,
-          canSpawnSmall:true,   // these regular balls can create smaller ones on click
-          massUnits:1
-        }));
-      }
-      // Cleanup dead
-      for (let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
-    }
-
-    /* ==== Hit tests ==== */
-    function hitBallAt(x,y,b){
-      const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy) <= b.r + 5;
-    }
-
-    /* ==== Pointer scoring & spawning ==== */
     document.addEventListener('click', (e)=>{
-      if (e.target.closest('input, textarea, [contenteditable="true"]')) return; // no change
+      if (e.target.closest('input, textarea, [contenteditable="true"]')) return; // no score change
 
       const x = e.clientX, y = e.clientY;
-
-      // Prefer to test original first
-      const orig = balls.find(b=>b.original);
       let handled = false;
 
-      // 1) Original click: +1, level sizeTier (to 15), maybe spawn mini, fast mode after 15 clicks
-      if (orig && hitBallAt(x,y,orig)){
-        addScore(+1);
-        const dx = orig.x - x, dy = orig.y - y, len=Math.max(1,Math.hypot(dx,dy));
-        let pushX=(dx/len)*4.8, pushY=(dy/len)*4.8;
-        const cap = (orig.hasFast?9:4), sp=Math.hypot(pushX,pushY), f=Math.min(cap,sp)/(sp||1);
-        orig.vx = pushX*f; orig.vy = pushY*f;
-
-        if (orig.sizeTier<15){ orig.sizeTier++; orig.massUnits = Math.min(15, orig.sizeTier); orig.r = tierToRadius(orig.sizeTier); }
-        if (balls.length < 15){
-          const a=Math.random()*Math.PI*2, s=1.6+Math.random()*1.6;
-          balls.push(makeBall({
-            x: orig.x + Math.cos(a)*(orig.r+6),
-            y: orig.y + Math.sin(a)*(orig.r+6),
-            r: Math.max(5, Math.round(orig.r * 0.6)),
-            vx: Math.cos(a)*s, vy: Math.sin(a)*s, original:false, massUnits:1
-          }));
-        }
-        orig.clickCount++;
-        if (orig.clickCount>=15){ orig.hasFast=true; const curS=Math.hypot(orig.vx,orig.vy); if (curS<7){ const F=7/(curS||1); orig.vx*=F; orig.vy*=F; } }
-        handled = true;
-      }
-
-      // 2) If not original, check other balls (including post-pop regular balls that can spawn minis)
-      if (!handled){
-        const b = balls.find(ball=>!ball.original && hitBallAt(x,y,ball));
-        if (b){
+      // Prioritize clicking white balls (original/spawner/small)
+      for (let idx=0; idx<balls.length; idx++){
+        const b = balls[idx]; if (b._dead || b.type==='killer') continue;
+        if (hitBallAt(x,y,b)){
           addScore(+1);
+          handled = true;
 
-          // If ball can spawn smaller ones on click (post-pop regulars), do it
-          if (b.canSpawnSmall && balls.length < 15){
-            const ang = Math.random()*Math.PI*2, spd = 1.4 + Math.random()*1.4;
+          // push away
+          const dx = b.x - x, dy = b.y - y, len=Math.max(1,Math.hypot(dx,dy));
+          let pushX=(dx/len)*4.8, pushY=(dy/len)*4.8;
+          const cap = (b.type==='original' && b.hasFast) ? 9 : 4;
+          const sp=Math.hypot(pushX,pushY), f=Math.min(cap,sp)/(sp||1);
+          b.vx = pushX*f; b.vy = pushY*f;
+
+          // Original leveling: sizeTier up to 15
+          if (b.type==='original'){
+            if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
+            b._clicks = (b._clicks||0)+1;
+            if (b._clicks>=15){ b.hasFast=true; const curS=Math.hypot(b.vx,b.vy); if (curS<7){ const F=7/(curS||1); b.vx*=F; b.vy*=F; } }
+          }
+
+          // Spawner or Original can spawn a mini (respect cap)
+          if ((b.type==='spawner' || b.type==='original') && balls.length < MAX_BALLS){
+            const ang = Math.random()*Math.PI*2, spd = 1.6 + Math.random()*1.6;
             balls.push(makeBall({
-              x: b.x + Math.cos(ang)*(b.r+5),
-              y: b.y + Math.sin(ang)*(b.r+5),
+              x: b.x + Math.cos(ang)*(b.r+6),
+              y: b.y + Math.sin(ang)*(b.r+6),
               r: Math.max(5, Math.round(b.r * 0.6)),
-              vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, original:false, massUnits:1
+              vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, type:'small'
             }));
           }
 
-          // subtle push away
-          const dx = b.x - x, dy = b.y - y, L=Math.max(1,Math.hypot(dx,dy));
-          b.vx += (dx/L)*0.8; b.vy += (dy/L)*0.8;
-
-          handled = true;
+          break;
         }
       }
 
-      // 3) Missed everything → -1
-      if (!handled){ addScore(-1); }
+      if (!handled){
+        // Maybe clicked a killer (no points given), else miss
+        const hitKiller = balls.some(b=>!b._dead && b.type==='killer' && hitBallAt(x,y,b));
+        if (!hitKiller) addScore(-1); // miss
+      }
     });
-
-    // Main loop kickoff
-    requestAnimationFrame(step);
   })();
 </script>
 </body>
