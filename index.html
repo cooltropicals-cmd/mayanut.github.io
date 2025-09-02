@@ -1,174 +1,190 @@
-/* ===== Patched Game Engine ===== */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MayaNut</title>
+<style>
+  /* === Colors and background === */
+  :root{
+    --ink:#eaf2ff; --ink-dim:#c6d0ea;
+    --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
+    --accent:#8fdcff; --accent2:#c79bff;
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
+  }
+  html,body{height:100%}
+  body{
+    margin:0;color:var(--ink);
+    font-family:Inter, system-ui, sans-serif;
+    display:flex;flex-direction:column;min-height:100%;
+    background:
+      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
+      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
+      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
+      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
+    overflow-x:hidden;
+  }
+
+  /* === Top bar === */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+  .brand{font-weight:800;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
+  .brand small{font-size:11px;opacity:.95;vertical-align:top}
+  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
+  .nav{display:flex;gap:18px;align-items:center}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
+  .nav a:hover{border:1px solid var(--line);background:rgba(255,255,255,.06)}
+
+  /* === Score === */
+  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
+    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
+
+  /* === Chat === */
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
+  .panel{width:min(900px,92vw);text-align:center}
+  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;color:#fff;margin:6px 0 14px}
+  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
+  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
+  .msg strong{color:#cfe1ff}
+
+  /* === Sections === */
+  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .section h3{margin:0 0 8px;color:#fff}
+  .section p{margin:8px 0 0;color:#cfe9ff}
+
+  /* === Footer === */
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
+
+  /* === Canvas === */
+  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="brand">MayaNut<small>™</small></div>
+  <div class="brandInfo">Balls: <b id="ballCount">1</b>/19</div>
+  <nav class="nav">
+    <a href="#home">MayaNut</a>
+    <a href="#buy">Buy</a>
+    <a href="#about">About</a>
+    <a href="https://instagram.com/mayanut.co" target="_blank">Instagram</a>
+  </nav>
+</header>
+
+<!-- Score -->
+<div id="scoreHUD" class="score">Score: <b id="score">0</b></div>
+
+<!-- Hero + Chat -->
+<main id="home" class="stage">
+  <div class="panel">
+    <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
+    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want" /></div>
+    <div class="log" id="chatLog"></div>
+  </div>
+</main>
+
+<!-- Buy -->
+<section id="buy" class="section">
+  <h3>Buy</h3>
+  <p>Search Through Our Wonderful Products — real items coming soon.</p>
+</section>
+
+<!-- About -->
+<section id="about" class="section">
+  <h3>About</h3>
+  <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
+  <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
+  farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
+  <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
+</section>
+
+<!-- Footer -->
+<footer>© 2025 MayaNut LLC. All rights reserved.</footer>
+
+<!-- Canvas -->
+<canvas id="ballLayer"></canvas>
+
+<script>
+/* === Chat Controls === */
+const input=document.getElementById('chatInput');const log=document.getElementById('chatLog');
+function say(who,msg){const d=document.createElement('div');d.className='msg';d.innerHTML=`<strong>${who}:</strong> ${msg}`;log.appendChild(d);log.scrollTop=log.scrollHeight;}
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){say('You',input.value);input.value='';}});
+
+/* === Game Engine === */
 (function(){
-  const scoreEl = document.getElementById('score');
-  const ballCountEl = document.getElementById('ballCount');
-  const MAX_BALLS = 19;
-  const RED_MAX = 6;
-  const FACTORY_INTERVAL = 200;
+  const canvas=document.getElementById('ballLayer');const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}resize();window.addEventListener('resize',resize);
 
-  const canvas = document.getElementById('ballLayer');
-  const ctx = canvas.getContext('2d');
+  const SMALL='small',SPAWNER='spawner',FACTORY='factory',RED='red';
+  const balls=[{x:200,y:200,vx:2,vy:1,r:6,type:SMALL,orbit:null,chain:null,cooldown:0}];
+  const chains=[];const MAX=19;const FACTORY_INTERVAL=200;
 
-  function resize(){
-    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    canvas.style.width = window.innerWidth+'px';
-    canvas.style.height = window.innerHeight+'px';
-    canvas.width = Math.round(window.innerWidth*dpr);
-    canvas.height= Math.round(window.innerHeight*dpr);
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  resize(); window.addEventListener('resize', resize);
+  function makeBall(x,y,type){const r=type===SMALL?6:type===SPAWNER?12:type===FACTORY?20:8;return{x,y,vx:Math.random()*2-1,vy:Math.random()*2-1,r,type,orbit:null,chain:null,cooldown:0};}
 
-  // Ball types
-  const SMALL = 'small';
-  const SPAWNER = 'spawner';
-  const FACTORY = 'factory';
-  const RED = 'red';
-
-  function makeBall(o={}) {
-    const {x=window.innerWidth/2, y=window.innerHeight/2, vx=1, vy=1, type=SMALL} = o;
-    const r = type===SMALL?6 : type===SPAWNER?12 : type===FACTORY?20 : 8;
-    return {x,y,vx,vy,r,type,orbit:null,chain:null,cooldown:0,_dead:false};
-  }
-
-  const balls = [ makeBall({type:SMALL}) ];
-  const chains = [];
-
-  function updateBallCount(){ ballCountEl.textContent = balls.filter(b=>!b._dead).length; }
-
-  // ==== Collisions ====
-  function handleCollision(a,b){
-    if(a._dead||b._dead) return;
-    const dx=b.x-a.x, dy=b.y-a.y;
-    const dist=Math.hypot(dx,dy);
-    if(dist>a.r+b.r) return;
-
-    // Small + Small → Spawner
-    if(a.type===SMALL && b.type===SMALL){
-      a._dead=b._dead=true;
-      balls.push(makeBall({x:(a.x+b.x)/2,y:(a.y+b.y)/2,vx:(a.vx+b.vx)/2,vy:(a.vy+b.vy)/2,type:SPAWNER}));
-      return;
-    }
-
-    // Spawner + Spawner → Factory
-    if(a.type===SPAWNER && b.type===SPAWNER){
-      a._dead=b._dead=true;
-      balls.push(makeBall({x:(a.x+b.x)/2,y:(a.y+b.y)/2,vx:(a.vx+b.vx)/2,vy:(a.vy+b.vy)/2,type:FACTORY}));
-      return;
-    }
-
-    // Orbiting smalls around bigs
-    if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY)) a.orbit=b;
-    if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY)) b.orbit=a;
-
-    // Orbiters collide → chain link
-    if(a.orbit && b.orbit && a.orbit===b.orbit){
-      if(!a.chain && !b.chain){
-        const chain=[a,b];
-        a.chain=b.chain=chain;
-        chains.push(chain);
-      } else if(a.chain && !b.chain){ a.chain.push(b); b.chain=a.chain; }
-      else if(!a.chain && b.chain){ b.chain.push(a); a.chain=b.chain; }
-    }
-  }
-
-  // ==== Update ====
-  function update(){
-    for(const b of balls){
-      if(b._dead) continue;
-      b.x+=b.vx; b.y+=b.vy;
-
-      // Orbit behavior
-      if(b.orbit && !b._dead){
-        const cx=b.orbit.x, cy=b.orbit.y;
-        const ang=Math.atan2(b.y-cy,b.x-cx)+0.05;
-        const dist=b.orbit.r+20;
-        b.x=cx+Math.cos(ang)*dist;
-        b.y=cy+Math.sin(ang)*dist;
-      }
-
-      // Factory spawn small balls
-      if(b.type===FACTORY){
-        b.cooldown++;
-        if(b.cooldown>FACTORY_INTERVAL && balls.length<MAX_BALLS){
-          b.cooldown=0;
-          balls.push(makeBall({x:b.x+Math.random()*20-10,y:b.y+Math.random()*20-10,type:SMALL}));
-        }
-      }
-
-      // Wall bounce
-      if(b.x-b.r<0||b.x+b.r>window.innerWidth) b.vx*=-1;
-      if(b.y-b.r<0||b.y+b.r>window.innerHeight) b.vy*=-1;
-    }
-
-    // Collisions
+  function collisions(){
     for(let i=0;i<balls.length;i++){
       for(let j=i+1;j<balls.length;j++){
-        handleCollision(balls[i],balls[j]);
+        const a=balls[i],b=balls[j];if(a._dead||b._dead)continue;
+        const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy);
+        if(dist>a.r+b.r)continue;
+
+        if(a.type===SMALL&&b.type===SMALL){a._dead=b._dead=true;balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER));}
+        if(a.type===SPAWNER&&b.type===SPAWNER){a._dead=b._dead=true;balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY));}
+
+        if(a.type===SMALL&&(b.type===SPAWNER||b.type===FACTORY))a.orbit=b;
+        if(b.type===SMALL&&(a.type===SPAWNER||a.type===FACTORY))b.orbit=a;
+
+        if(a.orbit&&b.orbit&&a.orbit===b.orbit){
+          if(!a.chain&&!b.chain){const chain=[a,b];a.chain=b.chain=chain;chains.push(chain);}
+          else if(a.chain&&!b.chain){a.chain.push(b);b.chain=a.chain;}
+          else if(!a.chain&&b.chain){b.chain.push(a);a.chain=b.chain;}
+        }
       }
     }
-
-    // Remove dead
-    for(let i=balls.length-1;i>=0;i--) if(balls[i]._dead) balls.splice(i,1);
   }
 
-  // ==== Click to Launch + Chain Folding ====
-  document.addEventListener('click',e=>{
+  function update(){
+    for(const b of balls){
+      b.x+=b.vx;b.y+=b.vy;
+      if(b.orbit){const c=b.orbit;const ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;const d=c.r+20;b.x=c.x+Math.cos(ang)*d;b.y=c.y+Math.sin(ang)*d;}
+      if(b.type===FACTORY){b.cooldown++;if(b.cooldown>FACTORY_INTERVAL&&balls.length<MAX){b.cooldown=0;balls.push(makeBall(b.x+Math.random()*20-10,b.y+Math.random()*20-10,SMALL));}}
+      if(b.x-b.r<0||b.x+b.r>innerWidth)b.vx*=-1;if(b.y-b.r<0||b.y+b.r>innerHeight)b.vy*=-1;
+    }
+    collisions();
+    for(let i=balls.length-1;i>=0;i--)if(balls[i]._dead)balls.splice(i,1);
+  }
+
+  canvas.addEventListener('click',e=>{
     const x=e.clientX,y=e.clientY;
     let chainHit=false;
     for(const ch of chains){
       if(ch.length>2){
-        const first=ch[0], last=ch[ch.length-1];
-        if(Math.hypot(first.x-x,first.y-y)<first.r+5 ||
-           Math.hypot(last.x-x,last.y-y)<last.r+5){
-          const cx=ch.reduce((s,b)=>s+b.x,0)/ch.length;
-          const cy=ch.reduce((s,b)=>s+b.y,0)/ch.length;
-          const radius=ch.length*5;
-          ch.forEach((b,i)=>{
-            const ang=(i/ch.length)*Math.PI*2;
-            b.x=cx+Math.cos(ang)*radius;
-            b.y=cy+Math.sin(ang)*radius;
-            b.vx=b.vy=0;
-          });
+        const f=ch[0],l=ch[ch.length-1];
+        if(Math.hypot(f.x-x,f.y-y)<f.r+5||Math.hypot(l.x-x,l.y-y)<l.r+5){
+          const cx=ch.reduce((s,b)=>s+b.x,0)/ch.length,cy=ch.reduce((s,b)=>s+b.y,0)/ch.length,radius=ch.length*5;
+          ch.forEach((b,i)=>{const ang=i/ch.length*Math.PI*2;b.x=cx+Math.cos(ang)*radius;b.y=cy+Math.sin(ang)*radius;b.vx=b.vy=0;});
           chainHit=true;
         }
       }
     }
-    if(chainHit) return;
-
-    // Otherwise launch balls
-    for(const b of balls){
-      if(Math.hypot(b.x-x,b.y-y)<b.r+5){
-        const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
-        b.vx=(dx/L)*4.5; b.vy=(dy/L)*4.5;
-      }
-    }
+    if(chainHit)return;
+    for(const b of balls){if(Math.hypot(b.x-x,b.y-y)<b.r+5){const dx=b.x-x,dy=b.y-y,L=Math.hypot(dx,dy)||1;b.vx=(dx/L)*4.5;b.vy=(dy/L)*4.5;}}
   });
 
-  // ==== Draw ====
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(const ch of chains){
-      ctx.beginPath();
-      ctx.moveTo(ch[0].x,ch[0].y);
-      for(const b of ch) ctx.lineTo(b.x,b.y);
-      ctx.strokeStyle='rgba(255,255,255,0.5)';
-      ctx.stroke();
-    }
-    for(const b of balls){
-      ctx.beginPath();
-      ctx.fillStyle=b.type===SMALL?'white':b.type===SPAWNER?'orange':b.type===FACTORY?'red':'#ff4d4d';
-      ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-      ctx.fill();
-    }
-    updateBallCount();
+    for(const ch of chains){ctx.beginPath();ctx.moveTo(ch[0].x,ch[0].y);for(const b of ch)ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.stroke();}
+    for(const b of balls){ctx.beginPath();ctx.fillStyle=b.type===SMALL?'white':b.type===SPAWNER?'orange':b.type===FACTORY?'red':'#ff4d4d';ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();}
+    document.getElementById('ballCount').textContent=balls.length;
   }
 
-  // ==== Loop ====
-  function loop(){
-    if(!window.GAME_PAUSED) update();
-    draw();
-    requestAnimationFrame(loop);
-  }
+  function loop(){update();draw();requestAnimationFrame(loop);}
   loop();
 })();
+</script>
+</body>
+</html>
