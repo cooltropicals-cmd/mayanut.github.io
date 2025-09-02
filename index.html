@@ -1,83 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MayaNut</title>
+
+<!-- Favicon (uses your generated image in the sandbox path) -->
+<link rel="icon" type="image/png"
+      href="sandbox:/mnt/data/ChatGPT%20Image%20Sep%202,%202025,%2004_47_05%20PM.png" />
+
 <style>
-/* === Stronger, softer “lava lamp” background overrides === */
+  :root{
+    --ink:#eef3ff;
+    --ink-dim:#cbd6f2;
+    --panel:rgba(12,16,34,.55);
+    --line:rgba(255,255,255,.12);
+    --inputBG:rgba(255,255,255,.08);
+    --inputLine:rgba(255,255,255,.22);
 
-/* Extra layer for color variety */
-.bg-blobs-4{
-  position:fixed; inset:-34% -34% -34% -34%;
-  z-index:-1; pointer-events:none;
-  filter: blur(48px) saturate(120%);
-  opacity:.75; mix-blend-mode:screen;
-  background:
-    radial-gradient(30% 36% at 12% 18%, rgba(62,160,95,.30), transparent 62%),
-    radial-gradient(36% 42% at 88% 28%, rgba(175,235,170,.26), transparent 64%),
-    radial-gradient(28% 34% at 55% 72%, rgba(105,175,120,.24), transparent 60%),
-    radial-gradient(22% 26% at 38% 48%, rgba(195,255,205,.18), transparent 60%);
-  animation: lava4 46s ease-in-out infinite;
-}
+    /* Sunny golds for the logo text */
+    --gold1:#fff0b5;
+    --gold2:#ffd46b;
+    --gold3:#f3ac3a;
+  }
 
-/* Beef up motion + range of hues on all layers */
-.bg-blobs, .bg-blobs-2, .bg-blobs-3{
-  inset:-34% -34% -34% -34%;
-  filter: blur(46px) saturate(122%);
-  will-change: transform, opacity;
-}
+  html,body{
+    height:100%;
+    margin:0;
+    color:var(--ink);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    /* Base green gradient, then animated blob layers on top */
+    background: linear-gradient(180deg, #0b1a0f 0%, #143821 40%, #0f2f1d 100%);
+    overflow-x:hidden;
+  }
 
-.bg-blobs{
-  opacity:.96;
-  background:
-    radial-gradient(36% 42% at 20% 25%, rgba(110,190,120,.38), transparent 62%),
-    radial-gradient(34% 40% at 78% 22%, rgba(155,225,165,.30), transparent 65%),
-    radial-gradient(28% 34% at 50% 62%, rgba(82,145,102,.34), transparent 60%),
-    radial-gradient(24% 28% at 45% 38%, rgba(205,255,205,.16), transparent 60%);
-  animation: lava1 32s ease-in-out infinite;
-}
+  /* ===== Animated blurred green “lava lamp” background (more motion/variation) ===== */
+  .bg, .bg2, .bg3, .bg4 {
+    position:fixed; inset:-25% -25% -25% -25%;
+    z-index:-1; pointer-events:none;
+    filter: blur(28px) saturate(118%) brightness(105%);
+    opacity:.95;
+  }
 
-.bg-blobs-2{
-  opacity:.88; mix-blend-mode:screen;
-  background:
-    radial-gradient(34% 40% at 18% 70%, rgba(70,150,95,.32), transparent 62%),
-    radial-gradient(30% 36% at 76% 70%, rgba(128,205,142,.30), transparent 62%),
-    radial-gradient(26% 32% at 50% 40%, rgba(165,235,175,.22), transparent 60%),
-    radial-gradient(22% 28% at 30% 55%, rgba(92,170,120,.26), transparent 60%);
-  animation: lava2 36s ease-in-out infinite;
-}
+  .bg{
+    background:
+      radial-gradient(38% 42% at 18% 22%, rgba(110,190,120,.38), transparent 62%),
+      radial-gradient(34% 38% at 78% 20%, rgba(165,230,170,.32), transparent 66%),
+      radial-gradient(28% 34% at 52% 65%, rgba(90,150,110,.34), transparent 62%);
+    animation: driftA 36s ease-in-out infinite;
+  }
+  .bg2{
+    background:
+      radial-gradient(36% 40% at 20% 72%, rgba(70,150,95,.32), transparent 60%),
+      radial-gradient(30% 34% at 72% 74%, rgba(125,200,140,.30), transparent 60%),
+      radial-gradient(26% 30% at 48% 38%, rgba(160,220,160,.26), transparent 60%);
+    animation: driftB 44s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  .bg3{
+    background:
+      radial-gradient(30% 34% at 35% 10%, rgba(185,255,185,.22), transparent 60%),
+      radial-gradient(32% 36% at 68% 50%, rgba(90,160,105,.26), transparent 60%);
+    animation: driftC 52s ease-in-out infinite;
+    opacity:.9;
+  }
+  .bg4{
+    background:
+      radial-gradient(22% 26% at 15% 50%, rgba(65,130,85,.30), transparent 60%),
+      radial-gradient(24% 28% at 85% 55%, rgba(95,180,110,.28), transparent 60%);
+    animation: driftD 60s ease-in-out infinite;
+    mix-blend-mode: overlay;
+  }
 
-.bg-blobs-3{
-  opacity:.82;
-  background:
-    radial-gradient(26% 32% at 35% 12%, rgba(185,255,190,.22), transparent 62%),
-    radial-gradient(30% 34% at 68% 52%, rgba(92,160,105,.26), transparent 60%),
-    radial-gradient(22% 28% at 52% 30%, rgba(140,205,150,.22), transparent 60%);
-  animation: lava3 40s ease-in-out infinite;
-}
+  @keyframes driftA { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-28px,22px) scale(1.06)} 100%{transform:translate(0,0) scale(1)} }
+  @keyframes driftB { 0%{transform:translate(0,0) scale(1.02) rotate(0deg)} 50%{transform:translate(34px,-18px) scale(1.08) rotate(1.5deg)} 100%{transform:translate(0,0) scale(1.02) rotate(0deg)} }
+  @keyframes driftC { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(-16px,16px) scale(1.05)} 100%{transform:translate(0,0) scale(1)} }
+  @keyframes driftD { 0%{transform:translate(0,0) scale(1.01) rotate(0)} 50%{transform:translate(22px,10px) scale(1.07) rotate(-1deg)} 100%{transform:translate(0,0) scale(1.01) rotate(0)} }
 
-/* Bigger, still-gentle travel + scale/opacity pulse */
-@keyframes lava1{
-  0%{   transform:translate3d(0,0,0) scale(1.00) rotate(0deg);      opacity:.92; }
-  25%{  transform:translate3d(-80px,55px,0) scale(1.10) rotate(.8deg); opacity:.97; }
-  50%{  transform:translate3d(60px,-70px,0) scale(1.16) rotate(-1deg); opacity:.90; }
-  75%{  transform:translate3d(-48px,32px,0) scale(1.08) rotate(.5deg); opacity:.95; }
-  100%{ transform:translate3d(0,0,0) scale(1.00) rotate(0deg);      opacity:.92; }
-}
-@keyframes lava2{
-  0%{   transform:translate3d(0,0,0) scale(1.02); opacity:.84; }
-  33%{  transform:translate3d(88px,-62px,0) scale(1.14); opacity:.89; }
-  66%{  transform:translate3d(-70px,48px,0) scale(1.18); opacity:.82; }
-  100%{ transform:translate3d(0,0,0) scale(1.02); opacity:.84; }
-}
-@keyframes lava3{
-  0%{   transform:translate3d(0,0,0) scale(1.00); opacity:.80; }
-  40%{  transform:translate3d(-58px,72px,0) scale(1.12); opacity:.85; }
-  80%{  transform:translate3d(66px,-46px,0) scale(1.15); opacity:.78; }
-  100%{ transform:translate3d(0,0,0) scale(1.00); opacity:.80; }
-}
-@keyframes lava4{
-  0%{   transform:translate3d(0,0,0) scale(1.00); opacity:.74; }
-  50%{  transform:translate3d(52px,58px,0) scale(1.13); opacity:.80; }
-  100%{ transform:translate3d(0,0,0) scale(1.00); opacity:.74; }
-}
+  @media (prefers-reduced-motion: reduce) {
+    .bg,.bg2,.bg3,.bg4 { animation: none; }
+  }
 
-@media (prefers-reduced-motion: reduce){
-  .bg-blobs, .bg-blobs-2, .bg-blobs-3, .bg-blobs-4{ animation:none; }
-}
+  /* ===== Top bar ===== */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; background:var(--panel);
+    border-bottom:1px solid var(--line); backdrop-filter:blur(10px) saturate(140%);
+  }
+  .brandLogo{ display:block; height:28px; width:auto; }
+
+  .nav{display:flex; gap:18px; align-items:center}
+  .nav a{
+    color:var(--ink); text-decoration:none; font-weight:700; font-size:14px;
+    padding:8px 12px; border-radius:10px; border:1px solid transparent;
+  }
+  .nav a:hover{border-color:var(--line); background:rgba(255,255,255,.06)}
+
+  /* ===== Hero & content ===== */
+  .stage{ flex:1; display:flex; align-items:center; justify-content:center; padding-top:88px; padding-bottom:80px }
+  .panel{ width:min(900px,92vw); text-align:center }
+  .heroLogo{ display:block; width:min(560px,80vw); margin:6px auto 12px }
+
+  .chatbar{ display:flex; align-items:center; gap:10px; justify-content:center; margin:0 auto; width:min(760px,92vw) }
+  .chatbar input{
+    flex:1; height:44px; padding:10px 12px; font-size:15px; color:#e9eeff;
+    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none
+  }
+  .chatbar input::placeholder{ color:#cfe8ff }
+  .chatbar input:focus{ border-color:rgba(143,220,255,.75); box-shadow:0 0 0 3px rgba(143,220,255,.25) }
+
+  .suggest{
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px
+  }
+  .pill{
+    border:1px solid var(--line); background:rgba(255,255,255,.06);
+    color:var(--ink-dim); padding:6px 10px; border-radius:999px; font-size:12px; cursor:pointer;
+  }
+  .pill:hover{ background:rgba(255,255,255,.10); color:#fff }
+
+  .log{
+    width:min(760px,92vw); margin:12px auto 0; background:rgba(8,12,30,.55);
+    border:1px solid var(--line); border-radius:14px; padding:12px; max-height:42vh; overflow:auto
+  }
+  .msg{ text-align:left; margin:6px 0; color:#eaf2ff }
+  .msg strong{ color:#cfe1ff }
+
+  /* ===== Sections ===== */
+  .section{
+    width:min(980px,94vw); margin:24px auto 0;
+    background:rgba(8,12,30,.50); border:1px solid var(--line);
+    border-radius:16px; padding:18px; backdrop-filter:blur(4px)
+  }
+  .section h3{ margin:0 0 8px; color:#fff; font-size:22px; letter-spacing:.2px }
+  .section p{ margin:8px 0 0; color:#cfe9ff; line-height:1.6 }
+
+  .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px }
+  .card{
+    background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:14px; padding:18px;
+    text-align:center; color:#eaf2ff; text-decoration:none;
+    transition:transform .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    background:rgba(255,255,255,.10);
+    border-color:rgba(255,255,255,.18);
+    box-shadow:0 10px 28px rgba(0,0,0,.25);
+  }
+
+  /* ===== Footer ===== */
+  footer{
+    width:100%; color:#c9d3ef; border-top:1px solid var(--line);
+    background:rgba(10,14,34,.55); text-align:center; font-size:13px; padding:12px 8px;
+    position:relative
+  }
+  .ig-link{
+    position:absolute; right:72px; top:50%; transform:translateY(-50%);
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px
+  }
+  .ig-link svg{ filter:drop-shadow(0 0 0 rgba(255,255,255,0)); transition:transform .2s ease, filter .2s ease }
+  .ig-link:hover svg{ transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65)) }
 </style>
+</head>
+<body>
+
+<!-- Animated background layers -->
+<div class="bg"></div>
+<div class="bg2"></div>
+<div class="bg3"></div>
+<div class="bg4"></div>
+
+<!-- Unified MayaNut™ logo symbol (™ tucked right, slightly raised) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="var(--gold1)"/>
+      <stop offset="55%" stop-color="var(--gold2)"/>
+      <stop offset="100%" stop-color="var(--gold3)"/>
+    </linearGradient>
+    <filter id="mn-shadow" x="-20%" y="-40%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.35)"/>
+    </filter>
+    <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
+      <text x="40" y="180"
+            font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="180"
+            fill="url(#mn-gold)" filter="url(#mn-shadow)">
+        <tspan>MayaNut</tspan>
+        <!-- ™ kept very close and slightly larger per your request -->
+        <tspan dx="-10" dy="-68" font-size="64">™</tspan>
+      </text>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- Top bar -->
+<header class="topbar" role="banner">
+  <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
+    <use href="#MayaNutLogo"></use>
+  </svg>
+  <nav class="nav" aria-label="Primary">
+    <a href="#home" id="navHome">MayaNut</a>
+    <a href="#buy"  id="navBuy">Buy</a>
+    <a href="#about" id="navAbout">About</a>
+    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<main id="home" class="stage">
+  <div class="panel">
+    <svg class="heroLogo" viewBox="0 0 1200 260" role="img" aria-label="MayaNut logo">
+      <use href="#MayaNutLogo"></use>
+    </svg>
+
+    <div class="chatbar" role="search">
+      <input id="chatInput" placeholder="Ask about MayaNut™ (ramón / breadnut / ojoche / oox) or our products" aria-label="Ask about MayaNut or our products" />
+    </div>
+
+    <!-- Friendly starter prompts -->
+    <div class="suggest" aria-hidden="true">
+      <button class="pill" data-q="What is Brosimum alicastrum?">What is <em>Brosimum alicastrum</em>?</button>
+      <button class="pill" data-q="Is Maya Nut the same as ramón or breadnut?">Is Maya Nut the same as ramón/breadnut?</button>
+      <button class="pill" data-q="How do you use MayaNut flour?">How do you use MayaNut flour?</button>
+      <button class="pill" data-q="Where do your trees grow?">Where do your trees grow?</button>
+    </div>
+
+    <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+  </div>
+</main>
+
+<!-- Buy -->
+<section id="buy" class="section" aria-labelledby="buyTitle">
+  <h3 id="buyTitle">Buy</h3>
+  <p>Search Through Our Wonderful Products — real items coming soon. For now, tap a category to return to home.</p>
+  <div class="cards">
+    <a class="card" href="#home">Flour (placeholder)</a>
+    <a class="card" href="#home">Drinks (placeholder)</a>
+    <a class="card" href="#home">Snacks (placeholder)</a>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" class="section" aria-labelledby="aboutTitle">
+  <h3 id="aboutTitle">About</h3>
+  <p><strong>MayaNut</strong> LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida.
+    <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
+</section>
+
+<!-- Footer -->
+<footer>
+  © 2025 MayaNut LLC. All rights reserved.
+  <a class="ig-link" href="https://instagram.com/mayanut.co" title="@mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
+    <!-- simple white Instagram glyph -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
+    </svg>
+  </a>
+</footer>
+
+<script>
+/* Smooth scroll nav */
+['navHome','navBuy','navAbout'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.addEventListener('click',e=>{
+    e.preventDefault();
+    const targetId = el.textContent.trim().toLowerCase();
+    const target = document.getElementById(targetId);
+    if (target) target.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+/* Friendly, on-topic chatbot (MayaNut / Brosimum alicastrum only) */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+const pills = document.querySelectorAll('.pill');
+
+function say(role, text){
+  const el = document.createElement('div');
+  el.className = 'msg';
+  el.innerHTML = `<strong>${role}:</strong> ${text}`;
+  logBox.appendChild(el);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+
+const MAYANUT_KEYWORDS = [
+  'mayanut','maya nut','mayan nut','mayanuts','maya nuts',
+  'ramon','ramón','breadnut','mayan breadnut','ojoche','oox','brosimum alicastrum','brosimum'
+];
+
+function isOnTopic(str){
+  const t = (str||'').toLowerCase();
+  return MAYANUT_KEYWORDS.some(k => t.includes(k));
+}
+
+function handleMessage(value){
+  const t = (value||'').trim();
+  if(!t) return;
+  say('You', t);
+
+  if (!isOnTopic(t)) {
+    say('MayaNut', "I can help with questions about MayaNut™ — also known as ramón/breadnut/ojoche — and our products. Try asking about nutrition, uses, or cultivation.");
+    return;
+  }
+
+  // Super simple answers (feel free to expand later)
+  const low = t.toLowerCase();
+  if (low.includes('what') && (low.includes('brosimum') || low.includes('species') || low.includes('tree'))) {
+    say('MayaNut', "<em>Brosimum alicastrum</em> (Maya Nut) is a tropical tree native to Mesoamerica. Its seeds can be roasted, milled into flour, and used in drinks/snacks. It’s resilient, drought-tolerant, and great for agroforestry.");
+  } else if (low.includes('flour') || low.includes('recipe') || low.includes('bake')) {
+    say('MayaNut', "MayaNut flour has a toasty, nutty flavor. Use it to enrich pancakes, smoothies, breads, and cookies. Start by replacing 10–25% of wheat flour, then adjust to taste.");
+  } else if (low.includes('grow') || low.includes('cultivate') || low.includes('plant')) {
+    say('MayaNut', "MayaNut thrives in warm, humid climates with good drainage. It prefers partial to full sun. Mulch young trees, water regularly until established, and consider companion planting in agroforestry systems.");
+  } else if (low.includes('nutrition') || low.includes('benefit') || low.includes('protein')) {
+    say('MayaNut', "MayaNut is naturally caffeine-free and contains fiber, minerals, and beneficial phytonutrients. Traditionally it’s roasted for beverages or used as a flour to boost nutrition.");
+  } else if (low.includes('product') || low.includes('buy') || low.includes('shop')) {
+    say('MayaNut', "We’re preparing products now. Check the Buy section for placeholders — we’ll update when items are available.");
+    document.getElementById('buy').scrollIntoView({behavior:'smooth'});
+  } else {
+    say('MayaNut', "Happy to help! Ask about uses (flour, drinks), cultivation in South Florida, or the tree’s background and benefits.");
+  }
+}
+
+input.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    handleMessage(input.value);
+    input.value='';
+  }
+});
+
+pills.forEach(p=>p.addEventListener('click', ()=>handleMessage(p.dataset.q)));
+</script>
+</body>
+</html>
