@@ -51,7 +51,6 @@
 
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* Canvas: we capture clicks on document; keep canvas non-interactive */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
 </style>
 </head>
@@ -150,7 +149,7 @@ function handleCommand(cmd){
   say('MayaNut', 'Commands: /spawn N [small|spawner|factory|red], /fill, /clear, /pause, /resume');
 }
 
-/* ===== Game Engine (500 cap, alternating chains, squash/stretch) ===== */
+/* ===== Game Engine (500 cap, orbiters→bonded chains, squash/stretch) ===== */
 (function(){
   const canvas=document.getElementById('ballLayer');
   const ctx=canvas.getContext('2d');
@@ -171,10 +170,11 @@ function handleCommand(cmd){
   const R_RED=8;
 
   const FACTORY_INTERVAL=200; // spawn rate for factories
+  const ORBIT_RADIUS_PAD = 18; // distance from host surface for orbiters
 
   // State
   const balls=[];      // all balls
-  const chains=[];     // alternating BIG–MED chains
+  const chains=[];     // arrays of bonded orbiters (stagnant)
   let score=0; const scoreEl=document.getElementById('score');
   const countEl=document.getElementById('ballCount');
   const aliveCount=()=>balls.filter(b=>!b._dead).length;
@@ -193,10 +193,9 @@ function handleCommand(cmd){
     balls.push(b); return true;
   }
 
-  // Seed: 1 factory, 1 spawner, some smalls
-  addBall(makeBall(innerWidth*0.45, innerHeight*0.42, FACTORY, 1.0, 0.9));
-  addBall(makeBall(innerWidth*0.58, innerHeight*0.42, SPAWNER, -0.8, 1.0));
-  for(let i=0;i<14;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
+  // Seed
+  addBall(makeBall(innerWidth*0.50, innerHeight*0.42, SPAWNER, 1.0, 0.9));
+  for(let i=0;i<12;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
 
   // UI rects to bounce off
   function rects(){
@@ -223,23 +222,19 @@ function handleCommand(cmd){
     if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
   }
 
-  // Chain rules (alternating FACTORY–SPAWNER–FACTORY–SPAWNER…)
-  function canAppend(chain, node){
-    if(chain.length===0) return true;
-    const last=chain[chain.length-1];
-    return (last.type===FACTORY && node.type===SPAWNER) || (last.type===SPAWNER && node.type===FACTORY);
-  }
-  function attachToChain(a,b){
-    const A=a.chain, B=b.chain;
-    if(!A && !B){
-      if(!canAppend([a], b)) return false;
+  // Bonding chains: orbiters around same host colliding → bond into stagnant chain
+  function bondOrbitersIfCollide(a,b){
+    if(!(a.orbit && b.orbit)) return false;
+    if(a.orbit !== b.orbit) return false; // must share host
+    // both become part of the same chain
+    if(!a.chain && !b.chain){
       const chain=[a,b]; a.chain=b.chain=chain; chains.push(chain);
-      a.vx=a.vy=b.vx=b.vy=0; a.orbit=b.orbit=null;
-      return true;
-    }
-    if(A && !B && canAppend(A,b)){ A.push(b); b.chain=A; b.vx=b.vy=0; b.orbit=null; return true; }
-    if(!A && B && canAppend(B,a)){ B.push(a); a.chain=B; a.vx=a.vy=0; a.orbit=null; return true; }
-    return false;
+    } else if(a.chain && !b.chain){ a.chain.push(b); b.chain=a.chain; }
+    else if(!a.chain && b.chain){ b.chain.push(a); a.chain=b.chain; }
+    // stop moving/orbiting once bonded
+    a.orbit=b.orbit=null;
+    a.vx=a.vy=b.vx=b.vy=0;
+    return true;
   }
 
   // Collisions
@@ -264,28 +259,11 @@ function handleCommand(cmd){
       return;
     }
 
-    // Factory touches Small → promote small to Spawner and bond
-    if((a.type===FACTORY && b.type===SMALL) || (b.type===FACTORY && a.type===SMALL)){
-      const big = a.type===FACTORY?a:b;
-      const sml = a.type===SMALL?a:b;
-      sml.type=SPAWNER; sml.r=R_SPAWNER; sml.orbit=null;
-      attachToChain(big, sml);
-      // snap toward big a bit
-      sml.x = (sml.x + big.x)/2; sml.y = (sml.y + big.y)/2; sml.vx=sml.vy=0;
-      big.squashT=sml.squashT=10; big.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y'; sml.squashAxis=big.squashAxis;
-      return;
-    }
-
-    // Spawner bonds to Factory to extend alternating chain
-    if((a.type===FACTORY && b.type===SPAWNER) || (b.type===FACTORY && a.type===SPAWNER)){
-      attachToChain(a,b);
+    // If this is a pair of orbiters of the same host and they hit, bond into chain
+    if (bondOrbitersIfCollide(a,b)) {
       a.squashT=b.squashT=10; a.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y'; b.squashAxis=a.squashAxis;
       return;
     }
-
-    // Small near big/spawner can orbit visually
-    if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY)) a.orbit=b;
-    if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY)) b.orbit=a;
 
     // Red interactions (simple: reds delete smalls; bounce off bigger)
     if(a.type===RED || b.type===RED){
@@ -330,7 +308,7 @@ function handleCommand(cmd){
         hit=true; const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
         const kick=5.2; b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
         b.squashT=10; b.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
-        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; } // nudge so movement is visible while paused
+        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; } // small nudge if paused
       }
     }
     addScore(hit?1:-1);
@@ -370,9 +348,10 @@ function handleCommand(cmd){
       if(b._dead) continue;
 
       if(b.orbit){
+        // orbit around host
         const c=b.orbit;
         const ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;
-        const d=c.r + 18;
+        const d=c.r + ORBIT_RADIUS_PAD;
         b.x=c.x+Math.cos(ang)*d;
         b.y=c.y+Math.sin(ang)*d;
         b.vx*=0.95; b.vy*=0.95;
@@ -383,6 +362,19 @@ function handleCommand(cmd){
       bounceWalls(b);
       for(const R of rs) collideRect(b,R);
 
+      // Spawner attracts nearby smalls into orbit
+      if (b.type===SPAWNER || b.type===FACTORY){
+        for(const s of balls){
+          if(s._dead || s.type!==SMALL || s.orbit || s.chain) continue;
+          const dist = Math.hypot(s.x-b.x, s.y-b.y);
+          const desired = b.r + ORBIT_RADIUS_PAD;
+          if (dist < desired + 14 && dist > desired - 22){
+            s.orbit = b; // capture
+          }
+        }
+      }
+
+      // Factory spawns new smalls slowly
       if(b.type===FACTORY){
         b.cooldown++;
         if(b.cooldown>FACTORY_INTERVAL && aliveCount()<MAX_BALLS){
@@ -401,7 +393,7 @@ function handleCommand(cmd){
       }
     }
 
-    // cleanup (safety)
+    // cleanup
     for(let i=balls.length-1;i>=0;i--) if(balls[i]._dead) balls.splice(i,1);
 
     updateCount();
@@ -410,7 +402,7 @@ function handleCommand(cmd){
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // Chains (links)
+    // Chains (stagnant links)
     ctx.strokeStyle='rgba(255,255,255,0.45)';
     for(const ch of chains){
       if(ch.length<2) continue;
