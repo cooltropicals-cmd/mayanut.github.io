@@ -15,7 +15,7 @@
   html,body{height:100%}
   body{
     margin:0;color:var(--ink);
-    font-family:Inter, system-ui, sans-serif;
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex;flex-direction:column;min-height:100%;
     background:
       radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
@@ -25,7 +25,7 @@
     overflow-x:hidden;
   }
 
-  /* === Top bar === */
+  /* Top bar */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
   .brand{font-weight:800;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
   .brand small{font-size:11px;opacity:.95;vertical-align:top}
@@ -34,11 +34,11 @@
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
   .nav a:hover{border:1px solid var(--line);background:rgba(255,255,255,.06)}
 
-  /* === Score === */
+  /* Score */
   .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
     border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
 
-  /* === Chat === */
+  /* Hero + Chat */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
   .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;color:#fff;margin:6px 0 14px}
@@ -49,15 +49,15 @@
   .msg{text-align:left;margin:6px 0;color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
-  /* === Sections === */
+  /* Sections */
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
   .section h3{margin:0 0 8px;color:#fff}
   .section p{margin:8px 0 0;color:#cfe9ff}
 
-  /* === Footer === */
+  /* Footer */
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
 
-  /* === Canvas === */
+  /* Canvas (clicks go through to document listener) */
   #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
 </style>
 </head>
@@ -71,19 +71,19 @@
     <a href="#home">MayaNut</a>
     <a href="#buy">Buy</a>
     <a href="#about">About</a>
-    <a href="https://instagram.com/mayanut.co" target="_blank">Instagram</a>
+    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
   </nav>
 </header>
 
 <!-- Score -->
-<div id="scoreHUD" class="score">Score: <b id="score">0</b></div>
+<div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
 
 <!-- Hero + Chat -->
 <main id="home" class="stage">
   <div class="panel">
     <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
-    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want" /></div>
-    <div class="log" id="chatLog"></div>
+    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" /></div>
+    <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
 </main>
 
@@ -97,8 +97,8 @@
 <section id="about" class="section">
   <h3>About</h3>
   <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
-  <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
-  farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
+    <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
+    farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
   <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
 </section>
 
@@ -109,80 +109,230 @@
 <canvas id="ballLayer"></canvas>
 
 <script>
-/* === Chat Controls === */
-const input=document.getElementById('chatInput');const log=document.getElementById('chatLog');
-function say(who,msg){const d=document.createElement('div');d.className='msg';d.innerHTML=`<strong>${who}:</strong> ${msg}`;log.appendChild(d);log.scrollTop=log.scrollHeight;}
-input.addEventListener('keydown',e=>{if(e.key==='Enter'){say('You',input.value);input.value='';}});
+/* === Chat (basic) === */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+let GAME_PAUSED = false;
+function say(role, text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
+input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const t=input.value.trim(); if(!t) return; say('You',t); input.value=''; const low=t.toLowerCase(); if(low==='pause'){GAME_PAUSED=true;say('MayaNut','Paused.');} if(['resume','unpause','continue'].includes(low)){GAME_PAUSED=false;say('MayaNut','Resumed.');} }});
 
-/* === Game Engine === */
+/* === Game Engine (with requested behavior) === */
 (function(){
-  const canvas=document.getElementById('ballLayer');const ctx=canvas.getContext('2d');
-  function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}resize();window.addEventListener('resize',resize);
+  const canvas=document.getElementById('ballLayer');
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+  resize(); addEventListener('resize',resize);
 
-  const SMALL='small',SPAWNER='spawner',FACTORY='factory',RED='red';
-  const balls=[{x:200,y:200,vx:2,vy:1,r:6,type:SMALL,orbit:null,chain:null,cooldown:0}];
-  const chains=[];const MAX=19;const FACTORY_INTERVAL=200;
+  const SMALL='small', SPAWNER='spawner', FACTORY='factory';
+  const MAX_BALLS=19, FACTORY_INTERVAL=200;
 
-  function makeBall(x,y,type){const r=type===SMALL?6:type===SPAWNER?12:type===FACTORY?20:8;return{x,y,vx:Math.random()*2-1,vy:Math.random()*2-1,r,type,orbit:null,chain:null,cooldown:0};}
+  const balls=[];       // all balls
+  const chains=[];      // arrays of orbiting smalls (links)
+  const scoreEl=document.getElementById('score');
+  const countEl=document.getElementById('ballCount');
 
-  function collisions(){
-    for(let i=0;i<balls.length;i++){
-      for(let j=i+1;j<balls.length;j++){
-        const a=balls[i],b=balls[j];if(a._dead||b._dead)continue;
-        const dx=b.x-a.x,dy=b.y-a.y,dist=Math.hypot(dx,dy);
-        if(dist>a.r+b.r)continue;
+  // radii (small are tiny dots)
+  const R_SMALL=3;        // tiny white dots
+  const R_SPAWNER=16;     // bigger than before
+  const R_FACTORY=26;     // largest
 
-        if(a.type===SMALL&&b.type===SMALL){a._dead=b._dead=true;balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER));}
-        if(a.type===SPAWNER&&b.type===SPAWNER){a._dead=b._dead=true;balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY));}
-
-        if(a.type===SMALL&&(b.type===SPAWNER||b.type===FACTORY))a.orbit=b;
-        if(b.type===SMALL&&(a.type===SPAWNER||a.type===FACTORY))b.orbit=a;
-
-        if(a.orbit&&b.orbit&&a.orbit===b.orbit){
-          if(!a.chain&&!b.chain){const chain=[a,b];a.chain=b.chain=chain;chains.push(chain);}
-          else if(a.chain&&!b.chain){a.chain.push(b);b.chain=a.chain;}
-          else if(!a.chain&&b.chain){b.chain.push(a);a.chain=b.chain;}
-        }
-      }
-    }
+  function makeBall(x,y,type=SMALL){
+    const r = type===SMALL?R_SMALL : type===SPAWNER?R_SPAWNER : R_FACTORY;
+    return {x,y,vx:(Math.random()-.5)*2, vy:(Math.random()-.5)*2, r, type, orbit:null, chain:null, cooldown:0, _dead:false};
   }
 
-  function update(){
-    for(const b of balls){
-      b.x+=b.vx;b.y+=b.vy;
-      if(b.orbit){const c=b.orbit;const ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;const d=c.r+20;b.x=c.x+Math.cos(ang)*d;b.y=c.y+Math.sin(ang)*d;}
-      if(b.type===FACTORY){b.cooldown++;if(b.cooldown>FACTORY_INTERVAL&&balls.length<MAX){b.cooldown=0;balls.push(makeBall(b.x+Math.random()*20-10,b.y+Math.random()*20-10,SMALL));}}
-      if(b.x-b.r<0||b.x+b.r>innerWidth)b.vx*=-1;if(b.y-b.r<0||b.y+b.r>innerHeight)b.vy*=-1;
-    }
-    collisions();
-    for(let i=balls.length-1;i>=0;i--)if(balls[i]._dead)balls.splice(i,1);
+  // seed a few dots
+  for(let i=0;i<12;i++) balls.push(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
+
+  function updateCount(){ countEl.textContent=balls.filter(b=>!b._dead).length; }
+
+  // Bounce against screen and major UI blocks (title, chat, sections, topbar)
+  function getRects(){
+    const els=[document.getElementById('heroTitle'), document.getElementById('chatInput'),
+               document.getElementById('buy'), document.getElementById('about'), document.querySelector('.topbar')].filter(Boolean);
+    return els.map(el=>{const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height};});
+  }
+  function collideRect(b,R){
+    const nx=Math.max(R.x, Math.min(b.x, R.x+R.w));
+    const ny=Math.max(R.y, Math.min(b.y, R.y+R.h));
+    const dx=b.x-nx, dy=b.y-ny;
+    if(dx*dx+dy*dy > b.r*b.r) return;
+    const cx=R.x+R.w/2, cy=R.y+R.h/2;
+    const ox=(R.w/2+b.r)-Math.abs(b.x-cx);
+    const oy=(R.h/2+b.r)-Math.abs(b.y-cy);
+    if(ox<oy){ b.vx*=-1; b.x+=(b.vx>0?1:-1)*Math.max(1,ox*0.6); } else { b.vy*=-1; b.y+=(b.vy>0?1:-1)*Math.max(1,oy*0.6); }
   }
 
-  canvas.addEventListener('click',e=>{
-    const x=e.clientX,y=e.clientY;
-    let chainHit=false;
+  // Collision rules
+  function handleCollision(a,b){
+    if(a._dead||b._dead) return;
+    const dx=b.x-a.x, dy=b.y-a.y, dist=Math.hypot(dx,dy);
+    if(dist>a.r+b.r) return;
+
+    // Small + Small => Spawner
+    if(a.type===SMALL && b.type===SMALL){
+      if(balls.filter(bb=>!bb._dead).length>=MAX_BALLS) return;
+      a._dead=b._dead=true;
+      balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER));
+      return;
+    }
+
+    // Spawner + Spawner => Factory
+    if(a.type===SPAWNER && b.type===SPAWNER){
+      if(balls.filter(bb=>!bb._dead).length>=MAX_BALLS) return;
+      a._dead=b._dead=true;
+      balls.push(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY));
+      return;
+    }
+
+    // Orbiting: little near big starts orbiting it
+    if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY)) a.orbit=b;
+    if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY)) b.orbit=a;
+
+    // Two orbiters around same host collide -> chain link (stagnant chain)
+    if(a.orbit && b.orbit && a.orbit===b.orbit){
+      if(!a.chain && !b.chain){ const chain=[a,b]; a.chain=b.chain=chain; chains.push(chain); }
+      else if(a.chain && !b.chain){ a.chain.push(b); b.chain=a.chain; }
+      else if(!a.chain && b.chain){ b.chain.push(a); a.chain=b.chain; }
+      // Slow orbiters so chains don't drift
+      a.vx*=0.2; a.vy*=0.2; b.vx*=0.2; b.vy*=0.2;
+      a.orbit=null; b.orbit=null; // once chained, no longer orbiting
+    }
+
+    // default elastic-ish bounce
+    const nx=dx/(dist||1), ny=dy/(dist||1);
+    const p= (a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
+    a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
+  }
+
+  // Click handling (document-level so canvas can stay pointer-events:none)
+  let score=0; const scoreEl=document.getElementById('score');
+  function addScore(n){ score+=n; scoreEl.textContent=score; }
+  document.addEventListener('click', e=>{
+    // ignore clicks on inputs so chat works
+    if (e.target.closest('input,textarea,[contenteditable]')) return;
+    const x=e.clientX, y=e.clientY;
+
+    // First, try folding a chain by clicking its ends
     for(const ch of chains){
       if(ch.length>2){
-        const f=ch[0],l=ch[ch.length-1];
-        if(Math.hypot(f.x-x,f.y-y)<f.r+5||Math.hypot(l.x-x,l.y-y)<l.r+5){
-          const cx=ch.reduce((s,b)=>s+b.x,0)/ch.length,cy=ch.reduce((s,b)=>s+b.y,0)/ch.length,radius=ch.length*5;
-          ch.forEach((b,i)=>{const ang=i/ch.length*Math.PI*2;b.x=cx+Math.cos(ang)*radius;b.y=cy+Math.sin(ang)*radius;b.vx=b.vy=0;});
-          chainHit=true;
+        const first=ch[0], last=ch[ch.length-1];
+        if(Math.hypot(first.x-x,first.y-y)<first.r+6 || Math.hypot(last.x-x,last.y-y)<last.r+6){
+          const cx=ch.reduce((s,b)=>s+b.x,0)/ch.length, cy=ch.reduce((s,b)=>s+b.y,0)/ch.length;
+          const radius=Math.max(16, ch.length*5);
+          ch.forEach((b,i)=>{ const ang=(i/ch.length)*Math.PI*2; b.x=cx+Math.cos(ang)*radius; b.y=cy+Math.sin(ang)*radius; b.vx=b.vy=0; });
+          addScore(1);
+          return;
         }
       }
     }
-    if(chainHit)return;
-    for(const b of balls){if(Math.hypot(b.x-x,b.y-y)<b.r+5){const dx=b.x-x,dy=b.y-y,L=Math.hypot(dx,dy)||1;b.vx=(dx/L)*4.5;b.vy=(dy/L)*4.5;}}
+
+    // Otherwise, launch any ball we actually clicked
+    let hit=false;
+    for(const b of balls){
+      if(Math.hypot(b.x-x,b.y-y) < b.r+5){
+        hit=true;
+        const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
+        const kick=4.8;
+        b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
+      }
+    }
+    addScore(hit?1:-1);
   });
+
+  function update(){
+    if (GAME_PAUSED) return;
+    const rects=getRects();
+
+    // Move + bounce + orbit + factory spawn
+    for(const b of balls){
+      if(b._dead) continue;
+
+      // orbit motion (only smalls orbit)
+      if(b.orbit){
+        const c=b.orbit;
+        const ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;
+        const dist=c.r + 18;
+        b.x=c.x+Math.cos(ang)*dist;
+        b.y=c.y+Math.sin(ang)*dist;
+        // light damping while orbiting
+        b.vx*=0.95; b.vy*=0.95;
+      }else{
+        // free motion
+        b.x+=b.vx; b.y+=b.vy;
+      }
+
+      // walls
+      if(b.x-b.r<0){b.x=b.r; b.vx=Math.abs(b.vx);}
+      if(b.x+b.r>innerWidth){b.x=innerWidth-b.r; b.vx=-Math.abs(b.vx);}
+      if(b.y-b.r<0){b.y=b.r; b.vy=Math.abs(b.vy);}
+      if(b.y+b.r>innerHeight){b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy);}
+
+      // UI boxes
+      for(const R of rects) collideRect(b,R);
+
+      // factories make smalls
+      if(b.type===FACTORY){
+        b.cooldown++;
+        if(b.cooldown>FACTORY_INTERVAL && balls.filter(bb=>!bb._dead).length<MAX_BALLS){
+          b.cooldown=0;
+          balls.push(makeBall(b.x + (Math.random()*20-10), b.y + (Math.random()*20-10), SMALL));
+        }
+      }
+    }
+
+    // collisions
+    for(let i=0;i<balls.length;i++){
+      for(let j=i+1;j<balls.length;j++){
+        handleCollision(balls[i], balls[j]);
+      }
+    }
+
+    // cleanup
+    for(let i=balls.length-1;i>=0;i--) if(balls[i]._dead) balls.splice(i,1);
+
+    updateCount();
+  }
 
   function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(const ch of chains){ctx.beginPath();ctx.moveTo(ch[0].x,ch[0].y);for(const b of ch)ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.stroke();}
-    for(const b of balls){ctx.beginPath();ctx.fillStyle=b.type===SMALL?'white':b.type===SPAWNER?'orange':b.type===FACTORY?'red':'#ff4d4d';ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();}
-    document.getElementById('ballCount').textContent=balls.length;
+
+    // draw chains (lines between linked orbiters)
+    ctx.strokeStyle='rgba(255,255,255,0.5)';
+    for(const ch of chains){
+      if(ch.length<2) continue;
+      ctx.beginPath();
+      ctx.moveTo(ch[0].x,ch[0].y);
+      for(const b of ch) ctx.lineTo(b.x,b.y);
+      ctx.stroke();
+    }
+
+    // draw balls
+    for(const b of balls){
+      // small white dots (tiny)
+      if(b.type===SMALL){
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(b.x,b.y,R_SMALL,0,Math.PI*2); ctx.fill();
+        continue;
+      }
+      // spawner: larger white with ring
+      if(b.type===SPAWNER){
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(b.x,b.y,R_SPAWNER-2,0,Math.PI*2); ctx.fill();
+        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,255,255,0.85)';
+        ctx.beginPath(); ctx.arc(b.x,b.y,R_SPAWNER,0,Math.PI*2); ctx.stroke();
+        continue;
+      }
+      // factory: biggest solid (soft white)
+      if(b.type===FACTORY){
+        ctx.fillStyle='rgba(255,255,255,0.95)';
+        ctx.beginPath(); ctx.arc(b.x,b.y,R_FACTORY,0,Math.PI*2); ctx.fill();
+        continue;
+      }
+    }
   }
 
-  function loop(){update();draw();requestAnimationFrame(loop);}
+  function loop(){ update(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
 </script>
