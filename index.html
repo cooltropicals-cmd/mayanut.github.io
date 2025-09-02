@@ -9,8 +9,6 @@
     --ink:#eef3ff;
     --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-
-    /* Warm gold for the logo text */
     --gold1:#fff0b5;
     --gold2:#ffd46b;
     --gold3:#f3ac3a;
@@ -20,63 +18,42 @@
     height:100%; margin:0; color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
-    /* Deep forest base to sit behind the moving blobs */
     background: linear-gradient(180deg, #0b1a0f 0%, #143821 40%, #0f2f1d 100%);
     overflow-x:hidden;
   }
 
-  /* --- Gently drifting, blurry “lava lamp” greens --- */
+  /* Animated blurred green background layers */
   .bg-blobs, .bg-blobs-2, .bg-blobs-3{
     position:fixed; inset:-20% -20% -20% -20%;
     z-index:-1; pointer-events:none; filter: blur(26px) saturate(115%);
-    animation: drift1 48s ease-in-out infinite;
   }
   .bg-blobs{
-    background:
-      radial-gradient(35% 40% at 20% 25%, rgba(110,190,120,.35), transparent 60%),
-      radial-gradient(30% 35% at 75% 20%, rgba(165,230,170,.28), transparent 65%),
-      radial-gradient(28% 30% at 50% 60%, rgba(90,150,110,.32), transparent 60%);
+    background:radial-gradient(35% 40% at 20% 25%, rgba(110,190,120,.35), transparent 60%),
+               radial-gradient(30% 35% at 75% 20%, rgba(165,230,170,.28), transparent 65%),
+               radial-gradient(28% 30% at 50% 60%, rgba(90,150,110,.32), transparent 60%);
+    animation: drift1 48s ease-in-out infinite;
   }
   .bg-blobs-2{
-    background:
-      radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.30), transparent 60%),
-      radial-gradient(30% 34% at 75% 70%, rgba(125,200,140,.28), transparent 60%),
-      radial-gradient(22% 26% at 50% 40%, rgba(160,220,160,.25), transparent 60%);
+    background:radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.30), transparent 60%),
+               radial-gradient(30% 34% at 75% 70%, rgba(125,200,140,.28), transparent 60%),
+               radial-gradient(22% 26% at 50% 40%, rgba(160,220,160,.25), transparent 60%);
     animation: drift2 56s ease-in-out infinite;
     mix-blend-mode: screen;
   }
   .bg-blobs-3{
-    background:
-      radial-gradient(22% 26% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
-      radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
+    background:radial-gradient(22% 26% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
+               radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
     animation: drift3 62s ease-in-out infinite;
     opacity:.9;
   }
 
-  @keyframes drift1 {
-    0%   {transform: translate3d(0,0,0) scale(1.02);}
-    50%  {transform: translate3d(-18px, 16px,0) scale(1.05);}
-    100% {transform: translate3d(0,0,0) scale(1.02);}
-  }
-  @keyframes drift2 {
-    0%   {transform: translate3d(0,0,0) scale(1.00);}
-    50%  {transform: translate3d(22px, -14px,0) scale(1.04);}
-    100% {transform: translate3d(0,0,0) scale(1.00);}
-  }
-  @keyframes drift3 {
-    0%   {transform: translate3d(0,0,0) scale(1.03);}
-    50%  {transform: translate3d(-10px, 10px,0) scale(1.06);}
-    100% {transform: translate3d(0,0,0) scale(1.03);}
-  }
+  @keyframes drift1 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-18px,16px,0)}100%{transform:translate3d(0,0,0)}}
+  @keyframes drift2 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(22px,-14px,0)}100%{transform:translate3d(0,0,0)}}
+  @keyframes drift3 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-10px,10px,0)}100%{transform:translate3d(0,0,0)}}
 
   /* Top bar */
-  .topbar{
-    position:fixed; top:0; left:0; right:0; z-index:30;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line);
-    backdrop-filter:blur(10px) saturate(140%);
-  }
-  .brandLogo { display:block; height:28px; width:auto; }
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .brandLogo{display:block;height:28px;width:auto}
 
   .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
@@ -84,7 +61,7 @@
 
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
-  .heroLogo{ display:block; width:min(560px,80vw); margin:6px auto 12px; }
+  .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 12px}
 
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
   .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
@@ -100,59 +77,49 @@
   .section p{margin:8px 0 0;color:#cfe9ff}
 
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
-  .card{
-    background:rgba(255,255,255,.06); border:1px solid var(--line); border-radius:14px; padding:16px;
-    text-align:center; color:#eaf2ff; text-decoration:none; transition:transform .2s ease, background .2s ease, border-color .2s ease;
-  }
-  .card:hover{ transform: translateY(-3px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.18) }
+  .card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;color:#eaf2ff;text-decoration:none;transition:transform .2s ease,background .2s ease,border-color .2s ease}
+  .card:hover{transform:translateY(-3px);background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18)}
 
   footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;position:relative}
-  .ig-link{
-    position:absolute; right:72px; top:50%; transform:translateY(-50%);
-    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px;
-  }
-  .ig-link svg{filter:drop-shadow(0 0 0 rgba(255,255,255,0)); transition:transform .2s ease, filter .2s ease}
-  .ig-link:hover svg{transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+  .ig-link{position:absolute;right:72px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px}
+  .ig-link svg{filter:drop-shadow(0 0 0 rgba(255,255,255,0));transition:transform .2s ease,filter .2s ease}
+  .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 </style>
 </head>
 <body>
 
-<!-- Blurry, faded green “lava lamp” layers -->
 <div class="bg-blobs"></div>
 <div class="bg-blobs-2"></div>
 <div class="bg-blobs-3"></div>
 
-<!-- Single-source SVG logo: MayaNut™ (same gold, TM tucked in close) -->
+<!-- Unified gold logo with TM close to "t" -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0%"  stop-color="var(--gold1)"/>
+      <stop offset="0%" stop-color="var(--gold1)"/>
       <stop offset="50%" stop-color="var(--gold2)"/>
       <stop offset="100%" stop-color="var(--gold3)"/>
     </linearGradient>
     <filter id="mn-shadow" x="-20%" y="-40%" width="140%" height="200%">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.35)"/>
     </filter>
-
-    <!-- The word and TM drawn together in one symbol so color matches perfectly.
-         TM is tight to the “t” (slightly raised). -->
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
       <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
             font-weight="900" font-size="180"
             fill="url(#mn-gold)" filter="url(#mn-shadow)">MayaNut</text>
-      <!-- TM positioned very close (touching visually) near the terminal of the 't' -->
-      <text x="1048" y="108" font-family="Poppins, Inter, system-ui, sans-serif"
-            font-weight="900" font-size="46"
+      <!-- TM positioned tight and slightly bigger -->
+      <text x="1040" y="98" font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="50"
             fill="url(#mn-gold)" filter="url(#mn-shadow)">™</text>
     </symbol>
   </defs>
 </svg>
 
 <header class="topbar" role="banner">
-  <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
-  <nav class="nav" aria-label="Primary">
+  <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
+  <nav class="nav">
     <a href="#home" id="navHome">MayaNut</a>
-    <a href="#buy"  id="navBuy">Buy</a>
+    <a href="#buy" id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
     <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
   </nav>
@@ -160,62 +127,38 @@
 
 <main id="home" class="stage">
   <div class="panel">
-    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo large"><use href="#MayaNutLogo"></use></svg>
-
-    <div class="chatbar" role="search">
-      <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
-    </div>
-    <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
+    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" /></div>
+    <div class="log" id="chatLog"></div>
   </div>
 </main>
 
-<section id="buy" class="section" aria-labelledby="buyTitle">
-  <h3 id="buyTitle">Buy</h3>
-  <p>Search Through Our Wonderful Products — real items coming soon. For now, tap a category to return to home.</p>
+<section id="buy" class="section"><h3>Buy</h3>
+  <p>Search Through Our Wonderful Products — real items coming soon.</p>
   <div class="cards">
-    <a class="card" href="#home">Flour (placeholder)</a>
-    <a class="card" href="#home">Drinks (placeholder)</a>
-    <a class="card" href="#home">Snacks (placeholder)</a>
+    <a class="card" href="#home">Flour</a>
+    <a class="card" href="#home">Drinks</a>
+    <a class="card" href="#home">Snacks</a>
   </div>
 </section>
 
-<section id="about" class="section" aria-labelledby="aboutTitle">
-  <h3 id="aboutTitle">About</h3>
+<section id="about" class="section"><h3>About</h3>
   <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
 </section>
 
 <footer>
   © 2025 MayaNut LLC. All rights reserved.
-  <a class="ig-link" href="https://instagram.com/mayanut.co" title="@mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <!-- simple white Instagram glyph -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
-    </svg>
+  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
   </a>
 </footer>
 
 <script>
-/* Minimal chat behavior kept simple */
-const input = document.getElementById('chatInput');
-const logBox = document.getElementById('chatLog');
-function say(role, text){
-  const el=document.createElement('div'); el.className='msg';
-  el.innerHTML=`<strong>${role}:</strong> ${text}`;
-  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
-}
-input.addEventListener('keydown', e=>{
-  if(e.key==='Enter'){
-    const t=input.value.trim(); if(!t) return; say('You', t); input.value='';
-    say('MayaNut', "I'm here to help with questions about MayaNut™ and our products!");
-  }
-});
-['navHome','navBuy','navAbout'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) el.addEventListener('click', e=>{
-    e.preventDefault();
-    document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});
-  });
-});
+const input=document.getElementById('chatInput');
+const logBox=document.getElementById('chatLog');
+function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){const t=input.value.trim();if(!t)return;say('You',t);input.value='';say('MayaNut',"I'm here to help with questions about MayaNut™ and our products!");}});
+['navHome','navBuy','navAbout'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('click',e=>{e.preventDefault();document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});} );});
 </script>
 </body>
 </html>
