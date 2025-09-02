@@ -1,881 +1,451 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MayaNut</title>
-<style>
-  :root{
-    --ink:#eaf2ff; --ink-dim:#c6d0ea;
-    --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
-    --accent:#8fdcff; --accent2:#c79bff;
-    --turq1:#7be9f0; --turq2:#4fd0df; --silver:#dfe9f4;
-    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-    --shadow:0 18px 40px rgba(0,0,0,.45);
-    --danger:#ff4d4d; --pink:#ff8ad6; --gold:rgba(255,220,130,.9);
-  }
-
-  html,body{height:100%}
-  body{
-    margin:0;color:var(--ink);
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
-    display:flex; flex-direction:column; min-height:100%;
-    background:
-      /* cyan/silver gleam at top */
-      linear-gradient(180deg, rgba(159,243,255,.30) 0%, rgba(115,232,232,.22) 8%, rgba(215,228,242,.16) 14%, rgba(0,0,0,0) 22%),
-      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
-      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
-      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
-      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
-    overflow-x:hidden;
-  }
-
-  /* Subtle animated gaseous overlays */
-  .bg-wave, .bg-wave2 {
-    position:fixed; inset:-20% -20% auto -20%;
-    height:70vh; z-index:-1; pointer-events:none;
-    background:
-      radial-gradient(65% 80% at 20% 30%, rgba(123,233,240,.30), transparent 65%),
-      radial-gradient(55% 70% at 70% 25%, rgba(79,208,223,.22), transparent 60%),
-      radial-gradient(40% 60% at 50% 60%, rgba(223,233,244,.18), transparent 60%);
-    filter: blur(22px) saturate(120%) brightness(110%);
-    animation: drift 28s ease-in-out infinite;
-  }
-  .bg-wave2{
-    height:60vh; top:0;
-    background:
-      radial-gradient(60% 70% at 35% -10%, rgba(139,226,255,.22), transparent 60%),
-      radial-gradient(55% 65% at 80% 10%, rgba(111,219,240,.24), transparent 60%),
-      radial-gradient(40% 55% at 10% 40%, rgba(215,228,242,.16), transparent 60%);
-    animation: drift2 36s ease-in-out infinite; mix-blend-mode:screen;
-  }
-  @keyframes drift {
-    0%{ transform: translateY(0) translateX(0) scale(1) }
-    50%{ transform: translateY(14px) translateX(-12px) scale(1.03) }
-    100%{ transform: translateY(0) translateX(0) scale(1) }
-  }
-  @keyframes drift2 {
-    0%{ transform: translateY(0) translateX(0) scale(1.02) }
-    50%{ transform: translateY(10px) translateX(10px) scale(1.05) }
-    100%{ transform: translateY(0) translateX(0) scale(1.02) }
-  }
-
-  /* Galaxies */
-  .galaxy{position:fixed; pointer-events:none; border-radius:50%; filter:blur(1px) saturate(120%) brightness(1.05); mix-blend-mode:screen; opacity:.30; animation:spin 140s linear infinite}
-  .galaxy.g1{width:540px;height:540px;left:6%;top:14%;background:
-      radial-gradient(closest-side, rgba(111,219,240,.22), transparent 70%),
-      radial-gradient(closest-side, rgba(156,124,255,.18), transparent 40%)}
-  .galaxy.g2{width:420px;height:420px;right:8%;top:18%;background:
-      radial-gradient(closest-side, rgba(255,170,220,.18), transparent 70%),
-      radial-gradient(closest-side, rgba(111,219,240,.18), transparent 40%);animation-duration:160s;animation-direction:reverse}
-  .galaxy.g3{width:600px;height:600px;left:50%;bottom:-8%;transform:translateX(-50%);background:
-      radial-gradient(closest-side, rgba(156,124,255,.18), transparent 70%),
-      radial-gradient(closest-side, rgba(159,243,255,.16), transparent 40%);animation-duration:180s}
-  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-  /* Top bar */
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
-  .brand{font-weight:800;letter-spacing:.2px;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
-  .brand small{font-size:11px;opacity:.95;vertical-align:top}
-  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
-  .nav{display:flex;gap:18px;align-items:center}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
-  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
-  .btn{cursor:pointer;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.10);color:var(--ink);}
-
-  /* Score */
-  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
-    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px; box-shadow:var(--shadow)}
-  #pausedBadge{opacity:.8}
-
-  /* Hero + chat */
-  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
-  .panel{width:min(900px,92vw);text-align:center}
-  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;letter-spacing:.6px;color:#fff;text-shadow:0 8px 28px rgba(0,0,0,.35);margin:6px 0 14px}
-  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 26px rgba(156,124,255,.25))}
-  .title small{font-size:.35em;color:#fff;opacity:.95;vertical-align:super;margin-left:4px}
-
-  .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
-  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none;box-shadow:var(--shadow)}
-  .chatbar input::placeholder{color:#bfe7ff}
-  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
-  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);max-height:42vh;overflow:auto}
-  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
-  .msg strong{color:#cfe1ff}
-
-  /* Sections */
-  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px);box-shadow:var(--shadow)}
-  .section h3{margin:0 0 8px;color:#fff}
-  .section p{margin:8px 0 0;color:#cfe9ff}
-  .muted{color:#c6d0ea; font-size:13px}
-
-  /* Footer */
-  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);backdrop-filter:blur(6px);text-align:center;font-size:13px;padding:12px 8px}
-
-  /* Canvas */
-  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
-
-  /* Auth modal */
-  .modalBack{position:fixed; inset:0; background:rgba(0,0,0,.45); backdrop-filter: blur(2px); display:none; align-items:center; justify-content:center; z-index:12000;}
-  .modal{width:min(460px, 92vw); background:rgba(12,16,34,.95); border:1px solid var(--line); border-radius:14px; padding:16px; color:#eaf2ff; box-shadow:var(--shadow)}
-  .modal h4{margin:0 0 10px}
-  .modal label{display:block; font-size:13px; margin:8px 0 4px; color:#cfe1ff}
-  .modal input{width:100%; padding:10px; border:1px solid var(--inputLine); border-radius:10px; background:var(--inputBG); color:#eaf2ff;}
-  .modal .row{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
-  .modal button{padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.10); color:var(--ink); cursor:pointer}
-  .closeX{position:absolute; right:16px; top:12px; cursor:pointer; opacity:.9}
-
-  @media (max-width:720px){.nav a{padding:6px 10px}}
-</style>
-</head>
-<body>
-
-  <!-- Animated gaseous overglow -->
-  <div class="bg-wave"></div><div class="bg-wave2"></div>
-
-  <!-- Subtle galaxies -->
-  <div class="galaxy g1"></div><div class="galaxy g2"></div><div class="galaxy g3"></div>
-
-  <!-- Top bar -->
-  <header class="topbar" role="banner">
-    <div class="brand">MayaNut<small>™</small></div>
-    <div class="brandInfo">Balls: <b id="ballCount">1</b>/<b id="ballCap">120</b></div>
-    <nav class="nav" aria-label="Primary">
-      <a href="#home" id="navHome">MayaNut</a>
-      <a href="#buy"  id="navBuy">Buy</a>
-      <a href="#about" id="navAbout">About</a>
-      <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
-      <button id="accountBtn" class="btn" type="button">Account</button>
-    </nav>
-  </header>
-
-  <!-- Score -->
-  <div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
-
-  <!-- Hero + Chat -->
-  <main id="home" class="stage">
-    <div class="panel">
-      <h1 id="heroTitle" class="title">
-        <span class="glow">MayaNut</span><small>™</small>
-      </h1>
-      <div class="chatbar" role="search">
-        <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
-      </div>
-      <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
-    </div>
-  </main>
-
-  <!-- Buy -->
-  <section id="buy" class="section" aria-labelledby="buyTitle">
-    <h3 id="buyTitle">Buy</h3>
-    <p>Search Through Our Wonderful Products — real items coming soon. For now, try typing what you’d like above.</p>
-    <ul class="muted">
-      <li>MayaNut Flour — placeholder</li>
-      <li>MayaNut Drink — placeholder</li>
-      <li>MayaNut Snacks — placeholder</li>
-    </ul>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="section" aria-labelledby="aboutTitle">
-    <h3 id="aboutTitle">About</h3>
-    <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
-      <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
-      farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
-    <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
-  </section>
-
-  <!-- Game info -->
-  <section id="game" class="section" aria-labelledby="gameTitle">
-    <h3 id="gameTitle">The Game</h3>
-    <p>Sign in to save your score, get on the Leaderboard today!</p>
-    <p class="muted"><strong>Objective:</strong> Keep the ecosystem thriving: whites → spawners → blobs → reds → dotted reds → novas & shards → back to whites via new mutations. Experiment with collisions!</p>
-    <p class="muted"><strong>Controls:</strong> Space = Pause/Play · Type <em>pause</em>/<em>resume</em> in chat · Type <em>Brosimum</em> to spawn 100 white balls at your cursor.</p>
-  </section>
-
-  <!-- Footer -->
-  <footer>© 2025 MayaNut LLC. All rights reserved.</footer>
-
-  <!-- Canvas -->
-  <canvas id="ballLayer"></canvas>
-
-  <!-- Auth modal -->
-  <div id="authModalBack" class="modalBack" aria-hidden="true">
-    <div class="modal">
-      <div class="closeX" id="closeAuth">✕</div>
-      <h4>Player Account</h4>
-      <label>Email</label>
-      <input id="authEmail" placeholder="you@example.com" />
-      <label>Password</label>
-      <input id="authPass" type="password" placeholder="••••••••" />
-      <div class="row">
-        <button id="signUpBtn"  type="button">Sign Up</button>
-        <button id="signInBtn"  type="button">Sign In</button>
-        <button id="signOutBtn" type="button">Sign Out</button>
-      </div>
-      <p class="muted" id="authInfo"></p>
-    </div>
-  </div>
-
 <script>
-/* ===== Chat (helpers + pause/resume + Brosimum powertool) ===== */
+/* ========= Mini SFX engine (unchanged, short) ========= */
+(function(){
+  const SFX = {
+    ctx:null, master:null, enabled:true, ready:false,
+    ensure(){ if(this.ctx) return; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); this.master=this.ctx.createGain(); this.master.gain.value=0.32; this.master.connect(this.ctx.destination); this.ready=true;}catch(e){} },
+    resume(){ try{ this.ensure(); if(this.ctx && this.ctx.state==='suspended') this.ctx.resume(); }catch{} },
+    toggle(){ this.enabled=!this.enabled; if(this.master) this.master.gain.value=this.enabled?0.32:0; const b=document.getElementById('audioToggle'); if(b) b.textContent=this.enabled?'🔊':'🔈'; },
+    env(t0,dur){ const c=this.ctx,g=c.createGain(); g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(.25,t0+.01); g.gain.exponentialRampToValueAtTime(.001,t0+dur); return g; },
+    blip(p=300,d=.09){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,o=c.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(p,t); o.frequency.exponentialRampToValueAtTime(p/2,t+d*.8); const g=this.env(t,d); o.connect(g).connect(this.master); o.start(t); o.stop(t+d+.05); },
+    squish(d=.12){ if(!this.ready||!this.enabled) return; const c=this.ctx,t=c.currentTime,b=c.createBuffer(1,2048,c.sampleRate),ch=b.getChannelData(0); for(let i=0;i<ch.length;i++) ch[i]=(Math.random()*2-1)*.55; const src=c.createBufferSource(); src.buffer=b; const f=c.createBiquadFilter(); f.type='bandpass'; f.frequency.setValueAtTime(420,t); f.Q.setValueAtTime(5,t); const g=this.env(t,d); src.connect(f).connect(g).connect(this.master); src.start(t); src.stop(t+d+.05); },
+    pop(){ this.blip(900,.06); }, tick(){ this.blip(1200,.04); }, bass(){ this.blip(70,.22); },
+    novaCharge(){ this.blip(260,.6); }, novaBoom(){ this.bass(); this.squish(.2); }
+  };
+  window.__SFX=SFX;
+  const unlock=()=>{SFX.ensure();SFX.resume();window.removeEventListener('pointerdown',unlock);window.removeEventListener('keydown',unlock);};
+  window.addEventListener('pointerdown',unlock,{once:true}); window.addEventListener('keydown',unlock,{once:true});
+  window.addEventListener('DOMContentLoaded',()=>{ const hud=document.getElementById('scoreHUD'); if(!hud) return; const b=document.createElement('button'); b.id='audioToggle'; b.textContent='🔊'; b.style.cssText='margin-left:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#eaf2ff;border-radius:8px;padding:2px 6px;cursor:pointer;'; b.onclick=()=>SFX.toggle(); hud.appendChild(b); });
+})();
+
+/* ========= Chat controls (pause, Red, Brosimum) ========= */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 const pausedBadge = document.getElementById('pausedBadge');
-let GAME_PAUSED = false;
-let lastMouse = {x: window.innerWidth/2, y: window.innerHeight/2};
-document.addEventListener('mousemove', (e)=>{ lastMouse.x=e.clientX; lastMouse.y=e.clientY; });
-
-function say(role, text){
-  const el = document.createElement('div');
-  el.className = 'msg';
-  el.innerHTML = `<strong>${role}:</strong> ${text}`;
-  logBox.appendChild(el);
-  logBox.scrollTop = logBox.scrollHeight;
-}
-function setPaused(v){
-  GAME_PAUSED = !!v;
-  pausedBadge.style.display = GAME_PAUSED ? '' : 'none';
-}
+let GAME_PAUSED=false;
+let lastMouse={x:innerWidth/2,y:innerHeight/2};
+document.addEventListener('mousemove',e=>{lastMouse.x=e.clientX;lastMouse.y=e.clientY;});
+function say(role,text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
+function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display=GAME_PAUSED?'':'none'; }
 function togglePause(){ setPaused(!GAME_PAUSED); }
-
 function handleMessage(v){
-  const t = (v||'').trim(); if(!t) return; say('You', t);
-  const low = t.toLowerCase();
-
-  // Pause / resume
-  if (['pause'].includes(low)){ setPaused(true); say('MayaNut','Paused. Type "resume" or press Space to play.'); return; }
+  const t=(v||'').trim(); if(!t) return; say('You',t); const low=t.toLowerCase();
+  if (low==='pause'){ setPaused(true); say('MayaNut','Paused. Type "resume" or press Space.'); return; }
   if (['unpause','resume','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
-
-  // Brosimum powertool: spawn up to 100 whites at cursor (respect cap)
-  if (low === 'brosimum'){
-    window.spawnWhitesAt(lastMouse.x, lastMouse.y, 100);
-    say('MayaNut','Brosimum powertool: unleashed 100 white balls (capped by system).');
-    return;
-  }
-
-  // Domain answers
-  const domainTriggers = [
-    "domain for sale","is this domain for sale","sell this domain","sell the domain",
-    "buy this domain","buy the domain","is the domain for sale","are you selling the domain",
-    "is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"
-  ];
+  if (low==='brosimum'){ window.spawnWhitesAt(lastMouse.x,lastMouse.y,100); say('MayaNut','Brosimum powertool spawned white cells.'); return; }
+  if (low==='red'){ window.spawnRedAgent(lastMouse.x,lastMouse.y); say('MayaNut','Red agent deployed — first contact demotes one full color.'); return; }
+  const domainTriggers=["domain for sale","is this domain for sale","sell this domain","sell the domain","buy this domain","buy the domain","is the domain for sale","are you selling the domain","is mayanut.com for sale","for sale domain","purchase this domain","can i buy this domain"];
   if (domainTriggers.some(k=>low.includes(k))) { say('MayaNut','mayanut.com is Not for Sale'); return; }
-
-  if (low.includes('buy') || low.includes('product') || low.includes('shop')) {
-    say('MayaNut','Head to the Buy section below for our upcoming products. (Placeholders for now.)');
-    document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return;
-  }
-  if (low.includes('about') || low.includes('company')) {
-    say('MayaNut','We’re a South Florida company promoting the Maya Nut tree. Scroll to the About section for details.');
-    document.getElementById('about').scrollIntoView({behavior:'smooth'}); return;
-  }
-  say('MayaNut', "Tell me what you want and I’ll point you in the right direction.");
+  if (low.includes('buy')||low.includes('product')||low.includes('shop')){ say('MayaNut','Head to the Buy section below for our upcoming products.'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
+  if (low.includes('about')||low.includes('company')){ say('MayaNut','We’re a South Florida company promoting the Maya Nut tree. See the About section.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
+  say('MayaNut',"Tell me what you want and I’ll point you in the right direction.");
 }
-input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ handleMessage(input.value); input.value = ''; }});
-document.addEventListener('keydown', (e)=>{
-  if (e.code === 'Space'){
-    const ae = document.activeElement;
-    if (ae && (ae === input || ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA')) return;
-    e.preventDefault(); togglePause();
+input.addEventListener('keydown',e=>{ if(e.key==='Enter'){handleMessage(input.value); input.value='';}});
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space'){ const a=document.activeElement; if(a&&(a===input||a.tagName==='INPUT'||a.tagName==='TEXTAREA')) return;
+    e.preventDefault(); togglePause(); __SFX.resume();
   }
 });
-document.getElementById('navHome').addEventListener('click', (e)=>{ e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'}); input.focus(); });
-document.getElementById('navBuy').addEventListener('click',  (e)=>{ e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); });
-document.getElementById('navAbout').addEventListener('click',(e)=>{ e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'}); });
+document.getElementById('navHome').addEventListener('click',e=>{e.preventDefault();document.getElementById('home').scrollIntoView({behavior:'smooth'});input.focus();});
+document.getElementById('navBuy').addEventListener('click',e=>{e.preventDefault();document.getElementById('buy').scrollIntoView({behavior:'smooth'});});
+document.getElementById('navAbout').addEventListener('click',e=>{e.preventDefault();document.getElementById('about').scrollIntoView({behavior:'smooth'});});
 
-/* ===== Firebase hooks (fill in to enable real accounts + cloud score) ===== */
-const FIREBASE_CONFIG = { apiKey:"YOUR_API_KEY", authDomain:"YOUR_PROJECT_ID.firebaseapp.com", projectId:"YOUR_PROJECT_ID", appId:"YOUR_APP_ID" };
-const SCORE_FN_URL = "https://YOUR_REGION-YOUR_PROJECT.cloudfunctions.net/submitScore";
-window.mnAuth = {
-  ready:false, user:null,
-  async init(){
-    try{
-      const [{ initializeApp }] = await Promise.all([ import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js") ]);
-      const app = initializeApp(FIREBASE_CONFIG);
-      const [{ getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut },
-             { getFirestore, doc, getDoc, setDoc } ] = await Promise.all([
-        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
-        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
-      ]);
-      this._auth=getAuth(app); this._db=getFirestore(app);
-      this._doc=doc; this._getDoc=getDoc; this._setDoc=setDoc;
-      this._create=createUserWithEmailAndPassword; this._signin=signInWithEmailAndPassword; this._signout=signOut;
-      onAuthStateChanged(this._auth, u=>{ this.user=u||null; authInfo.textContent = u?`Signed in as ${u.email}`:'Guest mode. Sign in to save scores.'; });
-      this.ready=true;
-    }catch(e){ console.warn("Firebase offline/disabled.", e); }
-  },
-  async signUp(email, pass){ if(!this.ready) return; await this._create(this._auth, email, pass); },
-  async signIn(email, pass){ if(!this.ready) return; await this._signin(this._auth, email, pass); },
-  async signOut(){ if(!this.ready) return; await this._signout(this._auth); },
-  async submitScore(score, extras={}){ try{
-    if(!this.user) return {ok:false, needLogin:true};
-    const token = await this._auth.currentUser.getIdToken(false);
-    const r = await fetch(SCORE_FN_URL,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},body:JSON.stringify({score,sessionStats:extras})});
-    const data = await r.json(); if(!r.ok) throw new Error(data?.error||"submit failed"); return {ok:true,data};
-  }catch(e){ console.warn("Cloud save failed.", e); return {ok:false, offline:true};}}
-};
-mnAuth.init();
-
-/* Auth UI */
-const accountBtn=document.getElementById('accountBtn');
-const authModalBack=document.getElementById('authModalBack');
-const closeAuth=document.getElementById('closeAuth');
-const signUpBtn=document.getElementById('signUpBtn');
-const signInBtn=document.getElementById('signInBtn');
-const signOutBtn=document.getElementById('signOutBtn');
-const authEmail=document.getElementById('authEmail');
-const authPass=document.getElementById('authPass');
-const authInfo=document.getElementById('authInfo');
-accountBtn.addEventListener('click', ()=>{ authModalBack.style.display='flex'; authModalBack.setAttribute('aria-hidden','false'); });
-closeAuth.addEventListener('click', ()=>{ authModalBack.style.display='none'; authModalBack.setAttribute('aria-hidden','true'); });
-authModalBack.addEventListener('click', (e)=>{ if(e.target===authModalBack){ closeAuth.click(); }});
-signUpBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signUp(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Account created. Signed in."; }catch(e){ authInfo.textContent="Sign up failed: "+e.message; }});
-signInBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signIn(authEmail.value.trim(), authPass.value.trim()); authInfo.textContent="Signed in."; }catch(e){ authInfo.textContent="Sign in failed: "+e.message; }});
-signOutBtn.addEventListener('click', async ()=>{ try{ await mnAuth.signOut(); authInfo.textContent="Signed out."; }catch(e){ authInfo.textContent="Error: "+e.message; }});
-
-/* ===== Game engine with Mutations/Hybrids ===== */
+/* ========= Game: “Biocells” system ========= */
 (function(){
-  const scoreEl = document.getElementById('score');
-  const ballCountEl = document.getElementById('ballCount');
-  const ballCapEl   = document.getElementById('ballCap');
-  const MAX_BALLS = 120; // raised for Brosimum 100 spawn
-  ballCapEl.textContent = MAX_BALLS;
+  const scoreEl=document.getElementById('score');
+  const ballCountEl=document.getElementById('ballCount');
+  const ballCapEl=document.getElementById('ballCap');
+  const MAX_CELLS=160; if(ballCapEl) ballCapEl.textContent=MAX_CELLS;
+  const canvas=document.getElementById('ballLayer'); const ctx=canvas.getContext('2d');
 
-  // Types:
-  // 'original' | 'small' | 'spawner' | 'blob'
-  // 'redSmall' | 'redBig' | 'redBigDot' | 'blackBig'
-  // NEW: 'cyanSwift' | 'amberHeavy' | 'violetGhost' | 'greenSeeker' | 'crimsonNova' | 'shard'
-  const canvas = document.getElementById('ballLayer');
-  const ctx = canvas.getContext('2d');
+  // Color/Stage ladders
+  const COLORS=['white','grey','blue','purple','green','black','gold']; // ascending power
+  const STAGES=['little','medium','big']; // only big reproduces
+  // Special pseudo-types
+  const TYPE_SUPERCELL='supercell'; // ring with interior logic
+  const TYPE_LAPIS='lapis'; // inside supercell only
+  const TYPE_REDAGENT='redAgent'; // command-based demoter
 
   function resize(){
-    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    canvas.style.width = window.innerWidth+'px';
-    canvas.style.height = window.innerHeight+'px';
-    canvas.width = Math.round(window.innerWidth*dpr);
-    canvas.height= Math.round(window.innerHeight*dpr);
+    const dpr=Math.max(1,Math.min(2,devicePixelRatio||1));
+    canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
+    canvas.width=Math.round(innerWidth*dpr); canvas.height=Math.round(innerHeight*dpr);
     ctx.setTransform(dpr,0,0,dpr,0,0);
   }
-  resize(); window.addEventListener('resize', resize);
+  resize(); addEventListener('resize',resize);
 
-  // UI rects
-  const heroTitle = document.getElementById('heroTitle');
-  const chatInput = document.getElementById('chatInput');
-  const chatLog  = document.getElementById('chatLog');
-  const buySec   = document.getElementById('buy');
-  const aboutSec = document.getElementById('about');
-  const topbar   = document.querySelector('.topbar');
+  const uiRects=()=>[document.getElementById('heroTitle'), document.getElementById('chatInput'), document.getElementById('chatLog'), document.querySelector('.topbar')]
+    .filter(Boolean).map(el=>{const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height};});
 
-  function getRects(){
-    const list = [heroTitle, chatInput, chatLog, buySec, aboutSec, topbar];
-    const rects = [];
-    for (const el of list){
-      if(!el) continue;
-      const r = el.getBoundingClientRect();
-      if (r.bottom >= -50 && r.top <= window.innerHeight + 50) {
-        rects.push({x:r.left, y:r.top, w:r.width, h:r.height});
+  // base cell
+  function makeCell(o={}){
+    const {x=innerWidth*.5,y=innerHeight*.4,vx= (Math.random()-.5)*2,vy=(Math.random()-.5)*2,color='white',stage='little',r=radiusFor(color,stage)}=o;
+    return {x,y,vx,vy,color,stage,r,life:0,breedCD:0, chainId:null, docked:false, insideOf:null, _dead:false};
+  }
+  function radiusFor(color,stage){
+    const base={white:6, grey:7, blue:8, purple:9, green:10, black:11, gold:12}[color]||8;
+    const mul={little:1, medium:1.25, big:1.55}[stage]||1;
+    return base*mul;
+  }
+  const cells=[ makeCell({color:'white',stage:'medium',vx:1.2,vy:1}) ];
+
+  // Supercells (from gold chain closure)
+  function makeSupercell(cx,cy,r){
+    return {type:TYPE_SUPERCELL, x:cx, y:cy, r:r, greens:[], lapis:[], spawnCD:0, wobble:0, _dead:false};
+  }
+
+  // lapis ovals (inside supercell)
+  function makeLapis(sc){
+    const ang=Math.random()*Math.PI*2, rad=sc.r*0.45;
+    const x=sc.x+Math.cos(ang)*rad, y=sc.y+Math.sin(ang)*rad;
+    const s={type:TYPE_LAPIS,x,y,vx:(Math.random()-.5)*1.2,vy:(Math.random()-.5)*1.2, a:ang, r:6.5, life:0, parent:sc, _dead:false};
+    return s;
+  }
+
+  // Red agent (single demote)
+  function makeRedAgent(x,y){ return {type:TYPE_REDAGENT,x,y,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4, r:7.5, life:0, ttl:220, _dead:false}; }
+
+  // Helpers
+  function aliveCount(){ return cells.filter(c=>!c._dead).length + supercells.filter(s=>!s._dead).length + lapisAll().length + reds.filter(r=>!r._dead).length; }
+  function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+
+  // Chain management for gold bonding
+  const CHAINS=new Map(); // id -> {nodes:[cellIds], closed:false}
+  let NEXT_CHAIN_ID=1;
+  function inChain(c){ return c.chainId!=null; }
+  function tryBondGold(a,b){
+    if (a.color!=='gold'||b.color!=='gold'||a.stage!=='big'||b.stage!=='big') return;
+    const d=Math.hypot(a.x-b.x,a.y-b.y);
+    if (d> a.r+b.r+4) return;
+    if (!inChain(a) && !inChain(b)){
+      const id=NEXT_CHAIN_ID++; CHAINS.set(id,{nodes:[a,b],closed:false}); a.chainId=b.chainId=id; __SFX.squish(.12);
+    } else if (inChain(a) && !inChain(b)){
+      CHAINS.get(a.chainId).nodes.push(b); b.chainId=a.chainId; __SFX.squish(.12);
+    } else if (!inChain(a) && inChain(b)){
+      CHAINS.get(b.chainId).nodes.push(a); a.chainId=b.chainId; __SFX.squish(.12);
+    } else if (a.chainId!==b.chainId){
+      // merge chains
+      const A=CHAINS.get(a.chainId), B=CHAINS.get(b.chainId);
+      A.nodes.push(...B.nodes); for(const n of B.nodes) n.chainId=a.chainId;
+      CHAINS.delete(b.chainId); __SFX.squish(.12);
+    }
+  }
+  function checkChainClosure(){
+    // If chain ends are near, close into supercell
+    for (const [id,ch] of [...CHAINS]){
+      if (ch.closed || ch.nodes.length<4) continue;
+      const first=ch.nodes[0], last=ch.nodes[ch.nodes.length-1];
+      const dist=Math.hypot(first.x-last.x, first.y-last.y);
+      if (dist < first.r+last.r+6){
+        // make a supercell at centroid
+        let cx=0, cy=0; for(const n of ch.nodes){ cx+=n.x; cy+=n.y; }
+        cx/=ch.nodes.length; cy/=ch.nodes.length;
+        const avgR = ch.nodes.reduce((s,n)=>s+n.r,0)/ch.nodes.length;
+        const sc=makeSupercell(cx,cy,Math.max(28,avgR*1.8));
+        supercells.push(sc);
+        // remove gold nodes that formed it
+        for(const n of ch.nodes){ n._dead=true; }
+        CHAINS.delete(id);
+        __SFX.novaCharge(); // fun feedback
       }
     }
-    return rects;
   }
 
-  let score = 0;
-  const addScore = d => { score += d; scoreEl.textContent = score; };
+  // Collections
+  const supercells=[]; const reds=[];
+  function lapisAll(){ return supercells.flatMap(s=>s.lapis.filter(l=>!l._dead)); }
 
-  function tierToRadius(tier){ const t = Math.max(1, Math.min(15, tier|0)); return 8 + (4 * (t - 1) / 14); }
-  function makeBall(o={}){
-    const {x=window.innerWidth*0.6, y=window.innerHeight*0.3, r=10, vx=3, vy=2, type='small', sizeTier=null, hasFast=false} = o;
-    return { x,y,r,vx,vy,type,sizeTier,hasFast,
-      squashTimer:0, squashAxis:'y', jellyTimer:0, jellyPhase:0,
-      balloonTimer:0, balloonAxis:'y', life:0, trail:[], _dead:false };
+  // Physics
+  function bounceWorld(obj,W,H){
+    if (obj.x - obj.r < 0){ obj.x=obj.r; obj.vx=Math.abs(obj.vx); __SFX.squish(.08); }
+    if (obj.x + obj.r > W){ obj.x=W-obj.r; obj.vx=-Math.abs(obj.vx); __SFX.squish(.08); }
+    if (obj.y - obj.r < 0){ obj.y=obj.r; obj.vy=Math.abs(obj.vy); __SFX.squish(.08); }
+    if (obj.y + obj.r > H){ obj.y=H-obj.r; obj.vy=-Math.abs(obj.vy); __SFX.squish(.08); }
   }
-  const balls = [ makeBall({ type:'original', vx:1.1, vy:0.9, r:tierToRadius(7), sizeTier:7 }) ];
-
-  function updateBallCount(){ ballCountEl.textContent = String(balls.filter(b=>!b._dead).length); }
-
-  // Spatial hashing
-  const CELL=48;
-  function buildGrid(){
-    const grid = new Map();
-    for(let i=0;i<balls.length;i++){
-      const b=balls[i]; if(b._dead) continue;
-      const minx=Math.floor((b.x-b.r)/CELL), maxx=Math.floor((b.x+b.r)/CELL);
-      const miny=Math.floor((b.y-b.r)/CELL), maxy=Math.floor((b.y+b.r)/CELL);
-      for(let gx=minx; gx<=maxx; gx++){
-        for(let gy=miny; gy<=maxy; gy++){
-          const key=gx+','+gy; if(!grid.has(key)) grid.set(key,[]);
-          grid.get(key).push(i);
-        }
+  function collideUI(obj,rects){
+    for(const R of rects){
+      const nx=clamp(obj.x,R.x,R.x+R.w), ny=clamp(obj.y,R.y,R.y+R.h);
+      const dx=obj.x-nx, dy=obj.y-ny;
+      if (dx*dx+dy*dy<=obj.r*obj.r){
+        // reflect
+        const cx=R.x+R.w/2, cy=R.y+R.h/2;
+        const ox=(R.w/2+obj.r)-Math.abs(obj.x-cx), oy=(R.h/2+obj.r)-Math.abs(obj.y-cy);
+        if (ox<oy){ obj.vx*=-1; obj.x+= (obj.vx>0?1:-1)*Math.max(1,ox*.6); } else { obj.vy*=-1; obj.y+= (obj.vy>0?1:-1)*Math.max(1,oy*.6); }
+        __SFX.squish(.1);
       }
     }
-    return grid;
   }
-  function nearbyPairs(grid){
-    const seen=new Set(), pairs=[];
-    for(const ids of grid.values()){
-      for(let a=0;a<ids.length;a++){
-        for(let b=a+1;b<ids.length;b++){
-          const i=ids[a], j=ids[b], key = i<j?`${i}-${j}`:`${j}-${i}`;
-          if(seen.has(key)) continue; seen.add(key); pairs.push([i,j]);
-        }
+
+  // Color ladder helpers
+  function colorIndex(c){ return COLORS.indexOf(c); }
+  function stageIndex(s){ return STAGES.indexOf(s); }
+  function promoteStage(cell){ // little→medium→big, else promote color
+    const si=stageIndex(cell.stage), ci=colorIndex(cell.color);
+    if (si<2){ cell.stage=STAGES[si+1]; cell.r=radiusFor(cell.color,cell.stage); return true; }
+    // at big, promote color (except gold big)
+    if (ci<COLORS.length-1){ cell.color=COLORS[ci+1]; cell.stage='little'; cell.r=radiusFor(cell.color,cell.stage); return true; }
+    return false;
+  }
+  function demoteColor(cell){ // down one whole color; if white -> death
+    const ci=colorIndex(cell.color);
+    if (ci<=0){ cell._dead=true; return; }
+    cell.color=COLORS[ci-1];
+    // keep same stage if possible (clamp)
+    cell.stage= STAGES[Math.min(STAGES.length-1, stageIndex(cell.stage))];
+    cell.r=radiusFor(cell.color,cell.stage);
+  }
+
+  // Reproduction (only big)
+  function tryReproduce(cell){
+    if (cell.stage!=='big') return;
+    if (cell.breedCD>0) { cell.breedCD--; return; }
+    if (aliveCount()>=MAX_CELLS) return;
+    // cool-down changes by color (higher color, slower)
+    const cdByColor={white:240,grey:260,blue:280,purple:300,green:340,black:380,gold:440};
+    cell.breedCD = cdByColor[cell.color]||300;
+    // spawn same color little
+    const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
+    cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+6), y:cell.y+Math.sin(ang)*(cell.r+6),
+                         vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:cell.color, stage:'little'}));
+    __SFX.squish(.12);
+  }
+
+  // Black→Gold upgrade event: emit two medium greens that dock outside supercells
+  function onBlackUpgradedToGold(cell){
+    for(let i=0;i<2;i++){
+      const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
+      cells.push(makeCell({x:cell.x+Math.cos(ang)*(cell.r+8), y:cell.y+Math.sin(ang)*(cell.r+8),
+                           vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:'green', stage:'medium'}));
+    }
+    __SFX.pop();
+  }
+
+  // Collision & mutation
+  function handleCellCollision(a,b){
+    // Elastic-ish push apart
+    const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy); if(d===0) return;
+    const overlap=a.r+b.r-d; if (overlap>0){
+      const nx=dx/d, ny=dy/d;
+      a.x-=nx*overlap*.5; a.y-=ny*overlap*.5; b.x+=nx*overlap*.5; b.y+=ny*overlap*.5;
+      // reflect velocities slightly
+      const p= (a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
+      a.vx-=p*nx; a.vy-=p*ny; b.vx+=p*nx; b.vy+=p*ny;
+      __SFX.squish(.08);
+    }
+
+    // Gold bonding
+    if (a.color==='gold' && a.stage==='big' && b.color==='gold' && b.stage==='big'){ tryBondGold(a,b); }
+
+    // Promote on like-like bump (same color/stage), small chance
+    if (a.color===b.color && a.stage===b.stage && a.stage!=='big' && Math.random()<0.25){
+      if (promoteStage(a)) { if(a.color==='gold' && a.stage==='little' && b.color==='black') onBlackUpgradedToGold(a); }
+      if (promoteStage(b)) { if(b.color==='gold' && b.stage==='little' && a.color==='black') onBlackUpgradedToGold(b); }
+    }
+
+    // Mixed-color gentle influence: higher color may “pull up” lower (tiny chance)
+    const ai=colorIndex(a.color), bi=colorIndex(b.color);
+    if (Math.abs(ai-bi)===1 && Math.random()<0.06){
+      const hi= ai>bi?a:b, lo= ai>bi?b:a;
+      if (lo.stage==='big' && Math.random()<0.35) { /* big resists */ }
+      else { promoteStage(lo); }
+    }
+
+    // If a black gets promoted to gold (via any earlier rule), emit greens
+    // (Handled inside promoteStage caller above where possible)
+  }
+
+  // Supercell mechanics
+  function updateSupercell(sc){
+    sc.wobble += 0.06;
+    // Greens docking around circumference
+    for(const c of cells){
+      if (c._dead || c.color!=='green') continue;
+      const d=Math.hypot(c.x-sc.x, c.y-sc.y);
+      if (d< sc.r+10 && d> sc.r-18){
+        // pull into ring
+        const ang=Math.atan2(c.y-sc.y, c.x-sc.x);
+        const rr=sc.r; c.x=sc.x+Math.cos(ang)*rr; c.y=sc.y+Math.sin(ang)*rr;
+        c.vx*=0.3; c.vy*=0.3; c.docked=true;
+        if (!sc.greens.includes(c)) sc.greens.push(c);
       }
     }
-    return pairs;
-  }
-
-  function bounceWall(b,W,H){
-    if (b.x - b.r < 0){ b.x = b.r; b.vx = Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
-    if (b.x + b.r > W){ b.x = W - b.r; b.vx = -Math.abs(b.vx); b.squashTimer=8; b.squashAxis='x'; }
-    if (b.y - b.r < 0){ b.y = b.r; b.vy = Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
-    if (b.y + b.r > H){ b.y = H - b.r; b.vy = -Math.abs(b.vy); b.squashTimer=8; b.squashAxis='y'; }
-  }
-  function collideWithRect(b,R){
-    // Violet Ghost: passes through UI
-    const ghosty = (b.type==='violetGhost');
-    const nx = Math.max(R.x, Math.min(b.x, R.x + R.w));
-    const ny = Math.max(R.y, Math.min(b.y, R.y + R.h));
-    const dx=b.x-nx, dy=b.y-ny;
-    if (dx*dx+dy*dy>b.r*b.r) return false;
-    if (ghosty) return false;
-
-    const cx = R.x+R.w/2, cy=R.y+R.h/2;
-    const ox = (R.w/2 + b.r) - Math.abs(b.x - cx);
-    const oy = (R.h/2 + b.r) - Math.abs(b.y - cy);
-    if (ox < oy){ b.vx *= -1; b.x += (b.vx>0?1:-1)*Math.max(1,ox*0.6); b.squashTimer=8; b.squashAxis='x'; }
-    else { b.vy *= -1; b.y += (b.vy>0?1:-1)*Math.max(1,oy*0.6); b.squashTimer=8; b.squashAxis='y'; }
-    if (b.type==='blob' && b.r>=12 && b.balloonTimer===0){ b.balloonTimer=18; b.balloonAxis=(ox<oy)?'x':'y'; }
-    return true;
-  }
-
-  function count(predicate){ return balls.reduce((n,b)=> n + (!b._dead && predicate(b)?1:0), 0); }
-  function redsCount(){ return count(b=>b.type==='redSmall'||b.type==='redBig'||b.type==='redBigDot'); }
-  function whitesCount(){ return count(b=>b.type==='original'||b.type==='small'||b.type==='spawner'||b.type==='blob'||b.type==='cyanSwift'||b.type==='amberHeavy'||b.type==='violetGhost'||b.type==='greenSeeker'); }
-
-  function accelerateOriginal(b){
-    const speed = Math.hypot(b.vx,b.vy);
-    const cap = (b.hasFast?9:4);
-    const accel = 0.002;
-    const ns = Math.min(cap, speed*(1+accel));
-    if (ns>0 && speed>0){ const f=ns/speed; b.vx*=f; b.vy*=f; }
-  }
-
-  function randomDottedChance(){ const N = Math.floor(Math.random()*(44-19+1)) + 19; return Math.random() < (1/N); }
-
-  /* ===== Collision rules (including new mutations) ===== */
-  function handleBallVsBall(i,j){
-    const a=balls[i], b=balls[j];
-    if (a._dead || b._dead) return;
-    const dx=b.x-a.x, dy=b.y-a.y;
-    const dist = Math.hypot(dx,dy);
-    if (dist > a.r + b.r) return;
-
-    // Fast path: Shards carve small reds / ping big reds down a tier
-    if (a.type==='shard' || b.type==='shard'){
-      const shard = a.type==='shard'?a:b;
-      const other = a.type==='shard'?b:a;
-      if (other.type==='redSmall'){ other._dead=true; }
-      else if (other.type==='redBig' || other.type==='redBigDot'){
-        // de-level big red → small red
-        other.type='redSmall'; other.r=Math.max(7.5, other.r*0.7);
-      }
-      // shards decay on hit
-      shard.life+=15; if (shard.life>120) shard._dead=true;
-      return;
-    }
-
-    // Black interactions
-    if (a.type==='blackBig' || b.type==='blackBig'){
-      let black = a.type==='blackBig'?a:b;
-      let other = a.type==='blackBig'?b:a;
-      if (other.type==='redSmall'){ other._dead=true; return; }
-      if (other.type==='blackBig'){ // black vs black → spawn small whites
-        a._dead=true; b._dead=true;
-        spawnWhites((a.x+b.x)/2,(a.y+b.y)/2,3);
-        return;
-      }
-      other.vx *= -0.9; other.vy *= -0.9; return;
-    }
-
-    // Dotted big reds → CRIMSON NOVA (not black anymore)
-    if (a.type==='redBigDot' && b.type==='redBigDot'){
-      a._dead=true; b._dead=true;
-      const nova = makeBall({ x:(a.x+b.x)/2, y:(a.y+b.y)/2, r:14, vx:0, vy:0, type:'crimsonNova' });
-      nova.life = 0; // explode later
-      balls.push(nova);
-      return;
-    }
-
-    // Red vs Red
-    if (a.type.startsWith('red') && b.type.startsWith('red')){
-      if (a.type==='redSmall' && b.type==='redSmall'){
-        (Math.random()<0.5?a:b)._dead = true;
-      } else if ((a.type==='redBig' || a.type==='redBigDot') && (b.type==='redBig' || b.type==='redBigDot')){
-        a.vx*=0.9; a.vy*=0.9; b.vx*=0.9; b.vy*=0.9;
+    // Lapis population: only if green ring is “complete-ish”
+    if (sc.greens.filter(g=>!g._dead).length>=8){
+      if (sc.lapis.filter(l=>!l._dead).length<5){
+        if (sc.spawnCD<=0){ const l=makeLapis(sc); sc.lapis.push(l); sc.spawnCD=180; __SFX.tick(); }
+        else sc.spawnCD--;
       } else {
-        (a.type==='redSmall'?a:b)._dead = true;
+        // After 5 lapis present, periodically spawn new gold (little) outside
+        if (sc.spawnCD<=0){
+          const ang=Math.random()*Math.PI*2, r=sc.r+16;
+          cells.push(makeCell({x:sc.x+Math.cos(ang)*r, y:sc.y+Math.sin(ang)*r, color:'gold', stage:'little', vx:(Math.random()-.5)*1.4, vy:(Math.random()-.5)*1.4}));
+          sc.spawnCD=220; __SFX.pop();
+        } else sc.spawnCD--;
       }
-      // If no whites left, sometimes drop a white seed
-      if (whitesCount()===0 && balls.filter(bb=>!bb._dead).length < MAX_BALLS && Math.random()<0.35){
-        const cx=(a.x+b.x)/2, cy=(a.y+b.y)/2, ang=Math.random()*Math.PI*2, sp=1.5+Math.random();
-        balls.push(makeBall({ x:cx, y:cy, r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
-      }
-      return;
-    }
-
-    // Red vs White side (includes hybrids)
-    if (a.type.startsWith('red') || b.type.startsWith('red')){
-      let red = a.type.startsWith('red')?a:b;
-      let w   = a.type.startsWith('red')?b:a;
-
-      // greenSeeker repels reds slightly
-      if (w.type==='greenSeeker'){
-        const ux = dx/(dist||1), uy=dy/(dist||1);
-        red.vx += ux*1.2; red.vy += uy*1.2;
-        return;
-      }
-
-      if (red.type==='redSmall'){
-        if (w.type==='spawner' || w.type==='original'){ red._dead = true; return; }
-        if (w.type==='small' || w.type==='blob' || w.type==='violetGhost' || w.type==='cyanSwift'){
-          w._dead = true;
-          red.type = randomDottedChance() ? 'redBigDot' : 'redBig';
-          red.r = Math.max(red.r, 10.5);
-          red.vx*=0.95; red.vy*=0.95;
-          return;
-        }
-      } else { // big/dotted red
-        if (w.type!=='blackBig'){ w._dead = true; }
-        red.vx*=0.98; red.vy*=0.98; return;
-      }
-    }
-
-    // Spawner + Spawner -> blob
-    if ((a.type==='spawner' || a.type==='original') && (b.type==='spawner' || b.type==='original')){
-      const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
-      const nr = Math.max(10, Math.sqrt(a.r*a.r + b.r*b.r));
-      a._dead=true; b._dead=true;
-      if (aliveCount() < MAX_BALLS){
-        const blob = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:nr, type:'blob' });
-        blob.jellyTimer=28; blob.jellyPhase=0; balls.push(blob);
-      }
-      return;
-    }
-
-    // Blob + Small -> Amber Heavy (slow breeder)
-    if ((a.type==='blob' && b.type==='small') || (b.type==='blob' && a.type==='small')){
-      const c = a.type==='blob'?a:b, s = a.type==='small'?a:b;
-      c._dead = true; s._dead = true;
-      if (aliveCount() < MAX_BALLS){
-        const heavy = makeBall({ x:c.x, y:c.y, r:Math.max(11,c.r), vx:(c.vx+s.vx)/2*0.6, vy:(c.vy+s.vy)/2*0.6, type:'amberHeavy' });
-        balls.push(heavy);
-      }
-      return;
-    }
-
-    // Cyan Swift (fast) creation chance: Small + Small (10% instead of Spawner)
-    if (a.type==='small' && b.type==='small'){
-      const chance = Math.random() < 0.10;
-      const nx=(a.x+b.x)/2, ny=(a.y+b.y)/2, nvx=(a.vx+b.vx)/2, nvy=(a.vy+b.vy)/2;
-      const nr=Math.sqrt(a.r*a.r + b.r*b.r);
-      a._dead=true; b._dead=true;
-      if (aliveCount() < MAX_BALLS){
-        if (chance){
-          const swift = makeBall({ x:nx, y:ny, vx:nvx*1.4, vy:nvy*1.4, r:Math.max(7.5,nr*0.9), type:'cyanSwift' });
-          balls.push(swift);
-        } else {
-          const sp = makeBall({ x:nx, y:ny, vx:nvx, vy:nvy, r:Math.max(9,nr), type:'spawner' });
-          sp.jellyTimer=16; sp.jellyPhase=0; balls.push(sp);
-        }
-      }
-      return;
-    }
-
-    // Cyan Swift + Small → Green Seeker (hunter)
-    if ((a.type==='cyanSwift' && b.type==='small') || (b.type==='cyanSwift' && a.type==='small')){
-      const c = a.type==='cyanSwift'?a:b, s = a.type==='small'?a:b;
-      c._dead = true; s._dead = true;
-      if (aliveCount() < MAX_BALLS){
-        const g = makeBall({ x:(c.x+s.x)/2, y:(c.y+s.y)/2, r:10, vx:(c.vx+s.vx)/2, vy:(c.vy+s.vy)/2, type:'greenSeeker' });
-        balls.push(g);
-      }
-      return;
-    }
-
-    // Original + Small → small chance Violet Ghost
-    if ((a.type==='original' && b.type==='small') || (b.type==='small' && a.type==='original')){
-      if (Math.random() < 0.05){
-        const o = a.type==='original'?a:b, s = a.type==='small'?a:b;
-        s._dead = true;
-        if (aliveCount() < MAX_BALLS){
-          balls.push(makeBall({ x:(o.x+s.x)/2, y:(o.y+s.y)/2, r:9, vx:(o.vx+s.vx)/2, vy:(o.vy+s.vy)/2, type:'violetGhost' }));
-        }
-        return;
-      }
-    }
-
-    // default elastic-ish bounce
-    const nx = dx/(dist||1), ny=dy/(dist||1);
-    const p = 2*(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny)/2;
-    a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-    a.squashTimer=b.squashTimer=8; a.squashAxis=Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
-  }
-
-  function aliveCount(){ return balls.filter(b=>!b._dead).length; }
-
-  // Anti-orbit nudge for smalls near spawners/originals
-  function antiOrbit(b){
-    if (b.type!=='small') return;
-    const near = balls.find(x=>!x._dead && (x.type==='spawner'||x.type==='original') && Math.hypot(x.x-b.x,x.y-b.y) < (x.r + b.r + 18));
-    if (near){
-      const ang = Math.random()*Math.PI*2, kick = 0.6 + Math.random()*0.8;
-      b.vx += Math.cos(ang)*kick; b.vy += Math.sin(ang)*kick;
     }
   }
 
-  // Drawing helpers
-  function drawTrail(trail, color){
-    ctx.save(); ctx.globalAlpha = 0.35;
-    for (let i=0;i<trail.length;i++){
-      const t = trail[i];
-      const a = (i+1)/trail.length;
-      ctx.beginPath(); ctx.arc(t.x, t.y, t.r*a*0.9, 0, Math.PI*2);
-      ctx.fillStyle = color; ctx.fill();
+  function drawSupercell(sc){
+    ctx.save();
+    ctx.translate(sc.x,sc.y);
+    const wob=1+Math.sin(sc.wobble)*0.02;
+    ctx.scale(wob,1/wob);
+    // ring
+    ctx.lineWidth=3;
+    ctx.strokeStyle='rgba(255,220,130,.95)';
+    ctx.beginPath(); ctx.arc(0,0,sc.r,0,Math.PI*2); ctx.stroke();
+    // interior soft glow
+    const grad=ctx.createRadialGradient(0,0,sc.r*0.1,0,0,sc.r*0.95);
+    grad.addColorStop(0,'rgba(255,240,180,.10)'); grad.addColorStop(1,'rgba(255,240,180,.02)');
+    ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(0,0,sc.r*0.96,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // lapis inside
+    for(const l of sc.lapis){ if(l._dead) continue; drawLapis(l); }
+  }
+
+  function drawLapis(l){
+    ctx.save();
+    ctx.translate(l.x,l.y);
+    ctx.rotate(l.a+=0.015);
+    ctx.scale(1.4,1);
+    ctx.fillStyle='rgba(60,120,255,.9)';
+    ctx.beginPath(); ctx.arc(0,0,l.r,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawCell(c){
+    ctx.save(); ctx.translate(c.x,c.y);
+    // shape
+    if (c.color==='gold'){
+      // ring
+      ctx.lineWidth=2.2;
+      ctx.strokeStyle='rgba(255,220,130,.95)';
+      ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.stroke();
+    } else {
+      // filled circle
+      const colorMap={
+        white:'#ffffff', grey:'#cdd3dd', blue:'#79a7ff', purple:'#b29bff', green:'#79ffb8', black:'#141414'
+      };
+      ctx.fillStyle=colorMap[c.color]||'#fff';
+      ctx.beginPath(); ctx.arc(0,0,c.r,0,Math.PI*2); ctx.fill();
     }
     ctx.restore();
   }
 
-  function drawBall(b){
-    let sx=1, sy=1;
-    if (b.squashTimer>0){ const t=b.squashTimer/8, amt=0.35*Math.sin(t*Math.PI); if(b.squashAxis==='x'){sx=1+amt;sy=1-amt;} else {sy=1+amt;sx=1-amt;} }
-    if (b.jellyTimer>0){ const wob=0.15*Math.sin((b.jellyPhase+=0.35)); sx*=1+wob; sy*=1-wob; }
-    if (b.balloonTimer>0){ const t=b.balloonTimer/20, bow=0.45*Math.sin((1-t)*Math.PI); if(b.balloonAxis==='x'){sx*=1+bow;sy*=1-bow*0.6;} else {sy*=1+bow;sx*=1-bow*0.6;} }
-
-    // Trails for Cyan Swift & Seeker
-    if (b.type==='cyanSwift' || b.type==='greenSeeker'){
-      b.trail.push({x:b.x, y:b.y, r:Math.max(4,b.r*0.6)});
-      if (b.trail.length>10) b.trail.shift();
-      drawTrail(b.trail, b.type==='cyanSwift' ? 'rgba(123,233,240,.6)' : 'rgba(122,255,180,.55)');
-    } else { b.trail.length = 0; }
-
-    ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
-
-    // Special shapes
-    if (b.type==='shard'){
-      // triangle shard
-      ctx.rotate((b.life%360) * Math.PI/180);
-      ctx.beginPath();
-      const R = b.r;
-      ctx.moveTo(R,0);
-      ctx.lineTo(-R*0.6, R*0.6);
-      ctx.lineTo(-R*0.6,-R*0.6);
-      ctx.closePath();
-      ctx.fillStyle='rgba(250,240,255,.95)';
-      ctx.fill();
-      ctx.restore();
-      return;
-    }
-
-    // glow
-    ctx.beginPath(); ctx.arc(0,0,b.r+3,0,Math.PI*2);
-    let glow='rgba(255,255,255,.40)';
-    if (b.type==='redSmall' || b.type==='redBig' || b.type==='redBigDot') glow='rgba(255,77,77,.35)';
-    if (b.type==='blob') glow='rgba(255,138,214,.35)';
-    if (b.type==='blackBig') glow='rgba(60,60,60,.45)';
-    if (b.type==='cyanSwift') glow='rgba(123,233,240,.35)';
-    if (b.type==='amberHeavy') glow='rgba(255,210,120,.35)';
-    if (b.type==='violetGhost') glow='rgba(190,140,255,.28)';
-    if (b.type==='greenSeeker') glow='rgba(120,255,190,.35)';
-    if (b.type==='crimsonNova') glow='rgba(255,90,120,.45)';
-    ctx.fillStyle=glow; ctx.fill();
-
-    // core (circles)
-    if (b.type==='crimsonNova'){
-      ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
-      ctx.fillStyle='#ff5a78'; ctx.fill();
-      ctx.lineWidth=2; ctx.strokeStyle='rgba(255,220,230,.8)'; ctx.stroke();
-      ctx.restore(); return;
-    }
-
-    ctx.beginPath(); ctx.arc(0,0,b.r,0,Math.PI*2);
-    let core='#ffffff';
-    if (b.type==='redSmall' || b.type==='redBig' || b.type==='redBigDot') core='#ff4d4d';
-    if (b.type==='blob') core='#ff8ad6';
-    if (b.type==='blackBig') core='#111111';
-    if (b.type==='cyanSwift') core='#6feaf2';
-    if (b.type==='amberHeavy') core='#ffc864';
-    if (b.type==='violetGhost') core='rgba(190,140,255,.75)';
-    if (b.type==='greenSeeker') core='#79ffb8';
-    ctx.fillStyle=core; ctx.fill();
-
-    // dotted big reds center
-    if (b.type==='redBigDot'){
-      ctx.beginPath(); ctx.arc(0,0, Math.max(2.5, b.r*0.35), 0, Math.PI*2);
-      ctx.fillStyle='#0c0c0c'; ctx.fill();
-    }
-
-    // rings
-    if (b.type==='original'){
-      ctx.lineWidth=2; ctx.strokeStyle='rgba(143,220,255,.7)';
-      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
-    } else if (b.type==='spawner'){
-      ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.9)';
-      ctx.beginPath(); ctx.arc(0,0,b.r+5,0,Math.PI*2); ctx.stroke();
-    } else if (b.type==='amberHeavy'){
-      ctx.lineWidth=2; ctx.strokeStyle= 'rgba(255,220,130,.85)';
-      ctx.beginPath(); ctx.arc(0,0,b.r+4,0,Math.PI*2); ctx.stroke();
-    }
-
+  function drawRed(r){
+    ctx.save(); ctx.translate(r.x,r.y);
+    ctx.fillStyle='#ff4d4d'; ctx.beginPath(); ctx.arc(0,0,r.r,0,Math.PI*2); ctx.fill();
     ctx.restore();
   }
 
-  // Seeker AI
-  function steerSeeker(b){
-    let target=null, best=1e9;
-    for (const r of balls){
-      if (r._dead) continue;
-      if (r.type==='redSmall' || r.type==='redBig' || r.type==='redBigDot'){
-        const d = (r.x-b.x)*(r.x-b.x) + (r.y-b.y)*(r.y-b.y);
-        if (d<best){ best=d; target=r; }
-      }
-    }
-    if (target){
-      const dx=target.x-b.x, dy=target.y-b.y, len=Math.max(1,Math.hypot(dx,dy));
-      b.vx += (dx/len)*0.12; b.vy += (dy/len)*0.12;
-      // clamp speed
-      const sp = Math.hypot(b.vx,b.vy); if (sp>5.5){ const f=5.5/sp; b.vx*=f; b.vy*=f; }
-    }
-  }
+  // Click scoring (keep your rules)
+  const scoreAdd=d=>{ const s=Number(scoreEl.textContent||'0')+d; scoreEl.textContent=s; };
 
-  // Spawners / heavies support
-  function periodicBehaviors(){
-    for (const b of balls){
-      if (b._dead) continue;
-      if (b.type==='amberHeavy'){
-        if ((b.life % 120) === 0 && aliveCount() < MAX_BALLS){
-          const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
-          balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6),
-                                r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
+  // Main loop
+  function step(){
+    const W=innerWidth,H=innerHeight;
+    const rects=uiRects();
+
+    if (!GAME_PAUSED){
+      // move red agents
+      for(const r of reds){ if(r._dead) continue; r.life++; r.x+=r.vx; r.y+=r.vy; r.vx*=0.995; r.vy*=0.995; bounceWorld(r,W,H); collideUI(r,rects); if(r.life>r.ttl) r._dead=true; }
+
+      // move lapis
+      for(const sc of supercells){ if(sc._dead) continue; for(const l of sc.lapis){ if(l._dead) continue; l.life++; l.x+=l.vx; l.y+=l.vy; // keep inside
+          const dx=l.x-sc.x, dy=l.y-sc.y, d=Math.hypot(dx,dy), maxR=sc.r*0.8; if(d>maxR){ const nx=dx/d, ny=dy/d; l.x=sc.x+nx*maxR; l.y=sc.y+ny*maxR; l.vx*=-0.4; l.vy*=-0.4; }
         }
       }
-      if (b.type==='crimsonNova'){
-        if (b.life > 120){ // explode into shards
-          b._dead = true;
-          const shardN = 6 + Math.floor(Math.random()*5);
-          for (let k=0;k<shardN;k++){
-            const ang = (Math.PI*2)*k/shardN + Math.random()*0.2;
-            const sp = 3.8 + Math.random()*1.6;
-            const sh = makeBall({ x:b.x, y:b.y, r:6, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'shard' });
-            balls.push(sh);
+
+      // move cells
+      for(const c of cells){
+        if (c._dead) continue;
+        c.life++;
+        c.x+=c.vx; c.y+=c.vy;
+        // small drag by color
+        const drag={white:.998,grey:.998,blue:.999,purple:.999,green:.999,black:1.000,gold:1.000}[c.color]||.999;
+        c.vx*=drag; c.vy*=drag;
+        bounceWorld(c,W,H); collideUI(c,rects);
+        tryReproduce(c);
+      }
+
+      // collisions cell vs cell (broad)
+      for(let i=0;i<cells.length;i++){
+        const a=cells[i]; if(a._dead) continue;
+        for(let j=i+1;j<cells.length;j++){
+          const b=cells[j]; if(b._dead) continue;
+          const dx=b.x-a.x, dy=b.y-a.y, dd=dx*dx+dy*dy, rr=(a.r+b.r)*(a.r+b.r);
+          if (dd<=rr){ handleCellCollision(a,b); }
+        }
+      }
+
+      // red agent first-hit demotion
+      for(const r of reds){
+        if (r._dead) continue;
+        for(const c of cells){
+          if (c._dead) continue;
+          const d2=(c.x-r.x)*(c.x-r.x)+(c.y-r.y)*(c.y-r.y);
+          if (d2 <= (c.r+r.r)*(c.r+r.r)){
+            // demote color; white disappears
+            demoteColor(c);
+            r._dead=true;
+            __SFX.pop();
+            break;
           }
         }
       }
-    }
-  }
 
-  // MAIN LOOP with PAUSE
-  function step(){
-    const W=window.innerWidth, H=window.innerHeight;
-    const rects=getRects();
+      // Gold chain closure → supercell
+      checkChainClosure();
 
-    if (!GAME_PAUSED){
-      for (const b of balls){
-        if (b._dead) continue;
-        b.life++;
-        // Move
-        b.x+=b.vx; b.y+=b.vy;
-
-        // Behavior tweaks
-        if (b.type==='original') accelerateOriginal(b);
-        if (b.type==='cyanSwift'){ b.vx*=1.003; b.vy*=1.003; } // tiny accel
-        if (b.type==='violetGhost'){ b.vx*=1.001; b.vy*=1.001; } // low drag
-        if (b.type==='greenSeeker') steerSeeker(b);
-
-        // Randomness for reds
-        if (b.type && b.type.startsWith('red') && Math.random()<0.02){
-          b.vx += (Math.random()-.5)*0.5; b.vy += (Math.random()-.5)*0.5;
-        }
-
-        // Collisions vs world
-        bounceWall(b,W,H);
-        for(const R of rects) collideWithRect(b,R);
-
-        // Timers
-        if (b.squashTimer>0) b.squashTimer--;
-        if (b.jellyTimer>0)  b.jellyTimer--;
-        if (b.balloonTimer>0) b.balloonTimer--;
-      }
-
-      // periodic systems (breeding, novas)
-      periodicBehaviors();
-
-      // collisions
-      const grid=buildGrid();
-      const pairs=nearbyPairs(grid);
-      for(const [i,j] of pairs){ handleBallVsBall(i,j); }
+      // Supercell updates
+      for (const sc of supercells){ if(!sc._dead) updateSupercell(sc); }
 
       // cleanup
-      for(let k=balls.length-1;k>=0;k--) if (balls[k]._dead) balls.splice(k,1);
+      for(let k=cells.length-1;k>=0;k--) if(cells[k]._dead) cells.splice(k,1);
+      for(let k=reds.length-1;k>=0;k--) if(reds[k]._dead) reds.splice(k,1);
+      for(let k=supercells.length-1;k>=0;k--) if(supercells[k]._dead) supercells.splice(k,1);
     }
 
-    // draw (always)
+    // draw
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(const b of balls) drawBall(b);
+    // supercells under
+    for(const sc of supercells) drawSupercell(sc);
+    // cells
+    for(const c of cells) drawCell(c);
+    // reds on top
+    for(const r of reds) drawRed(r);
 
-    updateBallCount();
+    if (ballCountEl) ballCountEl.textContent=aliveCount();
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 
-  function hitBallAt(x,y,b){ const dx=b.x-x, dy=b.y-y; return Math.hypot(dx,dy)<=b.r+5; }
-
-  // Click: +1 if ball, -1 if miss; spawner/original spawn small (soft-capped)
-  document.addEventListener('click',(e)=>{
-    if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
-    const x=e.clientX, y=e.clientY;
-    let handled=false;
-
-    if (!GAME_PAUSED){
-      for (const b of balls){
-        if (b._dead) continue;
-        if (hitBallAt(x,y,b)){
-          addScore(1); handled=true;
-          const dx=b.x-x, dy=b.y-y, L=Math.max(1,Math.hypot(dx,dy));
-          let px=(dx/L)*4.8, py=(dy/L)*4.8;
-          const cap=(b.type==='original' && b.hasFast)?9:4;
-          const sp=Math.hypot(px,py), f=Math.min(cap,sp)/(sp||1);
-          b.vx = px*f; b.vy = py*f;
-
-          if (b.type==='original'){
-            if (b.sizeTier<15){ b.sizeTier++; b.r = tierToRadius(b.sizeTier); }
-            b._clicks=(b._clicks||0)+1;
-            if (b._clicks>=15){ b.hasFast=true; const s=Math.hypot(b.vx,b.vy); if (s<7){ const F=7/(s||1); b.vx*=F; b.vy*=F; } }
-          }
-          if ((b.type==='spawner' || b.type==='original') && aliveCount() < MAX_BALLS){
-            const ang=Math.random()*Math.PI*2, spd=1.6+Math.random()*1.6;
-            balls.push(makeBall({ x:b.x+Math.cos(ang)*(b.r+6), y:b.y+Math.sin(ang)*(b.r+6), r:Math.max(5,Math.round(b.r*0.6)), vx:Math.cos(ang)*spd, vy:Math.sin(ang)*spd, type:'small' }));
-            updateBallCount();
-          }
-          break;
-        }
-      }
-      if (!handled) addScore(-1);
-    }
+  // Click scoring (hit = +1, miss = -1; clicks on inputs ignored)
+  document.addEventListener('click',e=>{
+    if (e.target.closest('input,textarea,[contenteditable="true"]')) return;
+    if (GAME_PAUSED) return;
+    const x=e.clientX,y=e.clientY;
+    let hit=false;
+    for (const c of cells){ if(c._dead) continue; const d=Math.hypot(c.x-x,c.y-y); if(d<=c.r+4){ hit=true; scoreAdd(1); break; } }
+    if (!hit) scoreAdd(-1);
   });
 
-  // Utility spawners (used by powertool & explosions)
+  // Spawners for commands
   function spawnWhites(cx,cy,n){
-    let created=0;
-    while (aliveCount() < MAX_BALLS && created < n){
-      const ang=Math.random()*Math.PI*2, sp=1.2+Math.random()*1.6;
-      balls.push(makeBall({ x:cx+Math.cos(ang)*8, y:cy+Math.sin(ang)*8, r:6.5, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, type:'small' }));
-      created++;
+    let made=0;
+    while(aliveCount()<MAX_CELLS && made<n){
+      const ang=Math.random()*Math.PI*2, sp=1+Math.random()*1.2;
+      cells.push(makeCell({x:cx+Math.cos(ang)*8, y:cy+Math.sin(ang)*8, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, color:'white', stage:'little'}));
+      made++;
     }
-    updateBallCount();
+    __SFX.squish(.12);
   }
-  window.spawnWhitesAt = spawnWhites;
+  function spawnRedAgentAt(x,y){ reds.push(makeRedAgent(x,y)); __SFX.pop(); }
+
+  // expose
+  window.spawnWhitesAt=spawnWhites;
+  window.spawnRedAgent=spawnRedAgentAt;
 
 })();
 </script>
-</body>
-</html>
