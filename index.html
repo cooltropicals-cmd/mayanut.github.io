@@ -17,10 +17,11 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
     --inputBG:rgba(255,255,255,.08);
     --inputLine:rgba(255,255,255,.22);
 
-    /* Gold logo gradient (slightly darker base, brighter top) */
-    --gold1:#fff0b5;
-    --gold2:#ffd46b;
-    --gold3:#f3ac3a;
+    /* Gold logo gradient */
+    --gold1:#fff0b5; --gold2:#ffd46b; --gold3:#f3ac3a;
+
+    /* Ball */
+    --ball:#7CFF36; /* lime */
   }
 
   html,body{
@@ -76,24 +77,24 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 
   /* Row with mascot + chat */
   .heroRow{
-    display:flex; align-items:flex-start; justify-content:center; gap:16px;
+    display:flex; align-items:flex-start; justify-content:center; gap:18px;
     width:min(900px,92vw); margin:0 auto;
   }
 
   /* Chatbar */
   .chatcol{flex:1; min-width:0}
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:100%}
-  .chatbar input{flex:1;height:44px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .chatbar input{flex:1;height:48px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
   .chatbar input::placeholder{color:#cfe8ff}
   .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
   .log{width:100%;margin:12px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto;text-align:left}
 
   /* Mascot + bubble */
-  .mn-mascot-wrap{position:relative; width:128px; flex:0 0 128px;}
-  .mn-mascot{cursor:pointer; display:block; width:118px; margin-top:0;}
+  .mn-mascot-wrap{position:relative; width:168px; flex:0 0 168px;}
+  .mn-mascot{cursor:pointer; display:block; width:160px; margin-top:2px;}
   .speech{
     position:absolute; left:-12px; top:-10px; transform:translateX(-100%);
-    max-width:220px; background:#fff; color:#223;
+    max-width:240px; background:#fff; color:#223;
     border-radius:14px; padding:10px 12px; font-size:13px; line-height:1.25;
     box-shadow:0 8px 24px rgba(0,0,0,.25);
   }
@@ -108,24 +109,24 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
   .mn-bob { animation: mn-bob 5.2s ease-in-out infinite; transform-origin: 130px 140px; }
   .mn-stem { transform-origin: 130px 44px; animation: mn-stem-sway 7s ease-in-out infinite; }
 
-  /* Click effects */
+  /* Side-to-side shake */
   @keyframes mn-shake {
     0%,100%{ transform:translateX(0) rotate(0deg) }
-    20%{ transform:translateX(-2px) rotate(-2deg) }
-    40%{ transform:translateX(2px) rotate(2deg) }
+    20%{ transform:translateX(-3px) rotate(-2deg) }
+    40%{ transform:translateX(3px) rotate(2deg) }
     60%{ transform:translateX(-2px) rotate(-1.6deg) }
     80%{ transform:translateX(2px) rotate(1.6deg) }
   }
   .mascot-shake { animation: mn-shake .45s ease-in-out; }
 
-  /* Eyelid blink (covers eyes briefly) */
-  @keyframes mn-blink {
-    0%,90%,100% { transform: scaleY(0); opacity:0; }
-    30%,60%     { transform: scaleY(1); opacity:1; }
-  }
-  .blink .eyelid { animation: mn-blink .25s ease-in-out; transform-origin: 0 0; }
+  /* Impact squash (directional) */
+  @keyframes impactX { 0%{transform:scale(1.06,.94)} 45%{transform:scale(.88,1.12)} 100%{transform:scale(1.06,.94)} }
+  @keyframes impactY { 0%{transform:scale(1.06,.94)} 45%{transform:scale(1.12,.88)} 100%{transform:scale(1.06,.94)} }
+  .deformX { animation: impactX .28s ease-out; transform-origin:130px 130px; }
+  .deformY { animation: impactY .28s ease-out; transform-origin:130px 130px; }
+  .mn-squish { transform: scale(1.06,.94); transform-origin:130px 130px; } /* base cute oval */
 
-  /* Sections (unchanged) */
+  /* Sections (unchanged basic styling) */
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px); text-align:left}
   .section h3{margin:0 0 8px;color:#fff}
   .section p{margin:8px 0 0;color:#cfe9ff}
@@ -134,6 +135,16 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
   .ig-link{position:absolute;right:72px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px}
   .ig-link svg{transition:transform .2s ease,filter .2s ease}
   .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+
+  /* Bouncy lime ball (DOM element, not canvas, so it never blocks inputs) */
+  #bouncer{
+    position:fixed; z-index:5; left:40vw; top:50vh; width:44px; height:44px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #D9FF9D 0%, var(--ball) 55%, #49CC00 100%);
+    box-shadow: 0 8px 18px rgba(0,0,0,.25), inset 0 6px 12px rgba(255,255,255,.35);
+    transform: translate(-50%,-50%);
+    cursor:pointer;
+    will-change: transform;
+  }
 </style>
 </head>
 <body>
@@ -142,7 +153,7 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 <div class="bg-blobs-2"></div>
 <div class="bg-blobs-3"></div>
 
-<!-- Logo symbol (™ tight; dx=0 as requested) -->
+<!-- Logo symbol (™ tight; dx=0) -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
@@ -188,11 +199,11 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
       <div class="mn-mascot-wrap">
         <div id="welcomeBubble" class="speech">Welcome to MayaNut.com! Please type your questions in the chat bar.</div>
 
-        <!-- MASCOT SVG -->
-        <svg id="mascot" class="mn-mascot mn-bob" viewBox="0 0 260 260" width="118" height="118" role="img" aria-label="MayaNut mascot">
+        <!-- MASCOT SVG (enlarged) -->
+        <svg id="mascot" class="mn-mascot mn-bob" viewBox="0 0 260 260" width="160" height="160" role="img" aria-label="Mateo the MayaNut">
           <defs>
-            <!-- Body shape (slightly tapered top) -->
             <clipPath id="mnBodyClip">
+              <!-- Slightly tapered top fruit shape -->
               <path id="mnBodyPath"
                 d="M130,36
                    C112,36  94,49  87,66
@@ -225,58 +236,60 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
             </filter>
           </defs>
 
-          <g id="mascotGroup" filter="url(#mnDrop)">
-            <!-- Body -->
-            <use href="#mnBodyPath" fill="url(#mnFruit)"/>
-            <g clip-path="url(#mnBodyClip)">
-              <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
-              <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
-            </g>
+          <g id="mascotDeform" class="mn-squish" filter="url(#mnDrop)">
+            <g id="mascotGroup">
+              <!-- Body -->
+              <use href="#mnBodyPath" fill="url(#mnFruit)"/>
+              <g clip-path="url(#mnBodyClip)">
+                <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
+                <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
+              </g>
 
-            <!-- Stem (flat base) -->
-            <g class="mn-stem">
-              <rect x="104" y="44" width="52" height="10" fill="#2e8a42"/>
-              <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
-                    fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
-              <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
-                    stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
-            </g>
+              <!-- Stem (flat base) -->
+              <g class="mn-stem">
+                <rect x="104" y="44" width="52" height="10" fill="#2e8a42"/>
+                <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
+                      fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
+                <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
+                      stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
+              </g>
 
-            <!-- Faint speckles -->
-            <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.45)">
-              <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="1.9"/>
-              <circle cx="150" cy="78" r="2.1"/><circle cx="166" cy="96" r="1.7"/>
-              <circle cx="100" cy="106" r="1.6"/><circle cx="130" cy="110" r="1.5"/>
-              <circle cx="142" cy="92" r="1.7"/><circle cx="118" cy="96" r="1.5"/>
-              <circle cx="156" cy="108" r="1.5"/><circle cx="122" cy="126" r="1.4"/>
-              <circle cx="146" cy="126" r="1.4"/><circle cx="106" cy="124" r="1.3"/>
-            </g>
+              <!-- Faint speckles -->
+              <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.45)">
+                <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="1.9"/>
+                <circle cx="150" cy="78" r="2.1"/><circle cx="166" cy="96" r="1.7"/>
+                <circle cx="100" cy="106" r="1.6"/><circle cx="130" cy="110" r="1.5"/>
+                <circle cx="142" cy="92" r="1.7"/><circle cx="118" cy="96" r="1.5"/>
+                <circle cx="156" cy="108" r="1.5"/><circle cx="122" cy="126" r="1.4"/>
+                <circle cx="146" cy="126" r="1.4"/><circle cx="106" cy="124" r="1.3"/>
+              </g>
 
-            <!-- Eyes (tall ovals) -->
-            <g>
-              <ellipse cx="98"  cy="118" rx="16" ry="26" fill="#fff"/>
-              <ellipse cx="162" cy="118" rx="16" ry="26" fill="#fff"/>
-              <circle  cx="108" cy="120" r="7" fill="#000"/>
-              <circle  cx="172" cy="120" r="7" fill="#000"/>
-            </g>
+              <!-- Eyes (taller ovals, farther apart, higher) -->
+              <g>
+                <ellipse cx="94"  cy="114" rx="15" ry="27" fill="#fff"/>
+                <ellipse cx="166" cy="114" rx="15" ry="27" fill="#fff"/>
+                <circle  cx="104" cy="116" r="7" fill="#000"/>
+                <circle  cx="176" cy="116" r="7" fill="#000"/>
+              </g>
 
-            <!-- Eyelids (used for blink) -->
-            <g class="eyelids" transform="translate(0,92)">
-              <rect class="eyelid" x="82"  y="0" width="32" height="30" rx="6" fill="#FFB553" style="transform:scaleY(0)"/>
-              <rect class="eyelid" x="146" y="0" width="32" height="30" rx="6" fill="#FFB553" style="transform:scaleY(0)"/>
-            </g>
+              <!-- Eyelids for blink -->
+              <g class="eyelids" transform="translate(0,88)">
+                <rect class="eyelid" x="79"  y="0" width="30" height="30" rx="6" fill="#FFB553" style="transform:scaleY(0)"/>
+                <rect class="eyelid" x="151" y="0" width="30" height="30" rx="6" fill="#FFB553" style="transform:scaleY(0)"/>
+              </g>
 
-            <!-- Eyebrows: simple upturned (happy) above fruit -->
-            <g fill="#000">
-              <!-- left brow (gentle upward arc) -->
-              <path d="M78,80 Q93,68 110,78" stroke="#000" stroke-width="6" stroke-linecap="round" fill="none"/>
-              <!-- right brow -->
-              <path d="M150,76 Q168,64 184,78" stroke="#000" stroke-width="6" stroke-linecap="round" fill="none"/>
-            </g>
+              <!-- Eyebrows: inner ends up toward forehead (simple slanted lines) -->
+              <g stroke="#000" stroke-linecap="round">
+                <!-- left: outer lower -> inner higher -->
+                <line x1="84" y1="88" x2="116" y2="72" stroke-width="6"/>
+                <!-- right: inner higher -> outer lower -->
+                <line x1="144" y1="72" x2="176" y2="88" stroke-width="6"/>
+              </g>
 
-            <!-- Cute rounded U-smile (lower) -->
-            <path d="M106,166 Q130,188 154,166"
-                  fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Cute little rounded U-smile (lower, more centered) -->
+              <path d="M104,168 Q130,190 156,168"
+                    fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
           </g>
         </svg>
       </div>
@@ -306,23 +319,26 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 <footer>
   © 2025 MayaNut LLC. All rights reserved.
   <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/></svg>
   </a>
 </footer>
 
+<!-- The bouncy lime ball -->
+<div id="bouncer" title="Click me!"></div>
+
 <script>
-/* ===== Randomized welcome bubble text (10 variants) ===== */
+/* ===== Randomized welcome bubble text (incl. Mateo intros) ===== */
 const welcomeLines = [
   "Welcome to MayaNut.com! Please type your questions in the chat bar.",
   "Hi there! Ask me anything about MayaNut™ in the box to the right.",
   "Glad you’re here—type your MayaNut™ questions and I’ll help!",
   "Welcome! Curious about MayaNut™? Pop your question into the chat.",
-  "Hello! Ask about Brosimum alicastrum/MayaNut™ right in the chat.",
-  "Hey! Type your MayaNut™ or product question to get started.",
+  "Hey, I'm Mateo…the MayaNut! Ask me about the tree or our products.",
+  "Hola! I’m Mateo, your friendly MayaNut. Type your question and let’s chat!",
+  "Hey! Mateo here—MayaNut™ facts, recipes, and products? Fire away!",
   "Welcome to the grove—ask your MayaNut™ question in the chat!",
   "Hi! Wondering what MayaNut™ is? Type your question to the right.",
-  "Welcome! I’m here for MayaNut™ Q&A—just type in the chat bar.",
-  "Hello there! Ask about MayaNut™ trees or products in the chat."
+  "I’m Mateo. I know all about MayaNut™—go ahead, ask me!"
 ];
 document.addEventListener('DOMContentLoaded', ()=>{
   const wb = document.getElementById('welcomeBubble');
@@ -337,7 +353,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   });
 });
 
-/* ===== Chat minimal behavior (kept simple & on-topic) ===== */
+/* ===== Chat: on-topic guard (kept simple) ===== */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 function say(role, text){
@@ -349,37 +365,137 @@ input.addEventListener('keydown', e=>{
   if(e.key==='Enter'){
     const t=input.value.trim(); if(!t) return;
     say('You', t); input.value='';
-    // VERY basic handler: prioritize MayaNut/Brosimum topics, else gentle redirect
     const low=t.toLowerCase();
     const keys = ["mayanut","maya nut","brosimum","breadnut","ramón","ramon","ojoche","oox","guáimaro","guaimaro"];
     const relevant = keys.some(k=>low.includes(k));
     if(relevant){
-      say('MayaNut', "Happy to help with MayaNut™! Ask about the tree, uses, nutrition, or our products.");
+      say('Mateo', "Yum! MayaNut™ is versatile—coffee, tortillas, tea, smoothies, you name it. What are you curious about?");
     } else {
       const redirects = [
-        "I can only chat about MayaNut™ (Brosimum alicastrum) and our products—try asking about the tree or foods!",
+        "I’m Mateo and I can only chat about MayaNut™ (Brosimum alicastrum) and our products—try asking about the tree or foods!",
         "Let’s keep it to MayaNut™ topics—cultivation, uses, or what we sell.",
-        "I’m focused on MayaNut™. Ask me about the species, benefits, or products!",
-        "I can help with MayaNut™ questions—care to ask about the tree or coffee/tea/tortillas?",
-        "I’m here for MayaNut™ only—try a question about the species or our lineup."
+        "I’m here for MayaNut™ questions—care to ask about the species, benefits, or our products?",
+        "Sticking to MayaNut™ keeps me smart! Ask about the tree, coffee/tea, or flour.",
+        "I can help with MayaNut™ only—try a question about the species or our lineup."
       ];
-      say('MayaNut', redirects[Math.floor(Math.random()*redirects.length)]);
+      say('Mateo', redirects[Math.floor(Math.random()*redirects.length)]);
     }
   }
 });
 
-/* ===== Mascot click: blink + shake ===== */
+/* ===== Mascot click: blink + side-to-side shake ===== */
 const mascot = document.getElementById('mascot');
 const group  = document.getElementById('mascotGroup');
 mascot.addEventListener('click', ()=>{
-  // Blink
   mascot.classList.add('blink');
-  // Shake
   group.classList.add('mascot-shake');
-  // Clear effects
   setTimeout(()=> mascot.classList.remove('blink'), 260);
   setTimeout(()=> group.classList.remove('mascot-shake'), 500);
 });
+
+/* ===== Micro mini-game: bouncy lime ball with squash/stretch and Mateo reactions ===== */
+(function(){
+  const ball = document.getElementById('bouncer');
+  const mascSVG = document.getElementById('mascot');
+  const mascDeform = document.getElementById('mascotDeform');
+
+  // Physics state
+  let x = innerWidth*0.6, y = innerHeight*0.45;
+  let vx = 2.2, vy = 1.8;
+  const r = 22; // visual radius (44px div)
+  const damp = 0.985;   // air “drag”
+  const bounce = 0.92;  // wall bounce
+  const boost = 1.18;   // Mateo collision boost
+
+  // Squash & stretch values (derived from velocity)
+  function setBallTransform(){
+    const speed = Math.hypot(vx,vy);
+    const maxS = 0.22;
+    const s = Math.min(maxS, speed/12); // 0..~.22
+    // direction-based squash
+    const angle = Math.atan2(vy,vx);
+    const sx = 1 + s, sy = 1 - s;
+    const cos = Math.cos(angle), sin = Math.sin(angle);
+    // rotate + scale via CSS: we’ll just rotate; scale anisotropic looks fine visually
+    ball.style.transform = `translate(${x - r}px, ${y - r}px) rotate(${angle}rad) scale(${sx},${sy})`;
+  }
+
+  // Hit Mateo (approximate his body as an ellipse from his bounding box)
+  function checkMateoCollision(){
+    const mr = mascSVG.getBoundingClientRect();
+    const cx = mr.left + mr.width/2;
+    const cy = mr.top  + mr.height*0.54;
+    const rx = mr.width*0.28;
+    const ry = mr.height*0.38;
+
+    // Convert ball center to the same coordinate system (already page coords)
+    const dx = (x - cx), dy = (y - cy);
+    const inNorm = (dx*dx)/(rx*rx) + (dy*dy)/(ry*ry); // <=1 means inside ellipse
+    if (inNorm <= 1){
+      // normal approx (push out along gradient)
+      const nx = dx/(rx*rx), ny = dy/(ry*ry);
+      const len = Math.hypot(nx,ny) || 1;
+      const ux = nx/len, uy = ny/len;
+
+      // place ball outside Mateo
+      const push = 6;
+      x += ux * (push + 2);
+      y += uy * (push + 2);
+
+      // reflect velocity with a boost
+      const dot = vx*ux + vy*uy;
+      vx = vx - 2*dot*ux; vy = vy - 2*dot*uy;
+      vx *= boost; vy *= boost;
+
+      // Mateo reaction: side-shake + directional deform
+      group.classList.add('mascot-shake');
+      mascDeform.classList.remove('deformX','deformY'); // reset
+      if (Math.abs(ux) > Math.abs(uy)) mascDeform.classList.add('deformX');
+      else mascDeform.classList.add('deformY');
+      setTimeout(()=>group.classList.remove('mascot-shake'), 360);
+      setTimeout(()=>{ mascDeform.classList.remove('deformX','deformY'); }, 300);
+    }
+  }
+
+  function step(){
+    // integrate
+    x += vx; y += vy;
+    vx *= damp; vy *= damp;
+
+    // walls
+    const left = r, right = innerWidth - r, top = 64 + r, bottom = innerHeight - r;
+    if (x < left){ x = left; vx = Math.abs(vx)*bounce; }
+    if (x > right){ x = right; vx = -Math.abs(vx)*bounce; }
+    if (y < top){ y = top; vy = Math.abs(vy)*bounce; }
+    if (y > bottom){ y = bottom; vy = -Math.abs(vy)*bounce; }
+
+    // Mateo collision
+    checkMateoCollision();
+
+    setBallTransform();
+    requestAnimationFrame(step);
+  }
+  step();
+
+  // Click to “kick” the ball (adds velocity from click direction)
+  ball.addEventListener('click', (e)=>{
+    // center of ball in page coords:
+    const rect = ball.getBoundingClientRect();
+    const bx = rect.left + rect.width/2;
+    const by = rect.top  + rect.height/2;
+    const dx = (bx - e.clientX), dy = (by - e.clientY);
+    const L = Math.hypot(dx,dy) || 1;
+    const kick = 5.2;
+    vx += (dx/L)*kick;
+    vy += (dy/L)*kick;
+  });
+
+  // Keep layout-safe on resize
+  window.addEventListener('resize', ()=>{
+    x = Math.min(Math.max(x, r), innerWidth - r);
+    y = Math.min(Math.max(y, 64 + r), innerHeight - r);
+  });
+})();
 </script>
 </body>
 </html>
