@@ -1,18 +1,18 @@
 <div class="mn-mascot" aria-hidden="true">
-  <svg viewBox="0 0 260 260" width="110" height="110" role="img">
+  <svg viewBox="0 0 260 260" width="118" height="108" role="img">
     <defs>
-      <!-- Main orange w/ subtle highlight -->
+      <!-- Main orange with soft highlight -->
       <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
         <stop offset="0%"  stop-color="#FFE19A"/>
         <stop offset="55%" stop-color="#FFB44B"/>
         <stop offset="100%" stop-color="#E98223"/>
       </radialGradient>
-      <!-- Rim shade -->
+      <!-- Rim vignette -->
       <radialGradient id="mnRim" cx="50%" cy="50%" r="50%">
         <stop offset="72%" stop-color="rgba(0,0,0,0)"/>
         <stop offset="100%" stop-color="rgba(0,0,0,.18)"/>
       </radialGradient>
-      <!-- Bottom green tint -->
+      <!-- Bottom green whisper -->
       <radialGradient id="mnBelly" cx="50%" cy="84%" r="48%">
         <stop offset="0%"  stop-color="rgba(110,180,105,.55)"/>
         <stop offset="100%" stop-color="rgba(110,180,105,0)"/>
@@ -27,20 +27,22 @@
         <stop offset="0%"  stop-color="#67c772"/>
         <stop offset="100%" stop-color="#2b863d"/>
       </linearGradient>
-      <!-- Shadow -->
+      <!-- Drop shadow -->
       <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
         <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="rgba(0,0,0,.28)"/>
       </filter>
-      <!-- Clip for the mouth to keep teeth inside -->
+      <!-- Mouth clip keeps teeth inside -->
       <clipPath id="mnMouthClip">
-        <path d="M88,152 Q130,188 172,152
-                 q-5,20 -42,22 q-38,-2 -42,-22 Z"/>
+        <!-- Banana smile (bigger on the right) -->
+        <path d="M80,150 Q130,205 184,162
+                 q-3,24 -54,24 q-52,0 -50,-24 Z"/>
       </clipPath>
     </defs>
 
-    <!-- Bobbing group -->
-    <g class="mn-bob" filter="url(#mnDrop)">
-      <!-- Fruit body (slightly tapered top; not a perfect circle) -->
+    <!-- Slightly wider & shorter overall -->
+    <g class="mn-bob" transform="scale(1.06,0.94)" filter="url(#mnDrop)">
+
+      <!-- Fruit body (top gently tapered toward stem) -->
       <path d="
         M130,34
         C110,34  90,48  83,66
@@ -61,7 +63,8 @@
         C185,92  184,84 177,66
         C170,48  150,34 130,34 Z"
         fill="url(#mnRim)"/>
-      <!-- Overlays -->
+
+      <!-- Gentle color tints -->
       <ellipse cx="130" cy="166" rx="74" ry="48" fill="url(#mnBelly)"/>
       <path d="
         M130,34
@@ -74,47 +77,49 @@
         C170,48  150,34 130,34 Z"
         fill="url(#mnTopRed)"/>
 
-      <!-- Stem with FLAT base touching fruit; gentle sway -->
+      <!-- Stem: flat base, slight sway -->
       <g class="mn-stem" transform="translate(0,-2)">
-        <!-- flat base -->
         <path d="M110,44 h40 v10 h-40 z" fill="#2b863d"/>
-        <!-- stem -->
-        <path d="M128,22
-                 c 10,-2  22,0  28,6
-                 c-6,6  -12,16 -14,26
-                 h-18
-                 c  2,-10  4,-18  4,-32 z"
+        <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
               fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
         <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
               stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
       </g>
 
-      <!-- Speckles -->
-      <g fill="rgba(255,255,255,.26)">
-        <circle cx="92" cy="88" r="2.3"/><circle cx="112" cy="80" r="1.9"/>
-        <circle cx="150" cy="78" r="2.2"/><circle cx="166" cy="96" r="1.7"/>
+      <!-- Faint orange speckles (more of them) -->
+      <g fill="rgba(255,175,80,.45)">
+        <circle cx="92" cy="88" r="2.2"/><circle cx="112" cy="80" r="1.9"/>
+        <circle cx="150" cy="78" r="2.1"/><circle cx="166" cy="96" r="1.7"/>
         <circle cx="100" cy="106" r="1.7"/><circle cx="130" cy="110" r="1.5"/>
+        <circle cx="142" cy="92" r="1.8"/><circle cx="118" cy="96" r="1.6"/>
+        <circle cx="156" cy="108" r="1.6"/><circle cx="122" cy="126" r="1.5"/>
+        <circle cx="146" cy="126" r="1.5"/><circle cx="106" cy="124" r="1.4"/>
       </g>
 
       <!-- Face -->
       <g>
-        <!-- bigger, higher, farther-apart eyes -->
-        <!-- sclera -->
-        <ellipse cx="102" cy="112" rx="17" ry="22" fill="#fff"/>
-        <ellipse cx="158" cy="112" rx="17" ry="22" fill="#fff"/>
-        <!-- pupils (looking right) -->
-        <circle cx="110" cy="116" r="8" fill="#000"/>
-        <circle cx="166" cy="116" r="8" fill="#000"/>
-        <!-- expressive eyebrows -->
-        <path d="M86,95 q16,-10 32,0"  fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
-        <path d="M142,95 q16,-10 32,0" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+        <!-- Bigger, higher, farther-apart eyes (looking right) -->
+        <ellipse cx="98"  cy="110" rx="19" ry="24" fill="#fff"/>
+        <ellipse cx="162" cy="110" rx="19" ry="24" fill="#fff"/>
+        <circle cx="108" cy="114" r="9" fill="#000"/>
+        <circle cx="172" cy="114" r="9" fill="#000"/>
 
-        <!-- big smile with thin black lips + white teeth (clipped) -->
-        <!-- lips (thin stroke) -->
-        <path d="M88,152 Q130,188 172,152" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
-        <!-- teeth fill inside a slightly thicker mouth shape, clipped so it doesn't spill -->
+        <!-- Friendlier eyebrows: tilted up (inner ends higher) -->
+        <path d="M80,98  q18,-14 36,2"  fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+        <path d="M144,96 q18,-14 36,2"  fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/>
+
+        <!-- Banana smile (right side larger), thin black lips + teeth with separators -->
+        <!-- outer lip arc -->
+        <path d="M80,150 Q130,205 184,162" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+        <!-- teeth block clipped to mouth area -->
         <g clip-path="url(#mnMouthClip)">
-          <path d="M86,148 Q130,188 174,148 v24 h-88 z" fill="#fff" opacity="0.95"/>
+          <path d="M78,148 Q130,205 186,160 v28 h-108 z" fill="#fff"/>
+          <!-- thin separators (classic cartoon look) -->
+          <path d="M102,160 v20" stroke="#000" stroke-width="1.5" opacity=".6"/>
+          <path d="M118,168 v18" stroke="#000" stroke-width="1.5" opacity=".6"/>
+          <path d="M134,172 v18" stroke="#000" stroke-width="1.5" opacity=".6"/>
+          <path d="M150,170 v18" stroke="#000" stroke-width="1.5" opacity=".6"/>
+          <path d="M166,164 v18" stroke="#000" stroke-width="1.5" opacity=".6"/>
         </g>
       </g>
     </g>
