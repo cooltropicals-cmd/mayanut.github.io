@@ -1,63 +1,19 @@
-<div class="chatbar">
-  <!-- MayaNut mascot (left of the input) -->
-  <div class="mn-mascot" aria-hidden="true">
-    <svg viewBox="0 0 220 220" width="92" height="92" role="img">
-      <defs>
-        <!-- Fruit body: orange base with a deeper top “ripe” tint -->
-        <radialGradient id="fruitGrad" cx="40%" cy="35%" r="70%">
-          <stop offset="0%"  stop-color="#FFD47A"/>
-          <stop offset="55%" stop-color="#FFB348"/>
-          <stop offset="100%" stop-color="#F28C2E"/>
-        </radialGradient>
-        <!-- Green underside glow -->
-        <radialGradient id="bellyGrad" cx="50%" cy="85%" r="50%">
-          <stop offset="0%"  stop-color="rgba(108,180,95,0.55)"/>
-          <stop offset="100%" stop-color="rgba(108,180,95,0)"/>
-        </radialGradient>
-        <!-- “Hair” (ripening red at the crown) -->
-        <linearGradient id="hairGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"  stop-color="#D83B27"/>
-          <stop offset="100%" stop-color="#F26E3B"/>
-        </linearGradient>
-      </defs>
+/* Mascot container */
+.mn-mascot{display:flex;align-items:center;justify-content:center;margin-right:12px;pointer-events:none}
+.mn-mascot svg{display:block}
 
-      <!-- body -->
-      <g class="bob">
-        <ellipse cx="110" cy="112" rx="90" ry="86" fill="url(#fruitGrad)"/>
-        <!-- subtle belly green -->
-        <ellipse cx="110" cy="152" rx="70" ry="44" fill="url(#bellyGrad)"/>
+/* Gentle bob + crown sway to match the reference vibe */
+@keyframes mn-bob {0%{transform:translateY(0)}50%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+@keyframes mn-sway{0%{transform:rotate(0deg)}50%{transform:rotate(-4.5deg)}100%{transform:rotate(0deg)}}
+.mn-bob{animation: mn-bob 4.8s ease-in-out infinite}
+.mn-sway{transform-origin:130px 24px; animation: mn-sway 5.6s ease-in-out infinite}
 
-        <!-- tiny speckles -->
-        <g fill="rgba(255,255,255,.25)">
-          <circle cx="62" cy="76" r="2.2"/><circle cx="84" cy="66" r="1.8"/>
-          <circle cx="130" cy="63" r="2.0"/><circle cx="150" cy="80" r="1.6"/>
-          <circle cx="96" cy="90" r="1.6"/><circle cx="126" cy="96" r="1.4"/>
-          <circle cx="72" cy="108" r="1.5"/><circle cx="154" cy="112" r="1.7"/>
-        </g>
+/* Solid-black eye blinks (quick vertical squish) */
+@keyframes mn-blink {0%,92%,100%{transform:scaleY(1)}94%{transform:scaleY(0.1)}96%{transform:scaleY(1)}}
+.mn-eye{transform-origin:center; animation: mn-blink 6.5s infinite}
+.mn-eye-delay{animation-delay:.6s}
 
-        <!-- crown “hair” -->
-        <g class="sway">
-          <path d="M75,32 C100,18 120,18 145,32 C138,22 122,12 110,12 C98,12 82,22 75,32 Z"
-                fill="url(#hairGrad)"/>
-        </g>
-
-        <!-- face (no nose, solid black eyes, big smile) -->
-        <g transform="translate(0,6)">
-          <!-- eyes -->
-          <g class="eye" transform="translate(78,108)">
-            <circle cx="0" cy="0" r="10" fill="#000"/>
-          </g>
-          <g class="eye eye-delay" transform="translate(142,108)">
-            <circle cx="0" cy="0" r="10" fill="#000"/>
-          </g>
-          <!-- smile -->
-          <path d="M78,140 Q110,166 142,140"
-                fill="none" stroke="#000" stroke-width="10" stroke-linecap="round"/>
-        </g>
-      </g>
-    </svg>
-  </div>
-
-  <!-- your input stays here -->
-  <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
-</div>
+/* Keep mascot from shrinking too much on tight screens */
+@media (max-width:560px){
+  .mn-mascot svg{width:88px;height:88px}
+}
