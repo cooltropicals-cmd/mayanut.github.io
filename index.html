@@ -1,67 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Mateo – Refined</title>
-<style>
-  html,body{height:100%}
-  body{margin:0;display:flex;align-items:center;justify-content:center;background:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-  svg{width:min(520px,92vw);height:auto;display:block}
-</style>
-</head>
-<body>
-<svg viewBox="-30 -40 560 620" aria-label="Mateo refined">
-  <defs>
-    <!-- Top->bottom fade: red -> orange -> green -->
-    <linearGradient id="bodyFade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"  stop-color="#ff6a43"/>  <!-- redder top -->
-      <stop offset="48%" stop-color="#f39a2f"/>  <!-- orange middle -->
-      <stop offset="100%" stop-color="#8fb157"/> <!-- green bottom -->
-    </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
-      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="rgba(0,0,0,.2)"/>
-    </filter>
-    <radialGradient id="speck" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="rgba(255,180,80,.9)"/>
-      <stop offset="100%" stop-color="rgba(255,180,80,0)"/>
-    </radialGradient>
-  </defs>
+<div class="mn-mascot" aria-hidden="true">
+  <svg viewBox="0 0 260 260" width="118" height="118" role="img">
+    <defs>
+      <!-- Orange body -->
+      <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
+        <stop offset="0%"  stop-color="#FFE3A6"/>
+        <stop offset="55%" stop-color="#FFB553"/>
+        <stop offset="100%" stop-color="#E88324"/>
+      </radialGradient>
+      <!-- Top red blush (inside only) -->
+      <radialGradient id="mnTopRed" cx="50%" cy="16%" r="38%">
+        <stop offset="0%"  stop-color="rgba(217,52,42,.45)"/>
+        <stop offset="100%" stop-color="rgba(217,52,42,0)"/>
+      </radialGradient>
+      <!-- Bottom green belly (inside only) -->
+      <radialGradient id="mnBelly" cx="50%" cy="84%" r="48%">
+        <stop offset="0%"  stop-color="rgba(110,180,105,.55)"/>
+        <stop offset="100%" stop-color="rgba(110,180,105,0)"/>
+      </radialGradient>
+      <!-- Stem -->
+      <linearGradient id="mnStem" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"  stop-color="#6ed17b"/>
+        <stop offset="100%" stop-color="#2e8a42"/>
+      </linearGradient>
+      <!-- Soft shadow -->
+      <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
+        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/>
+      </filter>
+      <!-- Body clip to keep shading inside -->
+      <clipPath id="mnBodyClip">
+        <path id="mnBodyPath"
+          d="M130,36
+             C112,36  94,49  87,66
+             C80,83   78,94  74,112
+             C66,142  80,176 104,194
+             C118,204 142,204 156,194
+             C180,176 194,142 186,112
+             C182,94  180,83 173,66
+             C166,49  148,36 130,36 Z"/>
+      </clipPath>
+    </defs>
 
-  <!-- BODY (more circular) -->
-  <g filter="url(#shadow)">
-    <ellipse cx="250" cy="290" rx="210" ry="220" fill="url(#bodyFade)"/>
+    <g class="mn-bob" transform="scale(1.06,1.0)" filter="url(#mnDrop)">
+      <!-- Body -->
+      <use href="#mnBodyPath" fill="url(#mnFruit)"/>
+      <g clip-path="url(#mnBodyClip)">
+        <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
+        <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
+      </g>
 
-    <!-- SPECKLES -->
-    <g opacity=".45">
-      <circle cx="210" cy="260" r="8"  fill="url(#speck)"/>
-      <circle cx="290" cy="310" r="9"  fill="url(#speck)"/>
-      <circle cx="330" cy="360" r="7"  fill="url(#speck)"/>
-      <circle cx="170" cy="340" r="7"  fill="url(#speck)"/>
-      <circle cx="245" cy="410" r="8"  fill="url(#speck)"/>
-      <circle cx="315" cy="430" r="7"  fill="url(#speck)"/>
+      <!-- Stem with flat base -->
+      <g class="mn-stem" transform="translate(0,-1)">
+        <rect x="104" y="44" width="52" height="10" fill="#2e8a42"/>
+        <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
+              fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
+        <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
+              stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
+      </g>
+
+      <!-- Faint orange speckles -->
+      <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.45)">
+        <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="1.9"/>
+        <circle cx="150" cy="78" r="2.1"/><circle cx="166" cy="96" r="1.7"/>
+        <circle cx="100" cy="106" r="1.6"/><circle cx="130" cy="110" r="1.5"/>
+        <circle cx="142" cy="92" r="1.7"/><circle cx="118" cy="96" r="1.5"/>
+        <circle cx="156" cy="108" r="1.5"/><circle cx="122" cy="126" r="1.4"/>
+        <circle cx="146" cy="126" r="1.4"/><circle cx="106" cy="124" r="1.3"/>
+      </g>
+
+      <!-- Eyes: taller ovals, small pupils looking right -->
+      <g>
+        <ellipse cx="98"  cy="118" rx="16" ry="26" fill="#fff"/>
+        <ellipse cx="162" cy="118" rx="16" ry="26" fill="#fff"/>
+        <circle  cx="108" cy="120" r="7" fill="#000"/>
+        <circle  cx="172" cy="120" r="7" fill="#000"/>
+      </g>
+
+      <!-- Tiny rounded U-smile (lower) -->
+      <path d="M108,166 Q130,186 152,166"
+            fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+      <!-- Eyebrows: forward-slash style, rotated 20° clockwise -->
+      <g>
+        <!-- Left eyebrow -->
+        <rect x="72" y="82" width="42" height="6" rx="3" fill="#000"
+              transform="rotate(20 93 85)"/>
+        <!-- Right eyebrow -->
+        <rect x="136" y="80" width="42" height="6" rx="3" fill="#000"
+              transform="rotate(20 157 83)"/>
+      </g>
     </g>
-
-    <!-- STEM (flat base, tight) -->
-    <g transform="translate(250,95)">
-      <rect x="-55" y="22" width="110" height="20" rx="6" fill="#2a8f4a"/>
-      <path d="M-8 -10c-18-4-36-4-54-1c-6 42-8 78-8 106h128c7-34 22-72 48-96c-23-21-64-29-106-9z"
-            fill="#3fae59" stroke="#1e6a37" stroke-width="6" />
-    </g>
-
-    <!-- EYES (farther apart, taller ovals) -->
-    <ellipse cx="185" cy="330" rx="58" ry="88" fill="#fff"/>
-    <ellipse cx="315" cy="330" rx="58" ry="88" fill="#fff"/>
-    <circle  cx="205" cy="350" r="26" fill="#111"/>
-    <circle  cx="335" cy="350" r="26" fill="#111"/>
-
-    <!-- EYEBROWS (shorter, higher, angled arcs) -->
-    <path d="M145 250 Q185 225 225 250" fill="none" stroke="#111" stroke-linecap="round" stroke-width="14"/>
-    <path d="M275 250 Q315 225 355 250" fill="none" stroke="#111" stroke-linecap="round" stroke-width="14"/>
-
-    <!-- SMALL U SMILE -->
-    <path d="M190 430 Q250 470 310 430" fill="none" stroke="#111" stroke-linecap="round" stroke-width="12"/>
-  </g>
-</svg>
-</body>
-</html>
+  </svg>
+</div>
