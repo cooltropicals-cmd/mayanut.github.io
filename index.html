@@ -1,19 +1,76 @@
-/* Mascot container */
-.mn-mascot{display:flex;align-items:center;justify-content:center;margin-right:12px;pointer-events:none}
-.mn-mascot svg{display:block}
+<div class="chatbar">
+  <!-- NEW MayaNut mascot (left of input) -->
+  <div class="mn-mascot" aria-hidden="true">
+    <svg viewBox="0 0 260 260" width="104" height="104" role="img">
+      <defs>
+        <!-- Body: orange with deeper rim & inner glow -->
+        <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
+          <stop offset="0%"  stop-color="#FFE19A"/>
+          <stop offset="55%" stop-color="#FFB44B"/>
+          <stop offset="100%" stop-color="#E98223"/>
+        </radialGradient>
+        <!-- Rim shading for a soft edge -->
+        <radialGradient id="mnRim" cx="50%" cy="50%" r="50%">
+          <stop offset="70%" stop-color="rgba(0,0,0,0)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,.18)"/>
+        </radialGradient>
+        <!-- Green underside tint -->
+        <radialGradient id="mnBelly" cx="50%" cy="82%" r="46%">
+          <stop offset="0%"  stop-color="rgba(110,180,105,.55)"/>
+          <stop offset="100%" stop-color="rgba(110,180,105,0)"/>
+        </radialGradient>
+        <!-- Crown “hair”: red→orange as it ripens -->
+        <linearGradient id="mnHair" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#D9342A"/>
+          <stop offset="100%" stop-color="#F66A38"/>
+        </linearGradient>
+        <!-- Soft drop shadow -->
+        <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
+          <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="rgba(0,0,0,.28)"/>
+        </filter>
+      </defs>
 
-/* Gentle bob + crown sway to match the reference vibe */
-@keyframes mn-bob {0%{transform:translateY(0)}50%{transform:translateY(-5px)}100%{transform:translateY(0)}}
-@keyframes mn-sway{0%{transform:rotate(0deg)}50%{transform:rotate(-4.5deg)}100%{transform:rotate(0deg)}}
-.mn-bob{animation: mn-bob 4.8s ease-in-out infinite}
-.mn-sway{transform-origin:130px 24px; animation: mn-sway 5.6s ease-in-out infinite}
+      <!-- group for bobbing -->
+      <g class="mn-bob" filter="url(#mnDrop)">
+        <!-- main fruit -->
+        <circle cx="130" cy="128" r="94" fill="url(#mnFruit)"/>
+        <!-- rim shade -->
+        <circle cx="130" cy="128" r="94" fill="url(#mnRim)"/>
+        <!-- underside green -->
+        <ellipse cx="130" cy="162" rx="70" ry="46" fill="url(#mnBelly)"/>
 
-/* Solid-black eye blinks (quick vertical squish) */
-@keyframes mn-blink {0%,92%,100%{transform:scaleY(1)}94%{transform:scaleY(0.1)}96%{transform:scaleY(1)}}
-.mn-eye{transform-origin:center; animation: mn-blink 6.5s infinite}
-.mn-eye-delay{animation-delay:.6s}
+        <!-- subtle speckles (faded dots) -->
+        <g fill="rgba(255,255,255,.28)">
+          <circle cx="86" cy="82" r="2.4"/><circle cx="108" cy="74" r="1.9"/>
+          <circle cx="150" cy="72" r="2.2"/><circle cx="164" cy="90" r="1.7"/>
+          <circle cx="98" cy="100" r="1.6"/><circle cx="128" cy="104" r="1.5"/>
+          <circle cx="78" cy="114" r="1.6"/><circle cx="170" cy="118" r="1.8"/>
+        </g>
 
-/* Keep mascot from shrinking too much on tight screens */
-@media (max-width:560px){
-  .mn-mascot svg{width:88px;height:88px}
-}
+        <!-- crown hair (ripening, slight sway) -->
+        <g class="mn-sway">
+          <path d="M88,38 C112,20 148,20 172,38 C162,22 148,12 130,12 C112,12 98,22 88,38 Z"
+                fill="url(#mnHair)"/>
+        </g>
+
+        <!-- face (no nose; solid black eyes; big smile) -->
+        <g transform="translate(0,6)">
+          <!-- left eye -->
+          <g class="mn-eye" transform="translate(98,116)">
+            <ellipse cx="0" cy="0" rx="11" ry="12" fill="#000"/>
+          </g>
+          <!-- right eye (slight delay) -->
+          <g class="mn-eye mn-eye-delay" transform="translate(162,116)">
+            <ellipse cx="0" cy="0" rx="11" ry="12" fill="#000"/>
+          </g>
+          <!-- smile -->
+          <path d="M96,150 Q130,178 164,150"
+                fill="none" stroke="#000" stroke-width="10" stroke-linecap="round"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- your input -->
+  <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
+</div>
