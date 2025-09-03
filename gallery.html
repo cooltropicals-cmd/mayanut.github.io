@@ -3,76 +3,587 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gallery – MayaNut</title>
+<title>MayaNut</title>
+
+<!-- Favicon (MN, golden gradient) -->
 <link rel="icon" type="image/svg+xml"
   href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffe992'/%3E%3Cstop offset='55%25' stop-color='%23ffc44d'/%3E%3Cstop offset='100%25' stop-color='%23c97a11'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%23152b1b'/%3E%3Ctext x='50%25' y='50%25' dy='.36em' text-anchor='middle' font-family='Poppins, Arial, sans-serif' font-weight='900' font-size='30' fill='url(%23g)'>MN%3C/text%3E%3C/svg%3E" />
+
 <style>
-  :root{--ink:#eef3ff; --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
-        --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;}
-  html,body{height:100%;margin:0;color:var(--ink);font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#0b1a0f 0%,#143821 42%,#0f2f1d 100%)}
-  .bg{position:fixed;inset:-25%;z-index:-1;filter:blur(28px) saturate(118%);background:
+  :root{
+    --ink:#eef3ff;
+    --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
+
+    /* Shiny gold logo gradient (top light → bottom darker) */
+    --gold-top:#ffe992;
+    --gold-mid:#ffc44d;
+    --gold-low:#e79a21;
+    --gold-deep:#c97a11;
+  }
+
+  html,body{
+    height:100%; margin:0; color:var(--ink);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    background: linear-gradient(180deg, #0b1a0f 0%, #143821 42%, #0f2f1d 100%);
+    overflow-x:hidden;
+  }
+
+  /* Animated blurry “green lava lamp” background */
+  .bg-layer{position:fixed; inset:-25% -25% -25% -25%; z-index:-1; pointer-events:none; filter: blur(28px) saturate(118%);}
+  .bg1{
+    background:
       radial-gradient(38% 40% at 20% 25%, rgba(110,190,120,.32), transparent 60%),
       radial-gradient(30% 36% at 78% 22%, rgba(165,230,170,.28), transparent 65%),
       radial-gradient(22% 28% at 52% 58%, rgba(90,150,110,.30), transparent 60%);
-      animation:float 48s ease-in-out infinite}
-  @keyframes float{50%{transform:translate(-26px,20px) scale(1.04)}}
-  .top{position:fixed;inset:0 auto auto 0;right:0;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px)}
-  .brand{height:32px}
-  .nav a{color:var(--ink);text-decoration:none;margin-left:16px}
-  main{padding:96px 16px 36px;max-width:980px;margin:0 auto}
-  .mateoFloat{position:fixed;right:18px;bottom:18px;width:120px;height:auto;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
-  .grid{display:grid;grid-template-columns:1fr;gap:16px}
-  .ph{height:220px;background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:14px}
+    animation: drift1 44s ease-in-out infinite;
+  }
+  .bg2{
+    background:
+      radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.28), transparent 60%),
+      radial-gradient(28% 34% at 76% 72%, rgba(125,200,140,.26), transparent 60%),
+      radial-gradient(22% 26% at 45% 38%, rgba(160,220,160,.22), transparent 60%);
+    animation: drift2 52s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  .bg3{
+    background:
+      radial-gradient(22% 28% at 35% 10%, rgba(185,255,185,.18), transparent 60%),
+      radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.20), transparent 60%),
+      radial-gradient(24% 32% at 50% 80%, rgba(60,120,80,.18), transparent 60%);
+    animation: drift3 60s ease-in-out infinite;
+    opacity:.95;
+  }
+  @keyframes drift1 {0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-34px,28px,0) scale(1.04)}100%{transform:translate3d(0,0,0) scale(1)}}
+  @keyframes drift2 {0%{transform:translate3d(0,0,0) scale(1.02)}50%{transform:translate3d(36px,-22px,0) scale(1.06)}100%{transform:translate3d(0,0,0) scale(1.02)}}
+  @keyframes drift3 {0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-20px,20px,0) scale(1.05)}100%{transform:translate3d(0,0,0) scale(1)}}
+
+  /* Top bar + unified logo */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .brandLogo{display:block;height:32px;width:auto}
+  .nav{display:flex;gap:18px;align-items:center}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
+  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
+  .panel{width:min(980px,92vw);text-align:center}
+
+  .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 14px}
+
+  /* Row: bubble | Mateo | search */
+  .chatRow{
+    display:grid; grid-template-columns:auto auto 1fr; gap:14px;
+    align-items:center; width:min(820px,94vw); margin:0 auto;
+    position:relative;
+  }
+  .bubble{
+    color:#0a1220; background:#fff; border-radius:16px; padding:12px 14px;
+    font-weight:600; line-height:1.25; box-shadow:0 8px 18px rgba(0,0,0,.18);
+    max-width:260px; text-align:left;
+  }
+  .plushyWrap{width:150px; display:flex; align-items:center; justify-content:center}
+  .chatbar{display:flex; align-items:center;}
+  .chatbar input{flex:1;height:46px;padding:12px 14px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .chatbar input::placeholder{color:#cfe8ff}
+  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
+
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
+  .msg strong{color:#cfe1ff}
+
+  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
+  .section h3{margin:0 0 8px;color:#fff}
+  .section p{margin:8px 0 0;color:#cfe9ff}
+
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;position:relative}
+  .ig-link{position:absolute;right:72px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px}
+  .ig-link svg{transition:transform .2s ease,filter .2s ease}
+  .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+
+  /* Mascot gentle bob */
+  .plushy{width:100%; height:auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); animation: bob 3.6s ease-in-out infinite; transform-origin:center;}
+  @keyframes bob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
+
+  /* Mateo REACTIONS */
+  .shake-side {
+    animation: shakeX .45s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes shakeX {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+  }
+  .blink-now ellipse,
+  .blink-now circle {
+    animation: blinkQuick .18s linear 1;
+    transform-origin:center;
+  }
+  @keyframes blinkQuick {
+    0% { transform: scaleY(1); }
+    50% { transform: scaleY(0.08); }
+    100% { transform: scaleY(1); }
+  }
+
+  /* Bouncing ball canvas sits above content but under header */
+  #ballLayer{
+    position:fixed; inset:0; z-index:15; pointer-events:auto; /* we handle clicks to detect ball */
+  }
+  /* Cursor hint when hovering near ball */
+  #ballLayer.grab { cursor: pointer; }
 </style>
 </head>
 <body>
-<div class="bg"></div>
 
+<!-- Animated background layers -->
+<div class="bg-layer bg1"></div>
+<div class="bg-layer bg2"></div>
+<div class="bg-layer bg3"></div>
+
+<!-- Shared logo symbol -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <linearGradient id="LogoGoldG" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0%"  stop-color="var(--gold-top)"/><stop offset="55%" stop-color="var(--gold-mid)"/>
-      <stop offset="85%" stop-color="var(--gold-low)"/><stop offset="100%" stop-color="var(--gold-deep)"/>
+    <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%"  stop-color="var(--gold-top)"/>
+      <stop offset="55%" stop-color="var(--gold-mid)"/>
+      <stop offset="85%" stop-color="var(--gold-low)"/>
+      <stop offset="100%" stop-color="var(--gold-deep)"/>
     </linearGradient>
-    <filter id="LogoShadowG"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.45)"/></filter>
-    <symbol id="LogoG" viewBox="0 0 1200 260"><text x="40" y="180" font-family="Poppins,Inter" font-weight="900" font-size="180" fill="url(#LogoGoldG)" filter="url(#LogoShadowG)">MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan></text></symbol>
+    <filter id="LogoShadow" x="-20%" y="-40%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.45)"/>
+    </filter>
+    <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
+      <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="180"
+            fill="url(#LogoGold)" filter="url(#LogoShadow)">
+        MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
+      </text>
+    </symbol>
 
-    <!-- Mateo symbol (same as other pages) -->
-    <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%"><stop offset="0%" stop-color="#FFB39A"/><stop offset="55%" stop-color="#FF993D"/><stop offset="100%" stop-color="#6DAF67"/></radialGradient>
-    <radialGradient id="mnBelly" cx="50%" cy="87%" r="48%"><stop offset="0%" stop-color="rgba(100,165,95,.28)"/><stop offset="100%" stop-color="rgba(100,165,95,0)"/></radialGradient>
-    <radialGradient id="mnTopRed" cx="50%" cy="15%" r="38%"><stop offset="0%" stop-color="rgba(217,52,42,.35)"/><stop offset="100%" stop-color="rgba(217,52,42,0)"/></radialGradient>
-    <linearGradient id="mnStem" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6ed17b"/><stop offset="100%" stop-color="#2e8a42"/></linearGradient>
-    <filter id="mnDrop"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/></filter>
+    <!-- === MATEO SYMBOL (reusable) === -->
+    <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
+      <stop offset="0%"  stop-color="#FFB39A"/>
+      <stop offset="55%" stop-color="#FF993D"/>
+      <stop offset="100%" stop-color="#6DAF67"/>
+    </radialGradient>
+    <radialGradient id="mnBelly" cx="50%" cy="87%" r="48%">
+      <stop offset="0%"  stop-color="rgba(100,165,95,.28)"/>
+      <stop offset="100%" stop-color="rgba(100,165,95,0)"/>
+    </radialGradient>
+    <radialGradient id="mnTopRed" cx="50%" cy="15%" r="38%">
+      <stop offset="0%"  stop-color="rgba(217,52,42,.35)"/>
+      <stop offset="100%" stop-color="rgba(217,52,42,0)"/>
+    </radialGradient>
+    <linearGradient id="mnStem" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#6ed17b"/>
+      <stop offset="100%" stop-color="#2e8a42"/>
+    </linearGradient>
+    <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/>
+    </filter>
+
     <symbol id="MateoMascot" viewBox="0 0 260 260">
-      <defs><clipPath id="mnBodyClip"><path id="mnBodyPath" d="M130,36 C112,36 94,49 87,66 C80,83 78,94 74,112 C66,142 80,176 104,194 C118,204 142,204 156,194 C180,176 194,142 186,112 C182,94 180,83 173,66 C166,49 148,36 130,36 Z"/></clipPath></defs>
+      <defs>
+        <clipPath id="mnBodyClip">
+          <path id="mnBodyPath"
+            d="M130,36
+               C112,36  94,49  87,66
+               C80,83   78,94  74,112
+               C66,142  80,176 104,194
+               C118,204 142,204 156,194
+               C180,176 194,142 186,112
+               C182,94  180,83 173,66
+               C166,49  148,36 130,36 Z"/>
+        </clipPath>
+      </defs>
+
       <g filter="url(#mnDrop)" transform="scale(1.06,1.0)">
+        <!-- Body -->
         <use href="#mnBodyPath" fill="url(#mnFruit)"/>
-        <g clip-path="url(#mnBodyClip)"><rect width="260" height="260" fill="url(#mnTopRed)"/><rect width="260" height="260" fill="url(#mnBelly)"/></g>
-        <g><path d="M128,28 c 8,-2 18,0 24,6 c-6,6 -10,16 -12,26 h-16 c 2,-12 3,-20 4,-32 z" fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/></g>
-        <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.65)"><circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="2.0"/><circle cx="150" cy="78" r="2.2"/><circle cx="166" cy="96" r="2.0"/><circle cx="100" cy="106" r="2.0"/><circle cx="130" cy="110" r="1.9"/></g>
-        <g id="mnEyes"><ellipse id="eyeL" cx="98" cy="118" rx="16" ry="26" fill="#fff"/><ellipse id="eyeR" cx="162" cy="118" rx="16" ry="26" fill="#fff"/><circle id="pupilL" cx="98" cy="112" r="7" fill="#000"/><circle id="pupilR" cx="162" cy="112" r="7" fill="#000"/><clipPath id="clipEyeL"><ellipse cx="98" cy="118" rx="16" ry="26"/></clipPath><clipPath id="clipEyeR"><ellipse cx="162" cy="118" rx="16" ry="26"/></clipPath><g clip-path="url(#clipEyeL)"><path d="M82,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/></g><g clip-path="url(#clipEyeR)"><path d="M146,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/></g></g>
-        <path d="M108,166 Q130,186 152,166" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <g clip-path="url(#mnBodyClip)">
+          <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
+          <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
+        </g>
+
+        <!-- Thinner curved stem -->
+        <g class="mn-stem">
+          <path d="M128,28 c 8,-2 18,0 24,6 c-6,6 -10,16 -12,26 h-16 c 2,-12 3,-20 4,-32 z"
+                fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
+          <path d="M144,32 c-6,6 -9,12 -11,22" fill="none"
+                stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
+        </g>
+
+        <!-- Freckles -->
+        <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.65)">
+          <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="2.0"/>
+          <circle cx="150" cy="78" r="2.2"/><circle cx="166" cy="96" r="2.0"/>
+          <circle cx="100" cy="106" r="2.0"/><circle cx="130" cy="110" r="1.9"/>
+          <circle cx="142" cy="92" r="2.1"/><circle cx="118" cy="96" r="1.8"/>
+          <circle cx="156" cy="108" r="2.0"/><circle cx="122" cy="126" r="1.9"/>
+          <circle cx="146" cy="126" r="1.9"/><circle cx="106" cy="124" r="1.9"/>
+          <circle cx="136" cy="142" r="2.0"/><circle cx="114" cy="148" r="1.9"/>
+          <circle cx="126" cy="160" r="1.9"/><circle cx="140" cy="154" r="2.1"/>
+          <circle cx="154" cy="144" r="2.0"/><circle cx="106" cy="152" r="1.9"/>
+          <circle cx="120" cy="98" r="1.2"/><circle cx="140" cy="100" r="1.2"/>
+          <circle cx="110" cy="118" r="1.2"/><circle cx="150" cy="118" r="1.2"/>
+        </g>
+
+        <!-- Eyes -->
+        <g id="mnEyes">
+          <!-- whites -->
+          <ellipse id="eyeL" cx="98"  cy="118" rx="16" ry="26" fill="#fff"/>
+          <ellipse id="eyeR" cx="162" cy="118" rx="16" ry="26" fill="#fff"/>
+
+          <!-- pupils -->
+          <circle id="pupilL" cx="98"  cy="112" r="7" fill="#000"/>
+          <circle id="pupilR" cx="162" cy="112" r="7" fill="#000"/>
+
+          <!-- bottom eyelids (skin-toned) -->
+          <clipPath id="clipEyeL"><ellipse cx="98"  cy="118" rx="16" ry="26"/></clipPath>
+          <clipPath id="clipEyeR"><ellipse cx="162" cy="118" rx="16" ry="26"/></clipPath>
+          <g clip-path="url(#clipEyeL)">
+            <path d="M82,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/>
+          </g>
+          <g clip-path="url(#clipEyeR)">
+            <path d="M146,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/>
+          </g>
+        </g>
+
+        <!-- Smile -->
+        <path d="M108,166 Q130,186 152,166"
+              fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       </g>
     </symbol>
   </defs>
 </svg>
 
-<header class="top">
+<header class="topbar" role="banner">
   <a href="index.html" aria-label="MayaNut home">
-    <svg class="brand" viewBox="0 0 1200 260"><use href="#LogoG"></use></svg>
+    <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
   </a>
-  <nav class="nav"><a href="index.html">Home</a><a href="buy.html">Buy</a><a href="about.html">About</a><a href="gallery.html">Gallery</a></nav>
+  <nav class="nav" aria-label="Primary">
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+  </nav>
 </header>
 
-<main>
-  <h2 style="margin:0 0 12px">Gallery</h2>
-  <div class="grid">
-    <!-- 10 full-width placeholders -->
-    <div class="ph"></div><div class="ph"></div><div class="ph"></div><div class="ph"></div><div class="ph"></div>
-    <div class="ph"></div><div class="ph"></div><div class="ph"></div><div class="ph"></div><div class="ph"></div>
+<main id="home" class="stage">
+  <div class="panel">
+    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
+      <use href="#MayaNutLogo"></use>
+    </svg>
+
+    <!-- Bubble | Mateo | Search -->
+    <div class="chatRow" id="chatRow">
+      <div class="bubble" id="mateoBubble">Welcome to MayaNut.com — I’m Mateo the MayaNut! 🌿</div>
+      <div class="plushyWrap" id="mateoWrap" aria-hidden="false" role="img" aria-label="Mateo the MayaNut">
+        <svg class="plushy" id="mateoSVG" viewBox="0 0 260 260" width="150" height="150">
+          <use href="#MateoMascot"></use>
+        </svg>
+      </div>
+      <div class="chatbar" role="search">
+        <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
+      </div>
+    </div>
+
+    <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
 </main>
 
-<svg class="mateoFloat" viewBox="0 0 260 260" aria-hidden="true"><use href="#MateoMascot"></use></svg>
+<section class="section" aria-labelledby="aboutTitle">
+  <h3 id="aboutTitle">About</h3>
+  <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation of
+    <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion regenerative agroforestry,
+    conserve threatened genetics, and nurture resilient foods for future generations.</p>
+</section>
+
+<footer>
+  © 2025 MayaNut LLC. All rights reserved.
+  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/>
+    </svg>
+  </a>
+</footer>
+
+<!-- Bouncing ball canvas (index-only) -->
+<canvas id="ballLayer" aria-hidden="true"></canvas>
+
+<script>
+/* ===== Welcome bubble variations ===== */
+const bubble = document.getElementById('mateoBubble');
+const welcomes = [
+  "Welcome to MayaNut.com — I’m Mateo the MayaNut! 🌿",
+  "Hey! I’m Mateo the MayaNut—bringing an ancient superfood to South Florida!",
+  "Hola! Mateo the MayaNut here—ask me anything about MayaNut™.",
+  "Hi, I’m Mateo the MayaNut—let’s talk Brosimum alicastrum!",
+  "Welcome! Mateo the MayaNut reporting for tasty duty 🍃",
+  "Mateo the MayaNut: ancient flavor, modern farming—ask away!"
+];
+bubble.textContent = welcomes[Math.floor(Math.random()*welcomes.length)];
+
+/* ===== Pupils follow cursor (subtle) ===== */
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+const mateoSVG = document.getElementById('mateoSVG');
+const pupilL = document.getElementById('pupilL');
+const pupilR = document.getElementById('pupilR');
+const eyeL = document.getElementById('eyeL');
+const eyeR = document.getElementById('eyeR');
+
+function movePupils(e){
+  const rect = mateoSVG.getBoundingClientRect();
+  // skip if pointer is far (keeps CPU low)
+  if (e.clientX < rect.left-200 || e.clientX > rect.right+200 ||
+      e.clientY < rect.top-200 || e.clientY > rect.bottom+200) return;
+
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  function steer(eye, pupil){
+    const cx = +eye.getAttribute('cx');
+    const cy = +eye.getAttribute('cy');
+    const rx = +eye.getAttribute('rx');
+    const ry = +eye.getAttribute('ry');
+    const maxX = rx*0.35, maxY = ry*0.28;
+
+    const dx = mx - cx, dy = my - cy;
+    const ang = Math.atan2(dy, dx);
+    const px = cx + Math.cos(ang) * maxX * 0.5;
+    const py = cy + Math.sin(ang) * maxY * 0.5;
+
+    pupil.setAttribute('cx', px.toFixed(2));
+    pupil.setAttribute('cy', py.toFixed(2));
+  }
+  steer(eyeL, pupilL);
+  steer(eyeR, pupilR);
+}
+window.addEventListener('mousemove', movePupils);
+
+/* ===== Chat logic (minimal + coffee training) ===== */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+function say(role, html){
+  const el=document.createElement('div'); el.className='msg';
+  el.innerHTML=`<strong>${role}:</strong> ${html}`;
+  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
+}
+input.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const v=input.value.trim(); if(!v) return;
+    say('You', v); input.value='';
+    const q=v.toLowerCase();
+
+    const coffeeKeys = ['coffee','café','cafe','latte','tea','brew','roast','ramon'];
+    if (coffeeKeys.some(k => q.includes(k))){
+      say('Mateo', `<div><strong>Ramon / Maya Nut Coffee</strong> = roasted <em>Brosimum alicastrum</em>—toasty, cocoa-caramel vibes, naturally caffeine-free. Try salt-roasted kernels, hot puffy tortillas, iced Maya Nut latte, or a soothing tea. ☕️🌰</div>`);
+      return;
+    }
+
+    const keys = ['mayanut','maya nut','ramon','breadnut','mayan breadnut','ojoche','oox','brosimum','alicastrum','brosimum alicastrum'];
+    if(!keys.some(k=> q.includes(k))){
+      const msgs=[
+        "I’m here for MayaNut™ topics—ask me about Brosimum alicastrum or our products!",
+        "Great question! I can help with MayaNut™—try asking about the tree, uses, or what we sell.",
+        "I’m focused on MayaNut™. Curious about cultivation, flavor, or saplings? I’ve got you!"
+      ];
+      say('Mateo', msgs[Math.floor(Math.random()*msgs.length)]);
+      return;
+    }
+
+    say('Mateo',"MayaNut™ (Brosimum alicastrum) is a resilient tropical tree—ask about nutrition, cultivation, roasting, or our saplings!");
+  }
+});
+
+/* ===== Mateo reactions: blink + head shake ===== */
+const mateoWrap = document.getElementById('mateoWrap');
+function triggerMateoReact(){
+  // Blink
+  const eyesGroup = document.getElementById('mnEyes');
+  eyesGroup.classList.add('blink-now');
+  // Shake
+  mateoSVG.classList.add('shake-side');
+
+  setTimeout(()=> eyesGroup.classList.remove('blink-now'), 220);
+  setTimeout(()=> mateoSVG.classList.remove('shake-side'), 500);
+}
+mateoWrap.addEventListener('click', triggerMateoReact);
+
+/* ===== BOUNCING BALL (index-only) ===== */
+(() => {
+  const canvas = document.getElementById('ballLayer');
+  const ctx = canvas.getContext('2d');
+  let W=innerWidth,H=innerHeight, DPR=1;
+
+  function resize(){
+    DPR = Math.max(1, Math.min(2, window.devicePixelRatio||1));
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    canvas.width = Math.round(W*DPR); canvas.height = Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function onResize(){ W=innerWidth; H=innerHeight; resize(); }
+  onResize(); addEventListener('resize', onResize);
+
+  // Ball state
+  const ball = {
+    x: W*0.7, y: H*0.35,
+    vx: 3.2, vy: 2.6,
+    r: 16,
+    squashT: 0, squashAxis: 'y'
+  };
+
+  // Utility to fetch collision rects for important boxes
+  function getRects(){
+    const els = [
+      document.querySelector('.topbar'),
+      document.getElementById('mateoWrap'),
+      document.getElementById('mateoBubble'),
+      document.querySelector('.chatbar'),
+      document.getElementById('chatLog'),
+      document.querySelector('.section')
+    ].filter(Boolean);
+    return els.map(el => el.getBoundingClientRect());
+  }
+
+  // Simple AABB vs circle collision
+  function collideCircleRect(cx,cy,r,rect){
+    const rx=rect.left, ry=rect.top, rw=rect.width, rh=rect.height;
+    const nx = Math.max(rx, Math.min(cx, rx+rw));
+    const ny = Math.max(ry, Math.min(cy, ry+rh));
+    const dx = cx - nx, dy = cy - ny;
+    return {hit: (dx*dx + dy*dy) <= r*r, nx, ny};
+  }
+
+  // Kick on click
+  canvas.addEventListener('click', (e)=>{
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const dx = mx - ball.x, dy = my - ball.y;
+    if (dx*dx + dy*dy <= (ball.r*ball.r)*1.3){
+      const mag = Math.max(4.5, Math.min(8, Math.hypot(dx,dy)/10));
+      const ang = Math.atan2(dy, dx);
+      ball.vx = Math.cos(ang) * mag;
+      ball.vy = Math.sin(ang) * mag;
+      ball.squashT = 10; ball.squashAxis='x';
+    }
+  });
+
+  // Change cursor near ball
+  canvas.addEventListener('mousemove', (e)=>{
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const d2 = (mx-ball.x)*(mx-ball.x) + (my-ball.y)*(my-ball.y);
+    canvas.classList.toggle('grab', d2 <= (ball.r*ball.r)*1.4);
+  });
+
+  function step(){
+    // Gravity-ish
+    ball.vy += 0.08;
+    // Move
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    // Window bounds
+    if (ball.x - ball.r < 0){ ball.x = ball.r; ball.vx = Math.abs(ball.vx)*0.98; hit('y'); }
+    if (ball.x + ball.r > W){ ball.x = W - ball.r; ball.vx = -Math.abs(ball.vx)*0.98; hit('y'); }
+    if (ball.y - ball.r < 0){ ball.y = ball.r; ball.vy = Math.abs(ball.vy)*0.98; hit('x'); }
+    if (ball.y + ball.r > H){ ball.y = H - ball.r; ball.vy = -Math.abs(ball.vy)*0.86; hit('x'); }
+
+    // Collide with boxes
+    const rects = getRects();
+    for(const r of rects){
+      const c = collideCircleRect(ball.x, ball.y, ball.r, r);
+      if (!c.hit) continue;
+
+      // determine normal
+      const centerX = r.left + r.width/2;
+      const centerY = r.top  + r.height/2;
+      const dx = (ball.x - centerX) / (r.width/2);
+      const dy = (ball.y - centerY) / (r.height/2);
+
+      if (Math.abs(dx) > Math.abs(dy)){
+        // hit left/right
+        if (dx < 0){ ball.x = r.left - ball.r - 0.5; }
+        else       { ball.x = r.right + ball.r + 0.5; }
+        ball.vx *= -0.95;
+        hit('y');
+      } else {
+        // hit top/bottom
+        if (dy < 0){ ball.y = r.top - ball.r - 0.5; }
+        else       { ball.y = r.bottom + ball.r + 0.5; }
+        ball.vy *= -0.9;
+        hit('x');
+      }
+
+      // If Mateo rect, trigger reaction
+      const mateoRect = document.getElementById('mateoWrap').getBoundingClientRect();
+      if (Math.abs(r.left - mateoRect.left) < 1 && Math.abs(r.top - mateoRect.top) < 1){
+        triggerMateoReact();
+        // give a little extra bounce off Mateo
+        ball.vx *= 1.05; ball.vy *= 1.05;
+      }
+    }
+
+    if (ball.squashT>0) ball.squashT--;
+  }
+
+  function hit(axis){
+    ball.squashT = 10;
+    ball.squashAxis = axis; // axis perpendicular to the surface
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Squash & stretch based on velocity & recent impacts
+    let sx=1, sy=1;
+    const speed = Math.hypot(ball.vx, ball.vy);
+    const stretch = Math.min(0.35, speed/20); // stretch factor
+    if (ball.squashT>0){
+      const t = ball.squashT/10;
+      const amt = (0.50* (1 - Math.abs(1-2*t))); // quick ease
+      if (ball.squashAxis==='x'){ sx = 1+amt; sy = 1-amt; }
+      else                       { sy = 1+amt; sx = 1-amt; }
+    } else {
+      // natural stretch along motion
+      const ang = Math.atan2(ball.vy, ball.vx);
+      // draw by rotating, then scale
+      ctx.save();
+      ctx.translate(ball.x, ball.y);
+      ctx.rotate(ang);
+      ctx.scale(1+stretch, 1-stretch);
+      renderBall(ctx, ball.r);
+      ctx.restore();
+      return;
+    }
+
+    // default draw without rotation (impact squash)
+    ctx.save();
+    ctx.translate(ball.x, ball.y);
+    ctx.scale(sx, sy);
+    renderBall(ctx, ball.r);
+    ctx.restore();
+  }
+
+  function renderBall(ctx, r){
+    // white glossy ball
+    const g = ctx.createRadialGradient(-r*0.3, -r*0.3, r*0.2, 0, 0, r);
+    g.addColorStop(0, 'rgba(255,255,255,0.95)');
+    g.addColorStop(1, 'rgba(240,240,240,0.9)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+
+    // tiny highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath(); ctx.arc(-r*0.4,-r*0.45,r*0.18,0,Math.PI*2); ctx.fill();
+  }
+
+  function loop(){ step(); draw(); requestAnimationFrame(loop); }
+  loop();
+})();
+</script>
 </body>
 </html>
