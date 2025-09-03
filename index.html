@@ -1,94 +1,251 @@
-<div class="mn-mascot" aria-hidden="true">
-  <svg viewBox="0 0 260 260" width="118" height="118" role="img">
-    <defs>
-      <!-- Orange body -->
-      <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
-        <stop offset="0%"  stop-color="#FFE3A6"/>
-        <stop offset="55%" stop-color="#FFB553"/>
-        <stop offset="100%" stop-color="#E88324"/>
-      </radialGradient>
-      <!-- Top red blush (inside only) -->
-      <radialGradient id="mnTopRed" cx="50%" cy="16%" r="38%">
-        <stop offset="0%"  stop-color="rgba(217,52,42,.45)"/>
-        <stop offset="100%" stop-color="rgba(217,52,42,0)"/>
-      </radialGradient>
-      <!-- Bottom green belly (inside only) -->
-      <radialGradient id="mnBelly" cx="50%" cy="84%" r="48%">
-        <stop offset="0%"  stop-color="rgba(110,180,105,.55)"/>
-        <stop offset="100%" stop-color="rgba(110,180,105,0)"/>
-      </radialGradient>
-      <!-- Stem -->
-      <linearGradient id="mnStem" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"  stop-color="#6ed17b"/>
-        <stop offset="100%" stop-color="#2e8a42"/>
-      </linearGradient>
-      <!-- Soft shadow -->
-      <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
-        <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/>
-      </filter>
-      <!-- Body clip to keep shading inside -->
-      <clipPath id="mnBodyClip">
-        <path id="mnBodyPath"
-          d="M130,36
-             C112,36  94,49  87,66
-             C80,83   78,94  74,112
-             C66,142  80,176 104,194
-             C118,204 142,204 156,194
-             C180,176 194,142 186,112
-             C182,94  180,83 173,66
-             C166,49  148,36 130,36 Z"/>
-      </clipPath>
-    </defs>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MayaNut</title>
+<style>
+  :root{
+    --ink:#eef3ff;
+    --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
+    --gold1:#fff0b5; --gold2:#ffd46b; --gold3:#f3ac3a;
+  }
 
-    <g class="mn-bob" transform="scale(1.06,1.0)" filter="url(#mnDrop)">
-      <!-- Body -->
-      <use href="#mnBodyPath" fill="url(#mnFruit)"/>
-      <g clip-path="url(#mnBodyClip)">
-        <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
-        <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
-      </g>
+  html,body{
+    height:100%; margin:0; color:var(--ink);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    background: linear-gradient(180deg, #0b1a0f 0%, #143821 40%, #0f2f1d 100%);
+    overflow-x:hidden;
+  }
 
-      <!-- Stem with flat base -->
-      <g class="mn-stem" transform="translate(0,-1)">
-        <rect x="104" y="44" width="52" height="10" fill="#2e8a42"/>
-        <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
-              fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
-        <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
-              stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
-      </g>
+  /* Gentle green “lava lamp” background (unchanged) */
+  .bg-blobs, .bg-blobs-2, .bg-blobs-3{
+    position:fixed; inset:-20% -20% -20% -20%;
+    z-index:-1; pointer-events:none; filter: blur(28px) saturate(118%);
+  }
+  .bg-blobs{
+    background:radial-gradient(35% 40% at 20% 25%, rgba(110,190,120,.35), transparent 60%),
+               radial-gradient(30% 35% at 75% 20%, rgba(165,230,170,.28), transparent 65%),
+               radial-gradient(28% 30% at 50% 60%, rgba(90,150,110,.32), transparent 60%);
+    animation: drift1 40s ease-in-out infinite;
+  }
+  .bg-blobs-2{
+    background:radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.30), transparent 60%),
+               radial-gradient(30% 34% at 75% 70%, rgba(125,200,140,.28), transparent 60%),
+               radial-gradient(22% 26% at 50% 40%, rgba(160,220,160,.25), transparent 60%);
+    animation: drift2 52s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  .bg-blobs-3{
+    background:radial-gradient(22% 26% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
+               radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
+    animation: drift3 60s ease-in-out infinite;
+    opacity:.9;
+  }
+  @keyframes drift1 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-22px,18px,0)}100%{transform:translate3d(0,0,0)}}
+  @keyframes drift2 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(28px,-16px,0)}100%{transform:translate3d(0,0,0)}}
+  @keyframes drift3 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-12px,12px,0)}100%{transform:translate3d(0,0,0)}}
 
-      <!-- MORE orange speckles (freckles) -->
-      <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.48)">
-        <!-- existing -->
-        <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="1.9"/>
-        <circle cx="150" cy="78" r="2.1"/><circle cx="166" cy="96" r="1.7"/>
-        <circle cx="100" cy="106" r="1.6"/><circle cx="130" cy="110" r="1.5"/>
-        <circle cx="142" cy="92" r="1.7"/><circle cx="118" cy="96" r="1.5"/>
-        <circle cx="156" cy="108" r="1.5"/><circle cx="122" cy="126" r="1.4"/>
-        <circle cx="146" cy="126" r="1.4"/><circle cx="106" cy="124" r="1.3"/>
-        <!-- added -->
-        <circle cx="135" cy="90"  r="1.8"/><circle cx="105" cy="140" r="1.6"/>
-        <circle cx="154" cy="136" r="1.7"/><circle cx="120" cy="150" r="1.5"/>
-        <circle cx="140" cy="152" r="1.6"/><circle cx="160" cy="118" r="1.4"/>
-        <circle cx="98"  cy="120" r="1.4"/><circle cx="170" cy="126" r="1.3"/>
-        <circle cx="130" cy="134" r="1.4"/><circle cx="112" cy="132" r="1.2"/>
-        <circle cx="148" cy="144" r="1.3"/><circle cx="124" cy="100" r="1.2"/>
-        <circle cx="136" cy="118" r="1.1"/><circle cx="108" cy="112" r="1.1"/>
-      </g>
+  /* Top bar + brand */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .brandLogo{display:block;height:28px;width:auto}
+  .nav{display:flex;gap:18px;align-items:center}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
+  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
-      <!-- Eyes: taller ovals, small pupils looking right -->
-      <g>
-        <ellipse cx="98"  cy="118" rx="16" ry="26" fill="#fff"/>
-        <ellipse cx="162" cy="118" rx="16" ry="26" fill="#fff"/>
-        <circle  cx="108" cy="120" r="7" fill="#000"/>
-        <circle  cx="172" cy="120" r="7" fill="#000"/>
-      </g>
+  /* Logo symbol (gold fade) */
+  svg defs linearGradient#mn-gold stop:nth-child(1){stop-color:var(--gold1)}
+  svg defs linearGradient#mn-gold stop:nth-child(2){stop-color:var(--gold2)}
+  svg defs linearGradient#mn-gold stop:nth-child(3){stop-color:var(--gold3)}
 
-      <!-- Tiny rounded U-smile (lower) -->
-      <path d="M108,166 Q130,186 152,166"
-            fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:94px;padding-bottom:80px}
+  .panel{width:min(980px,92vw);text-align:center}
 
-      <!-- Eyebrows REMOVED as requested -->
-    </g>
+  /* NEW: Row with Mateo + centered chat bar, nudged to the right */
+  .heroRow{
+    margin:8px auto 10px;
+    width:min(860px,92vw);
+    display:flex; align-items:center; justify-content:center;
+    gap:22px; padding-left:40px; /* “indented on the left” while still centered */
+  }
+  .mn-mascot{flex:0 0 auto}
+  .mn-mascot svg{width:168px; height:168px; /* bigger */ transform:scale(1.06,1.0);} /* slightly wider */
+
+  .chatbar{flex:1; display:flex; align-items:center; justify-content:center}
+  .chatbar input{
+    width:100%; height:46px; padding:12px 14px;
+    font-size:15px; color:#e9eeff; background:var(--inputBG);
+    border:1px solid var(--inputLine); border-radius:12px; outline:none;
+  }
+  .chatbar input::placeholder{color:#cfe8ff}
+  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
+
+  .log{width:min(860px,92vw);margin:12px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
+  .msg strong{color:#cfe1ff}
+</style>
+</head>
+<body>
+
+<div class="bg-blobs"></div>
+<div class="bg-blobs-2"></div>
+<div class="bg-blobs-3"></div>
+
+<!-- Gold logo symbol -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%"/>
+      <stop offset="50%"/>
+      <stop offset="100%"/>
+    </linearGradient>
+    <filter id="mn-shadow" x="-20%" y="-40%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.35)"/>
+    </filter>
+    <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
+      <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="180"
+            fill="url(#mn-gold)" filter="url(#mn-shadow)">MayaNut</text>
+      <text x="1040" y="98" font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="56"
+            fill="url(#mn-gold)" filter="url(#mn-shadow)">™</text>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="topbar" role="banner">
+  <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
+    <use href="#MayaNutLogo"></use>
   </svg>
-</div>
+  <nav class="nav" aria-label="Primary">
+    <a href="#home" id="navHome">Home</a>
+    <a href="#buy"  id="navBuy">Buy</a>
+    <a href="#about" id="navAbout">About</a>
+    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+  </nav>
+</header>
+
+<main id="home" class="stage">
+  <div class="panel">
+    <svg class="heroLogo" viewBox="0 0 1200 260" style="width:min(560px,80vw);margin:6px auto 2px;display:block">
+      <use href="#MayaNutLogo"></use>
+    </svg>
+
+    <!-- MATEO SVG (bigger + bottom eyelids for happy squint) + centered chat -->
+    <div class="heroRow">
+      <div class="mn-mascot" aria-hidden="true">
+        <svg viewBox="0 0 260 260" role="img">
+          <defs>
+            <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
+              <stop offset="0%"  stop-color="#FFE3A6"/>
+              <stop offset="55%" stop-color="#FFB553"/>
+              <stop offset="100%" stop-color="#E88324"/>
+            </radialGradient>
+            <radialGradient id="mnTopRed" cx="50%" cy="16%" r="38%">
+              <stop offset="0%"  stop-color="rgba(217,52,42,.45)"/>
+              <stop offset="100%" stop-color="rgba(217,52,42,0)"/>
+            </radialGradient>
+            <radialGradient id="mnBelly" cx="50%" cy="84%" r="48%">
+              <stop offset="0%"  stop-color="rgba(110,180,105,.55)"/>
+              <stop offset="100%" stop-color="rgba(110,180,105,0)"/>
+            </radialGradient>
+            <linearGradient id="mnStem" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"  stop-color="#6ed17b"/>
+              <stop offset="100%" stop-color="#2e8a42"/>
+            </linearGradient>
+            <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
+              <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/>
+            </filter>
+            <clipPath id="mnBodyClip">
+              <path id="mnBodyPath"
+                d="M130,36
+                   C112,36  94,49  87,66
+                   C80,83   78,94  74,112
+                   C66,142  80,176 104,194
+                   C118,204 142,204 156,194
+                   C180,176 194,142 186,112
+                   C182,94  180,83 173,66
+                   C166,49  148,36 130,36 Z"/>
+            </clipPath>
+            <!-- lower-half clips for eyelids -->
+            <clipPath id="lowerLeft"><rect x="82" y="118" width="32" height="28" /></clipPath>
+            <clipPath id="lowerRight"><rect x="146" y="118" width="32" height="28" /></clipPath>
+          </defs>
+
+          <g class="mn-bob" transform="scale(1.06,1.0)" filter="url(#mnDrop)">
+            <!-- Body + internal shading -->
+            <use href="#mnBodyPath" fill="url(#mnFruit)"/>
+            <g clip-path="url(#mnBodyClip)">
+              <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
+              <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
+            </g>
+
+            <!-- Stem (flat base) -->
+            <g class="mn-stem" transform="translate(0,-1)">
+              <rect x="104" y="44" width="52" height="10" fill="#2e8a42"/>
+              <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
+                    fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
+              <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
+                    stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
+            </g>
+
+            <!-- Freckles (a few more, slightly stronger) -->
+            <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.55)">
+              <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="1.9"/>
+              <circle cx="150" cy="78" r="2.1"/><circle cx="166" cy="96" r="1.7"/>
+              <circle cx="100" cy="106" r="1.6"/><circle cx="130" cy="110" r="1.5"/>
+              <circle cx="142" cy="92" r="1.7"/><circle cx="118" cy="96" r="1.5"/>
+              <circle cx="156" cy="108" r="1.5"/><circle cx="122" cy="126" r="1.4"/>
+              <circle cx="146" cy="126" r="1.4"/><circle cx="106" cy="124" r="1.3"/>
+              <circle cx="135" cy="90"  r="1.8"/><circle cx="105" cy="140" r="1.6"/>
+              <circle cx="154" cy="136" r="1.7"/><circle cx="120" cy="150" r="1.5"/>
+              <circle cx="140" cy="152" r="1.6"/><circle cx="160" cy="118" r="1.4"/>
+              <circle cx="98"  cy="120" r="1.4"/><circle cx="170" cy="126" r="1.3"/>
+            </g>
+
+            <!-- Eyes: wider spacing + happy lower eyelids -->
+            <g>
+              <!-- whites -->
+              <ellipse cx="96"  cy="118" rx="16" ry="26" fill="#fff"/>
+              <ellipse cx="164" cy="118" rx="16" ry="26" fill="#fff"/>
+              <!-- pupils (looking right a bit) -->
+              <circle  cx="106" cy="121" r="7" fill="#000"/>
+              <circle  cx="174" cy="121" r="7" fill="#000"/>
+              <!-- lower eyelids (orange) clipped to bottom halves -->
+              <ellipse cx="96"  cy="126" rx="16" ry="20" fill="#FFB553" clip-path="url(#lowerLeft)"/>
+              <ellipse cx="164" cy="126" rx="16" ry="20" fill="#FFB553" clip-path="url(#lowerRight)"/>
+            </g>
+
+            <!-- Tiny rounded U-smile (lower) -->
+            <path d="M108,166 Q130,186 152,166"
+                  fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="chatbar">
+        <input id="chatInput" placeholder="Ask about MayaNut™ or our products" />
+      </div>
+    </div>
+
+    <div class="log" id="chatLog" aria-live="polite"></div>
+  </div>
+</main>
+
+<script>
+  // Minimal chat handler (unchanged)
+  const input=document.getElementById('chatInput');
+  const logBox=document.getElementById('chatLog');
+  function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'){const t=input.value.trim();if(!t)return;say('You',t);input.value='';say('MayaNut',"I'm here to help with questions about MayaNut™ and our products!");}});
+
+  // Smooth anchor scrolling
+  ['navHome','navBuy','navAbout'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.addEventListener('click', e=>{e.preventDefault(); const target=el.getAttribute('href').replace('#',''); document.getElementById(target).scrollIntoView({behavior:'smooth'});});
+  });
+</script>
+</body>
+</html>
