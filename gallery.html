@@ -12,20 +12,14 @@
 <style>
   :root{
     --ink:#eef3ff;
-    --panel:rgba(12,16,34,.55);
-    --line:rgba(255,255,255,.12);
-    --inputBG:rgba(255,255,255,.08);
-    --inputLine:rgba(255,255,255,.22);
+    --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
 
     /* Shiny gold logo gradient (top light → bottom darker) */
-    --gold-top:#ffe992;
-    --gold-mid:#ffc44d;
-    --gold-low:#e79a21;
-    --gold-deep:#c97a11;
+    --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
 
-    /* Card color (used by About + common question boxes) */
-    --cardBG: rgba(8,12,30,.50);
-    --cardBorder: var(--line);
+    /* Card color (About + common questions) */
+    --cardBG: rgba(8,12,30,.50); --cardBorder: var(--line);
   }
 
   html,body{
@@ -77,22 +71,19 @@
 
   .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 14px}
 
-  /* Row: bubble + Mateo (centered) */
+  /* Mateo + centered chat row
+     Grid keeps input truly centered by using a right "ghost" spacer */
   .introRow{
-    display:flex; align-items:center; justify-content:center; gap:14px;
-    width:min(820px,94vw); margin:0 auto 10px;
+    display:grid; grid-template-columns:160px 1fr 160px; align-items:center;
+    width:min(820px,94vw); margin:0 auto 10px; gap:14px;
   }
-  .bubble{
-    color:#0a1220; background:#fff; border-radius:16px; padding:12px 14px;
-    font-weight:600; line-height:1.25; box-shadow:0 8px 18px rgba(0,0,0,.18);
-    max-width:280px; text-align:left;
-  }
-  .plushyWrap{width:160px; display:flex; align-items:center; justify-content:center}
-  .plushy{width:100%; height:auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); animation: bob 3.6s ease-in-out infinite;}
+  .plushyWrap{grid-column:1; display:flex; align-items:center; justify-content:center}
+  .ghostSpacer{grid-column:3;} /* empty spacer to balance Mateo's width */
+
+  .plushy{width:160px; height:auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,.35)); animation: bob 3.6s ease-in-out infinite;}
   @keyframes bob { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
 
-  /* Search bar under the intro row, same width */
-  .searchWrap{width:min(820px,94vw); margin:0 auto;}
+  .searchWrap{grid-column:2; width:100%;}
   .chatbar{display:flex; align-items:center;}
   .chatbar input{flex:1;height:46px;padding:12px 14px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
   .chatbar input::placeholder{color:#cfe8ff}
@@ -102,7 +93,7 @@
   .msg{text-align:left;margin:6px 0;color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
-  /* Common questions row (under chat log) same style as About card */
+  /* Common questions row */
   .quickRow{
     width:min(820px,94vw); margin:14px auto 0;
     display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
@@ -114,7 +105,7 @@
   }
   .quick:hover{ transform: translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); }
 
-  /* About card (index only): same style as quick cards */
+  /* About card (index only) */
   .section{width:min(980px,94vw);margin:24px auto 0;background:var(--cardBG);border:1px solid var(--cardBorder);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
   .section p{margin:0;color:#cfe9ff}
 
@@ -123,7 +114,7 @@
   .ig-link svg{transition:transform .2s ease,filter .2s ease}
   .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 
-  /* Mateo react classes */
+  /* Mateo reactions */
   .shake-side { animation: shakeX .45s cubic-bezier(.36,.07,.19,.97) both; }
   @keyframes shakeX {
     10%, 90% { transform: translateX(-1px); }
@@ -131,27 +122,25 @@
     30%, 50%, 70% { transform: translateX(-4px); }
     40%, 60% { transform: translateX(4px); }
   }
-  .blink-now ellipse,
-  .blink-now circle { animation: blinkQuick .18s linear 1; transform-origin:center; }
-  @keyframes blinkQuick { 0% { transform: scaleY(1); } 50% { transform: scaleY(0.08); } 100% { transform: scaleY(1); } }
+  .blink-now .blinkScale { animation: blinkQuick .18s linear 1; transform-origin:center; }
+  @keyframes blinkQuick { 0% { transform: scaleY(1); } 50% { transform: scaleY(0.06); } 100% { transform: scaleY(1); } }
 
-  /* Bouncing ball canvas sits above content but under header */
-  #ballLayer{
-    position:fixed; inset:0; z-index:25; pointer-events:auto;
-  }
+  /* Bouncing ball canvas (index-only) */
+  #ballLayer{ position:fixed; inset:0; z-index:25; pointer-events:auto; }
   #ballLayer.grab { cursor: pointer; }
 </style>
 </head>
 <body>
 
-<!-- Animated background layers -->
+<!-- Animated background -->
 <div class="bg-layer bg1"></div>
 <div class="bg-layer bg2"></div>
 <div class="bg-layer bg3"></div>
 
-<!-- Shared logo symbol -->
+<!-- Shared logo + Mateo symbols -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
+    <!-- Logo -->
     <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%"  stop-color="var(--gold-top)"/>
       <stop offset="55%" stop-color="var(--gold-mid)"/>
@@ -169,7 +158,7 @@
       </text>
     </symbol>
 
-    <!-- === MATEO SYMBOL === -->
+    <!-- === MATEO SYMBOL (with upper eyelids) === -->
     <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%">
       <stop offset="0%"  stop-color="#FFB39A"/>   <!-- redder top -->
       <stop offset="55%" stop-color="#FF993D"/>   <!-- orange mid -->
@@ -214,7 +203,7 @@
           <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
         </g>
 
-        <!-- Thinner stem only -->
+        <!-- Thinner stem -->
         <g class="mn-stem">
           <path d="M128,28 c 8,-2 18,0 24,6 c-6,6 -10,16 -12,26 h-16 c 2,-12 3,-20 4,-32 z"
                 fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
@@ -222,7 +211,7 @@
                 stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
         </g>
 
-        <!-- MANY freckles -->
+        <!-- Many freckles -->
         <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.65)">
           <circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="2.0"/>
           <circle cx="150" cy="78" r="2.2"/><circle cx="166" cy="96" r="2.0"/>
@@ -239,21 +228,18 @@
           <circle cx="138" cy="120" r="1.4"/><circle cx="116" cy="140" r="1.4"/>
         </g>
 
-        <!-- Eyes (with bottom eyelids same skin tone area) -->
-        <g id="mnEyes">
+        <!-- Eyes (white ovals + pupils; eyelids added below) -->
+        <g id="mnEyes" class="blinkScale">
           <ellipse id="eyeL" cx="98"  cy="118" rx="16" ry="26" fill="#fff"/>
           <ellipse id="eyeR" cx="162" cy="118" rx="16" ry="26" fill="#fff"/>
           <circle id="pupilL" cx="98"  cy="112" r="7" fill="#000"/>
           <circle id="pupilR" cx="162" cy="112" r="7" fill="#000"/>
+        </g>
 
-          <clipPath id="clipEyeL"><ellipse cx="98"  cy="118" rx="16" ry="26"/></clipPath>
-          <clipPath id="clipEyeR"><ellipse cx="162" cy="118" rx="16" ry="26"/></clipPath>
-          <g clip-path="url(#clipEyeL)">
-            <path d="M82,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/>
-          </g>
-          <g clip-path="url(#clipEyeR)">
-            <path d="M146,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/>
-          </g>
+        <!-- Upper eyelids (subtle arcs in body colors) -->
+        <g opacity=".85">
+          <path d="M82,110 q16,-10 32,0" fill="none" stroke="url(#mnFruit)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M146,110 q16,-10 32,0" fill="none" stroke="url(#mnFruit)" stroke-width="8" stroke-linecap="round"/>
         </g>
 
         <!-- Smile -->
@@ -283,27 +269,27 @@
       <use href="#MayaNutLogo"></use>
     </svg>
 
-    <!-- Mateo + bubble -->
+    <!-- Mateo (left) + truly centered chat -->
     <div class="introRow">
-      <div class="bubble" id="mateoBubble">Welcome to MayaNut.com — I’m Mateo the MayaNut! 🌿</div>
       <div class="plushyWrap" id="mateoWrap" aria-hidden="false" role="img" aria-label="Mateo the MayaNut">
         <svg class="plushy" id="mateoSVG" viewBox="0 0 260 260" width="160" height="160">
           <use href="#MateoMascot"></use>
         </svg>
       </div>
-    </div>
 
-    <!-- Search bar (under Mateo + bubble), same width -->
-    <div class="searchWrap">
-      <div class="chatbar" role="search">
-        <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
+      <div class="searchWrap">
+        <div class="chatbar" role="search">
+          <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
+        </div>
       </div>
+
+      <div class="ghostSpacer"></div>
     </div>
 
     <!-- Chat log -->
     <div class="log" id="chatLog" aria-live="polite"></div>
 
-    <!-- Common questions (under chat log) -->
+    <!-- Common questions -->
     <div class="quickRow">
       <button class="quick" id="qWhat">What is MayaNut?</button>
       <a class="quick" id="qBuy" href="buy.html">Buy Our Products</a>
@@ -321,7 +307,7 @@
   © 2025 MayaNut LLC. All rights reserved.
   <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/>
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
     </svg>
   </a>
 </footer>
@@ -330,20 +316,7 @@
 <canvas id="ballLayer" aria-hidden="true"></canvas>
 
 <script>
-/* ===== Welcome bubble variations ===== */
-const bubble = document.getElementById('mateoBubble');
-const welcomes = [
-  "Welcome to MayaNut.com — I’m Mateo the MayaNut! 🌿",
-  "Hey! I’m Mateo the MayaNut—bringing an ancient superfood to South Florida!",
-  "Hola! Mateo the MayaNut here—ask me anything about MayaNut™.",
-  "Hi, I’m Mateo the MayaNut—let’s talk Brosimum alicastrum!",
-  "Welcome! Mateo the MayaNut reporting for tasty duty 🍃",
-  "Mateo the MayaNut: ancient flavor, modern farming—ask away!"
-];
-bubble.textContent = welcomes[Math.floor(Math.random()*welcomes.length)];
-
 /* ===== Pupils follow cursor (subtle) ===== */
-function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
 const mateoSVG = document.getElementById('mateoSVG');
 const pupilL = mateoSVG.getElementById('pupilL');
 const pupilR = mateoSVG.getElementById('pupilR');
@@ -352,11 +325,9 @@ const eyeR   = mateoSVG.getElementById('eyeR');
 
 function movePupils(e){
   const rect = mateoSVG.getBoundingClientRect();
-  if (e.clientX < rect.left-200 || e.clientX > rect.right+200 ||
-      e.clientY < rect.top-200 || e.clientY > rect.bottom+200) return;
-
   const mx = e.clientX - rect.left;
   const my = e.clientY - rect.top;
+  if (mx < -200 || mx > rect.width+200 || my < -200 || my > rect.height+200) return;
 
   function steer(eye, pupil){
     const cx = +eye.getAttribute('cx');
@@ -378,7 +349,28 @@ function movePupils(e){
 }
 window.addEventListener('mousemove', movePupils);
 
-/* ===== Chat logic (minimal + coffee training) ===== */
+/* ===== Random blink every 5–10s + click reaction ===== */
+const eyesGroup = mateoSVG.getElementById('mnEyes');
+const mateoWrap = document.getElementById('mateoWrap');
+
+function blinkOnce(){
+  eyesGroup.classList.add('blink-now');
+  setTimeout(()=> eyesGroup.classList.remove('blink-now'), 220);
+}
+function scheduleBlink(){
+  const delay = 5000 + Math.random()*5000; // 5–10s
+  setTimeout(()=>{ blinkOnce(); scheduleBlink(); }, delay);
+}
+scheduleBlink();
+
+function triggerMateoReact(){
+  blinkOnce();
+  mateoSVG.classList.add('shake-side');
+  setTimeout(()=> mateoSVG.classList.remove('shake-side'), 500);
+}
+mateoWrap.addEventListener('click', triggerMateoReact);
+
+/* ===== Chat logic (minimal + coffee training + on-topic guard) ===== */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 function say(role, html){
@@ -419,17 +411,6 @@ document.getElementById('qWhat').addEventListener('click', ()=>{
 });
 /* qBuy is a link; qIG is a link */
 
-/* ===== Mateo reactions: blink + head shake ===== */
-const mateoWrap = document.getElementById('mateoWrap');
-function triggerMateoReact(){
-  const eyesGroup = mateoSVG.getElementById('mnEyes');
-  eyesGroup.classList.add('blink-now');
-  mateoSVG.classList.add('shake-side');
-  setTimeout(()=> eyesGroup.classList.remove('blink-now'), 220);
-  setTimeout(()=> mateoSVG.classList.remove('shake-side'), 500);
-}
-mateoWrap.addEventListener('click', triggerMateoReact);
-
 /* ===== BOUNCING BALL (index-only) ===== */
 (() => {
   const canvas = document.getElementById('ballLayer');
@@ -451,7 +432,6 @@ mateoWrap.addEventListener('click', triggerMateoReact);
     const els = [
       document.querySelector('.topbar'),
       document.getElementById('mateoWrap'),
-      document.getElementById('mateoBubble'),
       document.querySelector('.searchWrap'),
       document.getElementById('chatLog'),
       document.querySelector('.section'),
@@ -506,25 +486,20 @@ mateoWrap.addEventListener('click', triggerMateoReact);
       const c = collideCircleRect(ball.x, ball.y, ball.r, r);
       if (!c.hit) continue;
 
-      // Simple reflection by comparing center offsets
+      // Reflect by comparing center offsets
       const centerX = r.left + r.width/2;
       const centerY = r.top  + r.height/2;
       const dx = (ball.x - centerX) / (r.width/2);
       const dy = (ball.y - centerY) / (r.height/2);
 
       if (Math.abs(dx) > Math.abs(dy)){
-        // left/right sides
-        ball.vx *= -0.95;
-        impact('y');
+        ball.vx *= -0.95; impact('y');
         ball.x += (dx<0 ? -1 : 1) * (ball.r+2);
       } else {
-        // top/bottom
-        ball.vy *= -0.9;
-        impact('x');
+        ball.vy *= -0.9;  impact('x');
         ball.y += (dy<0 ? -1 : 1) * (ball.r+2);
       }
 
-      // Mateo reaction if we hit his rect
       if (Math.abs(r.left - mateoRect.left) < 1 && Math.abs(r.top - mateoRect.top) < 1){
         triggerMateoReact();
         ball.vx *= 1.05; ball.vy *= 1.05;
@@ -534,10 +509,7 @@ mateoWrap.addEventListener('click', triggerMateoReact);
     if (ball.squashT>0) ball.squashT--;
   }
 
-  function impact(axis){
-    ball.squashT = 10;
-    ball.squashAxis = axis;
-  }
+  function impact(axis){ ball.squashT = 10; ball.squashAxis = axis; }
 
   function draw(){
     ctx.clearRect(0,0,W,H);
@@ -547,22 +519,12 @@ mateoWrap.addEventListener('click', triggerMateoReact);
       const t = ball.squashT/10;
       const amt = 0.5*Math.sin(t*Math.PI);
       if (ball.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
-      ctx.save();
-      ctx.translate(ball.x, ball.y);
-      ctx.scale(sx, sy);
-      renderBall(ctx, ball.r);
-      ctx.restore();
+      ctx.save(); ctx.translate(ball.x, ball.y); ctx.scale(sx, sy); renderBall(ctx, ball.r); ctx.restore();
     } else {
-      // motion stretch
       const speed = Math.hypot(ball.vx, ball.vy);
       const stretch = Math.min(0.35, speed/22);
       const ang = Math.atan2(ball.vy, ball.vx);
-      ctx.save();
-      ctx.translate(ball.x, ball.y);
-      ctx.rotate(ang);
-      ctx.scale(1+stretch, 1-stretch);
-      renderBall(ctx, ball.r);
-      ctx.restore();
+      ctx.save(); ctx.translate(ball.x, ball.y); ctx.rotate(ang); ctx.scale(1+stretch, 1-stretch); renderBall(ctx, ball.r); ctx.restore();
     }
   }
 
@@ -572,15 +534,8 @@ mateoWrap.addEventListener('click', triggerMateoReact);
     g.addColorStop(1, 'rgba(240,240,240,0.92)');
     ctx.fillStyle = g;
     ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
-
-    // outline to keep visible on any background
-    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // highlight
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.beginPath(); ctx.arc(-r*0.4,-r*0.45,r*0.18,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.beginPath(); ctx.arc(-r*0.4,-r*0.45,r*0.18,0,Math.PI*2); ctx.fill();
   }
 
   function loop(){ step(); draw(); requestAnimationFrame(loop); }
