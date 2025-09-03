@@ -9,86 +9,72 @@
 <style>
   :root{ --ink:#eef3ff; --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
          --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11; }
-  html,body{height:100%;margin:0;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;background:linear-gradient(180deg,#0b1a0f 0%,#143821 42%,#0f2f1d 100%);overflow-x:hidden}
-  .bg{position:fixed;inset:-25% -25% -25% -25%;z-index:-1;filter:blur(28px) saturate(118%);pointer-events:none}
-  .one{background:radial-gradient(38% 40% at 20% 25%, rgba(110,190,120,.32), transparent 60%), radial-gradient(30% 36% at 78% 22%, rgba(165,230,170,.28), transparent 65%), radial-gradient(22% 28% at 52% 58%, rgba(90,150,110,.30), transparent 60%);animation:a1 44s ease-in-out infinite}
-  .two{background:radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.28), transparent 60%), radial-gradient(28% 34% at 76% 72%, rgba(125,200,140,.26), transparent 60%), radial-gradient(22% 26% at 45% 38%, rgba(160,220,160,.22), transparent 60%);animation:a2 52s ease-in-out infinite;mix-blend-mode:screen}
-  .thr{background:radial-gradient(22% 28% at 35% 10%, rgba(185,255,185,.18), transparent 60%), radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.20), transparent 60%), radial-gradient(24% 32% at 50% 80%, rgba(60,120,80,.18), transparent 60%);animation:a3 60s ease-in-out infinite;opacity:.95}
-  @keyframes a1{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-34px,28px) scale(1.04)}100%{transform:translate(0,0) scale(1)}}
-  @keyframes a2{0%{transform:translate(0,0) scale(1.02)}50%{transform:translate(36px,-22px) scale(1.06)}100%{transform:translate(0,0) scale(1.02)}}
-  @keyframes a3{0%{transform:translate(0,0)}50%{transform:translate(-20px,20px)}100%{transform:translate(0,0)}}
-
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
-  .brandLogo{height:32px;width:auto}
-  .nav{display:flex;gap:18px;align-items:center}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
-  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
-
-  .wrap{max-width:900px;margin:120px auto 40px;padding:0 16px}
-  .title{display:block;width:min(560px,80vw);margin:0 auto 14px}
-  .section{background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
-  .section h1{margin:0 0 8px;color:#fff;font-size:28px}
-  .section p{margin:8px 0 0;color:#cfe9ff;line-height:1.6}
-
-  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;position:relative}
-  .ig-link{position:absolute;right:72px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px}
-  .ig-link svg{transition:transform .2s ease,filter .2s ease}
-  .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+  html,body{height:100%;margin:0;color:var(--ink);font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#0b1a0f 0%,#143821 42%,#0f2f1d 100%)}
+  .bg{position:fixed;inset:-25%;z-index:-1;filter:blur(28px) saturate(118%);background:
+      radial-gradient(38% 40% at 20% 25%, rgba(110,190,120,.32), transparent 60%),
+      radial-gradient(30% 36% at 78% 22%, rgba(165,230,170,.28), transparent 65%),
+      radial-gradient(22% 28% at 52% 58%, rgba(90,150,110,.30), transparent 60%);
+      animation:float 48s ease-in-out infinite}
+  @keyframes float{50%{transform:translate(24px,-18px) scale(1.04)}}
+  .top{position:fixed;inset:0 auto auto 0;right:0;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px)}
+  .brand{height:32px}
+  .nav a{color:var(--ink);text-decoration:none;margin-left:16px}
+  main{padding:96px 16px 36px;display:grid;grid-template-columns:1fr auto;gap:18px;max-width:1000px;margin:0 auto}
+  .card{background:rgba(8,12,30,.52);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .mateo{width:160px;height:auto;align-self:start;position:sticky;top:96px;filter:drop-shadow(0 6px 12px rgba(0,0,0,.35))}
 </style>
 </head>
 <body>
-<div class="bg one"></div><div class="bg two"></div><div class="bg thr"></div>
+<div class="bg"></div>
 
-<!-- Shared logo symbol -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
-    <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0%"  stop-color="var(--gold-top)"/>
-      <stop offset="55%" stop-color="var(--gold-mid)"/>
-      <stop offset="85%" stop-color="var(--gold-low)"/>
-      <stop offset="100%" stop-color="var(--gold-deep)"/>
+    <linearGradient id="LogoGoldA" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%"  stop-color="var(--gold-top)"/><stop offset="55%" stop-color="var(--gold-mid)"/>
+      <stop offset="85%" stop-color="var(--gold-low)"/><stop offset="100%" stop-color="var(--gold-deep)"/>
     </linearGradient>
-    <filter id="LogoShadow" x="-20%" y="-40%" width="140%" height="200%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.45)"/>
-    </filter>
-    <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
-      <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
-            font-weight="900" font-size="180"
-            fill="url(#LogoGold)" filter="url(#LogoShadow)">
-        MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
-      </text>
+    <filter id="LogoShadowA"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.45)"/></filter>
+    <symbol id="LogoA" viewBox="0 0 1200 260"><text x="40" y="180" font-family="Poppins,Inter" font-weight="900" font-size="180" fill="url(#LogoGoldA)" filter="url(#LogoShadowA)">MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan></text></symbol>
+
+    <!-- reuse Mateo from index (same ids) -->
+    <radialGradient id="mnFruit" cx="42%" cy="34%" r="70%"><stop offset="0%" stop-color="#FFB39A"/><stop offset="55%" stop-color="#FF993D"/><stop offset="100%" stop-color="#6DAF67"/></radialGradient>
+    <radialGradient id="mnBelly" cx="50%" cy="87%" r="48%"><stop offset="0%" stop-color="rgba(100,165,95,.28)"/><stop offset="100%" stop-color="rgba(100,165,95,0)"/></radialGradient>
+    <radialGradient id="mnTopRed" cx="50%" cy="15%" r="38%"><stop offset="0%" stop-color="rgba(217,52,42,.35)"/><stop offset="100%" stop-color="rgba(217,52,42,0)"/></radialGradient>
+    <linearGradient id="mnStem" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#6ed17b"/><stop offset="100%" stop-color="#2e8a42"/></linearGradient>
+    <filter id="mnDrop"><feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/></filter>
+    <symbol id="MateoMascot" viewBox="0 0 260 260">
+      <defs><clipPath id="mnBodyClip"><path id="mnBodyPath" d="M130,36 C112,36 94,49 87,66 C80,83 78,94 74,112 C66,142 80,176 104,194 C118,204 142,204 156,194 C180,176 194,142 186,112 C182,94 180,83 173,66 C166,49 148,36 130,36 Z"/></clipPath></defs>
+      <g filter="url(#mnDrop)" transform="scale(1.06,1.0)">
+        <use href="#mnBodyPath" fill="url(#mnFruit)"/>
+        <g clip-path="url(#mnBodyClip)"><rect width="260" height="260" fill="url(#mnTopRed)"/><rect width="260" height="260" fill="url(#mnBelly)"/></g>
+        <g><path d="M128,28 c 8,-2 18,0 24,6 c-6,6 -10,16 -12,26 h-16 c 2,-12 3,-20 4,-32 z" fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/></g>
+        <g clip-path="url(#mnBodyClip)" fill="rgba(255,175,80,.65)"><circle cx="94" cy="88" r="2.2"/><circle cx="112" cy="80" r="2.0"/><circle cx="150" cy="78" r="2.2"/><circle cx="166" cy="96" r="2.0"/><circle cx="100" cy="106" r="2.0"/><circle cx="130" cy="110" r="1.9"/><circle cx="142" cy="92" r="2.1"/><circle cx="118" cy="96" r="1.8"/><circle cx="156" cy="108" r="2.0"/><circle cx="122" cy="126" r="1.9"/><circle cx="146" cy="126" r="1.9"/><circle cx="106" cy="124" r="1.9"/></g>
+        <g id="mnEyes"><ellipse id="eyeL" cx="98" cy="118" rx="16" ry="26" fill="#fff"/><ellipse id="eyeR" cx="162" cy="118" rx="16" ry="26" fill="#fff"/><circle id="pupilL" cx="98" cy="112" r="7" fill="#000"/><circle id="pupilR" cx="162" cy="112" r="7" fill="#000"/><clipPath id="clipEyeL"><ellipse cx="98" cy="118" rx="16" ry="26"/></clipPath><clipPath id="clipEyeR"><ellipse cx="162" cy="118" rx="16" ry="26"/></clipPath><g clip-path="url(#clipEyeL)"><path d="M82,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/></g><g clip-path="url(#clipEyeR)"><path d="M146,128 q16,12 32,0 v18 h-32z" fill="url(#mnFruit)" opacity=".75"/></g></g>
+        <path d="M108,166 Q130,186 152,166" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
     </symbol>
   </defs>
 </svg>
 
-<header class="topbar" role="banner">
+<header class="top">
   <a href="index.html" aria-label="MayaNut home">
-    <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
+    <svg class="brand" viewBox="0 0 1200 260"><use href="#LogoA"></use></svg>
   </a>
-  <nav class="nav" aria-label="Primary">
-    <a href="index.html">Home</a>
-    <a href="buy.html">Buy</a>
-    <a href="about.html" style="background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22);">About</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+  <nav class="nav">
+    <a href="index.html">Home</a><a href="buy.html">Buy</a><a href="about.html">About</a><a href="gallery.html">Gallery</a>
   </nav>
 </header>
 
-<div class="wrap">
-  <svg class="title" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
-  <div class="section">
-    <h1>About</h1>
-    <p><strong>MayaNut LLC</strong> is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. We promote resilient agroforestry, seed conservation, and regenerative nutrition for communities and ecosystems alike. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
-  </div>
-</div>
+<main>
+  <section class="card">
+    <h2>About</h2>
+    <p><strong>MayaNut LLC</strong> is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. August Kokus is the founder and current CEO of MayaNut™.</p>
+    <p>We promote regenerative agroforestry, conserve threatened genetics, and are introducing this ancient superfood to modern American agriculture.</p>
+  </section>
 
-<footer>
-  © 2025 MayaNut LLC. All rights reserved.
-  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
-    </svg>
-  </a>
-</footer>
+  <aside>
+    <svg class="mateo" viewBox="0 0 260 260" aria-hidden="true"><use href="#MateoMascot"></use></svg>
+  </aside>
+</main>
 </body>
 </html>
