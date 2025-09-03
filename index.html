@@ -26,7 +26,7 @@
       <filter id="mnDrop" x="-40%" y="-40%" width="180%" height="180%">
         <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="rgba(0,0,0,.25)"/>
       </filter>
-      <!-- Body clip keeps all tints/shades INSIDE the fruit -->
+      <!-- Body clip to keep shading inside -->
       <clipPath id="mnBodyClip">
         <path id="mnBodyPath"
           d="M130,36
@@ -40,24 +40,19 @@
       </clipPath>
     </defs>
 
-    <!-- Slight horizontal widen for cuteness -->
     <g class="mn-bob" transform="scale(1.06,1.0)" filter="url(#mnDrop)">
-      <!-- Fruit body (top slightly tapered toward stem) -->
+      <!-- Body -->
       <use href="#mnBodyPath" fill="url(#mnFruit)"/>
-
-      <!-- Color tints *inside body only* -->
       <g clip-path="url(#mnBodyClip)">
         <rect x="0" y="0" width="260" height="260" fill="url(#mnTopRed)"/>
         <rect x="0" y="0" width="260" height="260" fill="url(#mnBelly)"/>
       </g>
 
-      <!-- Stem with flat base connected to fruit -->
+      <!-- Stem with flat base -->
       <g class="mn-stem" transform="translate(0,-1)">
-        <!-- flat base band -->
         <rect x="104" y="44" width="52" height="10" fill="#2e8a42"/>
-        <!-- stem -->
         <path d="M128,22 c 10,-2 22,0 28,6 c-6,6 -12,16 -14,26 h-18 c 2,-10 4,-18 4,-32 z"
-              fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3" />
+              fill="url(#mnStem)" stroke="#1f6f34" stroke-width="3"/>
         <path d="M146,28 c-6,6 -10,12 -12,22" fill="none"
               stroke="rgba(255,255,255,.35)" stroke-linecap="round" stroke-width="2"/>
       </g>
@@ -72,21 +67,26 @@
         <circle cx="146" cy="126" r="1.4"/><circle cx="106" cy="124" r="1.3"/>
       </g>
 
-      <!-- Eyes (bigger whites, small black pupils looking right) -->
+      <!-- Eyes: taller ovals, small pupils looking right -->
       <g>
-        <ellipse cx="98"  cy="114" rx="19" ry="24" fill="#fff"/>
-        <ellipse cx="162" cy="114" rx="19" ry="24" fill="#fff"/>
-        <circle  cx="108" cy="116" r="7.5" fill="#000"/>
-        <circle  cx="172" cy="116" r="7.5" fill="#000"/>
+        <ellipse cx="98"  cy="118" rx="16" ry="26" fill="#fff"/>
+        <ellipse cx="162" cy="118" rx="16" ry="26" fill="#fff"/>
+        <circle  cx="108" cy="120" r="7" fill="#000"/>
+        <circle  cx="172" cy="120" r="7" fill="#000"/>
       </g>
 
-      <!-- Cute tiny U-shaped smile -->
-      <path d="M120,152 q10,12 20,0" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+      <!-- Tiny rounded U-smile (lower) -->
+      <path d="M108,166 Q130,186 152,166"
+            fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 
-      <!-- Friendly eyebrows ABOVE fruit (not touching), tilted up -->
-      <g transform="translate(0,-8)">
-        <path d="M82,86 q18,-16 36,0"  fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
-        <path d="M146,84 q18,-16 36,0" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/>
+      <!-- Eyebrows: forward-slash style, rotated 20° clockwise -->
+      <g>
+        <!-- Left eyebrow -->
+        <rect x="72" y="82" width="42" height="6" rx="3" fill="#000"
+              transform="rotate(20 93 85)"/>
+        <!-- Right eyebrow -->
+        <rect x="136" y="80" width="42" height="6" rx="3" fill="#000"
+              transform="rotate(20 157 83)"/>
       </g>
     </g>
   </svg>
