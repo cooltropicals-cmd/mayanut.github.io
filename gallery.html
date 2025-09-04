@@ -3,180 +3,66 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MayaNut</title>
+<title>Gallery – MayaNut</title>
 
-<!-- (Optional) Favicon kept as before; remove if you already include elsewhere -->
 <link rel="icon" type="image/svg+xml"
   href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffe992'/%3E%3Cstop offset='55%25' stop-color='%23ffc44d'/%3E%3Cstop offset='100%25' stop-color='%23c97a11'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%23152b1b'/%3E%3Ctext x='50%25' y='50%25' dy='.36em' text-anchor='middle' font-family='Poppins, Arial, sans-serif' font-weight='900' font-size='30' fill='url(%23g)'>MN%3C/text%3E%3C/svg%3E" />
 
 <style>
-  :root{
-    --ink:#eef3ff;
-    --panel:rgba(12,16,34,.55);
-    --line:rgba(255,255,255,.12);
-    --inputBG:rgba(255,255,255,.08);
-    --inputLine:rgba(255,255,255,.22);
-
-    /* Gold wordmark gradient (top → bottom) */
-    --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
-  }
-
-  html,body{
-    height:100%; margin:0; color:var(--ink);
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
-    display:flex; flex-direction:column; min-height:100%;
-    background: linear-gradient(180deg, #0b1a0f 0%, #143821 42%, #0f2f1d 100%);
-    overflow-x:hidden;
-  }
-
-  /* ===== BIGGER, FASTER, SOFT “LAVA LAMP” GREENS ===== */
-  .bg-layer{
-    position:fixed; inset:-28% -28% -28% -28%;
-    z-index:-1; pointer-events:none; filter: blur(40px) saturate(120%);
-  }
-  .bg1{
-    background:
-      radial-gradient(48% 52% at 18% 22%, rgba(45,115,70,.45), transparent 62%),
-      radial-gradient(40% 42% at 70% 20%, rgba(25,85,55,.40), transparent 62%),
-      radial-gradient(36% 40% at 50% 68%, rgba(20,60,40,.36), transparent 60%);
-    animation: drift1 30s ease-in-out infinite;
-  }
-  .bg2{
-    background:
-      radial-gradient(42% 46% at 20% 80%, rgba(70,150,95,.38), transparent 60%),
-      radial-gradient(36% 40% at 78% 74%, rgba(30,100,60,.34), transparent 60%),
-      radial-gradient(34% 38% at 46% 38%, rgba(15,50,35,.30), transparent 60%);
-    animation: drift2 36s ease-in-out infinite;
-    mix-blend-mode: screen;
-  }
-  .bg3{
-    background:
-      radial-gradient(46% 52% at 36% 10%, rgba(95,170,110,.30), transparent 62%),
-      radial-gradient(38% 44% at 66% 50%, rgba(35,120,75,.32), transparent 62%),
-      radial-gradient(32% 38% at 54% 82%, rgba(18,80,52,.28), transparent 62%);
-    animation: drift3 42s ease-in-out infinite;
-    opacity:.95;
-  }
-  /* Larger translation + subtle scale for more motion, still soft */
-  @keyframes drift1 { 0%{transform:translate3d(0,0,0) scale(1.02)} 50%{transform:translate3d(-80px,58px,0) scale(1.08)} 100%{transform:translate3d(0,0,0) scale(1.02)} }
-  @keyframes drift2 { 0%{transform:translate3d(0,0,0) scale(1.00)} 50%{transform:translate3d(95px,-66px,0) scale(1.10)} 100%{transform:translate3d(0,0,0) scale(1.00)} }
-  @keyframes drift3 { 0%{transform:translate3d(0,0,0) scale(1.01)} 50%{transform:translate3d(-68px,72px,0) scale(1.07)} 100%{transform:translate3d(0,0,0) scale(1.01)} }
-
-  /* ===== Header / Nav ===== */
-  .topbar{
-    position:fixed; top:0; left:0; right:0; z-index:30;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line); backdrop-filter:blur(10px) saturate(140%);
-  }
-  .brandLogo{display:block; height:32px; width:auto}
-  .nav{display:flex; gap:18px; align-items:center}
-  .nav a{color:var(--ink); text-decoration:none; font-weight:700; font-size:14px; padding:8px 12px; border-radius:10px; border:1px solid transparent}
-  .nav a:hover{border-color:var(--line); background:rgba(255,255,255,.06)}
-
-  /* ===== Layout ===== */
-  .stage{flex:1; display:flex; align-items:center; justify-content:center; padding-top:96px; padding-bottom:80px}
-  .panel{width:min(900px,92vw); text-align:center}
-  .heroLogo{display:block; width:min(560px,80vw); margin:0 auto 16px}
-
-  .chatbar{display:flex; align-items:center; width:min(760px,92vw); margin:0 auto}
-  .chatbar input{flex:1; height:46px; padding:12px 14px; font-size:15px; color:#e9eeff; background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none}
-  .chatbar input:focus{border-color:rgba(143,220,255,.75); box-shadow:0 0 0 3px rgba(143,220,255,.25)}
-
-  .log{width:min(760px,92vw); margin:12px auto 0; background:rgba(8,12,30,.55); border:1px solid var(--line); border-radius:14px; padding:12px; max-height:42vh; overflow:auto}
-  .msg{margin:6px 0; color:#eaf2ff}
-  .msg strong{color:#cfe1ff}
+  :root{--ink:#eef3ff;--panel:rgba(12,16,34,.55);--line:rgba(255,255,255,.12);
+    --gold-top:#ffe992;--gold-mid:#ffc44d;--gold-low:#e79a21;--gold-deep:#c97a11}
+  html,body{height:100%;margin:0;color:var(--ink);font-family:Inter,system-ui,sans-serif;display:flex;flex-direction:column;min-height:100%;
+    background:linear-gradient(180deg,#0b1a0f 0%,#143821 42%,#0f2f1d 100%);overflow-x:hidden}
+  .bg{position:fixed;inset:-25%;z-index:-1;filter:blur(28px) saturate(118%)}
+  .bg.a{background:radial-gradient(40% 38% at 20% 25%,rgba(110,190,120,.32),transparent 60%);animation:dr1 44s ease-in-out infinite}
+  .bg.b{background:radial-gradient(36% 38% at 70% 70%,rgba(125,200,140,.26),transparent 60%);animation:dr2 52s ease-in-out infinite;mix-blend-mode:screen}
+  .bg.c{background:radial-gradient(36% 38% at 48% 52%,rgba(90,160,105,.20),transparent 60%);animation:dr3 60s ease-in-out infinite;opacity:.95}
+  @keyframes dr1{50%{transform:translate(-34px,28px) scale(1.04)}}@keyframes dr2{50%{transform:translate(36px,-22px) scale(1.06)}}@keyframes dr3{50%{transform:translate(-20px,20px) scale(1.05)}}
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+  .brandLogo{height:32px}
+  .nav{display:flex;gap:18px}.nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
+  .nav a:hover{background:rgba(255,255,255,.06);border:1px solid var(--line)}
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
+  .panel{width:min(980px,94vw);text-align:center}
+  .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 18px}
+  .gallery{display:grid;grid-template-columns:1fr;gap:16px;margin:0 auto;width:min(900px,92vw)}
+  .frame{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;height:240px}
 </style>
 </head>
 <body>
-  <!-- More-animated blurry green background -->
-  <div class="bg-layer bg1"></div>
-  <div class="bg-layer bg2"></div>
-  <div class="bg-layer bg3"></div>
+<div class="bg a"></div><div class="bg b"></div><div class="bg c"></div>
 
-  <!-- ===== Reusable logo defs (same on all pages) ===== -->
-  <svg width="0" height="0" style="position:absolute">
-    <defs>
-      <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
-        <stop offset="0%"  stop-color="var(--gold-top)"/>
-        <stop offset="55%" stop-color="var(--gold-mid)"/>
-        <stop offset="85%" stop-color="var(--gold-low)"/>
-        <stop offset="100%" stop-color="var(--gold-deep)"/>
-      </linearGradient>
-      <!-- Wordmark with thin “MN” monogram touching the M -->
-      <symbol id="MayaNutLogoMN" viewBox="0 0 1260 260" preserveAspectRatio="xMinYMid meet">
-        <!-- Thin, elegant MN (italic/light look). Positioned to touch the big M. -->
-        <text x="8" y="168"
-              font-family="Poppins, Inter, system-ui, sans-serif"
-              font-weight="300" font-style="italic" font-size="92"
-              fill="url(#LogoGold)">MN</text>
+<svg width="0" height="0"><defs>
+  <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
+    <stop offset="0%" stop-color="#ffe992"/><stop offset="55%" stop-color="#ffc44d"/><stop offset="85%" stop-color="#e79a21"/><stop offset="100%" stop-color="#c97a11"/>
+  </linearGradient>
+  <symbol id="MayaNutLogo" viewBox="0 0 1200 260">
+    <text x="40" y="180" font-family="Poppins, Inter" font-weight="900" font-size="180" fill="url(#LogoGold)">
+      MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
+    </text>
+  </symbol>
+</defs></svg>
 
-        <!-- Main word “MayaNut” in heavy weight, same as other pages -->
-        <text x="120" y="180"
-              font-family="Poppins, Inter, system-ui, sans-serif"
-              font-weight="900" font-size="180"
-              fill="url(#LogoGold)">
-          MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
-        </text>
-      </symbol>
-    </defs>
-  </svg>
+<header class="topbar">
+  <a href="index.html"><svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg></a>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="buy.html">Buy</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html" style="background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22)">Gallery</a>
+  </nav>
+</header>
 
-  <!-- ===== Header ===== -->
-  <header class="topbar" role="banner">
-    <a href="index.html" aria-label="MayaNut home">
-      <!-- Upper-left logo: same symbol (now with MN + MayaNut™) -->
-      <svg class="brandLogo" viewBox="0 0 1260 260"><use href="#MayaNutLogoMN"></use></svg>
-    </a>
-    <nav class="nav" aria-label="Primary">
-      <a href="index.html">Home</a>
-      <a href="buy.html">Buy</a>
-      <a href="about.html">About</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
-    </nav>
-  </header>
+<main class="stage">
+  <div class="panel">
+    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
 
-  <!-- ===== Main ===== -->
-  <main class="stage">
-    <div class="panel">
-      <!-- Big hero logo above chat: same symbol for perfect consistency -->
-      <svg class="heroLogo" viewBox="0 0 1260 260" aria-label="MayaNut logo"><use href="#MayaNutLogoMN"></use></svg>
-
-      <div class="chatbar" role="search">
-        <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
-      </div>
-
-      <div class="log" id="chatLog" aria-live="polite"></div>
+    <!-- 10 full-width placeholder frames, one per row -->
+    <div class="gallery">
+      <div class="frame"></div><div class="frame"></div><div class="frame"></div><div class="frame"></div><div class="frame"></div>
+      <div class="frame"></div><div class="frame"></div><div class="frame"></div><div class="frame"></div><div class="frame"></div>
     </div>
-  </main>
-
-<script>
-/* Minimal chat behavior placeholder */
-const input = document.getElementById('chatInput');
-const logBox = document.getElementById('chatLog');
-function say(role, html){
-  const el=document.createElement('div'); el.className='msg';
-  el.innerHTML=`<strong>${role}:</strong> ${html}`;
-  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
-}
-input.addEventListener('keydown', e=>{
-  if(e.key==='Enter'){
-    const v=input.value.trim(); if(!v) return;
-    say('You', v); input.value='';
-    const q=v.toLowerCase();
-    const onKeys = ['mayanut','maya nut','ramon','breadnut','mayan breadnut','ojoche','oox','brosimum','alicastrum','brosimum alicastrum'];
-    if(!onKeys.some(k=> q.includes(k))){
-      const msgs=[
-        "I’m here for MayaNut™ topics—ask me about Brosimum alicastrum or our products!",
-        "I can help with MayaNut™—try asking about the tree, uses, or what we sell.",
-        "Let’s keep it on MayaNut™: cultivation, flavor, saplings, or roasting."
-      ];
-      say('MayaNut', msgs[Math.floor(Math.random()*msgs.length)]);
-      return;
-    }
-    say('MayaNut',"MayaNut™ (Brosimum alicastrum) is a resilient tropical tree—ask about nutrition, cultivation, roasting, or our saplings!");
-  }
-});
-</script>
+  </div>
+</main>
 </body>
 </html>
