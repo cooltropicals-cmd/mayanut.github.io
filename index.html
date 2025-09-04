@@ -7,7 +7,7 @@
 
 <!-- Favicon (MN, golden gradient) -->
 <link rel="icon" type="image/svg+xml"
-  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffe992'[...]
+  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffe992'/%3E%3Cstop offset='55%25' stop-color='%23ffc44d'/%3E%3Cstop offset='100%25' stop-color='%23c97a11'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%23152b1b'/%3E%3Ctext x='50%25' y='50%25' dy='.36em' text-anchor='middle' font-family='Poppins, Arial, sans-serif' font-weight='900' font-size='30' fill='url(%23g)'>MN%3C/text%3E%3C/svg%3E" />
 
 <style>
   :root{
@@ -20,7 +20,7 @@
     /* Gold logo gradient (top → bottom) */
     --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
 
-    /* Card color (boxes + about card) */
+    /* Card color for quick buttons */
     --cardBG: rgba(8,12,30,.50);
     --cardBorder: var(--line);
   }
@@ -33,7 +33,7 @@
     overflow-x:hidden;
   }
 
-  /* Animated blurry “green lava lamp” background — more motion */
+  /* Animated blurry “green lava lamp” background — extra motion */
   .bg-layer{position:fixed; inset:-28% -28% -28% -28%; z-index:-1; pointer-events:none; filter: blur(30px) saturate(118%);}
   .bg1{
     background:
@@ -62,7 +62,7 @@
   @keyframes drift2 { 0%,100%{transform:translate3d(0,0,0) scale(1.02)} 50%{transform:translate3d(64px,-40px,0) scale(1.08)} }
   @keyframes drift3 { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-38px,36px,0) scale(1.07)} }
 
-  /* Top bar + shared logo */
+  /* Top bar + shared logo (exact same symbol as other pages) */
   .topbar{
     position:fixed;top:0;left:0;right:0;z-index:30;
     display:flex;align-items:center;justify-content:space-between;
@@ -99,70 +99,18 @@
   }
   .quick:hover{ transform: translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); }
 
-  /* Footer styles */
-  .site-footer {
-    width: 100%;
-    background: var(--panel);
-    border-top: 1px solid var(--line);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px 24px;
-    box-sizing: border-box;
-    font-size: 18px;
-    font-weight: 600;
-    color: #ffe992;
-    margin-top: auto;
-    backdrop-filter: blur(8px) saturate(120%);
+  /* Footer */
+  footer{
+    width:100%; color:#c9d3ef; border-top:1px solid var(--line);
+    background:rgba(10,14,34,.55); font-size:13px; padding:12px 14px;
+    display:flex; align-items:center; justify-content:space-between;
   }
-  .footer-left {
-    display: flex;
-    flex-direction: column;
-  }
-  .footer-title {
-    font-size: 1.2em;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-  .footer-details {
-    font-size: 0.95em;
-    color: #ffc44d;
-    margin-top: 6px;
-    font-weight: 400;
-  }
-  .footer-right {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-  }
-  .footer-ig-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 38px;
-    width: 38px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-    transition: background .2s;
-    text-decoration: none;
-    border: 1px solid var(--line);
-  }
-  .footer-ig-link:hover {
-    background: rgba(255,255,255,0.14);
-    box-shadow:0 0 0 2px #ffc44d;
-  }
-  .footer-ig-link svg {
-    width: 22px;
-    height: 22px;
-    fill: #ffc44d;
-    transition: fill .2s;
-  }
-  .footer-ig-link:hover svg {
-    fill: #ffe992;
-  }
+  .legal a{color:#c9d3ef; text-decoration:none; margin-left:10px; opacity:.8}
+  .legal a:hover{opacity:1; text-decoration:underline}
+  .ig-link{display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:6px}
+  .ig-link svg{transition:transform .2s ease, filter .2s ease}
+  .ig-link:hover svg{transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 </style>
-<!-- Import Poppins font for logo consistency -->
-<link href="https://fonts.googleapis.com/css?family=Poppins:900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -171,7 +119,7 @@
 <div class="bg-layer bg2"></div>
 <div class="bg-layer bg3"></div>
 
-<!-- Shared Logo defs (font-family is Poppins for logo text) -->
+<!-- Shared Logo defs (exact same as Buy/About/Gallery) -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
@@ -181,7 +129,7 @@
       <stop offset="100%" stop-color="var(--gold-deep)"/>
     </linearGradient>
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
-      <text x="40" y="180" font-family="Poppins,Inter,system-ui,sans-serif"
+      <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
             font-weight="900" font-size="180" fill="url(#LogoGold)">
         MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
       </text>
@@ -205,12 +153,12 @@
 <!-- Main -->
 <main class="stage">
   <div class="panel">
-    <!-- Big centered logo above search/chat -->
+    <!-- Big centered logo above chat/search (same font as other pages) -->
     <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
       <use href="#MayaNutLogo"></use>
     </svg>
 
-    <!-- Search -->
+    <!-- Search / chat box -->
     <div class="searchWrap">
       <input id="searchInput" placeholder="Search Products..." aria-label="Search products" />
     </div>
@@ -223,27 +171,20 @@
   </div>
 </main>
 
-<!-- Footer -->
-<footer class="site-footer" role="contentinfo">
-  <div class="footer-left">
-    <span class="footer-title">MayaNut, Inc. 2025</span>
-    <span class="footer-details">All rights reserved. | South Florida, USA</span>
+<!-- Clean footer (no About card on index) -->
+<footer>
+  <div class="legal">
+    <strong>MayaNut, Inc. 2025</strong> — All rights reserved.
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="mailto:hello@mayanut.com">Contact</a>
   </div>
-  <div class="footer-right">
-    <a
-      class="footer-ig-link"
-      href="https://instagram.com/mayanut.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Instagram @mayanut.com"
-      title="Instagram @mayanut.com"
-    >
-      <!-- Instagram SVG Icon -->
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 2.163c3.204 0 3.584.012 4.849.07 1.366.062 2.633.343 3.608 1.32.975.976 1.257 2.243 1.319 3.608.058 1.265.069 1.645.069 4.849s-.011 3.584-.069 4.849c-.062 1.366-.344 2.633-1.319 3.608-.975.976-2.242 1.257-3.608 1.319-1.265.057-1.645.069-4.849.069s-3.584-.012-4.849-.069c-1.366-.062-2.633-.343-3.608-1.319-.976-.975-1.257-2.242-1.319-3.608C2.175 15.646 2.163 15.266 2.163 12c0-3.204.012-3.584.07-4.849.062-1.366.343-2.633 1.319-3.608.975-.976 2.242-1.257 3.608-1.319C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.77.131 4.64.418 3.675 1.384c-.965.965-1.253 2.095-1.312 3.377C2.013 5.668 2 6.078 2 9.262v5.476c0 3.184.013 3.594.072 4.874.059 1.282.347 2.412 1.312 3.377.965.965 2.095 1.253 3.377 1.312 1.28.059 1.689.072 4.874.072s3.594-.013 4.874-.072c1.282-.059 2.412-.347 3.377-1.312.965-.965 1.253-2.095 1.312-3.377.059-1.28.072-1.689.072-4.874V9.262c0-3.184-.013-3.594-.072-4.874-.059-1.282-.347-2.412-1.312-3.377-.965-.965-2.095-1.253-3.377-1.312C15.668.013 15.258 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
-      </svg>
-    </a>
-  </div>
+  <a class="ig-link" href="https://instagram.com/mayanut.com" target="_blank" rel="noopener" aria-label="Instagram @mayanut.com">
+    <!-- Instagram glyph -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
+    </svg>
+  </a>
 </footer>
 
 </body>
