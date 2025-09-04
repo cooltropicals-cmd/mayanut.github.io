@@ -17,8 +17,11 @@
     --inputBG:rgba(255,255,255,.08);
     --inputLine:rgba(255,255,255,.22);
 
-    /* Gold logo gradient */
-    --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
+    /* Shiny gold logo gradient (top light → bottom darker) */
+    --gold-top:#ffe992;
+    --gold-mid:#ffc44d;
+    --gold-low:#e79a21;
+    --gold-deep:#c97a11;
   }
 
   html,body{
@@ -30,65 +33,105 @@
   }
 
   /* Animated blurry “green lava lamp” background */
-  .bg{position:fixed; inset:-25%; z-index:-1; pointer-events:none; filter: blur(28px) saturate(118%);}
-  .bg.a{background:radial-gradient(40% 40% at 20% 25%, rgba(110,190,120,.34), transparent 60%); animation:dr1 26s ease-in-out infinite;}
-  .bg.b{background:radial-gradient(36% 40% at 72% 28%, rgba(165,230,170,.28), transparent 62%); animation:dr2 30s ease-in-out infinite; mix-blend-mode:screen;}
-  .bg.c{background:radial-gradient(36% 40% at 50% 70%, rgba(90,160,105,.22), transparent 60%), radial-gradient(28% 34% at 40% 50%, rgba(60,120,80,.18), transparent 60%); animation:dr3 34s ease-in-out infinite; opacity:.96;}
-  @keyframes dr1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,44px) scale(1.07)}}
-  @keyframes dr2{0%,100%{transform:translate(0,0) scale(1.02)}50%{transform:translate(64px,-40px) scale(1.09)}}
-  @keyframes dr3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-42px,36px) scale(1.08)}}
+  .bg-layer{position:fixed; inset:-25% -25% -25% -25%; z-index:-1; pointer-events:none; filter: blur(28px) saturate(118%);}
+  .bg1{
+    background:
+      radial-gradient(38% 40% at 20% 25%, rgba(110,190,120,.32), transparent 60%),
+      radial-gradient(30% 36% at 78% 22%, rgba(165,230,170,.28), transparent 65%),
+      radial-gradient(22% 28% at 52% 58%, rgba(90,150,110,.30), transparent 60%);
+    animation: drift1 28s ease-in-out infinite;
+  }
+  .bg2{
+    background:
+      radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.28), transparent 60%),
+      radial-gradient(28% 34% at 76% 72%, rgba(125,200,140,.26), transparent 60%),
+      radial-gradient(22% 26% at 45% 38%, rgba(160,220,160,.22), transparent 60%);
+    animation: drift2 32s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  .bg3{
+    background:
+      radial-gradient(22% 28% at 35% 10%, rgba(185,255,185,.18), transparent 60%),
+      radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.20), transparent 60%),
+      radial-gradient(24% 32% at 50% 80%, rgba(60,120,80,.18), transparent 60%);
+    animation: drift3 36s ease-in-out infinite;
+    opacity:.95;
+  }
+  @keyframes drift1 {0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-54px,42px,0) scale(1.06)}}
+  @keyframes drift2 {0%,100%{transform:translate3d(0,0,0) scale(1.02)} 50%{transform:translate3d(56px,-34px,0) scale(1.08)}}
+  @keyframes drift3 {0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-36px,32px,0) scale(1.07)}}
 
-  /* Header: centered brand, flag to the LEFT of logo; right-aligned nav */
+  /* Top bar with centered brand and right-aligned nav */
   .topbar{
     position:fixed; top:0; left:0; right:0; z-index:30;
     display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
     padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line);
     backdrop-filter:blur(10px) saturate(140%);
   }
-  .brandCenter{justify-self:center; display:flex; align-items:center; gap:10px; text-decoration:none}
-  .flag{height:18px; width:auto; display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
+  .brandCenter{justify-self:center; display:flex; align-items:center; gap:10px}
+  .flag{height:18px; width:auto; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
   .brandLogo{height:32px; width:auto; display:block}
 
   .nav{justify-self:end; display:flex; gap:18px; align-items:center}
-  .nav a{color:var(--ink); text-decoration:none; font-weight:700; font-size:14px; padding:8px 12px; border-radius:10px; border:1px solid transparent}
+  .nav a{
+    color:var(--ink); text-decoration:none; font-weight:700; font-size:14px;
+    padding:8px 12px; border-radius:10px; border:1px solid transparent;
+  }
   .nav a:hover{border-color:var(--line); background:rgba(255,255,255,.06)}
 
   .stage{flex:1; display:flex; align-items:center; justify-content:center; padding-top:96px; padding-bottom:80px}
   .panel{width:min(980px,92vw); text-align:center}
-
-  /* Hero logo with flag to its left too */
-  .heroWrap{display:flex; align-items:center; justify-content:center; gap:10px; margin:6px auto 14px; width:min(560px,90vw)}
-  .flagHero{height:24px}
-  .heroLogo{display:block; width:100%}
+  .heroLogo{display:block; width:min(560px,80vw); margin:6px auto 14px}
 
   .chatbar{display:flex; align-items:center; gap:10px; width:min(820px,94vw); margin:0 auto}
-  .chatbar input{flex:1; height:46px; padding:12px 14px; font-size:15px; color:#e9eeff; background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none}
+  .chatbar input{
+    flex:1; height:46px; padding:12px 14px; font-size:15px; color:#e9eeff;
+    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none;
+  }
   .chatbar input::placeholder{color:#cfe8ff}
   .chatbar input:focus{border-color:rgba(143,220,255,.75); box-shadow:0 0 0 3px rgba(143,220,255,.25)}
 
-  .log{width:min(820px,94vw); margin:12px auto 0; background:rgba(8,12,30,.55); border:1px solid var(--line); border-radius:14px; padding:12px; max-height:42vh; overflow:auto}
+  .log{
+    width:min(820px,94vw); margin:12px auto 0; background:rgba(8,12,30,.55);
+    border:1px solid var(--line); border-radius:14px; padding:12px; max-height:42vh; overflow:auto
+  }
   .msg{text-align:left; margin:6px 0; color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
   /* Common questions row */
-  .quickRow{width:min(820px,94vw); margin:14px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-  .quick{background:rgba(8,12,30,.50); border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center; color:#eaf2ff; text-decoration:none; font-weight:700; transition:transform .2s ease, background .2s ease, border-color .2s ease}
-  .quick:hover{transform:translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18)}
+  .quickRow{
+    width:min(820px,94vw); margin:14px auto 0;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px;
+  }
+  .quick{
+    background:rgba(8,12,30,.50); border:1px solid var(--line);
+    border-radius:14px; padding:14px; text-align:center; color:#eaf2ff;
+    text-decoration:none; font-weight:700; transition:transform .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .quick:hover{ transform: translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); }
 
   /* Footer */
   footer{
-    position:relative; width:100%; color:#c9d3ef; border-top:1px solid var(--line);
-    background:rgba(10,14,34,.55); text-align:center; font-size:13px; padding:14px 8px;
+    position:relative; width:100%; color:#c9d3ef;
+    border-top:1px solid var(--line); background:rgba(10,14,34,.55);
+    text-align:center; font-size:13px; padding:14px 8px;
   }
-  .ig-link{position:absolute; right:28px; top:50%; transform:translateY(-50%); display:inline-flex; width:22px; height:22px; align-items:center; justify-content:center}
+  .ig-link{
+    position:absolute; right:28px; top:50%; transform:translateY(-50%);
+    display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px
+  }
   .ig-link svg{transition:transform .2s ease,filter .2s ease}
-  .ig-link:hover svg{transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+  .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 </style>
 </head>
 <body>
-<div class="bg a"></div><div class="bg b"></div><div class="bg c"></div>
 
-<!-- Shared defs: gold logo + rectangular US flag -->
+<!-- Animated background layers -->
+<div class="bg-layer bg1"></div>
+<div class="bg-layer bg2"></div>
+<div class="bg-layer bg3"></div>
+
+<!-- Shared logo symbol (same as Buy/About/Gallery) -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
@@ -99,14 +142,23 @@
     </linearGradient>
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
       <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
-            font-weight="900" font-size="180" fill="url(#LogoGold)">
+            font-weight="900" font-size="180"
+            fill="url(#LogoGold)">
         MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
       </text>
     </symbol>
+
+    <!-- Small US flag SVG -->
     <symbol id="USFlag" viewBox="0 0 64 48">
       <rect width="64" height="48" fill="#b22234"/>
-      <g fill="#fff"><rect y="6" width="64" height="6"/><rect y="18" width="64" height="6"/><rect y="30" width="64" height="6"/><rect y="42" width="64" height="6"/></g>
+      <g fill="#fff">
+        <rect y="6" width="64" height="6"/>
+        <rect y="18" width="64" height="6"/>
+        <rect y="30" width="64" height="6"/>
+        <rect y="42" width="64" height="6"/>
+      </g>
       <rect width="28" height="21" fill="#3c3b6e"/>
+      <!-- Simple star dots -->
       <g fill="#fff">
         <circle cx="4" cy="3" r="1"/><circle cx="8" cy="3" r="1"/><circle cx="12" cy="3" r="1"/><circle cx="16" cy="3" r="1"/><circle cx="20" cy="3" r="1"/>
         <circle cx="6" cy="6" r="1"/><circle cx="10" cy="6" r="1"/><circle cx="14" cy="6" r="1"/><circle cx="18" cy="6" r="1"/><circle cx="22" cy="6" r="1"/>
@@ -118,11 +170,12 @@
   </defs>
 </svg>
 
+<!-- Header: centered brand with flag on the left, rightmost Instagram tab -->
 <header class="topbar" role="banner">
-  <div></div><!-- spacer -->
+  <div></div> <!-- left spacer to allow center alignment -->
   <a class="brandCenter" href="index.html" aria-label="MayaNut home">
-    <svg class="flag" viewBox="0 0 64 48" aria-hidden="true"><use href="#USFlag"/></svg>
-    <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"/></svg>
+    <svg class="flag" viewBox="0 0 64 48" aria-hidden="true"><use href="#USFlag"></use></svg>
+    <svg class="brandLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
   </a>
   <nav class="nav" aria-label="Primary">
     <a href="index.html">Home</a>
@@ -133,12 +186,11 @@
   </nav>
 </header>
 
-<main class="stage">
+<main id="home" class="stage">
   <div class="panel">
-    <div class="heroWrap">
-      <svg class="flagHero" viewBox="0 0 64 48" aria-hidden="true"><use href="#USFlag"/></svg>
-      <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"/></svg>
-    </div>
+    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
+      <use href="#MayaNutLogo"></use>
+    </svg>
 
     <div class="chatbar" role="search">
       <input id="chatInput" placeholder="Ask about MayaNut™ or our products" aria-label="Type what you want and press Enter" />
@@ -158,6 +210,7 @@
 <footer>
   <strong>Copyright © 2025 MayaNut – All Rights Reserved.</strong>
   <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
+    <!-- Instagram glyph -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
       <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
     </svg>
@@ -178,7 +231,6 @@ input.addEventListener('keydown', e=>{
     const v=input.value.trim(); if(!v) return;
     say('You', v); input.value='';
     const q=v.toLowerCase();
-
     const coffeeKeys = ['coffee','café','cafe','latte','tea','brew','roast','ramon'];
     if (coffeeKeys.some(k => q.includes(k))){
       say('MayaNut', `<div><strong>Ramon / Maya Nut Coffee</strong> = roasted <em>Brosimum alicastrum</em>—toasty, cocoa-caramel vibes, naturally caffeine-free. Try salt-roasted kernels, hot puffy tortillas, iced Maya Nut latte, or a soothing tea. ☕️🌰</div>`);
