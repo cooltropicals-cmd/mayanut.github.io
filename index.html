@@ -11,84 +11,145 @@
 <style>
   :root{
     --ink:#eef3ff;
-    --panel:rgba(12,16,34,.55);
-    --line:rgba(255,255,255,.12);
-    --inputBG:rgba(255,255,255,.08);
-    --inputLine:rgba(255,255,255,.22);
+    --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
 
     /* Shared gold gradient */
-    --gold-top:#ffe992;
-    --gold-mid:#ffc44d;
-    --gold-low:#e79a21;
-    --gold-deep:#c97a11;
+    --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
+
+    /* Card color used for quick buttons */
+    --cardBG: rgba(8,12,30,.50);
   }
 
   html,body{
     height:100%; margin:0; color:var(--ink);
     font-family: Inter, system-ui, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
-    background:linear-gradient(180deg,#0b1a0f 0%,#143821 42%,#0f2f1d 100%);
+    background: linear-gradient(180deg, #0b1a0f 0%, #143821 42%, #0f2f1d 100%);
     overflow-x:hidden;
   }
 
-  /* Background animation */
-  .bg{position:fixed;inset:-25%;z-index:-1;filter:blur(28px) saturate(118%)}
-  .bg.a{background:radial-gradient(40% 40% at 20% 25%,rgba(110,190,120,.34),transparent 60%);animation:dr1 26s ease-in-out infinite}
-  .bg.b{background:radial-gradient(36% 40% at 72% 28%,rgba(165,230,170,.28),transparent 62%);animation:dr2 30s ease-in-out infinite;mix-blend-mode:screen}
-  .bg.c{background:radial-gradient(36% 40% at 50% 70%,rgba(90,160,105,.22),transparent 60%);animation:dr3 34s ease-in-out infinite;opacity:.96}
-  @keyframes dr1{50%{transform:translate(-60px,44px) scale(1.07)}}
-  @keyframes dr2{50%{transform:translate(64px,-40px) scale(1.09)}}
-  @keyframes dr3{50%{transform:translate(-42px,36px) scale(1.08)}}
+  /* Blurry green motion background (more movement) */
+  .bg{position:fixed; inset:-28%; z-index:-1; filter: blur(30px) saturate(118%)}
+  .bg.a{background:
+      radial-gradient(40% 40% at 18% 22%, rgba(110,190,120,.36), transparent 62%),
+      radial-gradient(34% 36% at 62% 18%, rgba(165,230,170,.30), transparent 64%);
+    animation: dr1 24s ease-in-out infinite}
+  .bg.b{background:
+      radial-gradient(42% 44% at 80% 72%, rgba(90,160,105,.26), transparent 60%),
+      radial-gradient(28% 30% at 36% 60%, rgba(60,120,80,.22), transparent 60%);
+    animation: dr2 28s ease-in-out infinite; mix-blend-mode:screen}
+  .bg.c{background:
+      radial-gradient(36% 40% at 48% 48%, rgba(140,200,140,.22), transparent 62%),
+      radial-gradient(28% 30% at 20% 80%, rgba(100,170,120,.22), transparent 60%);
+    animation: dr3 32s ease-in-out infinite; opacity:.96}
+  @keyframes dr1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-80px,60px,0) scale(1.09)}}
+  @keyframes dr2{0%,100%{transform:translate3d(0,0,0) scale(1.02)}50%{transform:translate3d(90px,-66px,0) scale(1.11)}}
+  @keyframes dr3{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-64px,54px,0) scale(1.08)}}
 
   /* Header */
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
-  .brandLogo{height:32px;width:auto}
-  .nav{display:flex;gap:18px}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
-  .nav a:hover{background:rgba(255,255,255,.06);border:1px solid var(--line)}
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line)
+  }
+  .brandRow{display:flex; align-items:center; gap:10px}
+  .flagSmall{height:20px; width:auto; border-radius:3px; overflow:hidden; box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+  .brandLogo{height:32px; width:auto}
+  .nav{display:flex; gap:18px}
+  .nav a{color:var(--ink); text-decoration:none; font-weight:700; font-size:14px; padding:8px 12px; border-radius:10px}
+  .nav a:hover{background:rgba(255,255,255,.06); border:1px solid var(--line)}
 
-  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
-  .panel{text-align:center;width:min(900px,92vw)}
-  .heroLogo{display:block;width:min(560px,80vw);margin:0 auto 20px}
+  /* Layout */
+  .stage{flex:1; display:flex; align-items:flex-start; justify-content:center; padding-top:96px; padding-bottom:80px}
+  .panel{width:min(980px,94vw); text-align:center}
 
-  .chatbar{display:flex;width:min(760px,92vw);margin:0 auto}
-  .chatbar input{flex:1;height:46px;padding:12px 14px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px}
+  /* Hero logo used above chat AND above product search */
+  .heroLogo{display:block; width:min(560px,80vw); margin:0 auto 16px}
+
+  /* Chat area */
+  .chatbar{display:flex; width:min(760px,92vw); margin:0 auto}
+  .chatbar input{
+    flex:1; height:46px; padding:12px 14px; font-size:15px; color:#e9eeff;
+    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none
+  }
   .chatbar input::placeholder{color:#cfe8ff}
+  .chatbar input:focus{border-color:rgba(143,220,255,.75); box-shadow:0 0 0 3px rgba(143,220,255,.25)}
+  .log{
+    width:min(760px,92vw); margin:12px auto; background:rgba(8,12,30,.55);
+    border:1px solid var(--line); border-radius:14px; padding:12px; max-height:42vh; overflow:auto
+  }
+  .msg{margin:6px 0; color:#eaf2ff} .msg strong{color:#cfe1ff}
 
-  .log{width:min(760px,92vw);margin:12px auto;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
-  .msg{margin:6px 0;color:#eaf2ff}
-  .msg strong{color:#cfe1ff}
+  /* ==== “Buy page duplicated” section on Home ==== */
+  .productsBlock{margin-top:28px}
+  .flagRow{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    margin:0 auto 10px; width:min(820px,94vw);
+  }
+  .flagBig{height:32px; width:auto; border-radius:4px; overflow:hidden; box-shadow:0 0 0 1px rgba(0,0,0,.25)}
+  .searchProducts{width:min(820px,94vw); margin:0 auto}
+  .searchProducts input{
+    width:100%; height:46px; padding:12px 14px; font-size:15px; color:#e9eeff;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22); border-radius:12px; outline:none
+  }
+  .searchProducts input::placeholder{color:#cfe8ff}
+  .searchProducts input:focus{border-color:rgba(143,220,255,.75); box-shadow:0 0 0 3px rgba(143,220,255,.25)}
 
-  /* Two quick buttons */
-  .quickRow{width:min(760px,92vw);margin:14px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .quick{background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;color:#eaf2ff;text-decoration:none;font-weight:700}
-  .quick:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+  /* Two common-question buttons under product search */
+  .quickRow{
+    width:min(820px,94vw); margin:14px auto 0;
+    display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
+  }
+  .quick{
+    background:var(--cardBG); border:1px solid var(--line);
+    border-radius:14px; padding:14px; text-align:center; color:#eaf2ff;
+    text-decoration:none; font-weight:700; transition:transform .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .quick:hover{ transform: translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18) }
 
-  footer{position:relative;width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:14px 8px}
-  .ig-link{position:absolute;right:28px;top:50%;transform:translateY(-50%);display:inline-flex;width:22px;height:22px;align-items:center;justify-content:center}
+  /* Footer */
+  footer{
+    position:relative; width:100%; color:#c9d3ef; border-top:1px solid var(--line);
+    background:rgba(10,14,34,.55); text-align:center; font-size:13px; padding:14px 8px
+  }
+  .ig-link{position:absolute; right:28px; top:50%; transform:translateY(-50%); display:inline-flex; width:22px; height:22px; align-items:center; justify-content:center}
 </style>
 </head>
 <body>
 <div class="bg a"></div><div class="bg b"></div><div class="bg c"></div>
 
-<!-- Shared logo defs (EXACT same as Buy/About/Gallery) -->
+<!-- Shared logo defs (exactly same across pages) -->
 <svg width="0" height="0"><defs>
   <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
-    <stop offset="0%" stop-color="var(--gold-top)"/>
+    <stop offset="0%"  stop-color="var(--gold-top)"/>
     <stop offset="55%" stop-color="var(--gold-mid)"/>
     <stop offset="85%" stop-color="var(--gold-low)"/>
     <stop offset="100%" stop-color="var(--gold-deep)"/>
   </linearGradient>
   <symbol id="MayaNutLogo" viewBox="0 0 1200 260">
-    <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
-          font-weight="900" font-size="180" fill="url(#LogoGold)">
+    <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif" font-weight="900" font-size="180" fill="url(#LogoGold)">
       MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
     </text>
+  </symbol>
+
+  <!-- Simple US flag symbol (rectangle) -->
+  <symbol id="USFlag" viewBox="0 0 190 100" preserveAspectRatio="xMidYMid meet">
+    <rect width="190" height="100" fill="#b22234"/>
+    <g fill="#fff">
+      <rect y="14.285" width="190" height="14.285"/>
+      <rect y="42.855" width="190" height="14.285"/>
+      <rect y="71.425" width="190" height="14.285"/>
+    </g>
+    <rect width="76" height="50" fill="#3c3b6e"/>
   </symbol>
 </defs></svg>
 
 <header class="topbar">
-  <a href="index.html"><svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"/></svg></a>
+  <div class="brandRow">
+    <svg class="flagSmall" viewBox="0 0 190 100" aria-hidden="true"><use href="#USFlag"></use></svg>
+    <a href="index.html" aria-label="MayaNut home"><svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg></a>
+  </div>
   <nav class="nav">
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
@@ -100,18 +161,31 @@
 
 <main class="stage">
   <div class="panel">
-    <!-- Hero logo identical font -->
-    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"/></svg>
+    <!-- Main hero logo above the CHAT area -->
+    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
 
-    <div class="chatbar">
-      <input id="chatInput" placeholder="Ask about MayaNut™ or our products" />
-    </div>
-
+    <!-- Chat area (unchanged) -->
+    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" /></div>
     <div class="log" id="chatLog"></div>
 
-    <div class="quickRow">
-      <button class="quick">What is MayaNut™?</button>
-      <a class="quick" href="buy.html">Buy MayaNut™ Products!</a>
+    <!-- ===== DUPLICATED BUY AREA ON HOME ===== -->
+    <div class="productsBlock">
+      <!-- Enlarged flag + big logo above product search -->
+      <div class="flagRow">
+        <svg class="flagBig" viewBox="0 0 190 100" aria-hidden="true"><use href="#USFlag"></use></svg>
+        <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo"><use href="#MayaNutLogo"></use></svg>
+      </div>
+
+      <!-- Product search (same look as Buy page; no grid per your latest) -->
+      <div class="searchProducts">
+        <input type="text" placeholder="Search Products..." aria-label="Search products" />
+      </div>
+
+      <!-- Two common-question boxes under product search -->
+      <div class="quickRow">
+        <button class="quick" id="qWhat">What is MayaNut™?</button>
+        <a class="quick" id="qBuy" href="buy.html">Buy MayaNut™ Products!</a>
+      </div>
     </div>
   </div>
 </main>
@@ -119,8 +193,17 @@
 <footer>
   <strong>Copyright © 2025 MayaNut – All Rights Reserved.</strong>
   <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
   </a>
 </footer>
+
+<script>
+/* Minimal chat filler (unchanged) */
+const input=document.getElementById('chatInput');
+const logBox=document.getElementById('chatLog');
+function say(role,html){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${html}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){const t=input.value.trim();if(!t)return;say('You',t);input.value='';say('MayaNut','Ask me anything about MayaNut™ / Brosimum alicastrum or our products!');}});
+document.getElementById('qWhat').addEventListener('click',()=>say('MayaNut','MayaNut™ is the seed of <em>Brosimum alicastrum</em>—a resilient tropical tree with a toasty, cocoa-like flavor and long Mesoamerican heritage.'));
+</script>
 </body>
 </html>
