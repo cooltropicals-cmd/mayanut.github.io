@@ -17,7 +17,7 @@
     --inputBG:rgba(255,255,255,.08);
     --inputLine:rgba(255,255,255,.22);
 
-    /* Gold logo gradient (matches Buy/About/Gallery) */
+    /* Gold logo gradient */
     --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
   }
 
@@ -29,7 +29,7 @@
     overflow-x:hidden;
   }
 
-  /* Animated blurry green background (same motion style across pages) */
+  /* Animated blurry “green lava lamp” background */
   .bg{position:fixed; inset:-25%; z-index:-1; pointer-events:none; filter: blur(28px) saturate(118%);}
   .bg.a{background:radial-gradient(40% 40% at 20% 25%, rgba(110,190,120,.34), transparent 60%); animation:dr1 26s ease-in-out infinite;}
   .bg.b{background:radial-gradient(36% 40% at 72% 28%, rgba(165,230,170,.28), transparent 62%); animation:dr2 30s ease-in-out infinite; mix-blend-mode:screen;}
@@ -38,7 +38,7 @@
   @keyframes dr2{0%,100%{transform:translate(0,0) scale(1.02)}50%{transform:translate(64px,-40px) scale(1.09)}}
   @keyframes dr3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-42px,36px) scale(1.08)}}
 
-  /* Header: centered brand with US flag to the LEFT of logo; right-aligned nav */
+  /* Header: centered brand, flag to the LEFT of logo; right-aligned nav */
   .topbar{
     position:fixed; top:0; left:0; right:0; z-index:30;
     display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
@@ -46,7 +46,7 @@
     backdrop-filter:blur(10px) saturate(140%);
   }
   .brandCenter{justify-self:center; display:flex; align-items:center; gap:10px; text-decoration:none}
-  .flag{height:18px; width:auto; display:block}
+  .flag{height:18px; width:auto; display:block; filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
   .brandLogo{height:32px; width:auto; display:block}
 
   .nav{justify-self:end; display:flex; gap:18px; align-items:center}
@@ -56,7 +56,7 @@
   .stage{flex:1; display:flex; align-items:center; justify-content:center; padding-top:96px; padding-bottom:80px}
   .panel{width:min(980px,92vw); text-align:center}
 
-  /* Hero area: same logo/font as Buy/About, flag to the left */
+  /* Hero logo with flag to its left too */
   .heroWrap{display:flex; align-items:center; justify-content:center; gap:10px; margin:6px auto 14px; width:min(560px,90vw)}
   .flagHero{height:24px}
   .heroLogo{display:block; width:100%}
@@ -70,8 +70,8 @@
   .msg{text-align:left; margin:6px 0; color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
-  /* Common questions – now only TWO */
-  .quickRow{width:min(820px,94vw); margin:14px auto 0; display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+  /* Common questions row */
+  .quickRow{width:min(820px,94vw); margin:14px auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
   .quick{background:rgba(8,12,30,.50); border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center; color:#eaf2ff; text-decoration:none; font-weight:700; transition:transform .2s ease, background .2s ease, border-color .2s ease}
   .quick:hover{transform:translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18)}
 
@@ -88,7 +88,7 @@
 <body>
 <div class="bg a"></div><div class="bg b"></div><div class="bg c"></div>
 
-<!-- Shared defs: IDENTICAL to About/Buy (same font & gradient) -->
+<!-- Shared defs: gold logo + rectangular US flag -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
@@ -135,7 +135,6 @@
 
 <main class="stage">
   <div class="panel">
-    <!-- Hero logo + flag (same font/defs as About/Buy) -->
     <div class="heroWrap">
       <svg class="flagHero" viewBox="0 0 64 48" aria-hidden="true"><use href="#USFlag"/></svg>
       <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"/></svg>
@@ -147,10 +146,11 @@
 
     <div class="log" id="chatLog" aria-live="polite"></div>
 
-    <!-- Common questions: TWO buttons -->
+    <!-- Common questions -->
     <div class="quickRow">
-      <button class="quick" id="qWhat">What is MayaNut™?</button>
-      <a class="quick" href="buy.html">Buy MayaNut™ Products!</a>
+      <button class="quick" id="qWhat">What is MayaNut?</button>
+      <a class="quick" href="buy.html">Buy Our Products</a>
+      <a class="quick" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
 </main>
@@ -159,13 +159,13 @@
   <strong>Copyright © 2025 MayaNut – All Rights Reserved.</strong>
   <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/>
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
     </svg>
   </a>
 </footer>
 
 <script>
-/* Minimal chat + quick button hook (kept same behavior) */
+/* Minimal chat + quick button hook */
 const input = document.getElementById('chatInput');
 const logBox = document.getElementById('chatLog');
 function say(role, html){
