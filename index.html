@@ -7,7 +7,7 @@
 
 <!-- Favicon (MN, golden gradient) -->
 <link rel="icon" type="image/svg+xml"
-  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffe992'/%3E%3Cstop offset='55%25' stop-color='%23ffc44d'/%3E%3Cstop offset='100%25' stop-color='%23c97a11'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%23152b1b'/%3E%3Ctext x='50%25' y='50%25' dy='.36em' text-anchor='middle' font-family='Poppins, Arial, sans-serif' font-weight='900' font-size='30' fill='url(%23g)'>MN%3C/text%3E%3C/svg%3E" />
+  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ffe992'[...]
 
 <style>
   :root{
@@ -99,15 +99,70 @@
   }
   .quick:hover{ transform: translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); }
 
-  /* About card (same text as About page) */
-  .section{
-    width:min(980px,94vw); margin:20px auto 0;
-    background:var(--cardBG); border:1px solid var(--cardBorder);
-    border-radius:16px; padding:18px; backdrop-filter:blur(4px);
-    text-align:left;
+  /* Footer styles */
+  .site-footer {
+    width: 100%;
+    background: var(--panel);
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 24px;
+    box-sizing: border-box;
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffe992;
+    margin-top: auto;
+    backdrop-filter: blur(8px) saturate(120%);
   }
-  .section p{margin:0;color:#cfe9ff;line-height:1.6}
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+  }
+  .footer-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .footer-details {
+    font-size: 0.95em;
+    color: #ffc44d;
+    margin-top: 6px;
+    font-weight: 400;
+  }
+  .footer-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .footer-ig-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    transition: background .2s;
+    text-decoration: none;
+    border: 1px solid var(--line);
+  }
+  .footer-ig-link:hover {
+    background: rgba(255,255,255,0.14);
+    box-shadow:0 0 0 2px #ffc44d;
+  }
+  .footer-ig-link svg {
+    width: 22px;
+    height: 22px;
+    fill: #ffc44d;
+    transition: fill .2s;
+  }
+  .footer-ig-link:hover svg {
+    fill: #ffe992;
+  }
 </style>
+<!-- Import Poppins font for logo consistency -->
+<link href="https://fonts.googleapis.com/css?family=Poppins:900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -116,7 +171,7 @@
 <div class="bg-layer bg2"></div>
 <div class="bg-layer bg3"></div>
 
-<!-- Shared Logo defs (same as Buy/About/Gallery) -->
+<!-- Shared Logo defs (font-family is Poppins for logo text) -->
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
@@ -126,7 +181,7 @@
       <stop offset="100%" stop-color="var(--gold-deep)"/>
     </linearGradient>
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
-      <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
+      <text x="40" y="180" font-family="Poppins,Inter,system-ui,sans-serif"
             font-weight="900" font-size="180" fill="url(#LogoGold)">
         MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
       </text>
@@ -150,7 +205,7 @@
 <!-- Main -->
 <main class="stage">
   <div class="panel">
-    <!-- Big centered logo above search -->
+    <!-- Big centered logo above search/chat -->
     <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
       <use href="#MayaNutLogo"></use>
     </svg>
@@ -168,16 +223,28 @@
   </div>
 </main>
 
-<!-- About card (content mirrors About page) -->
-<section class="section" aria-label="About MayaNut (summary)">
-  <p>
-    <strong>MayaNut LLC</strong> is dedicated to cultivating the MayaNut tree,
-    <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder
-    and current CEO of MayaNut™.
-  </p>
-</section>
-
-<footer>© 2025 MayaNut LLC. All rights reserved.</footer>
+<!-- Footer -->
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-left">
+    <span class="footer-title">MayaNut, Inc. 2025</span>
+    <span class="footer-details">All rights reserved. | South Florida, USA</span>
+  </div>
+  <div class="footer-right">
+    <a
+      class="footer-ig-link"
+      href="https://instagram.com/mayanut.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Instagram @mayanut.com"
+      title="Instagram @mayanut.com"
+    >
+      <!-- Instagram SVG Icon -->
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2.163c3.204 0 3.584.012 4.849.07 1.366.062 2.633.343 3.608 1.32.975.976 1.257 2.243 1.319 3.608.058 1.265.069 1.645.069 4.849s-.011 3.584-.069 4.849c-.062 1.366-.344 2.633-1.319 3.608-.975.976-2.242 1.257-3.608 1.319-1.265.057-1.645.069-4.849.069s-3.584-.012-4.849-.069c-1.366-.062-2.633-.343-3.608-1.319-.976-.975-1.257-2.242-1.319-3.608C2.175 15.646 2.163 15.266 2.163 12c0-3.204.012-3.584.07-4.849.062-1.366.343-2.633 1.319-3.608.975-.976 2.242-1.257 3.608-1.319C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.77.131 4.64.418 3.675 1.384c-.965.965-1.253 2.095-1.312 3.377C2.013 5.668 2 6.078 2 9.262v5.476c0 3.184.013 3.594.072 4.874.059 1.282.347 2.412 1.312 3.377.965.965 2.095 1.253 3.377 1.312 1.28.059 1.689.072 4.874.072s3.594-.013 4.874-.072c1.282-.059 2.412-.347 3.377-1.312.965-.965 1.253-2.095 1.312-3.377.059-1.28.072-1.689.072-4.874V9.262c0-3.184-.013-3.594-.072-4.874-.059-1.282-.347-2.412-1.312-3.377-.965-.965-2.095-1.253-3.377-1.312C15.668.013 15.258 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+      </svg>
+    </a>
+  </div>
+</footer>
 
 </body>
 </html>
