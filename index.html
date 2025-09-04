@@ -16,58 +16,30 @@
     --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08);
     --inputLine:rgba(255,255,255,.22);
-
-    /* Gold logo gradient (top → bottom) */
     --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
-
-    /* Card color for quick buttons */
     --cardBG: rgba(8,12,30,.50);
     --cardBorder: var(--line);
   }
 
   html,body{
     height:100%; margin:0; color:var(--ink);
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    font-family: Inter, system-ui, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
     background: linear-gradient(180deg, #0b1a0f 0%, #143821 42%, #0f2f1d 100%);
     overflow-x:hidden;
   }
 
-  /* Animated blurry “green lava lamp” background — extra motion */
-  .bg-layer{position:fixed; inset:-28% -28% -28% -28%; z-index:-1; pointer-events:none; filter: blur(30px) saturate(118%);}
-  .bg1{
-    background:
-      radial-gradient(42% 44% at 18% 22%, rgba(110,190,120,.34), transparent 60%),
-      radial-gradient(36% 40% at 80% 18%, rgba(165,230,170,.30), transparent 65%),
-      radial-gradient(30% 36% at 52% 62%, rgba(90,150,110,.30), transparent 60%);
-    animation: drift1 38s ease-in-out infinite;
-  }
-  .bg2{
-    background:
-      radial-gradient(34% 38% at 16% 78%, rgba(70,150,95,.30), transparent 60%),
-      radial-gradient(32% 36% at 74% 76%, rgba(125,200,140,.28), transparent 60%),
-      radial-gradient(28% 34% at 48% 40%, rgba(160,220,160,.24), transparent 60%);
-    animation: drift2 46s ease-in-out infinite;
-    mix-blend-mode: screen;
-  }
-  .bg3{
-    background:
-      radial-gradient(28% 32% at 38% 8%, rgba(185,255,185,.20), transparent 60%),
-      radial-gradient(36% 40% at 66% 50%, rgba(90,160,105,.22), transparent 60%),
-      radial-gradient(28% 34% at 52% 86%, rgba(60,120,80,.20), transparent 60%);
-    animation: drift3 54s ease-in-out infinite;
-    opacity:.95;
-  }
-  @keyframes drift1 { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-60px,44px,0) scale(1.06)} }
-  @keyframes drift2 { 0%,100%{transform:translate3d(0,0,0) scale(1.02)} 50%{transform:translate3d(64px,-40px,0) scale(1.08)} }
-  @keyframes drift3 { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(-38px,36px,0) scale(1.07)} }
+  /* Background animation */
+  .bg-layer{position:fixed; inset:-28% -28% -28% -28%; z-index:-1; filter: blur(30px) saturate(118%);}
+  .bg1{background:radial-gradient(42% 44% at 18% 22%, rgba(110,190,120,.34), transparent 60%);animation: drift1 38s ease-in-out infinite;}
+  .bg2{background:radial-gradient(34% 38% at 74% 76%, rgba(125,200,140,.28), transparent 60%);animation: drift2 46s ease-in-out infinite;mix-blend-mode:screen;}
+  .bg3{background:radial-gradient(28% 32% at 52% 86%, rgba(60,120,80,.20), transparent 60%);animation: drift3 54s ease-in-out infinite;opacity:.95;}
+  @keyframes drift1 {50%{transform:translate(-60px,44px) scale(1.06)}}
+  @keyframes drift2 {50%{transform:translate(64px,-40px) scale(1.08)}}
+  @keyframes drift3 {50%{transform:translate(-38px,36px) scale(1.07)}}
 
-  /* Top bar + shared logo (EXACT font/defs copied from Buy page) */
-  .topbar{
-    position:fixed;top:0;left:0;right:0;z-index:30;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%);
-  }
+  /* Topbar + logo */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
   .brandLogo{display:block;height:32px;width:auto}
   .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
@@ -82,54 +54,40 @@
   .searchWrap{width:min(820px,94vw); margin:0 auto 14px;}
   .searchWrap input{
     width:100%; height:48px; padding:12px 14px; font-size:15px; color:#e9eeff;
-    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px; outline:none;
+    background:var(--inputBG); border:1px solid var(--inputLine); border-radius:12px;
   }
-  .searchWrap input::placeholder{color:#cfe8ff; animation: pulse 2.4s ease-in-out infinite;}
-  @keyframes pulse { 0%,100%{opacity:.55} 50%{opacity:1} }
+  .searchWrap input::placeholder{color:#cfe8ff; animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse {0%,100%{opacity:.55} 50%{opacity:1}}
 
-  /* Two common-question boxes */
-  .quickRow{
-    width:min(820px,94vw); margin:14px auto 0;
-    display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
-  }
-  .quick{
-    background:var(--cardBG); border:1px solid var(--cardBorder);
-    border-radius:14px; padding:14px; text-align:center; color:#eaf2ff;
-    text-decoration:none; font-weight:700; transition:transform .2s ease, background .2s ease, border-color .2s ease;
-  }
-  .quick:hover{ transform: translateY(-3px); background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.18); }
+  /* Quick buttons */
+  .quickRow{width:min(820px,94vw);margin:14px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .quick{background:var(--cardBG);border:1px solid var(--cardBorder);border-radius:14px;padding:14px;text-align:center;color:#eaf2ff;text-decoration:none;font-weight:700;transition:transform .2s ease, background .2s ease, border-color .2s ease;}
+  .quick:hover{transform:translateY(-3px);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
 
   /* Footer */
-  footer{
-    width:100%; color:#c9d3ef; border-top:1px solid var(--line);
-    background:rgba(10,14,34,.55); font-size:13px; padding:12px 16px;
-    display:flex; align-items:center; justify-content:space-between;
-  }
-  .brandFoot{font-weight:700}
-  .social{display:flex; align-items:center; gap:10px}
-  .ig-link{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px}
-  .ig-link svg{width:24px; height:24px; display:block}
-  .ig-link:hover svg{transform:scale(1.06)}
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);font-size:13px;padding:14px 16px;text-align:center;position:relative}
+  .social{position:absolute;right:20px;top:50%;transform:translateY(-50%);}
+  .ig-link{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px}
+  .ig-link svg{width:22px;height:22px;display:block}
 </style>
 </head>
 <body>
 
-<!-- Animated background layers -->
+<!-- Background -->
 <div class="bg-layer bg1"></div>
 <div class="bg-layer bg2"></div>
 <div class="bg-layer bg3"></div>
 
-<!-- Shared Logo defs (EXACTLY as Buy page) -->
-<svg width="0" height="0" style="position:absolute">
+<!-- Logo defs -->
+<svg width="0" height="0">
   <defs>
     <linearGradient id="LogoGold" x1="0" x2="0" y1="0" y2="1">
-      <stop offset="0%"  stop-color="var(--gold-top)"/>
+      <stop offset="0%" stop-color="var(--gold-top)"/>
       <stop offset="55%" stop-color="var(--gold-mid)"/>
       <stop offset="85%" stop-color="var(--gold-low)"/>
       <stop offset="100%" stop-color="var(--gold-deep)"/>
     </linearGradient>
     <symbol id="MayaNutLogo" viewBox="0 0 1200 260">
-      <!-- NOTE: font-family matches Buy page exactly -->
       <text x="40" y="180" font-family="Poppins, Inter" font-weight="900" font-size="180" fill="url(#LogoGold)">
         MayaNut<tspan dx="0" dy="-68" font-size="60">™</tspan>
       </text>
@@ -137,12 +95,9 @@
   </defs>
 </svg>
 
-<!-- Top bar -->
-<header class="topbar" role="banner">
-  <a href="index.html" aria-label="MayaNut home">
-    <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
-  </a>
-  <nav class="nav" aria-label="Primary">
+<header class="topbar">
+  <a href="index.html"><svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"/></svg></a>
+  <nav class="nav">
     <a href="index.html" style="background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22)">Home</a>
     <a href="buy.html">Buy</a>
     <a href="about.html">About</a>
@@ -150,20 +105,14 @@
   </nav>
 </header>
 
-<!-- Main -->
 <main class="stage">
   <div class="panel">
-    <!-- Big centered logo above search (same font as other pages) -->
-    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
-      <use href="#MayaNutLogo"></use>
-    </svg>
+    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"/></svg>
 
-    <!-- Search / chat box -->
     <div class="searchWrap">
-      <input id="searchInput" placeholder="Search Products..." aria-label="Search products" />
+      <input placeholder="Search Products..." aria-label="Search products" />
     </div>
 
-    <!-- Two common-question boxes -->
     <div class="quickRow">
       <a class="quick" href="about.html">What Is MayaNut™?</a>
       <a class="quick" href="buy.html">Buy MayaNut™ Products!</a>
@@ -171,13 +120,11 @@
   </div>
 </main>
 
-<!-- Clean footer (no extra links; IG not clipped) -->
 <footer>
-  <div class="brandFoot">MayaNut, Inc. 2025</div>
+  Copyright © 2025 MayaNut - All Rights Reserved.
   <div class="social">
     <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="Instagram @mayanut.co">
-      <!-- Instagram glyph -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
         <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5zm0 2A3.5 3.5 0 1 0 15.5 12 3.5 3.5 0 0 0 12 7.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/>
       </svg>
     </a>
