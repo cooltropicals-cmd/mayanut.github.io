@@ -5,13 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MayaNut</title>
 
-<!-- Clean, thin wordmark font -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
-
-<link rel="icon" type="image/svg+xml"
-  href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23152b1b'/%3E%3Ctext x='50%25' y='50%25' dy='.36em' text-anchor='middle' font-family='Inter Tight, Inter, system-ui, sans-serif' font-weight='700' font-size='26' fill='%23ffc44d'%3EMN%3C/text%3E%3C/svg%3E" />
-
 <style>
   :root{
     --ink:#eef3ff;
@@ -19,9 +12,9 @@
     --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08);
     --inputLine:rgba(255,255,255,.22);
+    --gold-top:#ffe992; --gold-mid:#ffc44d; --gold-low:#e79a21; --gold-deep:#c97a11;
     --cardBG: rgba(8,12,30,.50);
     --cardBorder: var(--line);
-    --brand:#173d2a; /* deep organic green for logo text */
   }
 
   html,body{
@@ -29,12 +22,11 @@
     font-family: Inter, system-ui, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
     overflow-x:hidden;
-
-    /* Smooth animated green background */
     background: linear-gradient(120deg, #0d2f14, #1a5c2e, #0d2f14);
     background-size: 400% 400%;
     animation: bgShift 20s ease infinite;
   }
+
   @keyframes bgShift {
     0% {background-position: 0% 50%;}
     50% {background-position: 100% 50%;}
@@ -52,11 +44,9 @@
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
   .panel{width:min(980px,92vw);text-align:center}
   .heroRow{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:16px}
-  .heroLogo{display:block;width:min(560px,86vw);}
-
-  /* Flag: bigger, no outline */
+  .heroLogo{display:block;width:min(560px,80vw);}
   .flag{width:200px;height:120px;display:block}
-
+  
   /* Search */
   .searchWrap{width:min(820px,94vw); margin:0 auto 14px;}
   .searchWrap input{
@@ -81,18 +71,7 @@
 <body>
 
 <header class="topbar">
-  <!-- TEXT-ONLY LOGO IMAGE (long & thin wordmark via SVG data URI) -->
-  <a href="index.html">
-    <img class="brandLogo" alt="MayaNut" 
-      src="data:image/svg+xml;utf8,
-      %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 180'%3E
-        %3Cstyle%3E
-          .w%7B font:500 110px 'Inter Tight', 'Inter', system-ui, sans-serif; letter-spacing:.06em; fill:%23173d2a; %7D
-        %3C/style%3E
-        %3Ctext class='w' x='0' y='120'%3EMayaNut%3C/text%3E
-        %3C/text%3E
-      %3C/svg%3E" />
-  </a>
+  <a href="index.html"><svg class="brandLogo" viewBox="0 0 1200 260"><text x="40" y="180" font-family="Poppins, Inter" font-weight="900" font-size="180" fill="gold">MayaNut™</text></svg></a>
   <nav class="nav">
     <a href="index.html" style="background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22)">Home</a>
     <a href="buy.html">Buy</a>
@@ -103,8 +82,33 @@
 
 <main class="stage">
   <div class="panel">
-    <!-- Flag + TEXT-ONLY LOGO again in hero -->
+    <!-- Flag + Logo row -->
     <div class="heroRow">
-      <svg class="flag" viewBox="0 0 7410 3900" aria-label="United States flag">
+      <svg class="flag" viewBox="0 0 7410 3900">
         <rect width="7410" height="3900" fill="#b22234"/>
-        <path d="M0,450h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410
+        <path d="M0,450h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0" fill="#fff"/>
+        <rect width="2964" height="2100" fill="#3c3b6e"/>
+        <g fill="#fff">
+          <g id="s18"><g id="s9"><g id="s5"><g id="s4"><path id="s" d="M247,90 317,307 129,168h236L177,307z"/></g><use xlink:href="#s" x="494"/><use xlink:href="#s" x="988" /><use xlink:href="#s" x="1482"/></g><use xlink:href="#s4" x="1976"/><use xlink:href="#s4" x="2470"/></g><use xlink:href="#s9" y="210"/></g><use xlink:href="#s18" y="420"/><use xlink:href="#s18" y="840"/><use xlink:href="#s18" y="1260"/><use xlink:href="#s18" y="1680"/>
+        </g>
+      </svg>
+      <svg class="heroLogo" viewBox="0 0 1200 260"><text x="40" y="180" font-family="Poppins, Inter" font-weight="900" font-size="180" fill="gold">MayaNut™</text></svg>
+    </div>
+
+    <div class="searchWrap">
+      <input placeholder="Search Products..." aria-label="Search products" />
+    </div>
+
+    <div class="quickRow">
+      <a class="quick" href="about.html">What Is MayaNut™?</a>
+      <a class="quick" href="buy.html">Buy MayaNut™ Products!</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Copyright © 2025 MayaNut - All Rights Reserved.
+</footer>
+
+</body>
+</html>
