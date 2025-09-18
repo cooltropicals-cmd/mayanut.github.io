@@ -5,115 +5,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About • MayaNut</title>
 
-<!-- Long/thin wordmark font -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
-
 <style>
   :root{
-    --ink:#eef3ff;
-    --panel:rgba(12,16,34,.55);
-    --line:rgba(255,255,255,.12);
-    --inputBG:rgba(255,255,255,.08);
-    --inputLine:rgba(255,255,255,.22);
-    --cardBG: rgba(8,12,30,.50);
-    --cardBorder: var(--line);
-    --brand:#173d2a;
+    --ink:#eef3ff; --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
+    --cardBG: rgba(8,12,30,.50); --cardBorder: var(--line);
   }
-
   html,body{
-    height:100%; margin:0; color:var(--ink);
-    font-family: Inter, system-ui, sans-serif;
-    display:flex; flex-direction:column; min-height:100%;
-    overflow-x:hidden;
-
-    /* Animated green background */
+    height:100%; margin:0; color:var(--ink); font-family: Inter, system-ui, sans-serif;
+    display:flex; flex-direction:column; min-height:100%; overflow-x:hidden;
     background: linear-gradient(120deg, #0d2f14, #1a5c2e, #0d2f14);
-    background-size: 400% 400%;
-    animation: bgShift 20s ease infinite;
+    background-size: 400% 400%; animation: bgShift 20s ease infinite;
   }
   @keyframes bgShift {0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-  /* Topbar */
   .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
   .brandLogo{display:block;height:32px;width:auto}
   .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
-  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+  .nav a[aria-current="page"], .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
-  /* Stage */
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
-  .panel{width:min(1100px,92vw);}
-
-  /* Flag + Logo row */
+  .panel{width:min(1100px,92vw)}
   .heroRow{display:flex;align-items:center;justify-content:center;gap:20px;margin:0 auto 24px;text-align:center}
-  .heroLogo{display:block;width:min(560px,86vw);}
-  .flag{width:200px;height:120px;display:block} /* bigger, no outline */
+  .heroLogo{display:block;width:min(560px,86vw)}
+  .flag{width:200px;height:120px;display:block}
 
-  /* Two-column content */
-  .content{display:grid; grid-template-columns: 1.1fr .9fr; gap:16px;}
-  @media (max-width: 900px){ .content{grid-template-columns:1fr} }
+  .content{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+  @media (max-width: 900px){.content{grid-template-columns:1fr}}
 
   .card{background:var(--cardBG);border:1px solid var(--cardBorder);border-radius:16px;padding:18px}
-  .aboutTitle{
-    font-family:"Inter Tight", Inter, system-ui, sans-serif;
-    font-weight:600; letter-spacing:.02em; margin:0 0 8px;
-  }
-  .aboutBody{line-height:1.6; font-size:16px; color:#f1f6ff}
+  .aboutTitle{font-weight:700;margin:0 0 8px}
+  .aboutBody{line-height:1.6;font-size:16px;color:#f1f6ff}
 
-  /* Right-side image placeholder */
-  .imgPlaceholder{
-    display:grid; place-items:center; aspect-ratio: 4/3;
-    border:2px dashed rgba(255,255,255,.35);
-    border-radius:14px;
-    background:rgba(255,255,255,.06);
-    font-weight:600; color:#e6f3ea; text-transform:uppercase; letter-spacing:.08em;
-  }
+  .imgPlaceholder{display:grid;place-items:center;aspect-ratio:4/3;border:2px dashed rgba(255,255,255,.35);border-radius:14px;background:rgba(255,255,255,.06);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <!-- TEXT-ONLY LONG/THIN LOGO as SVG image -->
+  <!-- Match index/home logo -->
   <a href="index.html" aria-label="MayaNut home">
-    <img class="brandLogo" alt="MayaNut"
-      src="data:image/svg+xml;utf8,
-      %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 180'%3E
-        %3Cstyle%3E .w%7B font:500 110px 'Inter Tight', 'Inter', system-ui, sans-serif; letter-spacing:.06em; fill:%23173d2a; %7D %3C/style%3E
-        %3Ctext class='w' x='0' y='120'%3EMayaNut%E2%84%A2%3C/text%3E
-      %3C/svg%3E" />
+    <svg class="brandLogo" viewBox="0 0 1200 260" role="img" aria-label="MayaNut">
+      <text x="40" y="180" font-family="Poppins, Inter" font-weight="900" font-size="180" fill="gold">MayaNut™</text>
+    </svg>
   </a>
   <nav class="nav" aria-label="Main">
     <a href="index.html">Home</a>
     <a href="buy.html">Buy</a>
-    <a href="about.html" style="background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22)">About</a>
+    <a href="about.html" aria-current="page">About</a>
     <a href="gallery.html">Gallery</a>
   </nav>
 </header>
 
 <main class="stage">
   <div class="panel">
-    <!-- Flag + text-only wordmark -->
+    <!-- Flag + same logo as home -->
     <div class="heroRow">
-      <svg class="flag" viewBox="0 0 7410 3900" aria-label="United States flag">
+      <!-- Fixed-star U.S. flag -->
+      <svg class="flag" viewBox="0 0 7410 3900" aria-label="United States flag" role="img">
+        <defs>
+          <g id="star">
+            <path d="M0,-98 L22,-30 95,-30 36,12 58,80 0,38 -58,80 -36,12 -95,-30 -22,-30 Z" transform="scale(0.6)"/>
+          </g>
+          <g id="row6">
+            <use href="#star" x="247"/><use href="#star" x="741"/><use href="#star" x="1235"/><use href="#star" x="1729"/><use href="#star" x="2223"/><use href="#star" x="2717"/>
+          </g>
+          <g id="row5">
+            <use href="#star" x="494"/><use href="#star" x="988"/><use href="#star" x="1482"/><use href="#star" x="1976"/><use href="#star" x="2470"/>
+          </g>
+        </defs>
         <rect width="7410" height="3900" fill="#b22234"/>
-        <path d="M0,450h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0zm0,600h7410v300H0" fill="#fff"/>
+        <path d="M0,450h7410v300H0 M0,1050h7410v300H0 M0,1650h7410v300H0 M0,2250h7410v300H0 M0,2850h7410v300H0 M0,3450h7410v300H0" fill="#fff"/>
         <rect width="2964" height="2100" fill="#3c3b6e"/>
         <g fill="#fff">
-          <g id="s18"><g id="s9"><g id="s5"><g id="s4"><path id="s" d="M247,90 317,307 129,168h236L177,307z"/></g><use href="#s" x="494"/><use href="#s" x="988"/><use href="#s" x="1482"/></g><use href="#s4" x="1976"/><use href="#s4" x="2470"/></g><use href="#s9" y="210"/></g>
-          <use href="#s18" y="420"/><use href="#s18" y="840"/><use href="#s18" y="1260"/><use href="#s18" y="1680"/>
+          <use href="#row6" y="210"/><use href="#row5" y="420"/>
+          <use href="#row6" y="630"/><use href="#row5" y="840"/>
+          <use href="#row6" y="1050"/><use href="#row5" y="1260"/>
+          <use href="#row6" y="1470"/><use href="#row5" y="1680"/>
+          <use href="#row6" y="1890"/>
         </g>
       </svg>
 
-      <img class="heroLogo" alt="MayaNut"
-        src="data:image/svg+xml;utf8,
-        %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 220'%3E
-          %3Cstyle%3E .w%7B font:500 140px 'Inter Tight', 'Inter', system-ui, sans-serif; letter-spacing:.06em; fill:%23173d2a; %7D %3C/style%3E
-          %3Ctext class='w' x='0' y='150'%3EMayaNut%E2%84%A2%3C/text%3E
-        %3C/svg%3E" />
+      <svg class="heroLogo" viewBox="0 0 1200 260" role="img" aria-label="MayaNut">
+        <text x="40" y="180" font-family="Poppins, Inter" font-weight="900" font-size="180" fill="gold">MayaNut™</text>
+      </svg>
     </div>
 
-    <!-- Two-column: left text, right image placeholder -->
+    <!-- Two-column layout -->
     <section class="content" aria-label="About content">
       <article class="card">
         <h2 class="aboutTitle">About</h2>
@@ -122,7 +101,6 @@
           <em>Brosimum alicastrum</em>, to South Florida Agriculture.
         </p>
       </article>
-
       <aside class="card" aria-label="About image">
         <div class="imgPlaceholder">Image Placeholder</div>
       </aside>
