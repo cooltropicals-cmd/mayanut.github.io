@@ -10,20 +10,29 @@
     font-family: Inter, sans-serif; color:#fff; overflow:hidden;
     background: linear-gradient(135deg, #5a0a0a, #7a1010 40%, #5a0a0a);
   }
+  /* Topbar */
   .topbar {
     position:fixed; top:0; left:0; right:0; height:56px;
-    display:flex; align-items:center; padding:0 14px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 14px;
     background:#3a0000; border-bottom:1px solid rgba(255,255,255,.2);
     z-index:100;
   }
-  .logoText { font-size:22px; font-weight:900;
-    color:#fff; -webkit-text-stroke:1px lightgrey; text-decoration:none; }
-  .nav { margin-left:auto; display:flex; gap:12px; }
+  .logoText {
+    font-size:22px; font-weight:900;
+    color:#fff; -webkit-text-stroke:1px lightgrey;
+    text-decoration:none;
+  }
+  .nav { display:flex; gap:12px; }
   .nav a { color:#fff; font-weight:700; text-decoration:none; }
   .nav a:hover { text-decoration:underline; }
-  .wrap { height:100vh; display:grid; place-items:center;
-    grid-template-rows:auto auto auto 1fr; gap:16px;
-    padding-top:70px; padding-bottom:70px; box-sizing:border-box; }
+
+  /* Layout */
+  .wrap {
+    height:100vh; display:grid; place-items:center;
+    grid-template-rows:auto auto auto auto 1fr; gap:16px;
+    padding-top:70px; padding-bottom:90px; box-sizing:border-box;
+  }
   .bigLogo { font-size:64px; font-weight:900; -webkit-text-stroke:2px lightgrey; }
   .search input {
     width:min(700px,92vw); height:50px;
@@ -31,23 +40,40 @@
     background:rgba(0,0,0,.25); color:#fff; font-size:16px; padding:0 16px;
   }
   .bubbles { display:grid; gap:10px; width:min(700px,92vw); }
-  .bubble { background:rgba(0,0,0,.25); padding:12px 14px;
+  .bubble {
+    background:rgba(0,0,0,.25); padding:12px 14px;
     border-radius:14px; border:1px solid rgba(255,255,255,.2);
-    text-decoration:none; color:#fff; font-weight:700; }
-  .footer { position:fixed; bottom:0; left:0; right:0; padding:10px 14px;
-    background:#3a0000; font-size:13px;
-    display:flex; justify-content:space-between; align-items:center; }
-  .ig { display:inline-flex; align-items:center; justify-content:center;
+    text-decoration:none; color:#fff; font-weight:700;
+  }
+
+  /* Flag */
+  .flag {
+    width:min(720px,95vw);
+    border:2px solid #fff;
+    margin-top:20px;
+  }
+
+  /* Footer */
+  .footer {
+    position:fixed; bottom:0; left:0; right:0;
+    padding:10px 14px;
+    background:#3a0000;
+    font-size:13px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .ig {
+    display:inline-flex; align-items:center; justify-content:center;
     width:32px; height:32px; border-radius:6px;
-    background:rgba(255,255,255,.12); }
-  .ig svg{width:20px;height:20px;fill:#fff;}
+    background:rgba(255,255,255,.12);
+  }
+  .ig svg { width:20px; height:20px; fill:#fff; }
 </style>
 </head>
 <body>
 <header class="topbar">
   <a class="logoText" href="index.html">MayaNut™</a>
   <nav class="nav">
-    <a href="index.html">Home</a>
+    <a href="index.html">MayaNut™</a>
     <a href="buy.html">Buy</a>
     <a href="about.html">About</a>
   </nav>
@@ -60,14 +86,37 @@
     <a class="bubble" href="about.html">What is MayaNut™?</a>
     <a class="bubble" href="buy.html">Buy MayaNut™ Products</a>
   </div>
+
+  <!-- US Flag SVG -->
+  <svg class="flag" viewBox="0 0 7410 3900" xmlns="http://www.w3.org/2000/svg">
+    <rect width="7410" height="3900" fill="#b22234"/>
+    <path d="M0,450h7410v300H0 M0,1050h7410v300H0 M0,1650h7410v300H0
+             M0,2250h7410v300H0 M0,2850h7410v300H0 M0,3450h7410v300H0" fill="#fff"/>
+    <rect width="2964" height="2100" fill="#3c3b6e"/>
+    <g fill="#fff">
+      <!-- 50 stars, 9 rows alternating 6 and 5 -->
+      <g id="s"><polygon points="0,-98 22,-30 95,-30 36,12 58,80 0,38 -58,80 -36,12 -95,-30 -22,-30"/></g>
+      <g id="r5"><use href="#s" x="247"/><use href="#s" x="741"/><use href="#s" x="1235"/><use href="#s" x="1729"/><use href="#s" x="2223"/></g>
+      <g id="r6"><use href="#s" x="0"/><use href="#s" x="494"/><use href="#s" x="988"/><use href="#s" x="1482"/><use href="#s" x="1976"/><use href="#s" x="2470"/></g>
+      <use href="#r6" y="0"/><use href="#r5" y="210"/>
+      <use href="#r6" y="420"/><use href="#r5" y="630"/>
+      <use href="#r6" y="840"/><use href="#r5" y="1050"/>
+      <use href="#r6" y="1260"/><use href="#r5" y="1470"/>
+      <use href="#r6" y="1680"/>
+    </g>
+  </svg>
 </main>
 
 <footer class="footer">
   <div>© <span id="yr"></span> MayaNut — All Rights Reserved.</div>
   <a class="ig" href="https://instagram.com/mayanut.co" target="_blank" aria-label="Instagram">
-    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5z"/></svg>
+    <!-- Instagram logo (white) -->
+    <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+      <path d="M224,202.66A53.34,53.34,0,1,0,277.34,256,53.38,53.38,0,0,0,224,202.66Zm124.71-41a54,54,0,0,0-30.3-30.3c-20.9-8.36-70.51-6.45-94.41-6.45s-73.51-1.91-94.41,6.45a54,54,0,0,0-30.3,30.3c-8.36,20.9-6.45,70.51-6.45,94.41s-1.91,73.51,6.45,94.41a54,54,0,0,0,30.3,30.3c20.9,8.36,70.51,6.45,94.41,6.45s73.51,1.91,94.41-6.45a54,54,0,0,0,30.3-30.3c8.36-20.9,6.45-70.51,6.45-94.41S357.07,182.56,348.71,161.66ZM224,338a82,82,0,1,1,82-82A81.9,81.9,0,0,1,224,338Zm85.33-148.67a19.2,19.2,0,1,1,19.2-19.2A19.18,19.18,0,0,1,309.33,189.33ZM398.8,80A93.24,93.24,0,0,0,368,51.2C350.5,44.19,311,32,224,32S97.5,44.19,80,51.2A93.24,93.24,0,0,0,51.2,80C44.19,97.5,32,136.94,32,224s12.19,126.5,19.2,144A93.24,93.24,0,0,0,80,396.8C97.5,403.81,136.94,416,224,416s126.5-12.19,144-19.2a93.24,93.24,0,0,0,28.8-28.8c7-17.5,19.2-56.94,19.2-144S405.81,97.5,398.8,80Z"/>
+    </svg>
   </a>
 </footer>
+
 <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 </body>
 </html>
