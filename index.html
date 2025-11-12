@@ -1,125 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>The MayaNut Company</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The MayaNut Company</title>
+<meta name="description" content="The MayaNut Company — Maya nut (Brosimum alicastrum) foods and education supporting reforestation, food security, and sustainable agriculture." />
+<link rel="icon" type="image/png" href="favicon-circle.png" />
+<meta name="theme-color" content="#18A7FF" />
 
-  <link rel="icon" type="image/png" href="logomayanut.png" />
-  <meta name="theme-color" content="#18A7FF" />
+<style>
+  :root{
+    --bg:#18A7FF;        /* page background */
+    --bar:#0a56c2;       /* header/footer color */
+    --bar-h:60px;
+    --move:10s;          /* travel time across */
+    --gap:2.5s;          /* time fully off-screen before restart */
+    --cycle:12.5s;       /* move + gap */
+  }
 
-  <style>
-    :root {
-      --blue-main: #18A7FF;       /* main background blue */
-      --blue-light1: #32b9ff;     /* soft highlight */
-      --blue-light2: #64ccff;     /* even softer */
-    }
+  html,body{height:100%}
+  body{
+    margin:0; color:#fff;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg); overflow:hidden;
+  }
 
-    /* Smooth blended background */
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+  /* Top ticker */
+  .topbar{
+    position:fixed; inset:0 0 auto 0; height:var(--bar-h);
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bar); border-bottom:1px solid rgba(255,255,255,.25);
+    z-index:100; overflow:hidden;
+  }
+  .ticker{
+    position:relative; width:100%; height:100%;
+    overflow:hidden; display:flex; align-items:center; justify-content:center;
+  }
+  .ticker__track{
+    position:absolute; white-space:nowrap;
+    font-weight:800; letter-spacing:.2px;
+    animation: marquee var(--cycle) linear infinite;
+  }
 
-      background: radial-gradient(circle at 30% 30%, var(--blue-light2), var(--blue-main) 60%),
-                  radial-gradient(circle at 75% 60%, var(--blue-light1), var(--blue-main) 70%),
-                  var(--blue-main);
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    }
+  @keyframes marquee{
+    0%   { transform:translateX(-100%); }
+    80%  { transform:translateX(100%); }
+    100% { transform:translateX(100%); }
+  }
 
-    /* Scrolling text bar */
-    .ticker {
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(4px);
-      color: white;
-      font-size: 1.1rem;
-      padding: 10px 0;
-      position: relative;
-    }
+  /* Main layout */
+  .wrap{
+    height:100vh; display:grid; align-content:start; justify-items:center;
+    row-gap:20px; 
+    padding-top:calc(var(--bar-h) + 18px);
+    padding-bottom:calc(var(--bar-h) + 24px);
+    box-sizing:border-box; text-align:center;
+  }
 
-    .ticker span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scroll 12s linear infinite;
-    }
+  .logo{
+    width:min(400px,74vw); height:auto; display:block; margin-inline:auto;
+    filter:drop-shadow(0 2px 10px rgba(0,0,0,.18));
+  }
 
-    @keyframes scroll {
-      0%   { transform: translateX(100%); opacity: 0; }
-      10%  { opacity: 1; }
-      50%  { transform: translateX(-100%); opacity: 1; }
-      90%  { opacity: 0; }
-      100% { transform: translateX(-120%); opacity: 0; }
-    }
+  /* CTA Buttons — BIGGER VERSION */
+  .cta-row{
+    display:flex; gap:14px; margin-top:8px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:180px;
+    height:60px;
+    padding:0 22px;
+    border-radius:14px;
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:.3px;
+    color:var(--bar);
+    background:#fff;
+    text-decoration:none;
+    border:1px solid rgba(0,0,0,.08);
+    box-shadow:0 3px 10px rgba(0,0,0,.22);
+    transition:background .2s, transform .15s;
+  }
+  .btn:hover{
+    background:#eaf2ff;
+    transform:translateY(-2px);
+  }
 
-    /* Logo positioning */
-    .logo {
-      width: min(420px, 80vw);
-      margin-top: 30px;
-      display: block;
-    }
-
-    /* Buttons */
-    .nav-buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 20px;
-    }
-
-    .nav-buttons a {
-      background: white;
-      color: #0064c8;
-      padding: 12px 24px;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      transition: 0.2s;
-    }
-
-    .nav-buttons a:hover {
-      transform: scale(1.05);
-      background: #e6f4ff;
-    }
-
-    /* Instagram icon bottom right */
-    .insta {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      width: 48px;
-      opacity: 0.9;
-    }
-  </style>
+  /* Footer */
+  .footer{
+    position:fixed; inset:auto 0 0 0; height:var(--bar-h);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 14px;
+    background:var(--bar); 
+    border-top:1px solid rgba(255,255,255,.25); 
+    font-size:13px;
+  }
+  .ig{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:36px; height:36px;
+    border-radius:50%;
+    background:rgba(255,255,255,.14);
+    text-decoration:none;
+  }
+  .ig svg{
+    width:22px; height:22px; fill:#fff;
+  }
+</style>
 </head>
 
 <body>
 
-  <!-- Scrolling Text -->
-  <div class="ticker">
-    <span>❄️ The MayaNut Company Wishing You a Merry Christmas 2025 ❄️</span>
+<header class="topbar">
+  <div class="ticker" aria-live="polite">
+    <div class="ticker__track">❄️ The MayaNut Company Wishing You Merry Christmas 2025 ❄️</div>
   </div>
+</header>
 
-  <!-- Logo -->
-  <img src="logomayanut.png" alt="The MayaNut Company" class="logo">
-
-  <!-- Buttons -->
-  <div class="nav-buttons">
-    <a href="about.html">About</a>
-    <a href="buy.html">Buy</a>
-  </div>
-
-  <!-- Instagram button -->
-  <a href="https://instagram.com/themayanutcompany" target="_blank">
-    <img class="insta" src="insta.png" alt="Instagram">
+<main class="wrap">
+  <a href="index.html" aria-label="Home">
+    <img class="logo" src="logomayanut.png" alt="The MayaNut Company logo">
   </a>
+
+  <div class="cta-row">
+    <a class="btn" href="about.html">About</a>
+    <a class="btn" href="buy.html">Buy</a>
+  </div>
+</main>
+
+<footer class="footer">
+  <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
+  <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" aria-label="Instagram">
+    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 12 6.5zm6.25-1.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
+  </a>
+</footer>
 
 </body>
 </html>
