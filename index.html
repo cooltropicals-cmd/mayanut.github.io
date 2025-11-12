@@ -5,49 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MayaNut™</title>
 <style>
+  :root{
+    /* Blues tuned to your logo’s background */
+    --blue-1:#0b6bdc;   /* darker edge */
+    --blue-2:#1894ff;   /* bright center */
+    --blue-3:#0b6bdc;   /* repeat for smooth gradient */
+    --bar:#0a56c2;      /* top/footer bar */
+  }
+
   body {
     margin:0; height:100%;
-    font-family: Inter, sans-serif; color:#fff; overflow:hidden;
-    background: linear-gradient(135deg, #5a0a0a, #7a1010 40%, #5a0a0a);
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    color:#fff; overflow:hidden;
+    background: linear-gradient(135deg, var(--blue-1), var(--blue-2) 40%, var(--blue-3));
   }
+
   .topbar {
     position:fixed; top:0; left:0; right:0; height:56px;
     display:flex; align-items:center; padding:0 14px;
-    background:#3a0000; border-bottom:1px solid rgba(255,255,255,.2);
+    background: var(--bar);
+    border-bottom:1px solid rgba(255,255,255,.25);
     z-index:100;
   }
-  .logoText { font-size:22px; font-weight:900;
-    color:#fff; -webkit-text-stroke:1px lightgrey; text-decoration:none; }
-  .nav { margin-left:auto; display:flex; gap:12px; }
-  .nav a { color:#fff; font-weight:700; text-decoration:none; }
-  .nav a:hover { text-decoration:underline; }
-  .wrap { height:100vh; display:grid; place-items:center;
-    grid-template-rows:auto auto auto 1fr; gap:16px;
-    padding-top:70px; padding-bottom:70px; box-sizing:border-box; }
-  .bigLogo { font-size:64px; font-weight:900; -webkit-text-stroke:2px lightgrey; }
-  .search input {
-    width:min(700px,92vw); height:50px;
-    border-radius:14px; border:1px solid rgba(255,255,255,.2);
-    background:rgba(0,0,0,.25); color:#fff; font-size:16px; padding:0 16px;
+
+  /* removed the upper-left logo */
+
+  .nav { margin-left:auto; display:flex; gap:16px; }
+  .nav a {
+    color:#fff; font-weight:700; text-decoration:none; letter-spacing:.2px;
+    padding:8px 10px; border-radius:8px;
   }
+  .nav a:hover, .nav a:focus-visible { background:rgba(255,255,255,.14); outline:none; }
+
+  .wrap {
+    height:100vh; display:grid; place-items:center;
+    grid-template-rows:auto auto 1fr; gap:16px;
+    padding-top:70px; padding-bottom:70px; box-sizing:border-box;
+  }
+
+  .bigLogo {
+    font-size:64px; font-weight:900; -webkit-text-stroke:2px lightgrey;
+    text-shadow: 0 2px 10px rgba(0,0,0,.25);
+  }
+
+  /* search removed */
+
   .bubbles { display:grid; gap:10px; width:min(700px,92vw); }
-  .bubble { background:rgba(0,0,0,.25); padding:12px 14px;
-    border-radius:14px; border:1px solid rgba(255,255,255,.2);
-    text-decoration:none; color:#fff; font-weight:700; }
-  .footer { position:fixed; bottom:0; left:0; right:0; padding:10px 14px;
-    background:#3a0000; font-size:13px;
-    display:flex; justify-content:space-between; align-items:center; }
+  .bubble {
+    background:rgba(255,255,255,.12); padding:12px 14px;
+    border-radius:14px; border:1px solid rgba(255,255,255,.25);
+    text-decoration:none; color:#fff; font-weight:700;
+  }
+  .bubble:hover, .bubble:focus-visible {
+    background:rgba(255,255,255,.18); outline:none;
+  }
+
+  .footer {
+    position:fixed; bottom:0; left:0; right:0; padding:10px 14px;
+    background: var(--bar); font-size:13px;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid rgba(255,255,255,.25);
+  }
+
   .ig { display:inline-flex; align-items:center; justify-content:center;
     width:32px; height:32px; border-radius:6px;
-    background:rgba(255,255,255,.12); }
+    background:rgba(255,255,255,.14); }
   .ig svg{width:20px;height:20px;fill:#fff;}
 </style>
 </head>
 <body>
 <header class="topbar">
-  <a class="logoText" href="index.html">MayaNut™</a>
-  <nav class="nav">
-    <a href="index.html">Home</a>
+  <nav class="nav" aria-label="Primary">
     <a href="buy.html">Buy</a>
     <a href="about.html">About</a>
   </nav>
@@ -55,7 +83,9 @@
 
 <main class="wrap">
   <div class="bigLogo">MayaNut™</div>
-  <form class="search"><input placeholder="🔎 Search mayanut.com" /></form>
+
+  <!-- search removed -->
+
   <div class="bubbles">
     <a class="bubble" href="about.html">What is MayaNut™?</a>
     <a class="bubble" href="buy.html">Buy MayaNut™ Products</a>
@@ -63,9 +93,11 @@
 </main>
 
 <footer class="footer">
-  <div>© <span id="yr"></span> MayaNut — All Rights Reserved.</div>
-  <a class="ig" href="https://instagram.com/mayanut.co" target="_blank" aria-label="Instagram">
-    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5z"/></svg>
+  <div>© <span id="yr"></span> MayaNut™ — All Rights Reserved.</div>
+  <a class="ig" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 5.5z"/>
+    </svg>
   </a>
 </footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
