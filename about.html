@@ -4,24 +4,83 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About — The MayaNut Company</title>
-<link rel="icon" type="image/png" href="favicon-circle.png">
+<link rel="icon" type="image/png" href="favicon-circle.png" />
 <meta name="theme-color" content="#18A7FF" />
 <style>
-  :root{ --bg:#18A7FF; --bar:#0a56c2; --bar-h:60px; }
+  :root{
+    --bg:#18A7FF;       /* page background */
+    --bar:#0a56c2;      /* header/footer color */
+    --bar-h:60px;
+    --move:10s;         /* time the text moves across */
+    --gap:2.5s;         /* time fully off-screen before restart */
+    --cycle:12.5s;      /* move + gap */
+  }
   html,body{height:100%}
-  body{ margin:0; color:#fff; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); }
-  .topbar{ position:fixed; inset:0 0 auto 0; height:var(--bar-h); background:var(--bar); border-bottom:1px solid rgba(255,255,255,.25); z-index:100; }
-  .wrap{ min-height:100vh; display:grid; justify-items:center; padding:calc(var(--bar-h) + 18px) 16px calc(var(--bar-h) + 28px); box-sizing:border-box; text-align:center; gap:20px; }
-  .logo{ width:min(360px,70vw); height:auto; display:block; margin-inline:auto; filter:drop-shadow(0 2px 10px rgba(0,0,0,.18)); }
-  .content{ max-width:820px; text-align:left; color:#083b7c; background:#ffffff; border-radius:14px; padding:18px 20px; box-shadow:0 2px 10px rgba(0,0,0,.18); }
+  body{
+    margin:0; color:#fff;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);
+    overflow:hidden;
+  }
+
+  /* Top ticker (single track; fully disappears before restart) */
+  .topbar{
+    position:fixed; inset:0 0 auto 0; height:var(--bar-h);
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bar);
+    border-bottom:1px solid rgba(255,255,255,.25);
+    z-index:100; overflow:hidden;
+  }
+  .ticker{ position:relative; width:100%; height:100%; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .ticker__track{
+    position:absolute; white-space:nowrap; font-weight:800; letter-spacing:.2px;
+    animation: marquee var(--cycle) linear infinite;
+  }
+  /* Move across (0→80%), then stay off-screen left (80→100%) to create the gap */
+  @keyframes marquee{
+    0%   { transform:translateX(100%); }
+    80%  { transform:translateX(-100%); }
+    100% { transform:translateX(-100%); }
+  }
+
+  .wrap{
+    min-height:100vh; display:grid; justify-items:center; gap:20px;
+    padding:calc(var(--bar-h) + 18px) 16px calc(var(--bar-h) + 28px);
+    box-sizing:border-box; text-align:center;
+  }
+  .logo{
+    width:min(360px,70vw); height:auto; display:block; margin-inline:auto;
+    filter:drop-shadow(0 2px 10px rgba(0,0,0,.18));
+  }
+
+  .content{
+    max-width:820px; text-align:left; color:#083b7c;
+    background:#fff; border-radius:14px; padding:18px 20px;
+    box-shadow:0 2px 10px rgba(0,0,0,.18);
+  }
   .content p{ margin:0; line-height:1.55; }
-  .footer{ position:fixed; inset:auto 0 0 0; height:var(--bar-h); display:flex; align-items:center; justify-content:space-between; padding:0 14px; background:var(--bar); border-top:1px solid rgba(255,255,255,.25); font-size:13px; }
-  .ig{ display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.14); text-decoration:none; }
-  .ig svg{ width:22px; height:22px; fill:#fff; }
+
+  .footer{
+    position:fixed; inset:auto 0 0 0; height:var(--bar-h);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 14px; background:var(--bar);
+    border-top:1px solid rgba(255,255,255,.25); font-size:13px;
+  }
+  .ig{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,.14); text-decoration:none;
+  }
+  .ig svg{width:22px;height:22px;fill:#fff;}
 </style>
 </head>
 <body>
-<header class="topbar" aria-hidden="true"></header>
+
+<header class="topbar">
+  <div class="ticker" aria-live="polite">
+    <div class="ticker__track">❄️ The MayaNut Company Wishing You Merry Christmas 2025 ❄️</div>
+  </div>
+</header>
 
 <main class="wrap">
   <a href="index.html" aria-label="Home">
@@ -31,7 +90,7 @@
   </a>
 
   <div class="content">
-    <p>The MayaNut Company was started in 2025 and is growing <em>Brosimum alicastrum</em> trees in South Florida. The mayanut tree is an ancient tropical rainforest species, unknown to American agriculture. In the Yucutan, many mayanut trees can be found around ancient Mayan sites, which ancient Mayan peoples presumably planted for cultivation. The trees produce an edible seed, which are perfect for all of our future tasty products. Our goal is to save the species <em>Brosimum alicastrum</em> from extinction by utilizing it in agriculture.</p>
+    <p>The MayaNut Company was started in 2025 and is growing <em>Brosimum alicastrum</em> trees in South Florida. The mayanut or maya nut tree, also known as Ramon, Ojoche, or Breadnut, is an ancient tropical rainforest species, unknown to American agriculture. In the Yucutan, many mayanut trees can be found around ancient Mayan sites, which ancient Mayan peoples presumably planted for cultivation. The trees produce an edible seed, which are perfect for all of our future tasty products. Our goal is to save the species <em>Brosimum alicastrum</em> from extinction by utilizing it in agriculture.</p>
   </div>
 </main>
 
@@ -43,5 +102,6 @@
     </svg>
   </a>
 </footer>
+
 </body>
 </html>
