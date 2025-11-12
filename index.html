@@ -5,23 +5,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The MayaNut Company</title>
 <meta name="description" content="The MayaNut Company — Maya nut (Brosimum alicastrum) foods and education supporting reforestation, food security, and sustainable agriculture." />
-<link rel="icon" type="image/png" href="favicon-circle.png">
+<link rel="icon" type="image/png" href="favicon-circle.png" />
 <meta name="theme-color" content="#18A7FF" />
 <style>
-  :root{ --bg:#18A7FF; --bar:#0a56c2; --bar-h:60px; --ticker-speed:10s; }
+  :root{
+    --bg:#18A7FF;        /* page background */
+    --bar:#0a56c2;       /* header/footer color */
+    --bar-h:60px;
+    --move:10s;          /* travel time across */
+    --gap:2.5s;          /* time fully off-screen before restart */
+    --cycle:12.5s;       /* move + gap */
+  }
   html,body{height:100%}
-  body{ margin:0; color:#fff; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); overflow:hidden; }
-  .topbar{ position:fixed; inset:0 0 auto 0; height:var(--bar-h); display:flex; align-items:center; justify-content:center; background:var(--bar); border-bottom:1px solid rgba(255,255,255,.25); z-index:100; overflow:hidden; }
-  .ticker{ position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-  .ticker__track{ position:absolute; white-space:nowrap; font-weight:800; letter-spacing:.2px; animation:marquee var(--ticker-speed) linear infinite; }
-  @keyframes marquee{ 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
-  .wrap{ height:100vh; display:grid; align-content:start; justify-items:center; row-gap:20px; padding-top:calc(var(--bar-h) + 18px); padding-bottom:calc(var(--bar-h) + 24px); box-sizing:border-box; text-align:center; }
-  .logo{ width:min(400px,74vw); height:auto; display:block; margin-inline:auto; filter:drop-shadow(0 2px 10px rgba(0,0,0,.18)); }
+  body{
+    margin:0; color:#fff;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg); overflow:hidden;
+  }
+
+  /* Top ticker (single track; L->R; fully disappears before reappearing) */
+  .topbar{
+    position:fixed; inset:0 0 auto 0; height:var(--bar-h);
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bar); border-bottom:1px solid rgba(255,255,255,.25);
+    z-index:100; overflow:hidden;
+  }
+  .ticker{ position:relative; width:100%; height:100%; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .ticker__track{
+    position:absolute; white-space:nowrap; font-weight:800; letter-spacing:.2px;
+    animation: marquee var(--cycle) linear infinite;
+  }
+  /* 0→80%: slide from left(-100%) to right(100%); 80→100%: stay off-screen right */
+  @keyframes marquee{
+    0%   { transform:translateX(-100%); }
+    80%  { transform:translateX(100%); }
+    100% { transform:translateX(100%); }
+  }
+
+  .wrap{
+    height:100vh; display:grid; align-content:start; justify-items:center;
+    row-gap:20px; padding-top:calc(var(--bar-h) + 18px);
+    padding-bottom:calc(var(--bar-h) + 24px); box-sizing:border-box; text-align:center;
+  }
+  .logo{
+    width:min(400px,74vw); height:auto; display:block; margin-inline:auto;
+    filter:drop-shadow(0 2px 10px rgba(0,0,0,.18));
+  }
   .cta-row{ display:flex; gap:14px; margin-top:8px; }
-  .btn{ display:inline-flex; align-items:center; justify-content:center; min-width:140px; height:46px; padding:0 16px; border-radius:12px; font-weight:800; letter-spacing:.2px; color:var(--bar); background:#fff; text-decoration:none; border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(0,0,0,.18); transition:background .2s, transform .15s; }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:140px; height:46px; padding:0 16px; border-radius:12px;
+    font-weight:800; letter-spacing:.2px; color:var(--bar); background:#fff; text-decoration:none;
+    border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(0,0,0,.18);
+    transition:background .2s, transform .15s;
+  }
   .btn:hover{ background:#eaf2ff; transform:translateY(-1px); }
-  .footer{ position:fixed; inset:auto 0 0 0; height:var(--bar-h); display:flex; align-items:center; justify-content:space-between; padding:0 14px; background:var(--bar); border-top:1px solid rgba(255,255,255,.25); font-size:13px; }
-  .ig{ display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.14); text-decoration:none; }
+
+  .footer{
+    position:fixed; inset:auto 0 0 0; height:var(--bar-h);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 14px; background:var(--bar); border-top:1px solid rgba(255,255,255,.25); font-size:13px;
+  }
+  .ig{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.14); text-decoration:none;
+  }
   .ig svg{ width:22px; height:22px; fill:#fff; }
 </style>
 </head>
@@ -33,11 +81,8 @@
 </header>
 
 <main class="wrap">
-  <!-- Clickable logo (back to home) -->
   <a href="index.html" aria-label="Home">
-    <img class="logo"
-      src="https://raw.githubusercontent.com/cooltropicals-cmd/mayanut.github.io/9c8f905665ba0a5f6166a5bdef209e2cfeedfcf8/.github/themayanutcompany-logo.png"
-      alt="The MayaNut Company logo">
+    <img class="logo" src="logomayanut.png" alt="The MayaNut Company logo" />
   </a>
 
   <div class="cta-row">
@@ -49,9 +94,7 @@
 <footer class="footer">
   <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
   <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="Instagram">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 12 6.5zm6.25-1.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/>
-    </svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 12 6.5zm6.25-1.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
   </a>
 </footer>
 </body>
