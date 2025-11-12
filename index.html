@@ -6,10 +6,9 @@
 <title>MayaNut™</title>
 <style>
   :root{
-    /* Blues tuned to your logo’s background */
+    /* Blues matched to your logo background */
     --blue-1:#0b6bdc;   /* darker edge */
     --blue-2:#1894ff;   /* bright center */
-    --blue-3:#0b6bdc;   /* repeat for smooth gradient */
     --bar:#0a56c2;      /* top/footer bar */
   }
 
@@ -17,7 +16,7 @@
     margin:0; height:100%;
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     color:#fff; overflow:hidden;
-    background: linear-gradient(135deg, var(--blue-1), var(--blue-2) 40%, var(--blue-3));
+    background: linear-gradient(135deg, var(--blue-1), var(--blue-2) 40%, var(--blue-1));
   }
 
   .topbar {
@@ -28,7 +27,7 @@
     z-index:100;
   }
 
-  /* removed the upper-left logo */
+  /* upper-left logo removed */
 
   .nav { margin-left:auto; display:flex; gap:16px; }
   .nav a {
@@ -39,18 +38,19 @@
 
   .wrap {
     height:100vh; display:grid; place-items:center;
-    grid-template-rows:auto auto 1fr; gap:16px;
+    grid-template-rows:auto 1fr; gap:16px;
     padding-top:70px; padding-bottom:70px; box-sizing:border-box;
+    text-align:center;
   }
 
-  .bigLogo {
-    font-size:64px; font-weight:900; -webkit-text-stroke:2px lightgrey;
-    text-shadow: 0 2px 10px rgba(0,0,0,.25);
+  /* Use your image instead of text */
+  .heroLogo{
+    width:min(520px, 82vw);   /* responsive */
+    height:auto; display:block;
+    filter: drop-shadow(0 2px 10px rgba(0,0,0,.25));
   }
 
-  /* search removed */
-
-  .bubbles { display:grid; gap:10px; width:min(700px,92vw); }
+  .bubbles { display:grid; gap:10px; width:min(700px,92vw); margin-top:6px; }
   .bubble {
     background:rgba(255,255,255,.12); padding:12px 14px;
     border-radius:14px; border:1px solid rgba(255,255,255,.25);
@@ -82,9 +82,8 @@
 </header>
 
 <main class="wrap">
-  <div class="bigLogo">MayaNut™</div>
-
-  <!-- search removed -->
+  <!-- Put your uploaded logo file next to this HTML and keep this filename -->
+  <img class="heroLogo" src="mayanut-logo.png" alt="The MayaNut™ Company logo" />
 
   <div class="bubbles">
     <a class="bubble" href="about.html">What is MayaNut™?</a>
@@ -100,6 +99,8 @@
     </svg>
   </a>
 </footer>
-<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
+<script>
+  document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
 </body>
 </html>
