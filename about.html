@@ -5,9 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About — The MayaNut Company</title>
 
-<!-- Favicon uses your logo -->
-<link rel="icon" type="image/png" href="logomayanut.png" />
-<link rel="shortcut icon" type="image/png" href="logomayanut.png" />
+<!-- Circular favicon -->
+<link rel="icon" type="image/png" href="favicon-circle.png" />
 
 <meta name="theme-color" content="#18A7FF" />
 <style>
@@ -24,10 +23,38 @@
   body{
     margin:0;
     color:#fff;
-    background:var(--bg);
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:var(--bg);
     overflow-y:auto;
-    position:relative; /* for snow layer */
+    position:relative;
+  }
+
+  /* Animated "lava lamp" blue background */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(circle at 20% 20%, #4cc4ff 0, transparent 40%),
+      radial-gradient(circle at 80% 30%, #68d4ff 0, transparent 45%),
+      radial-gradient(circle at 30% 80%, #3fb8ff 0, transparent 40%);
+    opacity:0.55;
+    mix-blend-mode:screen;
+    animation:floatBg 26s ease-in-out infinite alternate;
+    z-index:0;
+    pointer-events:none;
+  }
+
+  @keyframes floatBg{
+    0%{
+      transform:translate3d(0,0,0);
+    }
+    50%{
+      transform:translate3d(-3%, 2%, 0);
+    }
+    100%{
+      transform:translate3d(3%, -2%, 0);
+    }
   }
 
   /* Top ticker */
@@ -52,18 +79,19 @@
     animation:marquee var(--cycle) linear infinite;
   }
   @keyframes marquee{
-    0%{transform:translateX(-100%);}
-    80%{transform:translateX(100%);}
-    100%{transform:translateX(100%);}
+    0%   { transform:translateX(-100%); }
+    80%  { transform:translateX(100%); }
+    100% { transform:translateX(100%); }
   }
 
+  /* Main layout */
   .wrap{
     max-width:1100px;
     margin:0 auto;
     padding:calc(var(--bar-h) + 24px) 16px 80px;
     box-sizing:border-box;
     position:relative;
-    z-index:10;
+    z-index:10; /* above bg + snow */
   }
 
   .logo-wrap{
@@ -80,15 +108,14 @@
     display:grid;
     grid-template-columns:minmax(0,340px) minmax(0,1fr);
     gap:32px;
-    align-items:stretch;
+    align-items:flex-start;
   }
 
-  /* LEFT COLUMN — evenly spaced images */
+  /* Left image column */
   .image-column{
     display:flex;
     flex-direction:column;
-    justify-content:space-between; /* equal spacing */
-    height:100%;
+    gap:18px;
   }
   .image-column img{
     width:100%;
@@ -97,16 +124,16 @@
     object-fit:cover;
     box-shadow:0 2px 10px rgba(0,0,0,.25);
   }
-  .square {
+  .square{
     aspect-ratio:1/1;
   }
 
-  /* RIGHT COLUMN */
+  /* Right text column */
   .text-column{
-    background:rgba(255,255,255,0.96);
+    background:rgba(255,255,255,0.97);
     color:#083b7c;
     border-radius:16px;
-    padding:18px 20px 20px;
+    padding:18px 20px 22px;
     box-shadow:0 2px 14px rgba(0,0,0,.25);
   }
   .text-column h1{
@@ -114,43 +141,39 @@
     font-size:24px;
   }
   .text-column h2{
-    margin:18px 0 8px;
+    margin:16px 0 10px;
     font-size:20px;
   }
   .text-column p{
     margin:0 0 10px;
     font-size:15px;
-    line-height:1.62;
+    line-height:1.7;
+  }
+  .text-column em{
+    font-style:italic;
   }
 
   /* Footer */
   .footer{
-    position:fixed; left:0; right:0; bottom:0; height:var(--bar-h);
+    position:fixed;
+    left:0; right:0; bottom:0; height:var(--bar-h);
     background:var(--bar);
     display:flex; justify-content:space-between; align-items:center;
     padding:0 14px;
     border-top:1px solid rgba(255,255,255,.3);
     font-size:13px;
-    z-index:100;
     box-sizing:border-box;
+    z-index:100;
   }
   .ig{
     display:inline-flex; align-items:center; justify-content:center;
-    width:36px; height:36px;
-    border-radius:50%;
+    width:36px; height:36px; border-radius:50%;
     background:rgba(255,255,255,.15);
     text-decoration:none;
   }
   .ig svg{ width:22px; height:22px; fill:#fff; }
 
-  /* Mobile */
-  @media(max-width:800px){
-    .content-grid{
-      grid-template-columns:1fr;
-    }
-  }
-
-  /* SNOWFALL LAYER */
+  /* Snow */
   .snow-layer{
     pointer-events:none;
     position:fixed;
@@ -176,10 +199,17 @@
       transform:translateY(-10vh) translateX(0);
       opacity:0;
     }
-    10%{opacity:1;}
+    10%{ opacity:1; }
     100%{
       transform:translateY(110vh) translateX(30px);
       opacity:0.9;
+    }
+  }
+
+  /* Mobile */
+  @media(max-width:800px){
+    .content-grid{
+      grid-template-columns:1fr;
     }
   }
 </style>
@@ -192,6 +222,7 @@
   </div>
 </header>
 
+<!-- Snow layer -->
 <div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
@@ -206,31 +237,22 @@
 
     <!-- LEFT COLUMN IMAGES -->
     <div class="image-column">
-      <img src="fruitmaya.jpeg" alt="MayaNut fruit">
+      <img src="fruitmaya.jpeg" alt="Brosimum alicastrum fruit">
       <img src="ceomaya.jpeg" class="square" alt="CEO August Kokus">
-      <img src="plantation.jpeg" alt="MayaNut plantation">
+      <img src="plantation.png" alt="MayaNut plantation in South Florida">
     </div>
 
     <!-- RIGHT COLUMN TEXT -->
     <div class="text-column">
       <h1>About The MayaNut Company</h1>
 
-      <p>The MayaNut Company was started in 2025 and is growing <em>Brosimum alicastrum</em> trees in South Florida. The mayanut tree is an ancient tropical rainforest species, unknown to American agriculture. In the Yucatán, many mayanut trees are found around ancient Mayan sites. The trees produce edible seeds, perfect for our future products. Our mission is to save <em>Brosimum alicastrum</em> from extinction by bringing it into sustainable agriculture.</p>
+      <p><strong>The MayaNut Company was founded in 2025 with a simple but ambitious goal: bring <em>Brosimum alicastrum</em> back into the spotlight and give this ancient tree a home in modern agriculture.</strong> For founder August Kokus, the project is deeply personal. He has always believed that the most meaningful legacy a person can leave is something that keeps adapting long after we’re gone. A piece of life that grows, evolves, and continues telling your story. For him, that legacy is a tree — one that has fed civilizations, survived climate swings, and stood longer than empires. The idea that a single species could continue thriving for centuries, remembering him in its own quiet way, is what inspired The MayaNut Company.</p>
 
-      <h2>The Vision of August Kokus</h2>
+      <p><em>Brosimum alicastrum</em>, known as Maya nut, has a long and remarkable history. Its native range stretches across Cuba, Jamaica, the Yucatán Peninsula, Belize, Guatemala, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, and into the northern parts of Colombia and Venezuela. Humans likely first encountered the tree roughly 15,000–20,000 years ago, as the earliest Paleo-Indian groups moved south into the tropical Americas — give or take a few thousand years, depending on the route and timing. Thousands of years later, the Maya and other Indigenous peoples relied on the tree for food, shade, and cultural significance. Its seeds were ground into flour, roasted for drinks, eaten plain, and stored as an emergency food during droughts and seasonal shortages. Many ancient Maya sites still have Maya nut trees growing around them today, a living echo of that relationship.</p>
 
-      <p>August Kokus always had the fascination of creating something. He first learned about <em>Brosimum alicastrum</em> in 2022 and founded The MayaNut Company in 2025. He often questioned why he is conscious in his body, “sitting behind his eyes.” His goal was to leave behind proof of his existence — he valued his perspective so much — in the form of something that could adapt to an ever-changing world and never die. His love for music like Rachmaninoff, Tchaikovsky, and Scriabin inspired him.</p>
+      <p>Today, the seed is still incredibly versatile. When roasted, it develops a warm, nutty flavor that works beautifully in baked goods or as a caffeine-free coffee alternative. Ground Maya nut can be blended into drinks, smoothies, and porridges, or used as a nutrient-rich flour. Our work at The MayaNut Company focuses on establishing South Florida’s first Maya nut plantation, bringing this underappreciated species into a new agricultural region where it can thrive. We are selecting strong genetics, learning how the trees respond to Florida’s subtropical climate, and introducing people to this forgotten superfood one seedling at a time.</p>
 
-      <p>Plants can heal if injured, evolve with a changing world, and provide a service to humanity. When humans are eventually forced to leave Earth as the sun expands, people will take what they need to survive — the cows, the chickens, the wheat, the mayanut — but certainly not the mosquito.</p>
-
-      <p>In 2027, his creation became the first mayanut plantation in South Florida, launching a new agricultural industry. By 2029, mayanut was a popular “superfood” and seen as incredibly valuable. In 2033 on the optimistic horizon of progress, Mr. Kokus led his company to become a lifeline to malnourished countries, as mayanut became the 11th most popular crop in the U.S. <em>Brosimum alicastrum</em> was considered extremely valuable, finally gaining the recognition it deserves.</p>
-
-      <p>By 2039, The MayaNut Company became one of the world’s newest leaders in agriculture. In 2055, the company amassed a total of 1 million hectares of tropical and subtropical land. By 2061, The MayaNut Company had plantations in India, Africa, Asia, Australia, South America, and Florida — eventually replacing the Florida Orange as Florida’s primary agricultural income.</p>
-
-      <p>In 2063, August Kokus’s net worth reached $1 trillion, and he dedicated his wealth to establishing mayanut plantations across the world. He was a genius, obsessed with the perfection of his creation. In 2066, the first <em>Brosimum alicastrum</em> seeds germinated on Mars for study. By 2077, large-scale farming of <em>B. alicastrum</em> on Mars began. In 2089, mayanut continued to provide 11 billion humans with food.</p>
-
-      <p>On December 2, 2101, August Kokus passed away, leaving behind a creation so vast that by 2242, communities around the world relied on mayanut as a primary source of food. Through domestication, seeds grew to two inches in diameter with improved taste — all because of one man’s contribution to humanity. He said: “I am lucky to be born in the 21st century; discovery is dwindling — but through my plants, my beauty, my creation, I will reach into the future for centuries. There it is: perfection.”</p>
-
+      <p>Looking ahead, we’re developing the first line of MayaNut beverages in the United States. Our plan is to sell roasted, ground Maya nut for brewing at home — smooth, rich, and naturally caffeine-free — along with pre-bottled MayaNut drinks. If all goes well, our bottled beverages will begin appearing in grocery stores around 2028, marking a new chapter for an ancient tree. This is more than a product launch; it’s the beginning of a new agricultural story for South Florida and a chance to revive one of the most resilient food plants in the Americas.</p>
     </div>
   </section>
 
@@ -239,25 +261,31 @@
 <footer class="footer">
   <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
   <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" aria-label="Instagram">
-    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 5.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 17.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
   </a>
 </footer>
 
 <script>
+  // Snow generator (same feel as index)
   (function(){
     const snowLayer = document.getElementById('snow-layer');
     const flakes = 35;
-    for(let i=0;i<flakes;i++){
+
+    for(let i=0; i<flakes; i++){
       const flake = document.createElement('div');
       flake.className = 'snowflake';
+
       const size = Math.random()*4 + 3;
       flake.style.width = size + 'px';
       flake.style.height = size + 'px';
+
       flake.style.left = Math.random()*100 + 'vw';
+
       const duration = Math.random()*10 + 8;
       const delay = Math.random()*-20;
       flake.style.animationDuration = duration + 's';
       flake.style.animationDelay = delay + 's';
+
       snowLayer.appendChild(flake);
     }
   })();
