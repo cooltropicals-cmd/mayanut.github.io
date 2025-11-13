@@ -45,9 +45,77 @@
     letter-spacing:1px;
     border-bottom:1px solid rgba(255,255,255,0.3);
     z-index:100;
-    padding:0 12px;
+    padding:0 40px;
     box-sizing:border-box;
     text-align:center;
+  }
+
+  .menu-toggle{
+    position:absolute;
+    left:10px;
+    top:50%;
+    transform:translateY(-50%);
+    width:32px;
+    height:32px;
+    border:none;
+    background:transparent;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    padding:0;
+  }
+  .menu-toggle span{
+    display:block;
+    width:22px;
+    height:2px;
+    background:#fff;
+    border-radius:2px;
+  }
+
+  .side-menu{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:240px;
+    background:var(--bar);
+    transform:translateX(-100%);
+    transition:transform .25s ease-out;
+    z-index:150;
+    padding-top:var(--bar-h);
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+  }
+  .side-menu a{
+    color:#fff;
+    text-decoration:none;
+    padding:14px 18px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    font-family:"Mountains of Christmas", cursive;
+    font-size:20px;
+  }
+  .side-menu a:hover{
+    background:rgba(255,255,255,0.12);
+  }
+
+  .menu-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s ease-out;
+    z-index:140;
+  }
+
+  body.menu-open .side-menu{
+    transform:translateX(0);
+  }
+  body.menu-open .menu-backdrop{
+    opacity:1;
+    visibility:visible;
   }
 
   .snow-layer{
@@ -134,8 +202,19 @@
 <body>
 
 <header class="topbar">
+  <button class="menu-toggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
 </header>
+
+<nav class="side-menu" id="side-menu" aria-hidden="true">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="buy.html">Buy</a>
+  <a href="gallery.html">Gallery</a>
+</nav>
+<div class="menu-backdrop" id="menu-backdrop"></div>
 
 <div class="snow-layer" id="snow-layer"></div>
 
@@ -147,8 +226,8 @@
   <div class="card">
     <h1>MayaNut Beverage — Coming Soon</h1>
     <p><strong>Products Coming as Soon as 2028!</strong></p>
-    <p>Thank you for your patience — we’re currently developing South Florida’s first dedicated mayanut plantation.</p>
-    <p>Our first products will focus on a rich, coffee-like roasted mayanut drink and ready-to-enjoy bottled beverages made from <em>Brosimum alicastrum</em> seeds. Think cozy, nutty, and naturally caffeine-free — perfect for mornings, evenings, and everything in between.</p>
+    <p>Thank you for your patience — we’re currently developing South Florida’s first dedicated mayanut plantation. Before we sell anything, we want healthy trees, a reliable harvest, and a supply chain that respects farmers and forests.</p>
+    <p>Our first products will focus on a rich, coffee-style roasted mayanut drink and ready-to-enjoy bottled beverages made from <em>Brosimum alicastrum</em> seeds. Think cozy, nutty, and naturally caffeine-free — perfect for mornings, evenings, and everything in between.</p>
     <p>Follow our journey on Instagram at <strong>@themayanutcompany</strong> for progress updates, behind-the-scenes planting, and release news.</p>
   </div>
 </main>
@@ -160,6 +239,7 @@
 
 <script>
 (function(){
+  // snow
   const snowLayer = document.getElementById('snow-layer');
   const flakes = 35;
   for(let i=0;i<flakes;i++){
@@ -173,6 +253,20 @@
     flake.style.animationDelay = (Math.random()*-20) + 's';
     snowLayer.appendChild(flake);
   }
+
+  // menu
+  const toggle = document.querySelector('.menu-toggle');
+  const backdrop = document.getElementById('menu-backdrop');
+
+  function closeMenu(){
+    document.body.classList.remove('menu-open');
+  }
+
+  toggle.addEventListener('click', function(){
+    document.body.classList.toggle('menu-open');
+  });
+
+  backdrop.addEventListener('click', closeMenu);
 })();
 </script>
 
