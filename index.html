@@ -151,42 +151,49 @@
     transform:translateY(-2px);
   }
 
-  /* CSS American Flag */
+  /* Updated American Flag (correct ratio + 50 stars) */
   .flag-css{
-    width:260px;
-    height:140px;
+    width:240px;         /* smaller so it won't get cut off */
+    height:126px;        /* ~1.9:1 US flag ratio */
     background:repeating-linear-gradient(
       to bottom,
       #b22234 0,
-      #b22234 10.77px,
-      white 10.77px,
-      white 21.54px
+      #b22234 9.69px,
+      white 9.69px,
+      white 19.38px
     );
     position:relative;
-    border:2px solid rgba(255,255,255,0.7);
     border-radius:8px;
+    border:2px solid rgba(255,255,255,0.7);
     box-shadow:0 3px 10px rgba(0,0,0,.25);
     margin-top:18px;
+    overflow:hidden;
   }
+
   .flag-stars{
     position:absolute;
-    left:0;
     top:0;
-    width:40%;
-    height:53.85%;
+    left:0;
+    width:40%;          /* canton proportions */
+    height:53%;
     background:#3c3b6e;
-    display:flex;
-    flex-wrap:wrap;
+    display:grid;
+    grid-template-columns:repeat(11, 1fr);
+    grid-template-rows:repeat(9, 1fr);
     padding:4px;
     box-sizing:border-box;
   }
-  .flag-stars::before{
-    content:"★ ★ ★ ★ ★\A ★ ★ ★ ★\A ★ ★ ★ ★ ★\A ★ ★ ★ ★\A ★ ★ ★ ★ ★\A ★ ★ ★ ★";
-    white-space:pre;
-    font-size:10px;
-    line-height:12px;
+
+  .flag-stars span{
     color:white;
+    font-size:7px;
+    margin:auto;
     font-weight:bold;
+    line-height:1;
+  }
+
+  .flag-stars span.empty{
+    visibility:hidden;
   }
 
   /* Footer */
@@ -244,7 +251,43 @@
 
   <!-- CSS American Flag -->
   <div class="flag-css">
-    <div class="flag-stars"></div>
+    <div class="flag-stars">
+      <!-- Row 1: 6 stars -->
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 2: 5 stars -->
+      <span class="empty"></span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 3: 6 stars -->
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 4: 5 stars -->
+      <span class="empty"></span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 5: 6 stars -->
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 6: 5 stars -->
+      <span class="empty"></span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 7: 6 stars -->
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 8: 5 stars -->
+      <span class="empty"></span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+
+      <!-- Row 9: 6 stars -->
+      <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+      <span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span>
+    </div>
   </div>
 </main>
 
