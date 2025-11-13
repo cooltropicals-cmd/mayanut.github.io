@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About — The MayaNut Company</title>
 
-<!-- Favicon: uses your logo (make the PNG artwork circular if you want round look) -->
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="logomayanut.png" />
 <link rel="shortcut icon" type="image/png" href="logomayanut.png" />
 
@@ -30,28 +30,6 @@
     position:relative;
   }
 
-  /* Animated “lava lamp” blue overlay */
-  body::before{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(circle at 20% 20%, #4cc4ff 0, transparent 40%),
-      radial-gradient(circle at 80% 30%, #68d4ff 0, transparent 45%),
-      radial-gradient(circle at 30% 80%, #3fb8ff 0, transparent 40%);
-    opacity:0.55;
-    mix-blend-mode:screen;
-    animation:floatBg 26s ease-in-out infinite alternate;
-    z-index:0;
-    pointer-events:none;
-  }
-
-  @keyframes floatBg{
-    0%{ transform:translate3d(0,0,0); }
-    50%{ transform:translate3d(-3%, 2%, 0); }
-    100%{ transform:translate3d(3%, -2%, 0); }
-  }
-
   /* Top ticker */
   .topbar{
     position:fixed; top:0; left:0; right:0; height:var(--bar-h);
@@ -71,23 +49,22 @@
     white-space:nowrap;
     font-weight:800;
     letter-spacing:.2px;
+    will-change:transform;
     animation:marquee var(--cycle) linear infinite;
   }
-  /* Fixed marquee: fully off-screen on all screen widths */
   @keyframes marquee{
-    0%   { transform:translateX(100vw); }
-    80%  { transform:translateX(-100%); }
-    100% { transform:translateX(-100%); }
+    0%   { transform:translateX(-100%); }
+    80%  { transform:translateX(100%); }
+    100% { transform:translateX(100%); }
   }
 
-  /* Main layout */
   .wrap{
     max-width:1100px;
     margin:0 auto;
     padding:calc(var(--bar-h) + 24px) 16px 80px;
     box-sizing:border-box;
     position:relative;
-    z-index:10; /* above bg + snow */
+    z-index:10;
   }
 
   .logo-wrap{
@@ -107,7 +84,6 @@
     align-items:flex-start;
   }
 
-  /* Left image column */
   .image-column{
     display:flex;
     flex-direction:column;
@@ -124,7 +100,6 @@
     aspect-ratio:1/1;
   }
 
-  /* Right text column */
   .text-column{
     background:rgba(255,255,255,0.97);
     color:#083b7c;
@@ -145,7 +120,6 @@
     font-style:italic;
   }
 
-  /* Footer */
   .footer{
     position:fixed;
     left:0; right:0; bottom:0; height:var(--bar-h);
@@ -197,7 +171,6 @@
     100%{ transform:translateY(110vh) translateX(30px); opacity:0.9; }
   }
 
-  /* Mobile */
   @media(max-width:800px){
     .content-grid{
       grid-template-columns:1fr;
@@ -213,7 +186,6 @@
   </div>
 </header>
 
-<!-- Snow layer -->
 <div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
@@ -226,14 +198,12 @@
 
   <section class="content-grid">
 
-    <!-- LEFT COLUMN IMAGES -->
     <div class="image-column">
       <img src="fruitmaya.jpeg" alt="Brosimum alicastrum fruit">
       <img src="ceomaya.jpeg" class="square" alt="CEO August Kokus">
       <img src="plantation.jpeg" alt="MayaNut plantation in South Florida">
     </div>
 
-    <!-- RIGHT COLUMN TEXT -->
     <div class="text-column">
       <h1>About The MayaNut Company</h1>
 
