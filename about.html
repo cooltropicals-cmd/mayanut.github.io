@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About — The MayaNut Company</title>
 
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="favicon-circle.png" />
+<!-- Favicon uses your logo -->
+<link rel="icon" type="image/png" href="logomayanut.png" />
+<link rel="shortcut icon" type="image/png" href="logomayanut.png" />
 
 <meta name="theme-color" content="#18A7FF" />
 <style>
@@ -26,6 +27,7 @@
     background:var(--bg);
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     overflow-y:auto;
+    position:relative; /* for snow layer */
   }
 
   /* Top ticker */
@@ -50,9 +52,9 @@
     animation:marquee var(--cycle) linear infinite;
   }
   @keyframes marquee{
-    0%   { transform:translateX(-100%); }
-    80%  { transform:translateX(100%); }
-    100% { transform:translateX(100%); }
+    0%{transform:translateX(-100%);}
+    80%{transform:translateX(100%);}
+    100%{transform:translateX(100%);}
   }
 
   .wrap{
@@ -60,6 +62,8 @@
     margin:0 auto;
     padding:calc(var(--bar-h) + 24px) 16px 80px;
     box-sizing:border-box;
+    position:relative;
+    z-index:10;
   }
 
   .logo-wrap{
@@ -83,7 +87,7 @@
   .image-column{
     display:flex;
     flex-direction:column;
-    justify-content:space-between; /* makes spacing equal */
+    justify-content:space-between; /* equal spacing */
     height:100%;
   }
   .image-column img{
@@ -93,8 +97,6 @@
     object-fit:cover;
     box-shadow:0 2px 10px rgba(0,0,0,.25);
   }
-
-  /* CEO image square */
   .square {
     aspect-ratio:1/1;
   }
@@ -130,6 +132,7 @@
     border-top:1px solid rgba(255,255,255,.3);
     font-size:13px;
     z-index:100;
+    box-sizing:border-box;
   }
   .ig{
     display:inline-flex; align-items:center; justify-content:center;
@@ -146,6 +149,39 @@
       grid-template-columns:1fr;
     }
   }
+
+  /* SNOWFALL LAYER */
+  .snow-layer{
+    pointer-events:none;
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    z-index:5;
+  }
+  .snowflake{
+    position:absolute;
+    top:-10vh;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.9);
+    opacity:0.9;
+    filter:blur(0.3px);
+    animation-name:snowfall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes snowfall{
+    0%{
+      transform:translateY(-10vh) translateX(0);
+      opacity:0;
+    }
+    10%{opacity:1;}
+    100%{
+      transform:translateY(110vh) translateX(30px);
+      opacity:0.9;
+    }
+  }
 </style>
 </head>
 <body>
@@ -155,6 +191,8 @@
     <div class="ticker__track">❄️ The MayaNut Company Wishing You Merry Christmas 2025 ❄️</div>
   </div>
 </header>
+
+<div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
 
@@ -168,7 +206,7 @@
 
     <!-- LEFT COLUMN IMAGES -->
     <div class="image-column">
-      <img src="fruitofmayaplant.jpeg" alt="MayaNut fruit">
+      <img src="fruitmaya.jpeg" alt="MayaNut fruit">
       <img src="ceomaya.jpeg" class="square" alt="CEO August Kokus">
       <img src="plantation.png" alt="MayaNut plantation">
     </div>
@@ -201,9 +239,29 @@
 <footer class="footer">
   <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
   <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" aria-label="Instagram">
-    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 17.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 5.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
   </a>
 </footer>
+
+<script>
+  (function(){
+    const snowLayer = document.getElementById('snow-layer');
+    const flakes = 35;
+    for(let i=0;i<flakes;i++){
+      const flake = document.createElement('div');
+      flake.className = 'snowflake';
+      const size = Math.random()*4 + 3;
+      flake.style.width = size + 'px';
+      flake.style.height = size + 'px';
+      flake.style.left = Math.random()*100 + 'vw';
+      const duration = Math.random()*10 + 8;
+      const delay = Math.random()*-20;
+      flake.style.animationDuration = duration + 's';
+      flake.style.animationDelay = delay + 's';
+      snowLayer.appendChild(flake);
+    }
+  })();
+</script>
 
 </body>
 </html>
