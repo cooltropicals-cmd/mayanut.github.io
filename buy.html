@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Buy — The MayaNut Company</title>
 
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="logomayanut.png" />
 <link rel="shortcut icon" type="image/png" href="logomayanut.png" />
 
 <meta name="theme-color" content="#18A7FF" />
-
 <style>
   :root{
     --bg:#18A7FF;
@@ -24,20 +24,20 @@
   body{
     margin:0;
     color:#fff;
-    background:var(--bg);
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    overflow-x:hidden;
-    position:relative; /* for snow layer */
+    background:var(--bg);
+    overflow-y:auto;
+    position:relative;
   }
 
   /* Top ticker */
   .topbar{
-    position:fixed; inset:0 0 auto 0; height:var(--bar-h);
+    position:fixed; top:0; left:0; right:0; height:var(--bar-h);
     display:flex; align-items:center; justify-content:center;
     background:var(--bar);
-    border-bottom:1px solid rgba(255,255,255,.25);
-    overflow:hidden;
+    border-bottom:1px solid rgba(255,255,255,.3);
     z-index:100;
+    overflow:hidden;
   }
   .ticker{
     position:relative; width:100%; height:100%;
@@ -52,61 +52,91 @@
     animation:marquee var(--cycle) linear infinite;
   }
   @keyframes marquee{
-    0%   { transform:translateX(-100%); }
-    80%  { transform:translateX(100%); }
-    100% { transform:translateX(100%); }
+    0%   { transform:translateX(100vw); }
+    80%  { transform:translateX(-100%); }
+    100% { transform:translateX(-100%); }
   }
 
-  /* Layout */
+  /* Main layout */
   .wrap{
     max-width:900px;
     margin:0 auto;
-    padding:calc(var(--bar-h) + 30px) 20px 80px;
+    padding:calc(var(--bar-h)+24px) 16px 80px;
+    box-sizing:border-box;
     text-align:center;
     position:relative;
     z-index:10;
   }
 
-  .logo{
-    width:min(320px,70vw);
+  .logo-wrap{
+    margin-bottom:18px;
+  }
+  .logo-wrap img{
+    width:min(260px,70vw);
     height:auto;
-    margin-bottom:26px;
     filter:drop-shadow(0 2px 10px rgba(0,0,0,.18));
   }
 
-  /* Product announcement box */
-  .product-box{
-    background:#ffffffee;
-    color:#083b7c;
-    padding:24px 28px;
-    border-radius:18px;
-    max-width:600px;
+  .card{
     margin:0 auto;
-    box-shadow:0 3px 14px rgba(0,0,0,.28);
-    font-size:18px;
-    line-height:1.54;
+    max-width:640px;
+    background:rgba(255,255,255,0.97);
+    color:#083b7c;
+    border-radius:18px;
+    padding:20px 22px 22px;
+    box-shadow:0 2px 14px rgba(0,0,0,.25);
+  }
+  .card h1{
+    margin:0 0 10px;
+    font-size:24px;
+  }
+  .card p{
+    margin:0 0 8px;
+    font-size:15px;
+    line-height:1.7;
+  }
+  .card strong{
+    font-weight:800;
+  }
+
+  .back-link{
+    display:inline-block;
+    margin-top:14px;
+    font-size:14px;
+    color:#fff;
+    text-decoration:none;
     font-weight:600;
+  }
+  .back-link:hover{
+    text-decoration:underline;
   }
 
   /* Footer */
   .footer{
-    position:fixed; inset:auto 0 0 0; height:var(--bar-h);
+    position:fixed;
+    left:0; right:0; bottom:0; height:var(--bar-h);
     background:var(--bar);
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; justify-content:space-between; align-items:center;
     padding:0 14px;
-    border-top:1px solid rgba(255,255,255,.25);
+    border-top:1px solid rgba(255,255,255,.3);
     font-size:13px;
+    box-sizing:border-box;
     z-index:100;
   }
   .ig{
     display:inline-flex; align-items:center; justify-content:center;
     width:36px; height:36px;
-    background:rgba(255,255,255,.14);
     border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    text-decoration:none;
   }
-  .ig svg{ width:22px; height:22px; fill:#fff; }
+  .ig svg{
+    width:22px; height:22px;
+    fill:#fff;
+    display:block;
+  }
 
-  /* SNOWFALL LAYER */
+  /* Snow */
   .snow-layer{
     pointer-events:none;
     position:fixed;
@@ -128,15 +158,9 @@
     animation-iteration-count:infinite;
   }
   @keyframes snowfall{
-    0%{
-      transform:translateY(-10vh) translateX(0);
-      opacity:0;
-    }
-    10%{opacity:1;}
-    100%{
-      transform:translateY(110vh) translateX(30px);
-      opacity:0.9;
-    }
+    0%{ transform:translateY(-10vh) translateX(0); opacity:0; }
+    10%{ opacity:1; }
+    100%{ transform:translateY(110vh) translateX(30px); opacity:0.9; }
   }
 </style>
 </head>
@@ -151,37 +175,52 @@
 <div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
-  <a href="index.html"><img src="logomayanut.png" class="logo" alt="MayaNut Logo"></a>
-
-  <div class="product-box">
-    <strong>MayaNut Beverage</strong><br><br>
-    For sale coming as soon as <strong>2028!</strong><br><br>
-    Thank you for your patience — we are currently developing South Florida’s first mayanut plantation in progress.
+  <div class="logo-wrap">
+    <a href="index.html">
+      <img src="logomayanut.png" alt="The MayaNut Company logo">
+    </a>
   </div>
+
+  <section class="card">
+    <h1>Products Coming Soon!</h1>
+    <p><strong>MayaNut Beverage for sale coming as soon as 2028!</strong></p>
+    <p>Thank you for your patience — we’re currently developing South Florida’s first MayaNut plantation and perfecting our roasting and beverage recipes.</p>
+    <p>Our plan is to offer ground MayaNut for a coffee-like, caffeine-free drink, along with ready-to-drink bottled MayaNut beverages you’ll be able to find in grocery stores.</p>
+  </section>
+
+  <a class="back-link" href="index.html">← Back to Home</a>
 </main>
 
 <footer class="footer">
   <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
-  <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" aria-label="Instagram">
-    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 5.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
+  <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 17.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/>
+    </svg>
   </a>
 </footer>
 
 <script>
+  // Snow generator
   (function(){
     const snowLayer = document.getElementById('snow-layer');
     const flakes = 35;
+
     for(let i=0;i<flakes;i++){
       const flake = document.createElement('div');
       flake.className = 'snowflake';
+
       const size = Math.random()*4 + 3;
       flake.style.width = size + 'px';
       flake.style.height = size + 'px';
+
       flake.style.left = Math.random()*100 + 'vw';
+
       const duration = Math.random()*10 + 8;
       const delay = Math.random()*-20;
       flake.style.animationDuration = duration + 's';
       flake.style.animationDelay = delay + 's';
+
       snowLayer.appendChild(flake);
     }
   })();
