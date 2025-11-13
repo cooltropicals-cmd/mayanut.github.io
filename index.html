@@ -44,12 +44,14 @@
   .ticker__track{
     position:absolute; white-space:nowrap;
     font-weight:800; letter-spacing:.2px;
+    will-change:transform;
     animation: marquee var(--cycle) linear infinite;
   }
+  /* LEFT -> RIGHT and fully off-screen before restart */
   @keyframes marquee{
-    0%   { transform:translateX(100vw); }
-    80%  { transform:translateX(-100%); }
-    100% { transform:translateX(-100%); }
+    0%   { transform:translateX(-100%); }
+    80%  { transform:translateX(100%); }
+    100% { transform:translateX(100%); }
   }
 
   /* Main layout */
@@ -68,7 +70,6 @@
     filter:drop-shadow(0 2px 10px rgba(0,0,0,.18));
   }
 
-  /* CTA Buttons */
   .cta-row{
     display:flex; gap:14px; margin-top:8px;
   }
@@ -93,7 +94,6 @@
     transform:translateY(-2px);
   }
 
-  /* Footer */
   .footer{
     position:fixed; inset:auto 0 0 0; height:var(--bar-h);
     display:flex; align-items:center; justify-content:space-between;
@@ -151,7 +151,6 @@
   </div>
 </header>
 
-<!-- Snow layer -->
 <div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
