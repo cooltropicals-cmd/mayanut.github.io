@@ -48,8 +48,78 @@
     border-bottom:1px solid rgba(255,255,255,0.25);
     z-index:100;
     text-align:center;
-    padding:0 12px;
+    padding:0 40px; /* space for menu button */
     box-sizing:border-box;
+  }
+
+  /* Hamburger button */
+  .menu-toggle{
+    position:absolute;
+    left:10px;
+    top:50%;
+    transform:translateY(-50%);
+    width:32px;
+    height:32px;
+    border:none;
+    background:transparent;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
+    cursor:pointer;
+    padding:0;
+  }
+  .menu-toggle span{
+    display:block;
+    width:22px;
+    height:2px;
+    background:#fff;
+    border-radius:2px;
+  }
+
+  /* Slide-out side menu */
+  .side-menu{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:240px;
+    background:var(--bar);
+    transform:translateX(-100%);
+    transition:transform .25s ease-out;
+    z-index:150;
+    padding-top:var(--bar-h);
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+  }
+  .side-menu a{
+    color:#fff;
+    text-decoration:none;
+    padding:14px 18px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    font-family:"Mountains of Christmas", cursive;
+    font-size:20px;
+  }
+  .side-menu a:hover{
+    background:rgba(255,255,255,0.12);
+  }
+
+  .menu-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s ease-out;
+    z-index:140;
+  }
+
+  body.menu-open .side-menu{
+    transform:translateX(0);
+  }
+  body.menu-open .menu-backdrop{
+    opacity:1;
+    visibility:visible;
   }
 
   /* Main */
@@ -159,8 +229,19 @@
 <body>
 
 <header class="topbar">
+  <button class="menu-toggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
 </header>
+
+<nav class="side-menu" id="side-menu" aria-hidden="true">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="buy.html">Buy</a>
+  <a href="gallery.html">Gallery</a>
+</nav>
+<div class="menu-backdrop" id="menu-backdrop"></div>
 
 <div class="snow-layer" id="snow-layer"></div>
 
@@ -183,6 +264,7 @@
 
 <script>
 (function(){
+  // snow
   const snowLayer = document.getElementById('snow-layer');
   const flakes = 35;
   for(let i=0;i<flakes;i++){
@@ -196,6 +278,20 @@
     flake.style.animationDelay = (Math.random()*-20) + 's';
     snowLayer.appendChild(flake);
   }
+
+  // menu
+  const toggle = document.querySelector('.menu-toggle');
+  const backdrop = document.getElementById('menu-backdrop');
+
+  function closeMenu(){
+    document.body.classList.remove('menu-open');
+  }
+
+  toggle.addEventListener('click', function(){
+    document.body.classList.toggle('menu-open');
+  });
+
+  backdrop.addEventListener('click', closeMenu);
 })();
 </script>
 
