@@ -3,13 +3,12 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+
 <title>The MayaNut Company</title>
-<meta name="description" content="The MayaNut Company — Maya nut (Brosimum alicastrum) foods and education supporting reforestation, food security, and sustainable agriculture." />
 
-<!-- Christmas font -->
-<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+<meta name="description" content="The MayaNut Company — Maya nut (Brosimum alicastrum) foods, products, and education supporting reforestation and sustainable agriculture." />
 
-<!-- Favicon uses Christmas logo -->
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
 <link rel="shortcut icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
 
@@ -22,8 +21,8 @@
     --bar-h:60px;
   }
 
-  html,body{
-    height:100%;
+  html,body{height:100%;}
+  body{
     margin:0;
     font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background:var(--bg);
@@ -32,144 +31,131 @@
     position:relative;
   }
 
-  /* Top bar – static, centered text */
+  /* ---------------------------------- */
+  /* TOP BAR */
+  /* ---------------------------------- */
   .topbar{
     position:fixed;
     top:0; left:0; right:0;
     height:var(--bar-h);
     background:var(--bar);
+    border-bottom:1px solid rgba(255,255,255,0.25);
     display:flex;
     align-items:center;
     justify-content:center;
-    color:#fff;
-    font-family:"Mountains of Christmas", cursive;
-    font-size:22px;
-    letter-spacing:1px;
-    border-bottom:1px solid rgba(255,255,255,0.25);
-    z-index:100;
-    text-align:center;
-    padding:0 40px; /* space for menu button */
-    box-sizing:border-box;
+    z-index:1000;
   }
 
-  /* Hamburger button */
-  .menu-toggle{
+  /* winter message (smaller) */
+  .header-text{
+    font-family:"Mountains of Christmas", cursive;
+    font-size:18px;
+    font-weight:700;
+    color:white;
+    letter-spacing:0.4px;
+    white-space:nowrap;
+    text-align:center;
+  }
+
+  /* ---------------------------------- */
+  /* HAMBURGER MENU */
+  /* ---------------------------------- */
+  .menu-btn{
     position:absolute;
-    left:10px;
+    left:14px;
     top:50%;
     transform:translateY(-50%);
-    width:32px;
-    height:32px;
-    border:none;
-    background:transparent;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:4px;
+    font-size:32px;
+    color:white;
     cursor:pointer;
-    padding:0;
-  }
-  .menu-toggle span{
-    display:block;
-    width:22px;
-    height:2px;
-    background:#fff;
-    border-radius:2px;
+    user-select:none;
   }
 
-  /* Slide-out side menu */
   .side-menu{
     position:fixed;
-    top:0; left:0; bottom:0;
-    width:240px;
+    top:0; left:0;
+    width:260px;
+    height:100%;
     background:var(--bar);
     transform:translateX(-100%);
     transition:transform .25s ease-out;
-    z-index:150;
-    padding-top:var(--bar-h);
-    box-sizing:border-box;
+    z-index:2000;
     display:flex;
     flex-direction:column;
+    padding-top:80px;
+    padding-bottom:30px;
   }
+
+  .side-menu.open{
+    transform:translateX(0);
+  }
+
   .side-menu a{
     color:#fff;
     text-decoration:none;
-    padding:14px 18px;
-    border-bottom:1px solid rgba(255,255,255,0.2);
-    font-family:"Mountains of Christmas", cursive;
+    padding:14px 22px;
+    border-bottom:1px solid rgba(255,255,255,0.18);
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     font-size:20px;
-  }
-  .side-menu a:hover{
-    background:rgba(255,255,255,0.12);
+    font-weight:600;
   }
 
-  .menu-backdrop{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.4);
-    opacity:0;
-    visibility:hidden;
-    transition:opacity .2s ease-out;
-    z-index:140;
+  .menu-logo{
+    margin-top:auto;
+    text-align:center;
+    padding-bottom:20px;
+  }
+  .menu-logo img{
+    width:160px;
+    height:auto;
+    filter:drop-shadow(0 2px 8px rgba(0,0,0,.25));
   }
 
-  body.menu-open .side-menu{
-    transform:translateX(0);
-  }
-  body.menu-open .menu-backdrop{
-    opacity:1;
-    visibility:visible;
-  }
-
-  /* Main */
+  /* ---------------------------------- */
+  /* MAIN */
+  /* ---------------------------------- */
   .wrap{
     height:100vh;
     display:grid;
     align-content:start;
     justify-items:center;
+    padding-top:calc(var(--bar-h) + 20px);
+    padding-bottom:calc(var(--bar-h) + 20px);
     row-gap:20px;
-    padding-top:calc(var(--bar-h) + 22px);
-    padding-bottom:80px;
-    box-sizing:border-box;
     text-align:center;
     position:relative;
     z-index:10;
   }
 
   .logo{
-    width:min(400px,75vw);
+    width:min(400px,74vw);
     height:auto;
-    display:block;
-    margin-inline:auto;
-    filter:drop-shadow(0 3px 10px rgba(0,0,0,0.2));
+    filter:drop-shadow(0 2px 10px rgba(0,0,0,.18));
   }
 
   .cta-row{
     display:flex;
-    gap:16px;
-    margin-top:10px;
-    flex-wrap:wrap;
-    justify-content:center;
+    gap:14px;
+    margin-top:8px;
   }
 
   .btn{
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    min-width:160px;
+    min-width:180px;
     height:60px;
     padding:0 22px;
     border-radius:14px;
     font-weight:800;
     font-size:20px;
     letter-spacing:.3px;
-    background:#fff;
     color:var(--bar);
+    background:#fff;
     text-decoration:none;
-    border:1px solid rgba(0,0,0,0.08);
-    box-shadow:0 3px 10px rgba(0,0,0,0.22);
-    transition:background .2s, transform .15s;
+    border:1px solid rgba(0,0,0,.08);
+    box-shadow:0 3px 10px rgba(0,0,0,.22);
+    transition:background .25s, transform .15s;
   }
 
   .btn:hover{
@@ -177,14 +163,48 @@
     transform:translateY(-2px);
   }
 
-  /* Snow */
+  /* ---------------------------------- */
+  /* FOOTER */
+  /* ---------------------------------- */
+  .footer{
+    position:fixed;
+    bottom:0; left:0; right:0;
+    height:var(--bar-h);
+    background:var(--bar);
+    border-top:1px solid rgba(255,255,255,.25);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 14px;
+    font-size:13px;
+    z-index:1000;
+  }
+
+  .ig{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:rgba(255,255,255,.14);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+  }
+  .ig svg{
+    width:22px; height:22px; fill:#fff;
+  }
+
+  /* ---------------------------------- */
+  /* SNOWFALL */
+  /* ---------------------------------- */
   .snow-layer{
     pointer-events:none;
     position:fixed;
     inset:0;
-    z-index:5;
     overflow:hidden;
+    z-index:5;
   }
+
   .snowflake{
     position:absolute;
     top:-10vh;
@@ -196,58 +216,46 @@
     filter:blur(0.3px);
     animation:snowfall linear infinite;
   }
+
   @keyframes snowfall{
-    0%   { transform:translateY(-10vh) translateX(0);   opacity:0; }
-    10%  { opacity:1; }
-    100% { transform:translateY(110vh) translateX(30px); opacity:0.9; }
-  }
-
-  /* Footer */
-  .footer{
-    position:fixed;
-    bottom:0; left:0; right:0;
-    height:var(--bar-h);
-    background:var(--bar);
-    border-top:1px solid rgba(255,255,255,0.25);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 14px;
-    box-sizing:border-box;
-    font-size:13px;
-    z-index:100;
-  }
-
-  .footer a{
-    color:#fff;
-    text-decoration:none;
-    font-weight:600;
+    0%{ transform:translateY(-10vh); opacity:0; }
+    10%{ opacity:1; }
+    100%{ transform:translateY(110vh) translateX(30px); opacity:0.8; }
   }
 </style>
 </head>
 
 <body>
 
-<header class="topbar">
-  <button class="menu-toggle" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
-  ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
-</header>
-
-<nav class="side-menu" id="side-menu" aria-hidden="true">
+<!-- SIDEBAR MENU -->
+<nav class="side-menu" id="sideMenu">
   <a href="index.html">Home</a>
   <a href="about.html">About</a>
   <a href="buy.html">Buy</a>
   <a href="gallery.html">Gallery</a>
-</nav>
-<div class="menu-backdrop" id="menu-backdrop"></div>
 
+  <div class="menu-logo">
+    <img src="themayanutcompanychristmaslogo.png" alt="Menu Logo">
+  </div>
+</nav>
+
+<!-- TOP HEADER -->
+<header class="topbar">
+  <div class="menu-btn" onclick="document.getElementById('sideMenu').classList.toggle('open')">☰</div>
+
+  <div class="header-text">
+    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  </div>
+</header>
+
+<!-- SNOW -->
 <div class="snow-layer" id="snow-layer"></div>
 
+<!-- MAIN CONTENT -->
 <main class="wrap">
-  <a href="index.html" aria-label="Home">
-    <img class="logo" src="themayanutcompanychristmaslogo.png" alt="The MayaNut Company logo">
+
+  <a href="index.html">
+    <img class="logo" src="themayanutcompanychristmaslogo.png" alt="The MayaNut Company Logo">
   </a>
 
   <div class="cta-row">
@@ -255,43 +263,33 @@
     <a class="btn" href="buy.html">Buy</a>
     <a class="btn" href="gallery.html">Gallery</a>
   </div>
+
 </main>
 
+<!-- FOOTER -->
 <footer class="footer">
-  <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
-  <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener">Instagram</a>
+  <div>© 2025 The MayaNut Company, Inc. All Rights Reserved.</div>
+  <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank" aria-label="Instagram">
+    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5a5.5 5.5 0 1 0 5.5 5.5A5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
+  </a>
 </footer>
 
 <script>
+// Generate snowflakes
 (function(){
-  // snow
   const snowLayer = document.getElementById('snow-layer');
   const flakes = 35;
   for(let i=0;i<flakes;i++){
-    const flake = document.createElement('div');
-    flake.className = 'snowflake';
-    const size = Math.random()*4 + 3;
-    flake.style.width = size + 'px';
-    flake.style.height = size + 'px';
-    flake.style.left = Math.random()*100 + 'vw';
-    flake.style.animationDuration = (Math.random()*10 + 8) + 's';
-    flake.style.animationDelay = (Math.random()*-20) + 's';
+    const flake=document.createElement('div');
+    flake.className='snowflake';
+    const size=Math.random()*4+3;
+    flake.style.width=size+'px';
+    flake.style.height=size+'px';
+    flake.style.left=Math.random()*100+'vw';
+    flake.style.animationDuration=(Math.random()*10+8)+'s';
+    flake.style.animationDelay=(Math.random()*-20)+'s';
     snowLayer.appendChild(flake);
   }
-
-  // menu
-  const toggle = document.querySelector('.menu-toggle');
-  const backdrop = document.getElementById('menu-backdrop');
-
-  function closeMenu(){
-    document.body.classList.remove('menu-open');
-  }
-
-  toggle.addEventListener('click', function(){
-    document.body.classList.toggle('menu-open');
-  });
-
-  backdrop.addEventListener('click', closeMenu);
 })();
 </script>
 
