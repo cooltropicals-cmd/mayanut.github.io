@@ -4,13 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Buy — The MayaNut Company</title>
+<meta name="description" content="Shop MayaNut™ beverages and flour from The MayaNut Company — coming soon!" />
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
-<link rel="shortcut icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
+<link rel="icon" type="image/png" href="rach2.png" />
+<link rel="shortcut icon" type="image/png" href="rach2.png" />
 
 <meta name="theme-color" content="#18A7FF" />
 
@@ -24,13 +25,14 @@
   html,body{
     height:100%;
     margin:0;
-    background:var(--bg);
     font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:var(--bg);
     color:#fff;
     overflow-y:auto;
     position:relative;
   }
 
+  /* Top bar – static, centered text */
   .topbar{
     position:fixed;
     top:0; left:0; right:0;
@@ -43,81 +45,79 @@
     font-family:"Mountains of Christmas", cursive;
     font-size:22px;
     letter-spacing:1px;
-    border-bottom:1px solid rgba(255,255,255,0.3);
+    border-bottom:1px solid rgba(255,255,255,0.25);
     z-index:100;
+    text-align:center;
     padding:0 40px;
     box-sizing:border-box;
-    text-align:center;
   }
 
-  .menu-toggle{
-    position:absolute;
-    left:10px;
-    top:50%;
-    transform:translateY(-50%);
-    width:32px;
-    height:32px;
-    border:none;
-    background:transparent;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:4px;
-    cursor:pointer;
-    padding:0;
-  }
-  .menu-toggle span{
+  /* Main layout */
+  .wrap{
+    min-height:100vh;
     display:block;
-    width:22px;
-    height:2px;
-    background:#fff;
-    border-radius:2px;
-  }
-
-  .side-menu{
-    position:fixed;
-    top:0; left:0; bottom:0;
-    width:240px;
-    background:var(--bar);
-    transform:translateX(-100%);
-    transition:transform .25s ease-out;
-    z-index:150;
-    padding-top:var(--bar-h);
+    padding-top:calc(var(--bar-h) + 22px);
+    padding-bottom:80px;
     box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
+    position:relative;
+    z-index:10;
   }
-  .side-menu a{
-    color:#fff;
-    text-decoration:none;
-    padding:14px 18px;
-    border-bottom:1px solid rgba(255,255,255,0.2);
-    font-family:"Mountains of Christmas", cursive;
-    font-size:20px;
+
+  .logo-wrap{
+    text-align:center;
+    margin-bottom:22px;
   }
-  .side-menu a:hover{
+  .logo{
+    width:min(360px,70vw);
+    height:auto;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,0.2));
+  }
+
+  .buy-container{
+    max-width:1100px;
+    margin:0 auto;
+    padding:0 16px;
+    box-sizing:border-box;
+  }
+
+  .product{
+    display:grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,2fr);
+    gap:20px;
+    align-items:center;
+    margin-bottom:28px;
+  }
+
+  .img-placeholder{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:14px;
+    border:2px dashed rgba(255,255,255,0.8);
     background:rgba(255,255,255,0.12);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    font-size:16px;
+    color:#f7f7f7;
   }
 
-  .menu-backdrop{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.4);
-    opacity:0;
-    visibility:hidden;
-    transition:opacity .2s ease-out;
-    z-index:140;
+  .product-text{
+    background:rgba(255,255,255,0.96);
+    color:#083b7c;
+    border-radius:16px;
+    padding:18px 20px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.22);
+    font-size:17px;
+    font-weight:700;
   }
 
-  body.menu-open .side-menu{
-    transform:translateX(0);
-  }
-  body.menu-open .menu-backdrop{
-    opacity:1;
-    visibility:visible;
+  .product-text span.tm{
+    font-size:12px;
+    vertical-align:super;
   }
 
+  /* Snow */
   .snow-layer{
     pointer-events:none;
     position:fixed;
@@ -128,7 +128,8 @@
   .snowflake{
     position:absolute;
     top:-10vh;
-    width:6px; height:6px;
+    width:6px;
+    height:6px;
     border-radius:50%;
     background:rgba(255,255,255,0.9);
     opacity:0.9;
@@ -136,65 +137,38 @@
     animation:snowfall linear infinite;
   }
   @keyframes snowfall{
-    0%{ transform:translateY(-10vh) translateX(0); opacity:0; }
-    10%{ opacity:1; }
-    100%{ transform:translateY(110vh) translateX(30px); opacity:0.9; }
+    0%   { transform:translateY(-10vh) translateX(0);   opacity:0; }
+    10%  { opacity:1; }
+    100% { transform:translateY(110vh) translateX(30px); opacity:0.9; }
   }
 
-  .wrap{
-    max-width:800px;
-    margin:0 auto;
-    padding:calc(var(--bar-h) + 30px) 16px 90px;
-    box-sizing:border-box;
-    position:relative;
-    z-index:10;
-    text-align:center;
-  }
-
-  .logo{
-    width:min(260px,70vw);
-    filter:drop-shadow(0 2px 10px rgba(0,0,0,0.2));
-    margin-bottom:18px;
-  }
-
-  .card{
-    background:rgba(255,255,255,0.97);
-    color:#083b7c;
-    border-radius:18px;
-    padding:22px 22px 26px;
-    box-shadow:0 3px 12px rgba(0,0,0,0.25);
-  }
-
-  .card h1{
-    margin:0 0 12px;
-    font-size:24px;
-  }
-
-  .card p{
-    margin:0 0 10px;
-    font-size:15px;
-    line-height:1.7;
-  }
-
+  /* Footer */
   .footer{
     position:fixed;
     bottom:0; left:0; right:0;
     height:var(--bar-h);
     background:var(--bar);
-    color:#fff;
-    border-top:1px solid rgba(255,255,255,0.3);
+    border-top:1px solid rgba(255,255,255,0.25);
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:0 14px;
-    font-size:13px;
     box-sizing:border-box;
+    font-size:13px;
     z-index:100;
   }
+
   .footer a{
     color:#fff;
     text-decoration:none;
     font-weight:600;
+  }
+
+  /* Mobile */
+  @media (max-width:800px){
+    .product{
+      grid-template-columns:1fr;
+    }
   }
 </style>
 </head>
@@ -202,44 +176,50 @@
 <body>
 
 <header class="topbar">
-  <button class="menu-toggle" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
   ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
 </header>
-
-<nav class="side-menu" id="side-menu" aria-hidden="true">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="buy.html">Buy</a>
-  <a href="gallery.html">Gallery</a>
-</nav>
-<div class="menu-backdrop" id="menu-backdrop"></div>
 
 <div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
-  <a href="index.html">
-    <img class="logo" src="themayanutcompanychristmaslogo.png" alt="The MayaNut Company logo">
-  </a>
-
-  <div class="card">
-    <h1>MayaNut Beverage — Coming Soon</h1>
-    <p><strong>Products Coming as Soon as 2028!</strong></p>
-    <p>Thank you for your patience — we’re currently developing South Florida’s first dedicated mayanut plantation. Before we sell anything, we want healthy trees, a reliable harvest, and a supply chain that respects farmers and forests.</p>
-    <p>Our first products will focus on a rich, coffee-style roasted mayanut drink and ready-to-enjoy bottled beverages made from <em>Brosimum alicastrum</em> seeds. Think cozy, nutty, and naturally caffeine-free — perfect for mornings, evenings, and everything in between.</p>
-    <p>Follow our journey on Instagram at <strong>@themayanutcompany</strong> for progress updates, behind-the-scenes planting, and release news.</p>
+  <div class="logo-wrap">
+    <a href="index.html" aria-label="Home">
+      <img class="logo" src="rach1.png" alt="The MayaNut Company logo">
+    </a>
   </div>
+
+  <section class="buy-container">
+
+    <!-- Product 1 -->
+    <div class="product">
+      <div class="img-placeholder">
+        Image Placeholder
+      </div>
+      <div class="product-text">
+        MayaNut<span class="tm">™</span> Beverage Coming Soon
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product">
+      <div class="img-placeholder">
+        Image Placeholder
+      </div>
+      <div class="product-text">
+        MayaNut<span class="tm">™</span> Flour Coming Soon
+      </div>
+    </div>
+
+  </section>
 </main>
 
 <footer class="footer">
-  <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
+  <div>© 2025 The MayaNut Company, Inc. All Rights Reserved.</div>
   <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener">Instagram</a>
 </footer>
 
 <script>
 (function(){
-  // snow
   const snowLayer = document.getElementById('snow-layer');
   const flakes = 35;
   for(let i=0;i<flakes;i++){
@@ -253,20 +233,6 @@
     flake.style.animationDelay = (Math.random()*-20) + 's';
     snowLayer.appendChild(flake);
   }
-
-  // menu
-  const toggle = document.querySelector('.menu-toggle');
-  const backdrop = document.getElementById('menu-backdrop');
-
-  function closeMenu(){
-    document.body.classList.remove('menu-open');
-  }
-
-  toggle.addEventListener('click', function(){
-    document.body.classList.toggle('menu-open');
-  });
-
-  backdrop.addEventListener('click', closeMenu);
 })();
 </script>
 
