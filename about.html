@@ -5,69 +5,232 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About — The MayaNut Company</title>
 
-<link rel="icon" type="image/png" href="mayanutsunsantalogo.png" />
+<!-- Christmas font -->
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
+<link rel="shortcut icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
+
+<meta name="theme-color" content="#18A7FF" />
 
 <style>
-  body{
+  :root{
+    --bg:#18A7FF;
+    --bar:#0a56c2;
+    --bar-h:60px;
+  }
+
+  html,body{
+    height:100%;
     margin:0;
-    background:#18A7FF;
-    font-family:Inter, system-ui, Arial, sans-serif;
-    color:white;
+    background:var(--bg);
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color:#fff;
+    overflow-y:auto;
+    position:relative;
   }
 
   .topbar{
-    height:60px;
-    background:#0a56c2;
+    position:fixed;
+    top:0; left:0; right:0;
+    height:var(--bar-h);
+    background:var(--bar);
     display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-family:"Mountains of Christmas", cursive;
+    font-size:22px;
+    letter-spacing:1px;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+    z-index:100;
+    padding:0 40px;
+    box-sizing:border-box;
+    text-align:center;
+  }
+
+  .menu-toggle{
+    position:absolute;
+    left:10px;
+    top:50%;
+    transform:translateY(-50%);
+    width:32px;
+    height:32px;
+    border:none;
+    background:transparent;
+    display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
-    font-weight:700;
+    gap:4px;
+    cursor:pointer;
+    padding:0;
+  }
+  .menu-toggle span{
+    display:block;
+    width:22px;
+    height:2px;
+    background:#fff;
+    border-radius:2px;
+  }
+
+  .side-menu{
+    position:fixed;
+    top:0; left:0; bottom:0;
+    width:240px;
+    background:var(--bar);
+    transform:translateX(-100%);
+    transition:transform .25s ease-out;
+    z-index:150;
+    padding-top:var(--bar-h);
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+  }
+  .side-menu a{
+    color:#fff;
+    text-decoration:none;
+    padding:14px 18px;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+    font-family:"Mountains of Christmas", cursive;
+    font-size:20px;
+  }
+  .side-menu a:hover{
+    background:rgba(255,255,255,0.12);
+  }
+
+  .menu-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s ease-out;
+    z-index:140;
+  }
+
+  body.menu-open .side-menu{
+    transform:translateX(0);
+  }
+  body.menu-open .menu-backdrop{
+    opacity:1;
+    visibility:visible;
+  }
+
+  .snow-layer{
+    pointer-events:none;
+    position:fixed;
+    inset:0;
+    z-index:5;
+    overflow:hidden;
+  }
+  .snowflake{
+    position:absolute;
+    top:-10vh;
+    width:6px; height:6px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.9);
+    opacity:0.9;
+    filter:blur(0.3px);
+    animation:snowfall linear infinite;
+  }
+  @keyframes snowfall{
+    0%{ transform:translateY(-10vh) translateX(0); opacity:0; }
+    10%{ opacity:1; }
+    100%{ transform:translateY(110vh) translateX(30px); opacity:0.9; }
   }
 
   .wrap{
-    padding:90px 30px 40px;
+    max-width:1100px;
+    margin:0 auto;
+    padding:calc(var(--bar-h) + 24px) 16px 90px;
+    box-sizing:border-box;
+    position:relative;
+    z-index:10;
+  }
+
+  .logo-wrap{
     text-align:center;
-    max-width:700px;
-    margin:auto;
-  }
-
-  .logo{
-    width:260px;
-    height:auto;
-    display:block;
-    margin:0 auto 20px auto;
-  }
-
-  p{
-    font-size:18px;
-    line-height:1.5;
     margin-bottom:20px;
+  }
+  .logo-wrap img{
+    width:min(260px,70vw);
+    filter:drop-shadow(0 2px 10px rgba(0,0,0,0.2));
+  }
+
+  .content-grid{
+    display:grid;
+    grid-template-columns:minmax(0,340px) minmax(0,1fr);
+    gap:32px;
+    align-items:flex-start;
+  }
+
+  .image-column{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .image-column img{
+    width:100%;
+    border-radius:14px;
+    background:#ffffff33;
+    object-fit:cover;
+    box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  }
+  .square{
+    aspect-ratio:1/1;
+  }
+
+  .text-column{
+    background:rgba(255,255,255,0.97);
+    color:#083b7c;
+    border-radius:16px;
+    padding:18px 20px 20px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.25);
+  }
+  .text-column h1{
+    margin:0 0 10px;
+    font-size:24px;
+  }
+  .text-column h2{
+    margin:18px 0 8px;
+    font-size:20px;
+  }
+  .text-column p{
+    margin:0 0 10px;
+    font-size:15px;
+    line-height:1.65;
+  }
+  .text-column em{
+    font-style:italic;
   }
 
   .footer{
-    background:#0a56c2;
-    height:60px;
+    position:fixed;
+    bottom:0; left:0; right:0;
+    height:var(--bar-h);
+    background:var(--bar);
+    color:#fff;
+    border-top:1px solid rgba(255,255,255,0.3);
     display:flex;
+    align-items:center;
     justify-content:space-between;
-    align-items:center;
-    padding:0 16px;
+    padding:0 14px;
     font-size:13px;
+    box-sizing:border-box;
+    z-index:100;
+  }
+  .footer a{
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
   }
 
-  .ig{
-    width:34px;
-    height:34px;
-    background:rgba(255,255,255,0.15);
-    display:flex;
-    border-radius:50%;
-    justify-content:center;
-    align-items:center;
-  }
-
-  .ig svg{
-    width:20px;
-    height:20px;
-    fill:white;
+  @media(max-width:800px){
+    .content-grid{
+      grid-template-columns:1fr;
+    }
   }
 </style>
 </head>
@@ -75,29 +238,105 @@
 <body>
 
 <header class="topbar">
+  <button class="menu-toggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
 </header>
 
+<nav class="side-menu" id="side-menu" aria-hidden="true">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="buy.html">Buy</a>
+  <a href="gallery.html">Gallery</a>
+</nav>
+<div class="menu-backdrop" id="menu-backdrop"></div>
+
+<div class="snow-layer" id="snow-layer"></div>
+
 <main class="wrap">
 
-  <img class="logo" src="mayanutsunsantalogo.png">
+  <div class="logo-wrap">
+    <a href="index.html">
+      <img src="themayanutcompanychristmaslogo.png" alt="The MayaNut Company logo">
+    </a>
+  </div>
 
-  <p>The MayaNut Company was founded in 2025 by August Kokus, who wanted to leave behind something new and meaningful — a living legacy that would adapt, evolve, and bring value to people long after he was gone. That legacy became the MayaNut project.</p>
+  <section class="content-grid">
+    <!-- LEFT COLUMN IMAGES -->
+    <div class="image-column">
+      <img src="fruitmaya.jpeg" alt="Maya nut fruit (Brosimum alicastrum)">
+      <img src="ceomaya.jpeg" class="square" alt="Founder August Kokus">
+      <img src="plantation.jpeg" alt="Brosimum alicastrum plantation">
+    </div>
 
-  <p>Brosimum alicastrum, known as the Maya nut tree, is native to South Florida’s extended tropical region, stretching across Cuba, Jamaica, Mexico, Central America, and into northern Colombia and Venezuela. Its story with humans began nearly 20,000 years ago, when the first early settlers of the Americas encountered it. Indigenous peoples — including the Maya — used the tree for food, shade, and survival, and it became woven into Mesoamerican culture.</p>
+    <!-- RIGHT COLUMN TEXT -->
+    <div class="text-column">
+      <h1>About The MayaNut Company</h1>
 
-  <p>At The MayaNut Company, we are working to establish South Florida’s first MayaNut plantation, developing new uses for this nutritious seed. The Maya nut can be roasted, ground, brewed like coffee, or made into a creamy drink — all without caffeine. We aim to bring it into modern agriculture responsibly and sustainably.</p>
+      <p>The MayaNut Company was founded in 2025 by August Kokus, who wanted to leave behind something new and unique in the world. He became fascinated by the idea of an ever-lasting creation — something that could adapt, evolve, and continue long after we’re gone. A living legacy. For him, that legacy is a tree. If it can feed people and fit into the future of agriculture, it has a reason to survive. Why not mayanut?</p>
 
-  <p>Future products will include ground MayaNut for a coffee-like beverage and ready-to-drink bottled MayaNut beverages, planned for release in grocery stores by 2028.</p>
+      <p>Our focus is <em>Brosimum alicastrum</em> — often called maya nut, ojoche, Ramón, or breadnut. It’s native to the tropical forests of Mesoamerica and the Caribbean, from Mexico and Guatemala through Belize and Honduras, into parts of Nicaragua, Costa Rica, and Panama, and across to islands like Cuba and Jamaica, as well as northern regions of Colombia and Venezuela. In many areas, you’ll still find towering mayanut trees near ancient ceremonial sites, where they were likely planted and cared for by Indigenous communities.</p>
+
+      <h2>Maya Nut in History</h2>
+
+      <p>Humans in the Americas probably first encountered <em>Brosimum alicastrum</em> tens of thousands of years ago, as early hunter-gatherers and later settled Indigenous groups moved into tropical lowland forests. Over time, the tree became woven into local food traditions. In parts of the Maya region, its seeds were dried, roasted, ground into flour, or cooked into porridges and beverages. During times of drought or crop failure, mayanut helped people bridge the gap between harvests.</p>
+
+      <p>Today the species is still present in forests and shade agroforestry systems, but it’s underused in mainstream agriculture. We see that as a huge opportunity — both for farmers and for the tree itself.</p>
+
+      <h2>What We’re Doing in South Florida</h2>
+
+      <p>At The MayaNut Company, we’re working to establish South Florida’s first dedicated mayanut plantation. We’re testing how the trees handle our soils, rainfall patterns, and hurricanes, and how they can fit into diversified farms alongside fruit trees, pasture, and native plants. Our long-term goal is simple: make mayanut so useful and so beloved that planting it becomes a no-brainer for growers.</p>
+
+      <h2>Future Products</h2>
+
+      <p>The seeds of <em>Brosimum alicastrum</em> are incredibly versatile. When roasted and ground, they can produce a rich, coffee-like beverage with their own unique character — naturally caffeine-free, but still full of flavor. We plan to offer ground mayanut that people can brew at home, as well as ready-to-drink bottled mayanut beverages.</p>
+
+      <p>Our aim is to begin bringing these products to market — including grocery stores — around 2028. Between now and then, we’re focused on growing trees, refining recipes, and building a supply chain that respects both farmers and forests.</p>
+
+      <p>For us, this is more than a product line. It’s a way to give an ancient tree a modern job — one that feeds people, supports reforestation, and quietly carries a human story forward in every seed.</p>
+    </div>
+  </section>
 
 </main>
 
 <footer class="footer">
-  <div>© 2025 The MayaNut Company, Inc. All Rights Reserved.</div>
-  <a class="ig" href="https://instagram.com/themayanutcompany" target="_blank">
-    <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 4.5A5.5 5.5 0 1 0 5.5 12 5.5 5.5 0 0 0 12 6.5zM18.25 4.75a1.25 1.25 0 1 0 1.25 1.25 1.25 1.25 0 0 0-1.25-1.25z"/></svg>
-  </a>
+  <div>© 2025 The MayaNut Company — All Rights Reserved.</div>
+  <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener">Instagram</a>
 </footer>
+
+<script>
+(function(){
+  // snow
+  const snowLayer = document.getElementById('snow-layer');
+  const flakes = 35;
+  for(let i=0;i<flakes;i++){
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    const size = Math.random()*4 + 3;
+    flake.style.width = size + 'px';
+    flake.style.height = size + 'px';
+    flake.style.left = Math.random()*100 + 'vw';
+    flake.style.animationDuration = (Math.random()*10 + 8) + 's';
+    flake.style.animationDelay = (Math.random()*-20) + 's';
+    snowLayer.appendChild(flake);
+  }
+
+  // menu
+  const toggle = document.querySelector('.menu-toggle');
+  const backdrop = document.getElementById('menu-backdrop');
+
+  function closeMenu(){
+    document.body.classList.remove('menu-open');
+  }
+
+  toggle.addEventListener('click', function(){
+    document.body.classList.toggle('menu-open');
+  });
+
+  backdrop.addEventListener('click', closeMenu);
+})();
+</script>
 
 </body>
 </html>
