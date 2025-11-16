@@ -125,7 +125,7 @@ html,body{
   gap:40px;
 }
 
-/* Right side – text + image (now both live directly in hero-inner) */
+/* Right side – text + image */
 .hero-right{
   display:flex;
   align-items:center;
@@ -207,6 +207,7 @@ html,body{
 .section{
   padding:70px 16px 80px;
   position:relative;
+  z-index:1;
 }
 
 .section-inner{
@@ -214,24 +215,19 @@ html,body{
   margin:0 auto;
 }
 
-/* Wavy transitions (top of each section) */
+/* CIRCULAR transitions between sections (from your snippet) */
 .section--about::before,
 .section--buy::before,
 .section--gallery::before,
 .section--bottom-logo::before{
   content:"";
   position:absolute;
-  top:-70px;
+  top:-60px;
   left:50%;
   transform:translateX(-50%);
-  width:140%;
-  height:110px;
-  background:
-    radial-gradient(circle at 10% 120%, transparent 60%, currentColor 61%) repeat-x,
-    radial-gradient(circle at 50% 120%, transparent 60%, currentColor 61%) repeat-x,
-    radial-gradient(circle at 90% 120%, transparent 60%, currentColor 61%) repeat-x;
-  background-size:120px 120px;
-  color:inherit;
+  width:120%;
+  height:120px;
+  border-radius:50% 50% 0 0;
   z-index:-1;
 }
 
@@ -241,7 +237,7 @@ html,body{
   color:#fff;
 }
 .section--about::before{
-  color:var(--bar);
+  background:var(--bar);
 }
 
 /* ABOUT layout */
@@ -301,7 +297,10 @@ html,body{
   color:#083b7c;
 }
 .section--buy::before{
-  color:#f5f7ff;
+  background:
+    radial-gradient(circle at 0% 0%, #e8ddff 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #e3d7ff 0, transparent 55%),
+    linear-gradient(180deg,#f8f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
 }
 
 .buy-grid{
@@ -353,7 +352,7 @@ html,body{
   background:#18A7FF;
 }
 .section--gallery::before{
-  color:#18A7FF;
+  background:#18A7FF;
 }
 
 .gallery-inner{
@@ -395,7 +394,7 @@ html,body{
   text-align:center;
 }
 .section--bottom-logo::before{
-  color:#0a56c2;
+  background:#0a56c2;
 }
 
 .section--bottom-logo img{
