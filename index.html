@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 
 <!-- Base + headline fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" href="rach3.png" />
@@ -21,7 +21,12 @@
 <style>
 :root{
   --bg:#18A7FF;
-  --bg-grad:radial-gradient(circle at 30% 20%, #34c3ff 0, #18A7FF 40%, #0c7adf 100%);
+  /* More dramatic shaded blue: lighter center, darker edges */
+  --bg-grad:
+    radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
+    radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
+    radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
+    #0a56c2;
   --bar:#0a56c2;
   --bar-h:60px;
   --card-bg:#ffffff;
@@ -120,7 +125,7 @@ html,body{
 .hero-logo{
   width:170px;
   height:auto;
-  margin-top:4px;            /* snug under the blue bar */
+  margin-top:0;              /* tighter to the corner */
   margin-left:0;             /* flush to the left */
   filter:drop-shadow(0 3px 10px rgba(0,0,0,.25));
 }
@@ -129,11 +134,13 @@ html,body{
 .hero-right{
   display:flex;
   align-items:center;
-  gap:64px;                  /* more space between glass + text */
+  justify-content:space-between;   /* push text left, glass right */
+  gap:40px;
 }
 
 .hero-image-wrap{
   flex:0 0 auto;
+  margin-left:auto;                /* really push the glass to the right */
 }
 
 .hero-image-link{
@@ -158,17 +165,20 @@ html,body{
   flex:1;
   max-width:420px;
   margin-left:8px;
-  font-family:"Luckiest Guy", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:80px;
-  line-height:1.1;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:90px;               /* slightly larger */
+  line-height:1.05;
   font-weight:400;
   color:#ffffff;
-  /* blue outline */
   -webkit-text-stroke:3px #0057c8;
   text-stroke:3px #0057c8;
   text-shadow:
     0 3px 0 #0057c8,
     0 6px 12px rgba(0,0,0,0.4);
+}
+
+.hero-headline span{
+  display:block;
 }
 
 /* Snow only on hero */
@@ -207,28 +217,34 @@ html,body{
   margin:0 auto;
 }
 
-/* Curved transitions */
+/* Wavy transitions (top of each section) */
 .section--about::before,
 .section--buy::before,
 .section--gallery::before,
 .section--bottom-logo::before{
   content:"";
   position:absolute;
-  top:-60px;
+  top:-70px;
   left:50%;
   transform:translateX(-50%);
-  width:120%;
-  height:120px;
-  border-radius:50% 50% 0 0;
+  width:140%;
+  height:110px;
+  background:
+    radial-gradient(circle at 10% 120%, transparent 60%, currentColor 61%) repeat-x,
+    radial-gradient(circle at 50% 120%, transparent 60%, currentColor 61%) repeat-x,
+    radial-gradient(circle at 90% 120%, transparent 60%, currentColor 61%) repeat-x;
+  background-size:120px 120px;
+  color:inherit;
   z-index:-1;
 }
 
 /* ABOUT */
 .section--about{
   background:var(--bar);
+  color:#fff;
 }
 .section--about::before{
-  background:var(--bar);
+  color:var(--bar);
 }
 
 /* ABOUT layout */
@@ -280,11 +296,15 @@ html,body{
 
 /* BUY */
 .section--buy{
-  background:linear-gradient(180deg,#f7f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
+  /* White with lavender shading in some spots */
+  background:
+    radial-gradient(circle at 0% 0%, #e8ddff 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #e3d7ff 0, transparent 55%),
+    linear-gradient(180deg,#f8f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
   color:#083b7c;
 }
 .section--buy::before{
-  background:linear-gradient(180deg,#f7f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
+  color:#f5f7ff;
 }
 
 .buy-grid{
@@ -336,7 +356,7 @@ html,body{
   background:#18A7FF;
 }
 .section--gallery::before{
-  background:#18A7FF;
+  color:#18A7FF;
 }
 
 .gallery-inner{
@@ -378,7 +398,7 @@ html,body{
   text-align:center;
 }
 .section--bottom-logo::before{
-  background:#0a56c2;
+  color:#0a56c2;
 }
 
 .section--bottom-logo img{
@@ -481,7 +501,7 @@ footer{
     gap:32px;
   }
   .hero-headline{
-    font-size:32px;
+    font-size:34px;
     max-width:none;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
@@ -527,13 +547,16 @@ footer{
       </div>
 
       <div class="hero-right">
+        <div class="hero-headline">
+          <span>MayaNut</span>
+          <span>Beverage</span>
+          <span>Is Here</span>
+        </div>
+
         <div class="hero-image-wrap">
           <a href="#buy" class="hero-image-link">
             <img src="mayanutglass.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
           </a>
-        </div>
-        <div class="hero-headline">
-          Yummy MayaNut Beverages Coming Soon!
         </div>
       </div>
     </div>
