@@ -4,340 +4,428 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The MayaNut Company</title>
-<meta name="description" content="The MayaNut Company — Maya nut (Brosimum alicastrum) foods and education supporting reforestation, food security, and sustainable agriculture." />
+<meta name="description" content="The MayaNut Company — MayaNut™ plantation and future beverages & foods from Brosimum alicastrum." />
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 
-<!-- Favicon (Christmas logo) -->
-<link rel="icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
-<link rel="shortcut icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
+<!-- Favicon (use any logo file you like) -->
+<link rel="icon" type="image/png" href="rach3.png" />
+<link rel="shortcut icon" type="image/png" href="rach3.png" />
 
 <meta name="theme-color" content="#18A7FF" />
 
 <style>
-  :root{
-    --light:#18A7FF;
-    --dark:#0a56c2;
-    --bar-h:60px;
-  }
+:root{
+  --blue-light:#18A7FF;
+  --blue-main:#0a56c2;
+  --blue-deep:#04326f;
+  --section-padding:70px;
+  --bar-h:60px;
+}
 
-  html,body{
-    height:100%;
-    margin:0;
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    color:#fff;
-    background:var(--light);
-    overflow-x:hidden;
-  }
+/* GLOBAL */
 
-  /* Christmas header */
-  .topbar{
-    position:fixed;
-    top:0; left:0; right:0;
-    height:var(--bar-h);
-    background:var(--dark);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-family:"Mountains of Christmas", cursive;
-    font-size:18px;
-    letter-spacing:.8px;
-    border-bottom:1px solid rgba(255,255,255,0.25);
-    z-index:100;
-    padding:0 16px;
-    text-align:center;
-    box-sizing:border-box;
-  }
+*{box-sizing:border-box;}
 
-  /* Snow */
-  .snow-layer{
-    pointer-events:none;
-    position:fixed;
-    inset:0;
-    z-index:5;
-    overflow:hidden;
-  }
-  .snowflake{
-    position:absolute;
-    top:-10vh;
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.9);
-    opacity:0.9;
-    filter:blur(0.3px);
-    animation:snowfall linear infinite;
-  }
-  @keyframes snowfall{
-    0%   { transform:translateY(-10vh) translateX(0); opacity:0; }
-    10%  { opacity:1; }
-    100% { transform:translateY(110vh) translateX(30px); opacity:0.9; }
-  }
+html,body{
+  margin:0;
+  height:100%;
+  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:#fff;
+  background:var(--blue-light);
+}
 
-  main{
-    margin-top:var(--bar-h);
-  }
+body{
+  position:relative;
+  overflow-x:hidden;
+}
 
-  /* HERO */
-  .hero{
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:radial-gradient(circle at top, #3ac3ff 0, var(--light) 60%, var(--dark) 120%);
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-  }
-  .hero-logo{
-    width:min(380px,80vw);
-    filter:drop-shadow(0 4px 12px rgba(0,0,0,0.25));
-  }
+/* TOP BAR */
 
-  /* Curve into about section */
-  .about-section{
-    position:relative;
-    background:var(--dark);
-    padding:60px 16px 50px;
-    box-sizing:border-box;
-  }
-  .about-section::before{
-    content:"";
-    position:absolute;
-    top:-60px;
-    left:0; right:0;
-    height:120px;
-    background:var(--dark);
-    border-bottom-left-radius:50% 100%;
-    border-bottom-right-radius:50% 100%;
-  }
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:var(--bar-h);
+  background:var(--blue-main);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 12px;
+  z-index:100;
+  font-family:"Mountains of Christmas", cursive;
+  font-size:18px;           /* smaller Christmas text */
+  letter-spacing:1px;
+  border-bottom:1px solid rgba(255,255,255,.25);
+}
 
-  .about-inner{
-    max-width:1100px;
-    margin:0 auto;
-    position:relative;
-    z-index:1;
-  }
+/* SNOW */
 
+.snow-layer{
+  pointer-events:none;
+  position:fixed;
+  inset:0;
+  z-index:5;
+  overflow:hidden;
+}
+.snowflake{
+  position:absolute;
+  top:-10vh;
+  width:6px; height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,.9);
+  opacity:.9;
+  filter:blur(.3px);
+  animation:snowfall linear infinite;
+}
+@keyframes snowfall{
+  0%   { transform:translateY(-10vh) translateX(0);   opacity:0; }
+  10%  { opacity:1; }
+  100% { transform:translateY(110vh) translateX(30px); opacity:.9; }
+}
+
+/* MAIN LAYOUT */
+
+main{
+  position:relative;
+  z-index:10;
+}
+
+/* SECTIONS & CURVED TRANSITIONS */
+
+.section{
+  padding:calc(var(--section-padding) + var(--bar-h)) 16px var(--section-padding);
+  position:relative;
+}
+
+.section-hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background:radial-gradient(circle at top, #2fc0ff 0%, var(--blue-light) 55%, #0b86e6 100%);
+}
+
+.section-about{
+  background:var(--blue-deep);
+}
+
+.section-gallery{
+  background:var(--blue-light);
+  color:#fff;
+}
+
+.section-buy{
+  background:var(--blue-main);
+}
+
+/* curved separators */
+.section + .wave-top{
+  margin-top:-1px;
+}
+
+.wave{
+  display:block;
+  width:100%;
+  height:80px;
+}
+.wave svg{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+/* HERO */
+
+.hero-logo{
+  width:min(420px, 80vw);
+  height:auto;
+  filter:drop-shadow(0 3px 15px rgba(0,0,0,.28));
+}
+
+.hero-scroll-hint{
+  margin-top:18px;
+  font-size:14px;
+  opacity:.9;
+}
+
+/* ABOUT LAYOUT */
+
+.section-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.about-grid{
+  display:grid;
+  grid-template-columns:minmax(0,360px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+
+.about-images{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.about-images img{
+  width:100%;
+  border-radius:14px;
+  box-shadow:0 2px 12px rgba(0,0,0,.4);
+  object-fit:cover;
+}
+.about-images .square{ aspect-ratio:1/1; }
+
+.about-text h2{
+  margin:0 0 12px;
+  font-size:24px;
+}
+.about-text h3{
+  margin:22px 0 8px;
+  font-size:20px;
+}
+.about-text p{
+  margin:0 0 10px;
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* GALLERY */
+
+.gallery-content{
+  text-align:center;
+}
+.gallery-grid{
+  margin:22px auto 0;
+  max-width:720px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:10px;
+}
+.gallery-placeholder{
+  background:rgba(255,255,255,.2);
+  border-radius:10px;
+  border:1px dashed rgba(255,255,255,.6);
+  aspect-ratio:1/1;
+}
+
+/* BUY */
+
+.buy-grid{
+  display:flex;
+  flex-direction:column;
+  gap:26px;
+}
+.buy-row{
+  display:grid;
+  grid-template-columns:minmax(0,32%) minmax(0,1fr);
+  gap:18px;
+  align-items:stretch;
+}
+.buy-img{
+  background:#0d4ea5;
+  border-radius:14px;
+  border:1px dashed rgba(255,255,255,.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  text-align:center;
+  padding:10px;
+}
+.buy-card{
+  background:rgba(255,255,255,.97);
+  color:#083b7c;
+  border-radius:14px;
+  padding:16px 18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.35);
+}
+.buy-card h3{
+  margin:0 0 8px;
+}
+.buy-card p{
+  margin:0;
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* FOOTER */
+
+.footer{
+  background:#022145;
+  color:#fff;
+  text-align:center;
+  padding:14px 10px 18px;
+  font-size:12px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:800px){
+  .section{
+    padding-top:calc(var(--bar-h) + 40px);
+  }
   .about-grid{
-    display:flex;
-    flex-direction:column;
-    gap:28px;
+    grid-template-columns:1fr;
   }
-  .about-row{
-    display:grid;
-    grid-template-columns:minmax(0,320px) minmax(0,1fr);
-    gap:24px;
-    align-items:flex-start;
+  .buy-row{
+    grid-template-columns:1fr;
   }
-  .about-image{
-    border-radius:14px;
-    overflow:hidden;
-    box-shadow:0 2px 10px rgba(0,0,0,0.25);
-    background:#ffffff22;
-  }
-  .about-image img{
-    width:100%;
-    height:100%;
-    display:block;
-    object-fit:cover;
-  }
-  .about-text{
-    background:rgba(255,255,255,0.97);
-    color:#083b7c;
-    border-radius:16px;
-    padding:18px 20px 20px;
-    box-shadow:0 2px 14px rgba(0,0,0,0.25);
-  }
-  .about-text h2{
-    margin:0 0 8px;
-    font-size:20px;
-  }
-  .about-text p{
-    margin:0;
-    font-size:15px;
-    line-height:1.65;
-  }
-
-  /* Curve into gallery */
-  .gallery-section{
-    position:relative;
-    background:var(--light);
-    padding:70px 16px 50px;
-    box-sizing:border-box;
-    color:#fff;
-  }
-  .gallery-section::before{
-    content:"";
-    position:absolute;
-    top:-60px;
-    left:0; right:0;
-    height:120px;
-    background:var(--light);
-    border-bottom-left-radius:50% 100%;
-    border-bottom-right-radius:50% 100%;
-  }
-
-  .gallery-inner{
-    max-width:1100px;
-    margin:0 auto;
-    position:relative;
-    z-index:1;
-    text-align:center;
-  }
-  .gallery-inner h2{
-    margin:0 0 6px;
-    font-size:22px;
-  }
-  .gallery-inner p{
-    margin:0 0 18px;
-    font-size:15px;
-  }
-  .gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
-    gap:14px;
-  }
-  .gallery-item{
-    background:rgba(255,255,255,0.2);
-    border-radius:14px;
-    padding:6px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.25);
-  }
-  .gallery-item-inner{
-    width:100%;
-    aspect-ratio:1/1;
-    border-radius:10px;
-    background:#ffffff22;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:700;
-    letter-spacing:.3px;
-    font-size:14px;
-    color:#fefefe;
-  }
-
-  .page-footer{
-    text-align:center;
-    padding:20px 12px 26px;
-    font-size:12px;
-    color:#eaf5ff;
-    background:var(--light);
-  }
-
-  @media(max-width:800px){
-    .about-row{
-      grid-template-columns:1fr;
-    }
-  }
+}
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
   ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
 </header>
 
+<!-- Snow -->
 <div class="snow-layer" id="snow-layer"></div>
 
 <main>
 
-  <!-- HERO: just the logo -->
-  <section class="hero">
-    <img class="hero-logo" src="rach3.png" alt="The MayaNut Company logo">
+  <!-- HERO / HOME -->
+  <section class="section section-hero" id="home">
+    <img src="rach3.png" alt="The MayaNut Company logo" class="hero-logo">
+    <div class="hero-scroll-hint">Scroll down to learn more about MayaNut™</div>
   </section>
 
-  <!-- ABOUT: dark blue section -->
-  <section class="about-section" id="about">
-    <div class="about-inner">
+  <!-- Curve into ABOUT (light → deep blue) -->
+  <div class="wave wave-top">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <path fill="#04326f" d="M0,96 C240,160 480,0 720,64 C960,128 1200,32 1440,96 L1440,160 L0,160 Z"></path>
+    </svg>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="section section-about" id="about">
+    <div class="section-inner">
+
       <div class="about-grid">
-
-        <div class="about-row">
-          <div class="about-image">
-            <img src="fruitmaya.jpeg" alt="MayaNut fruit (Brosimum alicastrum)">
-          </div>
-          <div class="about-text">
-            <h2>About MayaNut™</h2>
-            <p>
-              MayaNut™ is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit which is chewy and has a syrupy, slightly tangy taste. The fruit — which is elusively talked about — is so delicious and best eaten when red, yet has a very short shelf-life; only fresh fruit should be eaten. The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an underutilized species, which is why we are the first MayaNut™ plantation in the United States.
-            </p>
+        <div class="about-images">
+          <img src="fruitmaya.jpeg" alt="MayaNut fruit on the tree">
+          <img src="ceomaya.jpeg" class="square" alt="Founder August Kokus">
+          <img src="plantation.jpeg" alt="Young MayaNut plantation in South Florida">
+          <div class="square" style="background:rgba(0,0,0,.2); border-radius:14px; border:1px dashed rgba(255,255,255,.5); display:flex; align-items:center; justify-content:center; font-size:13px; text-align:center; padding:10px;">
+            Future product photo placeholder
           </div>
         </div>
 
-        <div class="about-row">
-          <div class="about-image">
-            <img src="ceomaya.jpeg" alt="Founder August Kokus">
-          </div>
-          <div class="about-text">
-            <h2>About August Kokus</h2>
-            <p>
-              August Kokus had a vision to create something that lasts. In 2025, he founded The MayaNut Company, Inc. to preserve a species. He realized he could create whatever he wanted, but whatever that was, it had to last. It couldn’t be art, because paintings decay. It couldn’t be a song, because they’re forgotten. But give humanity something they love? Only then did he realize his creation would have to be loved to be passed down through the ages — and for his chosen species to survive. It’s unlikely that wherever humans end up going in the galaxy, they’ll bring everything with them, but they will bring what’s necessary. August Kokus is counting on that: a unique, new creation… MayaNut™.
-            </p>
-          </div>
-        </div>
+        <div class="about-text">
+          <h2>About MayaNut™</h2>
+          <p><strong>MayaNut™</strong> is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit which is chewy and has a syrupy, slightly tangy taste. The fruit, which is elusively talked about, is so delicious and best eaten when red, yet has a very short shelf-life — only fresh fruit should be eaten.</p>
+          <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an underutilized species, which is why we are building the first MayaNut™ plantation in the United States.</p>
 
-        <div class="about-row">
-          <div class="about-image">
-            <img src="plantation.jpeg" alt="MayaNut plantation in South Florida">
-          </div>
-          <div class="about-text">
-            <h2>Our Work in South Florida</h2>
-            <p>
-              MayaNut™ seems to only grow up to zone 9 in the United States. Temperatures below 50°F can begin to damage new growth, temperatures under 38°F can cause defoliation, and temperatures under 32°F can kill mature MayaNut™ trees. South Florida and parts of southern Texas are the only places in the continental United States that could support viable agricultural projects. South Florida, with its subtropical environment, appears to be the most ideal location. Florida’s first MayaNut™ plantation is set to open in January 2027.
-            </p>
-          </div>
-        </div>
+          <h3>About August Kokus</h3>
+          <p>August Kokus had a vision to create something that lasts. In 2025, he founded The MayaNut Company, Inc. to preserve a species. He realized he could create whatever he wanted, but whatever that was, it had to last. It couldn’t be art, because paintings decay. It couldn’t be a song, because even the greatest melodies are eventually forgotten.</p>
+          <p>But give humanity something they truly love? Then it will be carried forward. That’s when he realized his creation had to be living, useful, and cherished — a species people would choose to plant, protect, and take with them wherever they go. That creation is MayaNut™.</p>
 
-        <div class="about-row">
-          <div class="about-image">
-            <img src="placeholder-products.png" alt="MayaNut product concepts placeholder">
-          </div>
-          <div class="about-text">
-            <h2>Future Products</h2>
-            <p>
-              The MayaNut Company plans to utilize MayaNut™ powder in our chilled MayaNut™ beverages. Our culinary team is currently preparing two more special MayaNut™ creations which will be unveiled in July 2027.
-            </p>
-          </div>
-        </div>
+          <h3>Our Work in South Florida</h3>
+          <p>MayaNut™ seems to grow reliably only up to about USDA Zone 9. Temperatures below 50°F can damage new growth, temperatures under 38°F can cause defoliation, and a hard freeze can kill mature trees. That makes South Florida and a few pockets of southern Texas the only places in the continental United States that can support viable agricultural plantings.</p>
+          <p>South Florida, with its subtropical climate, is especially promising. Our goal is to establish Florida’s first dedicated MayaNut™ plantation and refine how the trees fit into diversified farms — alongside fruit trees, pasture, and native plants.</p>
 
+          <h3>Future Products</h3>
+          <p>The MayaNut Company plans to use MayaNut™ powder in chilled MayaNut™ beverages and other foods. Our culinary team is developing additional creations that highlight the seed’s flavor, nutrition, and versatility. As the trees grow, so will our product line — always rooted in this remarkable species.</p>
+        </div>
       </div>
+
     </div>
   </section>
 
-  <!-- GALLERY: back to light blue with curved transition -->
-  <section class="gallery-section" id="gallery">
-    <div class="gallery-inner">
+  <!-- Curve into GALLERY (deep blue → light blue) -->
+  <div class="wave">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <path fill="#18A7FF" d="M0,96 C240,32 480,160 720,96 C960,32 1200,128 1440,64 L1440,160 L0,160 Z"></path>
+    </svg>
+  </div>
+
+  <!-- GALLERY -->
+  <section class="section section-gallery" id="gallery">
+    <div class="section-inner gallery-content">
       <h2>Gallery</h2>
-      <p>Gallery Coming Soon!</p>
+      <p>Gallery Coming Soon! We’re busy planting, growing, and documenting the very first MayaNut™ plantation in South Florida.</p>
 
       <div class="gallery-grid">
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
-        <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
       </div>
     </div>
   </section>
 
-  <div class="page-footer">
-    © 2025 The MayaNut Company, Inc. All Rights Reserved.
+  <!-- Curve into BUY (light blue → mid blue) -->
+  <div class="wave">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <path fill="#0a56c2" d="M0,96 C260,160 520,32 780,96 C1040,160 1300,32 1440,80 L1440,160 L0,160 Z"></path>
+    </svg>
   </div>
+
+  <!-- BUY -->
+  <section class="section section-buy" id="buy">
+    <div class="section-inner">
+      <h2 style="margin-top:0;">Buy — Coming Soon</h2>
+      <p style="max-width:680px; margin-bottom:24px;">
+        We’re working hard behind the scenes to bring the very first MayaNut™ products to market.
+        Here’s a preview of what’s on the way:
+      </p>
+
+      <div class="buy-grid">
+
+        <div class="buy-row">
+          <div class="buy-img">
+            Product image placeholder — chilled MayaNut™ Beverage bottle
+          </div>
+          <div class="buy-card">
+            <h3>MayaNut™ Beverage — Coming Soon</h3>
+            <p>
+              Our flagship chilled MayaNut™ Beverage will feature roasted MayaNut™ powder blended into a smooth,
+              lightly sweet drink. Naturally caffeine-free, rich in flavor, and perfect straight from the fridge.
+              Expected to be available in select stores once our first harvests begin.
+            </p>
+          </div>
+        </div>
+
+        <div class="buy-row">
+          <div class="buy-img">
+            Product image placeholder — MayaNut™ Flour package
+          </div>
+          <div class="buy-card">
+            <h3>MayaNut™ Flour — Coming Soon</h3>
+            <p>
+              MayaNut™ Flour will be finely milled, lightly toasted, and ready to mix into breads, cookies,
+              and other baked goods. Our goal is to offer a versatile pantry ingredient that brings rainforest
+              history into everyday kitchens.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 
 </main>
 
+<footer class="footer">
+  © 2025 The MayaNut Company, Inc. All Rights Reserved.
+</footer>
+
 <script>
 (function(){
+  // snow
   const snowLayer = document.getElementById('snow-layer');
   const flakes = 35;
-  for(let i=0;i<flakes;i++){
+  for(let i=0; i<flakes; i++){
     const flake = document.createElement('div');
     flake.className = 'snowflake';
     const size = Math.random()*4 + 3;
