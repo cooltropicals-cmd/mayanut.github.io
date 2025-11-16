@@ -9,7 +9,7 @@
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 
-<!-- Favicon (use any logo file you like) -->
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="rach3.png" />
 <link rel="shortcut icon" type="image/png" href="rach3.png" />
 
@@ -18,15 +18,17 @@
 <style>
 :root{
   --blue-light:#18A7FF;
-  --blue-main:#0a56c2;
+  --blue-main:#0a56c2; /* matches tab */
   --blue-deep:#04326f;
   --section-padding:70px;
   --bar-h:60px;
 }
 
-/* GLOBAL */
-
 *{box-sizing:border-box;}
+
+html{
+  scroll-behavior:smooth;
+}
 
 html,body{
   margin:0;
@@ -36,12 +38,7 @@ html,body{
   background:var(--blue-light);
 }
 
-body{
-  position:relative;
-  overflow-x:hidden;
-}
-
-/* TOP BAR */
+/* TOP BAR WITH LOGO + LINKS */
 
 .topbar{
   position:fixed;
@@ -51,81 +48,114 @@ body{
   color:#fff;
   display:flex;
   align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:0 12px;
+  justify-content:space-between;
+  padding:0 14px;
   z-index:100;
-  font-family:"Mountains of Christmas", cursive;
-  font-size:18px;           /* smaller Christmas text */
-  letter-spacing:1px;
   border-bottom:1px solid rgba(255,255,255,.25);
 }
 
-/* SNOW */
-
-.snow-layer{
-  pointer-events:none;
-  position:fixed;
-  inset:0;
-  z-index:5;
-  overflow:hidden;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  color:#fff;
 }
-.snowflake{
-  position:absolute;
-  top:-10vh;
-  width:6px; height:6px;
-  border-radius:50%;
-  background:rgba(255,255,255,.9);
-  opacity:.9;
-  filter:blur(.3px);
-  animation:snowfall linear infinite;
-}
-@keyframes snowfall{
-  0%   { transform:translateY(-10vh) translateX(0);   opacity:0; }
-  10%  { opacity:1; }
-  100% { transform:translateY(110vh) translateX(30px); opacity:.9; }
+.brand-logo{
+  width:120px;
+  height:auto;
+  display:block;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));
 }
 
-/* MAIN LAYOUT */
+.topbar-text{
+  flex:1;
+  text-align:center;
+  font-family:"Mountains of Christmas", cursive;
+  font-size:16px;
+  letter-spacing:1px;
+  padding:0 8px;
+}
+
+.top-nav{
+  display:flex;
+  gap:10px;
+}
+.top-nav a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:14px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.4);
+}
+.top-nav a:hover{
+  background:rgba(255,255,255,.18);
+}
+
+/* MAIN / SECTIONS */
+
+body{
+  overflow-x:hidden;
+}
 
 main{
   position:relative;
   z-index:10;
 }
 
-/* SECTIONS & CURVED TRANSITIONS */
-
 .section{
   padding:calc(var(--section-padding) + var(--bar-h)) 16px var(--section-padding);
   position:relative;
 }
 
+/* HERO */
+
 .section-hero{
   min-height:100vh;
+  padding-top:var(--bar-h); /* header height */
   display:flex;
   align-items:center;
   justify-content:center;
-  flex-direction:column;
-  background:radial-gradient(circle at top, #2fc0ff 0%, var(--blue-light) 55%, #0b86e6 100%);
+  background:radial-gradient(circle at top, #31c8ff 0%, #18A7FF 45%, #0b86e6 100%);
+  position:relative;
 }
 
-.section-about{
-  background:var(--blue-deep);
+/* snow only on hero */
+.snow-layer{
+  pointer-events:none;
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+.snowflake{
+  position:absolute;
+  top:-10vh;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.9);
+  opacity:0.9;
+  filter:blur(0.3px);
+  animation:snowfall linear infinite;
+}
+@keyframes snowfall{
+  0%   { transform:translateY(-10vh) translateX(0);   opacity:0; }
+  10%  { opacity:1; }
+  100% { transform:translateY(110vh) translateX(30px); opacity:0.9; }
 }
 
-.section-gallery{
-  background:var(--blue-light);
-  color:#fff;
+/* content in hero if needed */
+.hero-inner{
+  text-align:center;
+}
+.hero-inner h1{
+  margin:0;
+  font-size:30px;
 }
 
-.section-buy{
-  background:var(--blue-main);
-}
-
-/* curved separators */
-.section + .wave-top{
-  margin-top:-1px;
-}
+/* WAVES */
 
 .wave{
   display:block;
@@ -138,21 +168,11 @@ main{
   height:100%;
 }
 
-/* HERO */
+/* ABOUT */
 
-.hero-logo{
-  width:min(420px, 80vw);
-  height:auto;
-  filter:drop-shadow(0 3px 15px rgba(0,0,0,.28));
+.section-about{
+  background:var(--blue-main); /* matches tab */
 }
-
-.hero-scroll-hint{
-  margin-top:18px;
-  font-size:14px;
-  opacity:.9;
-}
-
-/* ABOUT LAYOUT */
 
 .section-inner{
   max-width:1100px;
@@ -179,40 +199,33 @@ main{
 }
 .about-images .square{ aspect-ratio:1/1; }
 
-.about-text h2{
-  margin:0 0 12px;
+/* white card behind about text */
+.about-card{
+  background:rgba(255,255,255,0.97);
+  color:#083b7c;
+  border-radius:16px;
+  padding:18px 20px 20px;
+  box-shadow:0 2px 14px rgba(0,0,0,0.35);
+}
+.about-card h2{
+  margin:0 0 10px;
   font-size:24px;
 }
-.about-text h3{
-  margin:22px 0 8px;
+.about-card h3{
+  margin:18px 0 8px;
   font-size:20px;
 }
-.about-text p{
+.about-card p{
   margin:0 0 10px;
   font-size:15px;
   line-height:1.7;
 }
 
-/* GALLERY */
+/* BUY (above gallery now) */
 
-.gallery-content{
-  text-align:center;
+.section-buy{
+  background:var(--blue-deep);
 }
-.gallery-grid{
-  margin:22px auto 0;
-  max-width:720px;
-  display:grid;
-  grid-template-columns:repeat(3, minmax(0,1fr));
-  gap:10px;
-}
-.gallery-placeholder{
-  background:rgba(255,255,255,.2);
-  border-radius:10px;
-  border:1px dashed rgba(255,255,255,.6);
-  aspect-ratio:1/1;
-}
-
-/* BUY */
 
 .buy-grid{
   display:flex;
@@ -252,21 +265,82 @@ main{
   line-height:1.7;
 }
 
+/* GALLERY */
+
+.section-gallery{
+  background:var(--blue-light);
+  color:#fff;
+}
+.gallery-content{
+  text-align:center;
+}
+.gallery-grid{
+  margin:22px auto 0;
+  max-width:720px;
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:10px;
+}
+.gallery-placeholder{
+  background:rgba(255,255,255,.2);
+  border-radius:10px;
+  border:1px dashed rgba(255,255,255,.6);
+  aspect-ratio:1/1;
+}
+
+/* BOTTOM LOGO SECTION & LEGAL LINKS */
+
+.section-bottom{
+  background:#0b86e6;
+  text-align:center;
+}
+.bottom-logo{
+  width:min(260px, 60vw);
+  height:auto;
+  display:block;
+  margin:0 auto 20px;
+  filter:drop-shadow(0 3px 12px rgba(0,0,0,.35));
+}
+.legal-links{
+  border-top:1px solid rgba(255,255,255,.6);
+  padding-top:12px;
+  font-size:14px;
+}
+.legal-links a{
+  color:#fff;
+  text-decoration:underline;
+  margin:0 10px;
+}
+
+/* simple small legal paragraphs */
+.legal-text{
+  max-width:800px;
+  margin:16px auto 0;
+  font-size:13px;
+  line-height:1.6;
+}
+
 /* FOOTER */
 
 .footer{
   background:#022145;
   color:#fff;
   text-align:center;
-  padding:14px 10px 18px;
+  padding:12px 10px 16px;
   font-size:12px;
 }
 
 /* RESPONSIVE */
 
+@media(max-width:900px){
+  .topbar-text{
+    display:none; /* hide long text on very small screens */
+  }
+}
+
 @media(max-width:800px){
   .section{
-    padding-top:calc(var(--bar-h) + 40px);
+    padding-top:calc(var(--section-padding) + var(--bar-h));
   }
   .about-grid{
     grid-template-columns:1fr;
@@ -278,27 +352,35 @@ main{
 </style>
 </head>
 
-<body>
+<body id="top">
 
 <header class="topbar">
-  ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  <a href="#top" class="brand">
+    <img src="rach3.png" alt="The MayaNut Company logo" class="brand-logo">
+  </a>
+  <div class="topbar-text">
+    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  </div>
+  <nav class="top-nav">
+    <a href="#about">About</a>
+    <a href="#buy">Buy</a>
+  </nav>
 </header>
-
-<!-- Snow -->
-<div class="snow-layer" id="snow-layer"></div>
 
 <main>
 
-  <!-- HERO / HOME -->
+  <!-- HERO WITH SNOW -->
   <section class="section section-hero" id="home">
-    <img src="rach3.png" alt="The MayaNut Company logo" class="hero-logo">
-    <div class="hero-scroll-hint">Scroll down to learn more about MayaNut™</div>
+    <div class="snow-layer" id="snow-layer"></div>
+    <div class="hero-inner">
+      <!-- you can add a tagline here if you want -->
+    </div>
   </section>
 
-  <!-- Curve into ABOUT (light → deep blue) -->
-  <div class="wave wave-top">
+  <!-- Wave into ABOUT -->
+  <div class="wave">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
-      <path fill="#04326f" d="M0,96 C240,160 480,0 720,64 C960,128 1200,32 1440,96 L1440,160 L0,160 Z"></path>
+      <path fill="#0a56c2" d="M0,96 C240,160 480,0 720,64 C960,128 1200,32 1440,96 L1440,160 L0,160 Z"></path>
     </svg>
   </div>
 
@@ -316,7 +398,7 @@ main{
           </div>
         </div>
 
-        <div class="about-text">
+        <div class="about-card">
           <h2>About MayaNut™</h2>
           <p><strong>MayaNut™</strong> is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit which is chewy and has a syrupy, slightly tangy taste. The fruit, which is elusively talked about, is so delicious and best eaten when red, yet has a very short shelf-life — only fresh fruit should be eaten.</p>
           <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an underutilized species, which is why we are building the first MayaNut™ plantation in the United States.</p>
@@ -337,41 +419,14 @@ main{
     </div>
   </section>
 
-  <!-- Curve into GALLERY (deep blue → light blue) -->
+  <!-- Wave into BUY -->
   <div class="wave">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
-      <path fill="#18A7FF" d="M0,96 C240,32 480,160 720,96 C960,32 1200,128 1440,64 L1440,160 L0,160 Z"></path>
+      <path fill="#04326f" d="M0,96 C260,160 520,32 780,96 C1040,160 1300,32 1440,80 L1440,160 L0,160 Z"></path>
     </svg>
   </div>
 
-  <!-- GALLERY -->
-  <section class="section section-gallery" id="gallery">
-    <div class="section-inner gallery-content">
-      <h2>Gallery</h2>
-      <p>Gallery Coming Soon! We’re busy planting, growing, and documenting the very first MayaNut™ plantation in South Florida.</p>
-
-      <div class="gallery-grid">
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-        <div class="gallery-placeholder"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Curve into BUY (light blue → mid blue) -->
-  <div class="wave">
-    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
-      <path fill="#0a56c2" d="M0,96 C260,160 520,32 780,96 C1040,160 1300,32 1440,80 L1440,160 L0,160 Z"></path>
-    </svg>
-  </div>
-
-  <!-- BUY -->
+  <!-- BUY (above gallery) -->
   <section class="section section-buy" id="buy">
     <div class="section-inner">
       <h2 style="margin-top:0;">Buy — Coming Soon</h2>
@@ -414,6 +469,69 @@ main{
     </div>
   </section>
 
+  <!-- Wave into GALLERY -->
+  <div class="wave">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <path fill="#18A7FF" d="M0,96 C240,32 480,160 720,96 C960,32 1200,128 1440,64 L1440,160 L0,160 Z"></path>
+    </svg>
+  </div>
+
+  <!-- GALLERY -->
+  <section class="section section-gallery" id="gallery">
+    <div class="section-inner gallery-content">
+      <h2>Gallery</h2>
+      <p>Gallery Coming Soon! We’re busy planting, growing, and documenting the very first MayaNut™ plantation in South Florida.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+        <div class="gallery-placeholder"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Wave into BOTTOM LOGO SECTION -->
+  <div class="wave">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <path fill="#0b86e6" d="M0,96 C260,160 520,32 780,96 C1040,160 1300,32 1440,80 L1440,160 L0,160 Z"></path>
+    </svg>
+  </div>
+
+  <!-- BOTTOM LOGO + LEGAL LINKS -->
+  <section class="section section-bottom" id="bottom-logo">
+    <div class="section-inner">
+      <a href="#top">
+        <img src="rach3.png" alt="The MayaNut Company logo" class="bottom-logo">
+      </a>
+
+      <div class="legal-links">
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#dns">Do Not Sell My Data</a>
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener">Instagram</a>
+      </div>
+
+      <div id="privacy" class="legal-text">
+        <strong>Privacy Policy (basic)</strong><br>
+        We collect only the information needed to operate this website and improve your experience.
+        We do not sell your personal information. Any data provided through contact forms or email
+        is used solely to respond to your inquiries or share updates you request.
+      </div>
+
+      <div id="dns" class="legal-text">
+        <strong>Do Not Sell My Data</strong><br>
+        The MayaNut Company, Inc. does not sell your personal data. If you have any questions about how
+        your information is used, or would like it deleted from our records, please contact us and we
+        will honor your request whenever legally and operationally possible.
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="footer">
@@ -422,8 +540,10 @@ main{
 
 <script>
 (function(){
-  // snow
+  // snow only in hero
   const snowLayer = document.getElementById('snow-layer');
+  if (!snowLayer) return;
+
   const flakes = 35;
   for(let i=0; i<flakes; i++){
     const flake = document.createElement('div');
