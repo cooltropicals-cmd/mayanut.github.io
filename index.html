@@ -28,7 +28,7 @@
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
   --bar:#0a56c2;
-  --bar-h:60px;
+  --bar-h:72px;          /* taller bar so bigger logo fits */
   --card-bg:#ffffff;
 }
 
@@ -64,6 +64,19 @@ html,body{
   box-sizing:border-box;
 }
 
+/* Logo in upper-left of the blue tab */
+.topbar-logo-link{
+  position:absolute;
+  left:10px;
+  top:8px;
+}
+.topbar-logo{
+  height:60px;         /* bigger logo */
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+}
+
 .topbar-title{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
@@ -72,11 +85,11 @@ html,body{
 
 .topbar-nav{
   position:absolute;
-  right:32px;                 /* moved further from the right so Gallery isn't cut off */
+  right:16px;
   top:50%;
   transform:translateY(-50%);
   display:flex;
-  gap:16px;
+  gap:18px;
   font-size:14px;
 }
 
@@ -105,43 +118,23 @@ html,body{
 .hero-inner{
   width:100%;
   max-width:1100px;
-  padding:16px 16px 80px;
+  padding:0 16px 80px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  justify-content:center;
   gap:40px;
-}
-
-/* Left column with logo, under the blue tab */
-.hero-left{
-  flex:0 0 auto;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-}
-
-.hero-logo-link{
-  align-self:flex-start;
-}
-
-.hero-logo{
-  width:260px;                /* bigger logo */
-  height:auto;
-  margin-top:8px;             /* a little space under the bar */
-  margin-left:0;              /* all the way left */
-  filter:drop-shadow(0 3px 10px rgba(0,0,0,.25));
 }
 
 /* Right side – text + image */
 .hero-right{
-  flex:1;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:40px;
+  width:100%;
 }
 
-/* Hero Headline */
+/* Glass Headline */
 .hero-headline{
   flex:1;
   max-width:420px;
@@ -165,7 +158,7 @@ html,body{
 /* Glass image */
 .hero-image-wrap{
   flex:0 0 auto;
-  margin-left:auto; /* push glass to the right */
+  margin-left:auto; /* push to the right */
 }
 
 .hero-image-link{
@@ -173,8 +166,8 @@ html,body{
 }
 
 .hero-glass{
-  width:420px;               /* bigger glass */
-  max-width:90vw;
+  width:440px;           /* bigger glass */
+  max-width:80vw;
   display:block;
   cursor:pointer;
   transition:transform 0.22s ease, box-shadow 0.22s ease;
@@ -500,28 +493,19 @@ footer{
 
   .hero-inner{
     flex-direction:column;
-    padding-top:16px;
-    gap:24px;
-  }
-
-  .hero-left{
-    align-items:center;
-  }
-
-  .hero-logo{
-    width:220px;
+    padding-top:8px;
+    gap:32px;
   }
 
   .hero-right{
     flex-direction:column;
-    align-items:center;
-    gap:24px;
+    align-items:flex-start;
+    gap:32px;
   }
 
   .hero-headline{
-    font-size:40px;
+    font-size:34px;
     max-width:none;
-    text-align:center;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
   }
@@ -546,6 +530,9 @@ footer{
 <body>
 
 <header class="topbar">
+  <a href="#top" class="topbar-logo-link">
+    <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
+  </a>
   <div class="topbar-title">
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
@@ -563,12 +550,6 @@ footer{
     <div class="snow-layer" id="snow-layer"></div>
 
     <div class="hero-inner">
-      <div class="hero-left">
-        <a href="#top" class="hero-logo-link">
-          <img src="rach3.png" alt="The MayaNut Company logo" class="hero-logo">
-        </a>
-      </div>
-
       <div class="hero-right">
         <div class="hero-headline">
           <span>MayaNut</span>
