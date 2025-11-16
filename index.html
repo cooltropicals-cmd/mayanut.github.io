@@ -9,9 +9,9 @@
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
 
-<!-- Favicon uses Christmas logo -->
-<link rel="icon" type="image/png" href="mayanewlogo.png" />
-<link rel="shortcut icon" type="image/png" href="mayanewlogo.png" />
+<!-- Favicon (Christmas logo) -->
+<link rel="icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
+<link rel="shortcut icon" type="image/png" href="themayanutcompanychristmaslogo.png" />
 
 <meta name="theme-color" content="#18A7FF" />
 
@@ -25,14 +25,14 @@
   html,body{
     height:100%;
     margin:0;
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background:var(--bg);
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     color:#fff;
-    overflow:hidden;
+    overflow-y:auto;
     position:relative;
   }
 
-  /* Top bar – static, centered text */
+  /* TOP CHRISTMAS BAR (smaller text) */
   .topbar{
     position:fixed;
     top:0; left:0; right:0;
@@ -43,71 +43,16 @@
     justify-content:center;
     color:#fff;
     font-family:"Mountains of Christmas", cursive;
-    font-size:22px;
-    letter-spacing:1px;
+    font-size:18px;             /* smaller than before */
+    letter-spacing:.8px;
     border-bottom:1px solid rgba(255,255,255,0.25);
     z-index:100;
-    text-align:center;
-    padding:0 40px;
-    box-sizing:border-box;
-  }
-
-  /* Main */
-  .wrap{
-    height:100vh;
-    display:grid;
-    align-content:start;
-    justify-items:center;
-    row-gap:20px;
-    padding-top:calc(var(--bar-h) + 22px);
-    padding-bottom:80px;
+    padding:0 16px;
     box-sizing:border-box;
     text-align:center;
-    position:relative;
-    z-index:10;
   }
 
-  .logo{
-    width:min(400px,75vw);
-    height:auto;
-    display:block;
-    margin-inline:auto;
-    filter:drop-shadow(0 3px 10px rgba(0,0,0,0.2));
-  }
-
-  .cta-row{
-    display:flex;
-    gap:16px;
-    margin-top:10px;
-    flex-wrap:wrap;
-    justify-content:center;
-  }
-
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:160px;
-    height:60px;
-    padding:0 22px;
-    border-radius:14px;
-    font-weight:800;
-    font-size:20px;
-    letter-spacing:.3px;
-    background:#fff;
-    color:var(--bar);
-    text-decoration:none;
-    border:1px solid rgba(0,0,0,0.08);
-    box-shadow:0 3px 10px rgba(0,0,0,0.22);
-    transition:background .2s, transform .15s;
-  }
-
-  .btn:hover{
-    background:#eaf2ff;
-    transform:translateY(-2px);
-  }
-
-  /* Snow */
+  /* SNOW */
   .snow-layer{
     pointer-events:none;
     position:fixed;
@@ -127,31 +72,134 @@
     animation:snowfall linear infinite;
   }
   @keyframes snowfall{
-    0%   { transform:translateY(-10vh) translateX(0);   opacity:0; }
+    0%   { transform:translateY(-10vh) translateX(0); opacity:0; }
     10%  { opacity:1; }
     100% { transform:translateY(110vh) translateX(30px); opacity:0.9; }
   }
 
-  /* Footer */
-  .footer{
-    position:fixed;
-    bottom:0; left:0; right:0;
-    height:var(--bar-h);
-    background:var(--bar);
-    border-top:1px solid rgba(255,255,255,0.25);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 14px;
+  /* MAIN WRAP */
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    padding:calc(var(--bar-h) + 24px) 16px 40px;
     box-sizing:border-box;
-    font-size:13px;
-    z-index:100;
+    position:relative;
+    z-index:10;
   }
 
-  .footer a{
-    color:#fff;
-    text-decoration:none;
-    font-weight:600;
+  /* HERO / LOGO */
+  .hero{
+    text-align:center;
+    margin-bottom:24px;
+  }
+  .hero .logo{
+    width:min(360px,75vw);
+    height:auto;
+    display:block;
+    margin:0 auto;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,0.2));
+  }
+
+  /* ABOUT SECTION (same layout style as About page) */
+  .content-grid{
+    display:grid;
+    grid-template-columns:minmax(0,340px) minmax(0,1fr);
+    gap:32px;
+    align-items:flex-start;
+    margin-bottom:40px;
+  }
+
+  .image-column{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .image-column img{
+    width:100%;
+    border-radius:14px;
+    background:#ffffff33;
+    object-fit:cover;
+    box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  }
+  .square{
+    aspect-ratio:1/1;
+  }
+
+  .text-column{
+    background:rgba(255,255,255,0.97);
+    color:#083b7c;
+    border-radius:16px;
+    padding:18px 20px 20px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.25);
+  }
+  .text-column h1{
+    margin:0 0 10px;
+    font-size:24px;
+  }
+  .text-column h2{
+    margin:18px 0 8px;
+    font-size:20px;
+  }
+  .text-column p{
+    margin:0 0 10px;
+    font-size:15px;
+    line-height:1.65;
+  }
+  .text-column em{
+    font-style:italic;
+  }
+
+  /* GALLERY SECTION */
+  .gallery-section{
+    margin-top:10px;
+    text-align:center;
+  }
+  .gallery-section h2{
+    font-size:22px;
+    margin:0 0 6px;
+  }
+  .gallery-section p{
+    margin:0 0 18px;
+    font-size:15px;
+  }
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+    gap:14px;
+  }
+  .gallery-item{
+    background:rgba(255,255,255,0.18);
+    border-radius:14px;
+    padding:6px;
+    box-sizing:border-box;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+  }
+  .gallery-item-inner{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:10px;
+    background:#ffffff22;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    letter-spacing:.3px;
+    font-size:14px;
+    color:#fefefe;
+  }
+
+  /* SIMPLE NON-STICKY FOOTER TEXT */
+  .page-footer{
+    margin-top:32px;
+    text-align:center;
+    font-size:12px;
+    color:#eaf5ff;
+  }
+
+  @media(max-width:800px){
+    .content-grid{
+      grid-template-columns:1fr;
+    }
   }
 </style>
 </head>
@@ -165,21 +213,74 @@
 <div class="snow-layer" id="snow-layer"></div>
 
 <main class="wrap">
-  <a href="index.html" aria-label="Home">
-    <img class="logo" src="mayanewlogo.png" alt="The MayaNut Company logo">
-  </a>
 
-  <div class="cta-row">
-    <a class="btn" href="about.html">About</a>
-    <a class="btn" href="buy.html">Buy</a>
-    <a class="btn" href="gallery.html">Gallery</a>
+  <!-- HERO / LOGO -->
+  <section class="hero">
+    <a href="index.html" aria-label="Home">
+      <img class="logo" src="mayanutsunsantalogo.png" alt="The MayaNut Company logo">
+    </a>
+  </section>
+
+  <!-- ABOUT SECTION (embedded version of About page) -->
+  <section class="content-grid" id="about">
+    <div class="image-column">
+      <img src="fruitmaya.jpeg" alt="Maya nut fruit (Brosimum alicastrum)">
+      <img src="ceomaya.jpeg" class="square" alt="Founder August Kokus">
+      <img src="plantation.jpeg" alt="Brosimum alicastrum plantation">
+    </div>
+
+    <div class="text-column">
+      <h1>About The MayaNut Company</h1>
+
+      <p>The MayaNut Company was founded in 2025 by August Kokus, who wanted to leave behind something new and unique in the world.</p>
+
+      <p>Our focus is <em>Brosimum alicastrum</em> — often called maya nut, ojoche, ramón, or breadnut. It’s native to the tropical forests of Mesoamerica and the Caribbean, from Mexico and Guatemala through Belize and Honduras, into parts of Nicaragua, Costa Rica, and Panama, and across to islands like Cuba and Jamaica, as well as northern regions of Colombia and Venezuela. In many areas, you’ll still find towering mayanut trees near ancient ceremonial sites, where they were likely planted and cared for by Indigenous communities.</p>
+
+      <h2>History of Brosimum alicastrum</h2>
+
+      <p>The Brosimum lineage occurs in the Western Hemisphere, closely related to <em>Trymatococcus</em> and <em>Helianthostylis</em>, and shares morphological similarities to <em>Treculia</em>, an African lineage, thus its placement in Dorstenieae. Humans in the Americas must have first encountered <em>Brosimum alicastrum</em> thousands of years before Europeans arrived, with written documentation appearing in the mid-1700s. Early hunter-gatherers and later settled Indigenous groups moving into tropical lowland forests would have noticed its generous seed crops. Over time, the tree became woven into local food traditions. In parts of the Maya region, its seeds were dried, roasted, ground into flour, or cooked into porridges and beverages. During times of drought or crop failure, mayanut helped people bridge the gap between harvests as a famine food. Its presence on islands like Cuba and Jamaica may even reflect intentional human transport of seeds a few thousand years ago.</p>
+
+      <p>Today the species is still present in forests and shade agroforestry systems, but it’s underused in mainstream agriculture. We see that as a huge opportunity — both for farmers and for the tree itself.</p>
+
+      <h2>What We’re Doing in South Florida</h2>
+
+      <p>At The MayaNut Company, we’re working to establish South Florida’s first dedicated mayanut plantation. We’re testing how the trees handle our soils, rainfall patterns, and hurricanes, and how they can fit into diversified farms alongside fruit trees, pasture, and native plants. Our long-term goal is simple: make mayanut so useful and so beloved that planting it becomes a no-brainer for growers.</p>
+
+      <h2>Future Products</h2>
+
+      <p>The seeds of <em>Brosimum alicastrum</em> are incredibly versatile. When roasted and ground, they can produce a rich, coffee-like beverage with their own unique character — naturally caffeine-free, but still full of flavor. We plan to offer ground mayanut that people can brew at home, as well as ready-to-drink bottled mayanut beverages.</p>
+
+      <p>Our aim is to begin bringing these products to market — including grocery stores — around 2028. Between now and then, we’re focused on growing trees, refining recipes, and building a supply chain that respects both farmers and forests.</p>
+
+      <p>For us, this is more than a product line. It’s a way to give an ancient tree a modern job — one that feeds people, supports reforestation, and quietly carries a human story forward in every seed.</p>
+    </div>
+  </section>
+
+  <!-- GALLERY SECTION INLINE -->
+  <section class="gallery-section" id="gallery">
+    <h2>Gallery</h2>
+    <p>Gallery Coming Soon!</p>
+
+    <div class="gallery-grid">
+      <!-- 3x3 grid of placeholders -->
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+      <div class="gallery-item"><div class="gallery-item-inner">Coming Soon</div></div>
+    </div>
+  </section>
+
+  <!-- SIMPLE FOOTER TEXT (not a dark bar, not fixed) -->
+  <div class="page-footer">
+    © 2025 The MayaNut Company, Inc. All Rights Reserved.
   </div>
-</main>
 
-<footer class="footer">
-  <div>© 2025 The MayaNut Company, Inc. All Rights Reserved.</div>
-  <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener">Instagram</a>
-</footer>
+</main>
 
 <script>
 (function(){
