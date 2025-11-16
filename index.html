@@ -11,6 +11,7 @@
 <!-- Base font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+<!-- Favicon (make rach3.png a circular PNG with transparent corners for a circular look) -->
 <link rel="icon" type="image/png" href="rach3.png" />
 <link rel="shortcut icon" type="image/png" href="rach3.png" />
 
@@ -68,7 +69,7 @@ html,body{
   top:50%;
   transform:translateY(-50%);
   display:flex;
-  gap:12px;
+  gap:18px;
   font-size:14px;
 }
 
@@ -76,13 +77,10 @@ html,body{
   color:#fff;
   text-decoration:none;
   font-weight:600;
-  padding:4px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.4);
 }
 
 .topbar-nav a:hover{
-  background:rgba(255,255,255,0.15);
+  text-decoration:underline;
 }
 
 /* HERO */
@@ -100,11 +98,11 @@ html,body{
 .hero-inner{
   width:100%;
   max-width:1100px;
-  padding:24px 16px 80px;
+  padding:14px 16px 80px;
   display:grid;
-  grid-template-columns:minmax(0,420px) minmax(0,1fr);
-  gap:32px;
-  align-items:center;
+  grid-template-columns:minmax(0,220px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
 }
 
 .hero-left{
@@ -118,35 +116,34 @@ html,body{
 }
 
 .hero-logo{
-  width:180px;
+  width:170px;
   height:auto;
-  margin-top:8px;         /* sits slightly below the top bar */
+  margin-top:0;            /* sits close under the top bar */
   filter:drop-shadow(0 3px 10px rgba(0,0,0,.25));
-}
-
-.hero-tagline{
-  font-size:20px;
-  font-weight:600;
-  max-width:320px;
 }
 
 .hero-right{
   display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:18px;
+  align-items:center;
+  gap:32px;
 }
 
-.hero-copy{
-  font-size:16px;
-  max-width:420px;
+.hero-image-wrap{
+  flex:0 0 auto;
 }
 
 .hero-glass{
-  width:260px;
-  max-width:70vw;
+  width:360px;
+  max-width:80vw;
   display:block;
-  margin-top:4px;
+}
+
+.hero-headline{
+  flex:1;
+  font-size:28px;
+  font-weight:800;
+  color:#000;
+  max-width:320px;
 }
 
 /* Snow only on hero */
@@ -243,9 +240,9 @@ html,body{
   line-height:1.7;
 }
 
-/* Buy section */
+/* Buy section – subtle lavender / white */
 .section--buy{
-  background:#f5f7ff;
+  background:linear-gradient(180deg,#f7f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
   color:#083b7c;
 }
 
@@ -261,11 +258,11 @@ html,body{
   width:100%;
   aspect-ratio:4/5;
   border-radius:18px;
-  background:linear-gradient(145deg,#e0e7ff,#ffffff);
+  background:linear-gradient(145deg,#e4defe,#ffffff);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#6070a8;
+  color:#5f63a8;
   font-weight:600;
   font-size:15px;
   box-shadow:0 3px 12px rgba(0,0,0,0.14);
@@ -429,10 +426,13 @@ footer{
 @media(max-width:800px){
   .hero-inner{
     grid-template-columns:1fr;
-    text-align:left;
   }
   .hero-right{
+    flex-direction:column;
     align-items:flex-start;
+  }
+  .hero-headline{
+    max-width:none;
   }
   .about-grid,
   .buy-grid{
@@ -455,8 +455,9 @@ footer{
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
   <nav class="topbar-nav">
-    <a href="#about">About</a>
     <a href="#buy">Buy</a>
+    <a href="#about">About</a>
+    <a href="#gallery">Gallery</a>
   </nav>
 </header>
 
@@ -471,18 +472,15 @@ footer{
         <a href="#top" class="hero-logo-link">
           <img src="rach3.png" alt="The MayaNut Company logo" class="hero-logo">
         </a>
-        <div class="hero-tagline">
-          Farming for the future with MayaNut™ — an ancient tree seed with a brand-new job.
-        </div>
       </div>
 
       <div class="hero-right">
-        <div class="hero-copy">
-          MayaNut™ Beverage is crafted from roasted <em>Brosimum alicastrum</em> seeds —
-          smooth, lightly sweet, and naturally caffeine-free. Our first South Florida
-          plantation is under development now.
+        <div class="hero-image-wrap">
+          <img src="mayanutglass.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
         </div>
-        <img src="mayanutglass.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
+        <div class="hero-headline">
+          Yummy MayaNut Beverages Coming Soon!
+        </div>
       </div>
     </div>
 
@@ -532,7 +530,7 @@ footer{
     <div class="section-inner">
       <div class="buy-grid">
         <div class="buy-image-placeholder">
-          <!-- You can replace this with an actual bottle image -->
+          <!-- Replace with actual bottle image when ready -->
           <img src="mayanutbottle.png" alt="MayaNut Beverage bottle placeholder">
         </div>
         <div class="buy-text-box">
