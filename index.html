@@ -10,9 +10,9 @@
 
 <!-- Base + headline fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee+Hairline&display=swap" rel="stylesheet">
 
-<!-- Favicon -->
+<!-- Favicon (round look depends on the actual image having transparent corners) -->
 <link rel="icon" type="image/png" href="rach3.png" />
 <link rel="shortcut icon" type="image/png" href="rach3.png" />
 
@@ -21,12 +21,7 @@
 <style>
 :root{
   --bg:#18A7FF;
-  /* More dramatic shaded blue: lighter center, darker edges */
-  --bg-grad:
-    radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
-    radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
-    radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
-    #0a56c2;
+  --bg-grad:radial-gradient(circle at 30% 20%, #34c3ff 0, #18A7FF 40%, #0c7adf 100%);
   --bar:#0a56c2;
   --bar-h:60px;
   --card-bg:#ffffff;
@@ -104,11 +99,12 @@ html,body{
 .hero-inner{
   width:100%;
   max-width:1100px;
-  padding:0 16px 80px;
+  padding:16px 16px 80px;        /* small top padding so logo sits snug under bar */
   display:grid;
   grid-template-columns:minmax(0,220px) minmax(0,1fr);
   gap:28px;
-  align-items:flex-start;
+  align-items:center;
+  justify-content:center;        /* centers the columns as a group */
 }
 
 /* Left column with logo */
@@ -125,8 +121,8 @@ html,body{
 .hero-logo{
   width:170px;
   height:auto;
-  margin-top:0;              /* tighter to the corner */
-  margin-left:0;             /* flush to the left */
+  margin-top:0;                 /* as high as possible under the bar */
+  margin-left:0;                /* all the way left */
   filter:drop-shadow(0 3px 10px rgba(0,0,0,.25));
 }
 
@@ -134,13 +130,12 @@ html,body{
 .hero-right{
   display:flex;
   align-items:center;
-  justify-content:space-between;   /* push text left, glass right */
-  gap:40px;
+  justify-content:center;       /* centers image + text as a group */
+  gap:64px;
 }
 
 .hero-image-wrap{
   flex:0 0 auto;
-  margin-left:auto;                /* really push the glass to the right */
 }
 
 .hero-image-link{
@@ -160,18 +155,18 @@ html,body{
   box-shadow:0 0 40px rgba(255,255,255,0.95);
 }
 
-/* Glass Headline */
+/* Hero Headline – stacked MayaNut / Beverage / Is Here */
 .hero-headline{
   flex:1;
   max-width:420px;
   margin-left:8px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:90px;               /* slightly larger */
-  line-height:1.05;
+  font-family:"Bungee Hairline", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:64px;
+  line-height:1.1;
   font-weight:400;
   color:#ffffff;
-  -webkit-text-stroke:3px #0057c8;
-  text-stroke:3px #0057c8;
+  -webkit-text-stroke:2px #0057c8;
+  text-stroke:2px #0057c8;
   text-shadow:
     0 3px 0 #0057c8,
     0 6px 12px rgba(0,0,0,0.4);
@@ -210,6 +205,7 @@ html,body{
 .section{
   padding:70px 16px 80px;
   position:relative;
+  z-index:1;
 }
 
 .section-inner{
@@ -217,34 +213,28 @@ html,body{
   margin:0 auto;
 }
 
-/* Wavy transitions (top of each section) */
+/* Curved transitions between sections */
 .section--about::before,
 .section--buy::before,
 .section--gallery::before,
 .section--bottom-logo::before{
   content:"";
   position:absolute;
-  top:-70px;
+  top:-60px;
   left:50%;
   transform:translateX(-50%);
-  width:140%;
-  height:110px;
-  background:
-    radial-gradient(circle at 10% 120%, transparent 60%, currentColor 61%) repeat-x,
-    radial-gradient(circle at 50% 120%, transparent 60%, currentColor 61%) repeat-x,
-    radial-gradient(circle at 90% 120%, transparent 60%, currentColor 61%) repeat-x;
-  background-size:120px 120px;
-  color:inherit;
+  width:120%;
+  height:120px;
+  border-radius:50% 50% 0 0;
   z-index:-1;
 }
 
 /* ABOUT */
 .section--about{
   background:var(--bar);
-  color:#fff;
 }
 .section--about::before{
-  color:var(--bar);
+  background:var(--bar);
 }
 
 /* ABOUT layout */
@@ -296,15 +286,11 @@ html,body{
 
 /* BUY */
 .section--buy{
-  /* White with lavender shading in some spots */
-  background:
-    radial-gradient(circle at 0% 0%, #e8ddff 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, #e3d7ff 0, transparent 55%),
-    linear-gradient(180deg,#f8f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
+  background:linear-gradient(180deg,#f7f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
   color:#083b7c;
 }
 .section--buy::before{
-  color:#f5f7ff;
+  background:linear-gradient(180deg,#f7f6ff 0%, #f5f7ff 70%, #f8f9ff 100%);
 }
 
 .buy-grid{
@@ -356,7 +342,7 @@ html,body{
   background:#18A7FF;
 }
 .section--gallery::before{
-  color:#18A7FF;
+  background:#18A7FF;
 }
 
 .gallery-inner{
@@ -398,7 +384,7 @@ html,body{
   text-align:center;
 }
 .section--bottom-logo::before{
-  color:#0a56c2;
+  background:#0a56c2;
 }
 
 .section--bottom-logo img{
@@ -493,16 +479,18 @@ footer{
 @media(max-width:800px){
   .hero-inner{
     grid-template-columns:1fr;
-    padding-top:8px;
+    padding-top:16px;
+    justify-content:center;
   }
   .hero-right{
     flex-direction:column;
-    align-items:flex-start;
-    gap:32px;
+    align-items:center;
+    gap:24px;
   }
   .hero-headline{
-    font-size:34px;
+    font-size:40px;
     max-width:none;
+    text-align:center;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
   }
@@ -547,16 +535,15 @@ footer{
       </div>
 
       <div class="hero-right">
-        <div class="hero-headline">
-          <span>MayaNut</span>
-          <span>Beverage</span>
-          <span>Is Here</span>
-        </div>
-
         <div class="hero-image-wrap">
           <a href="#buy" class="hero-image-link">
             <img src="mayanutglass.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
           </a>
+        </div>
+        <div class="hero-headline">
+          <span>MayaNut</span>
+          <span>Beverage</span>
+          <span>Is Here</span>
         </div>
       </div>
     </div>
