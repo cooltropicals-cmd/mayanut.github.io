@@ -155,9 +155,40 @@ html,body{
   display:block;
 }
 
-/* underline only on the last line */
+/* underline + shine only on the last line */
 .hero-headline .hero-is-here{
+  position:relative;
+  display:inline-block;
   text-decoration:underline;
+  overflow:hidden;
+}
+
+/* Shine animation */
+.hero-headline .hero-is-here::after{
+  content:"";
+  position:absolute;
+  top:-20%;
+  left:-40%;
+  width:40%;
+  height:140%;
+  background:linear-gradient(120deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0.95),
+    rgba(255,255,255,0));
+  transform:skewX(-25deg);
+  animation:shine 2.2s ease-in-out infinite;
+}
+
+@keyframes shine{
+  0%{
+    transform:translateX(-180%) skewX(-25deg);
+  }
+  60%{
+    transform:translateX(260%) skewX(-25deg);
+  }
+  100%{
+    transform:translateX(260%) skewX(-25deg);
+  }
 }
 
 /* Glass image */
@@ -559,7 +590,7 @@ footer{
         <div class="hero-headline">
           <span>MayaNut</span>
           <span>Beverage</span>
-          <span class="hero-is-here">Is Here</span>
+          <span class="hero-is-here">Is Here!</span>
         </div>
 
         <div class="hero-image-wrap">
@@ -576,7 +607,7 @@ footer{
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <img src="fruitsite.png" alt="MayaNut fruit (Brosimum alicastrum)">
+          <img src="fruitsite.jpg" alt="MayaNut fruit (Brosimum alicastrum)">
           <img src="augsite.png" class="square" alt="Founder August Kokus">
           <img src="plantsite.png" alt="Brosimum alicastrum plantation">
         </div>
