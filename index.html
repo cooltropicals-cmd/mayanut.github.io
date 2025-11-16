@@ -137,10 +137,10 @@ html,body{
 /* Glass Headline */
 .hero-headline{
   flex:1;
-  max-width:420px;
+  max-width:520px;
   margin-left:8px;
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:90px;
+  font-size:70px;
   line-height:1.05;
   font-weight:400;
   color:#ffffff;
@@ -151,44 +151,9 @@ html,body{
     0 6px 12px rgba(0,0,0,0.4);
 }
 
-.hero-headline span{
-  display:block;
-}
-
-/* underline + shine only on the last line */
+/* Underline only the "Is Here!" part, no shine */
 .hero-headline .hero-is-here{
-  position:relative;
-  display:inline-block;
   text-decoration:underline;
-  overflow:hidden;
-}
-
-/* Shine animation */
-.hero-headline .hero-is-here::after{
-  content:"";
-  position:absolute;
-  top:-20%;
-  left:-40%;
-  width:40%;
-  height:140%;
-  background:linear-gradient(120deg,
-    rgba(255,255,255,0),
-    rgba(255,255,255,0.95),
-    rgba(255,255,255,0));
-  transform:skewX(-25deg);
-  animation:shine 2.2s ease-in-out infinite;
-}
-
-@keyframes shine{
-  0%{
-    transform:translateX(-180%) skewX(-25deg);
-  }
-  60%{
-    transform:translateX(260%) skewX(-25deg);
-  }
-  100%{
-    transform:translateX(260%) skewX(-25deg);
-  }
 }
 
 /* Glass image */
@@ -459,18 +424,53 @@ footer{
   margin:0 0 10px;
 }
 
+/* Footer links layout: left text links + right icon */
 .footer-links{
   display:flex;
+  justify-content:space-between;
+  align-items:center;
   flex-wrap:wrap;
   gap:12px;
   margin-bottom:6px;
 }
 
-.footer-links a{
+.footer-links-left{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.footer-links-right{
+  display:flex;
+  align-items:center;
+}
+
+/* Text footer links */
+.footer-links-left a{
   color:#d5e3ff;
   text-decoration:none;
   border-bottom:1px dashed rgba(213,227,255,0.6);
   cursor:pointer;
+  padding-bottom:1px;
+}
+
+/* Instagram icon link */
+.footer-instagram{
+  color:#d5e3ff;
+  border-bottom:none;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.footer-instagram svg{
+  width:20px;
+  height:20px;
+}
+
+.footer-instagram:hover svg{
+  opacity:0.8;
 }
 
 .footer-copy{
@@ -540,7 +540,7 @@ footer{
   }
 
   .hero-headline{
-    font-size:34px;
+    font-size:40px;
     max-width:none;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
@@ -558,6 +558,11 @@ footer{
 
   .gallery-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .footer-links{
+    flex-direction:column;
+    align-items:flex-start;
   }
 }
 </style>
@@ -588,9 +593,7 @@ footer{
     <div class="hero-inner">
       <div class="hero-right">
         <div class="hero-headline">
-          <span>MayaNut</span>
-          <span>Beverage</span>
-          <span class="hero-is-here">Is Here!</span>
+          MayaNut Beverage <span class="hero-is-here">Is Here!</span>
         </div>
 
         <div class="hero-image-wrap">
@@ -700,9 +703,26 @@ footer{
   <div class="footer-inner">
     <hr class="footer-line" />
     <div class="footer-links">
-      <a id="privacy-link">Privacy Policy</a>
-      <a id="dns-link">Do Not Sell My Info</a>
-      <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener">Instagram</a>
+      <div class="footer-links-left">
+        <a id="privacy-link">Privacy Policy</a>
+        <a id="dns-link">Do Not Sell My Info</a>
+      </div>
+      <div class="footer-links-right">
+        <a
+          href="https://instagram.com/themayanutcompany"
+          target="_blank"
+          rel="noopener"
+          class="footer-instagram"
+          aria-label="The MayaNut Company on Instagram"
+        >
+          <!-- Simple Instagram-style icon -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/>
+          </svg>
+        </a>
+      </div>
     </div>
     <div class="footer-copy">
       © 2025 The MayaNut Company, Inc. All Rights Reserved.
