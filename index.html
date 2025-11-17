@@ -112,7 +112,7 @@ body{
   justify-content:space-between;
   padding:0;
   cursor:pointer;
-  z-index:1100;
+  z-index:2601; /* ABOVE nav overlay so it stays bright white */
 }
 .menu-toggle span{
   display:block;
@@ -161,6 +161,7 @@ body{
     radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
     radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
     #0a56c2;
+  position:relative; /* so the close X positions inside */
 }
 
 .nav-modal-title{
@@ -191,12 +192,24 @@ body{
   text-decoration:underline;
 }
 
+/* Small X inside menu popup */
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
 /* HERO */
 .hero{
   position:relative;
   min-height:100vh;
   padding-top:var(--bar-h);
-  /* IMPORTANT: hero background is just the main gradient now */
   background:transparent;
   display:flex;
   align-items:center;
@@ -261,7 +274,7 @@ canvas#snow{
   text-decoration:underline;
   text-decoration-color:var(--bar);
   text-underline-offset:4px;
-  white-space:nowrap; /* “Coming Soon!” on one line */
+  white-space:nowrap;
 }
 
 /* Glass image */
@@ -559,9 +572,9 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – solid dark blue */
+/* Bottom logo section – now uses the blue gradient */
 .section--bottom-logo{
-  background:var(--bar);
+  background:var(--bg-grad);
   text-align:center;
 }
 
@@ -572,7 +585,7 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* Footer – keep same */
+/* Footer – keep same solid dark blue */
 footer{
   background:var(--bar);
   color:#d5e3ff;
@@ -828,6 +841,7 @@ footer{
 <!-- Full-screen NAV overlay -->
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
+    <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Navigation</h2>
     <div class="nav-modal-links">
       <a href="#buy" data-close-nav="true">STORE</a>
@@ -995,7 +1009,7 @@ footer{
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION -->
+  <!-- BOTTOM LOGO SECTION (gradient background now) -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
@@ -1226,6 +1240,7 @@ footer{
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
+  const navClose = document.getElementById('nav-close');
 
   if(!toggle || !navBackdrop) return;
 
@@ -1248,7 +1263,15 @@ footer{
     }
   });
 
+  if (navClose){
+    navClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeNav();
+    });
+  }
+
   navBackdrop.addEventListener('click', (e) => {
+    // click outside the modal closes
     if(e.target === navBackdrop){
       closeNav();
     }
