@@ -64,15 +64,15 @@ html,body{
   box-sizing:border-box;
 }
 
-/* Logo in upper-left of the blue tab */
+/* Logo in upper-left of the blue tab – stays exactly where it is, fixed via parent */
 .topbar-logo-link{
   position:absolute;
   left:10px;
   top:70px;
 }
 .topbar-logo{
-  height:100px;
-  width:100px;
+  height:150px;
+  width:150px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
@@ -83,6 +83,7 @@ html,body{
   text-align:center;
 }
 
+/* Desktop nav */
 .topbar-nav{
   position:absolute;
   right:26px;
@@ -103,6 +104,63 @@ html,body{
   text-decoration:underline;
 }
 
+/* Hamburger button (hidden on desktop) */
+.menu-toggle{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:32px;
+  height:26px;
+  border:none;
+  background:transparent;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:0;
+  cursor:pointer;
+}
+.menu-toggle span{
+  display:block;
+  height:3px;
+  border-radius:999px;
+  background:#ffffff;
+  transition:transform 0.2s ease, opacity 0.2s ease;
+}
+.menu-toggle.open span:nth-child(1){
+  transform:translateY(11px) rotate(45deg);
+}
+.menu-toggle.open span:nth-child(2){
+  opacity:0;
+}
+.menu-toggle.open span:nth-child(3){
+  transform:translateY(-11px) rotate(-45deg);
+}
+
+/* Mobile dropdown menu */
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:var(--bar-h);
+  left:0;
+  right:0;
+  background:#0a56c2;
+  z-index:900;
+  padding:10px 16px 14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.35);
+}
+.mobile-menu.open{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.mobile-menu a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+}
+
 /* HERO */
 .hero{
   position:relative;
@@ -115,6 +173,18 @@ html,body{
   overflow:hidden;
 }
 
+/* subtle glow behind hero content */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.18), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12), transparent 65%);
+  pointer-events:none;
+  z-index:0;
+}
+
 .hero-inner{
   width:100%;
   max-width:1100px;
@@ -123,6 +193,8 @@ html,body{
   align-items:center;
   justify-content:center;
   gap:40px;
+  position:relative;
+  z-index:1;
 }
 
 /* Right side – text + image */
@@ -166,7 +238,7 @@ html,body{
 }
 
 .hero-glass{
-  width:420px;          /* bigger glass */
+  width:420px;          /* bigger glass desktop */
   max-width:80vw;
   display:block;
   cursor:pointer;
@@ -215,7 +287,7 @@ html,body{
   margin:0 auto;
 }
 
-/* CIRCULAR transitions between sections */
+/* CIRCULAR transitions between sections (desktop only, we’ll hide on mobile) */
 .section--about::before,
 .section--buy::before,
 .section--gallery::before,
@@ -380,11 +452,16 @@ html,body{
   border-radius:14px;
   overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
 }
 .gallery-tile img{
   width:100%;
   height:100%;
   object-fit:cover;
+}
+.gallery-tile:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
 /* Bottom logo section */
@@ -518,8 +595,13 @@ footer{
 
 /* Responsive */
 @media(max-width:800px){
+  /* hide desktop nav, show hamburger */
   .topbar-nav{
     display:none;
+  }
+
+  .menu-toggle{
+    display:flex;
   }
 
   .hero-inner{
@@ -540,8 +622,8 @@ footer{
     max-width:none;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
-    text-align:center;   /* center text on mobile */
-    margin-left:0;       /* remove desktop offset */
+    text-align:center;
+    margin-left:0;
   }
 
   .hero-image-wrap{
@@ -571,6 +653,16 @@ footer{
     display:none;
   }
 }
+
+/* Extra-small screens: gently reduce hero glass + text */
+@media(max-width:500px){
+  .hero-glass{
+    max-width:70vw;
+  }
+  .hero-headline{
+    font-size:32px;
+  }
+}
 </style>
 </head>
 
@@ -583,12 +675,28 @@ footer{
   <div class="topbar-title">
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
+
+  <!-- Desktop nav -->
   <nav class="topbar-nav">
     <a href="#buy">Buy</a>
     <a href="#about">About</a>
     <a href="#gallery">Gallery</a>
   </nav>
+
+  <!-- Hamburger (mobile) -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </header>
+
+<!-- Mobile dropdown menu -->
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="#buy">Buy</a>
+  <a href="#about">About</a>
+  <a href="#gallery">Gallery</a>
+</nav>
 
 <main>
 
@@ -617,7 +725,8 @@ footer{
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <img src="fruitsite.png" alt="MayaNut fruit (Brosimum alicastrum)">
+          <!-- first image now rach13.jpg -->
+          <img src="rach13.jpg" alt="MayaNut fruit (Brosimum alicastrum)">
           <img src="rach11.jpg" class="square" alt="Founder August Kokus">
           <img src="rach12.jpg" alt="Brosimum alicastrum plantation">
         </div>
@@ -674,22 +783,22 @@ footer{
       <p>Images from our trees, fruit, and future products — coming soon.</p>
       <div class="gallery-grid">
         <div class="gallery-tile">
-          <img src="fruitsite.png" alt="MayaNut fruit gallery image">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
         <div class="gallery-tile">
-          <img src="fruitsite.png" alt="MayaNut fruit gallery image">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
         <div class="gallery-tile">
-          <img src="fruitsite.png" alt="MayaNut fruit gallery image">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
         <div class="gallery-tile">
-          <img src="fruitsite.png" alt="MayaNut fruit gallery image">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
         <div class="gallery-tile">
-          <img src="fruitsite.png" alt="MayaNut fruit gallery image">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
         <div class="gallery-tile">
-          <img src="fruitsite.png" alt="MayaNut fruit gallery image">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
       </div>
     </div>
@@ -793,6 +902,27 @@ footer{
   closeBtn.addEventListener('click', closeModal);
   backdrop.addEventListener('click', (e) => {
     if(e.target === backdrop) closeModal();
+  });
+})();
+
+// Mobile nav (hamburger)
+(function(){
+  const toggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if(!toggle || !mobileMenu) return;
+
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+
+  // Close menu when a link is clicked
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      toggle.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
   });
 })();
 </script>
