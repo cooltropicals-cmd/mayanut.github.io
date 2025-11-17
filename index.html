@@ -566,27 +566,37 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – pure CSS, no image */
+/* Instagram icon – white camera icon */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
   justify-content:center;
   width:30px;
   height:30px;
-  border-radius:50%;
-  background:radial-gradient(circle at 30% 30%, #ffd776, #f56040, #fd1d1d, #833ab4);
+  border-radius:8px;
+  border:2px solid #ffffff;
+  position:relative;
   text-decoration:none;
 }
-
 .footer-instagram span{
-  font-size:16px;
-  color:#fff;
-  font-weight:bold;
-  font-family:system-ui, -apple-system, "Segoe UI", sans-serif;
+  display:none; /* hide IG text */
 }
-
-.footer-instagram a:hover{
-  opacity:0.85;
+.footer-instagram a::before{
+  content:"";
+  width:14px;
+  height:14px;
+  border:2px solid #ffffff;
+  border-radius:4px;
+}
+.footer-instagram a::after{
+  content:"";
+  position:absolute;
+  width:3px;
+  height:3px;
+  border-radius:50%;
+  background:#ffffff;
+  top:8px;
+  right:8px;
 }
 
 .footer-copy{
@@ -594,7 +604,7 @@ footer{
   margin-top:6px;
 }
 
-/* Modal */
+/* Modal (Privacy / DNS) */
 .modal-backdrop{
   position:fixed;
   inset:0;
@@ -635,6 +645,53 @@ footer{
   background:#0a56c2;
   color:#fff;
   font-size:13px;
+  cursor:pointer;
+}
+
+/* WELCOME POPUP */
+.welcome-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2500;
+}
+.welcome-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:20px 22px 22px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  position:relative;
+  text-align:left;
+  font-size:14px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+}
+.welcome-title{
+  margin:0 0 8px;
+  font-weight:700;
+  font-size:18px;
+}
+.welcome-modal p{
+  margin:0 0 8px;
+}
+.welcome-close{
+  position:absolute;
+  top:10px;
+  right:14px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
   cursor:pointer;
 }
 
@@ -910,7 +967,17 @@ footer{
   </div>
 </footer>
 
-<!-- Modal -->
+<!-- Welcome popup -->
+<div class="welcome-backdrop" id="welcome-backdrop">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
+    <h2 class="welcome-title">Welcome to MayaNut.com</h2>
+    <p>We are currently developing Florida's first MayaNut plantation.</p>
+    <p>Thank you — we hope to be serving you our delicious MayaNut Beverage by 2028. Thank you for your patience!</p>
+  </div>
+</div>
+
+<!-- Privacy / DNS Modal -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <h3 id="modal-title">Privacy Policy</h3>
@@ -941,7 +1008,7 @@ footer{
   }
 })();
 
-// Simple modal logic
+// Simple modal logic (Privacy / DNS)
 (function(){
   const backdrop = document.getElementById('modal-backdrop');
   const titleEl = document.getElementById('modal-title');
@@ -972,12 +1039,14 @@ footer{
     backdrop.style.display = 'none';
   }
 
-  privacyLink.addEventListener('click', () => openModal('privacy'));
-  dnsLink.addEventListener('click', () => openModal('dns'));
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', (e) => {
-    if(e.target === backdrop) closeModal();
-  });
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
 })();
 
 // Mobile nav (hamburger)
@@ -998,6 +1067,27 @@ footer{
       toggle.classList.remove('open');
       mobileMenu.classList.remove('open');
     });
+  });
+})();
+
+// Welcome popup
+(function(){
+  const welcomeBackdrop = document.getElementById('welcome-backdrop');
+  const welcomeClose = document.getElementById('welcome-close');
+
+  if(!welcomeBackdrop || !welcomeClose) return;
+
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+  });
+
+  function closeWelcome(){
+    welcomeBackdrop.style.display = 'none';
+  }
+
+  welcomeClose.addEventListener('click', closeWelcome);
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if(e.target === welcomeBackdrop) closeWelcome();
   });
 })();
 </script>
