@@ -1,1 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The MayaNut Company – Blog</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/png" href="faviconmayanut.png" />
+<link rel="shortcut icon" type="image/png" href="faviconmayanut.png" />
+
+<meta name="theme-color" content="#18A7FF" />
+
+<style>
+:root{
+  --bg:#18A7FF;
+  --bg-grad:
+    radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
+    radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
+    radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
+    #0a56c2;
+  --bar:#0a56c2;
+  --bar-h:60px;
+}
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:#fff;
+  background:var(--bg-grad);
+}
+
+/* TOP BAR */
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:var(--bar-h);
+  background:var(--bar);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+  padding:0 16px;
+  box-sizing:border-box;
+}
+
+.topbar-logo-link{
+  position:absolute;
+  left:10px;
+  top:70px;
+}
+.topbar-logo{
+  height:150px;
+  width:150px;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+}
+
+.topbar-title{
+  font-family:"Mountains of Christmas", cursive;
+  font-size:18px;
+  text-align:center;
+}
+
+/* Desktop nav */
+.topbar-nav{
+  position:absolute;
+  right:26px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  gap:18px;
+  font-size:14px;
+}
+.topbar-nav a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+}
+.topbar-nav a:hover{
+  text-decoration:underline;
+}
+
+/* Hamburger button (hidden on desktop) */
+.menu-toggle{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:32px;
+  height:26px;
+  border:none;
+  background:transparent;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:0;
+  cursor:pointer;
+}
+.menu-toggle span{
+  display:block;
+  height:3px;
+  border-radius:999px;
+  background:#ffffff;
+  transition:transform 0.2s ease, opacity 0.2s ease;
+}
+.menu-toggle.open span:nth-child(1){
+  transform:translateY(11px) rotate(45deg);
+}
+.menu-toggle.open span:nth-child(2){
+  opacity:0;
+}
+.menu-toggle.open span:nth-child(3){
+  transform:translateY(-11px) rotate(-45deg);
+}
+
+/* Mobile dropdown menu */
+.mobile-menu{
+  display:none;
+  position:fixed;
+  top:var(--bar-h);
+  left:0;
+  right:0;
+  background:#0a56c2;
+  z-index:900;
+  padding:10px 16px 14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.35);
+}
+.mobile-menu.open{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.mobile-menu a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+}
+
+/* MAIN CONTENT */
+main{
+  padding-top:var(--bar-h);
+}
+
+.blog-hero{
+  min-height:40vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:80px 16px 40px;
+}
+
+.blog-inner{
+  max-width:800px;
+  margin:0 auto;
+}
+
+/* Blog card styled like About paragraph card */
+.blog-card{
+  background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
+  border-radius:18px;
+  padding:24px 24px 26px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.35);
+  color:#3b3f7a;
+}
+.blog-card h1{
+  margin:0 0 12px;
+  font-size:26px;
+  color:#30346a;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.blog-card p{
+  margin:0;
+  font-size:16px;
+  line-height:1.7;
+}
+
+/* Footer – simple */
+footer{
+  background:#06274f;
+  color:#d5e3ff;
+  padding:18px 16px 28px;
+  font-size:13px;
+  margin-top:40px;
+}
+.footer-inner{
+  max-width:800px;
+  margin:0 auto;
+  text-align:center;
+}
+
+/* Responsive */
+@media(max-width:800px){
+  .topbar-nav{
+    display:none;
+  }
+  .menu-toggle{
+    display:flex;
+  }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html#top" class="topbar-logo-link">
+    <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
+  </a>
+  <div class="topbar-title">
+    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  </div>
+
+  <nav class="topbar-nav">
+    <a href="index.html#buy">Buy</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#gallery">Gallery</a>
+    <a href="index.html#research">Research</a>
+    <a href="blog.html">Blog</a>
+  </nav>
+
+  <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<nav class="mobile-menu" id="mobile-menu">
+  <a href="index.html#buy">Buy</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#gallery">Gallery</a>
+  <a href="index.html#research">Research</a>
+  <a href="blog.html">Blog</a>
+</nav>
+
+<main>
+  <section class="blog-hero">
+    <div class="blog-inner">
+      <div class="blog-card">
+        <h1>MayaNut Blog</h1>
+        <p>Hello, this is the blog for MayaNut.com and I just want to say it's been a real cool journey bringing these plants into reality.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    © 2025 The MayaNut Company, Inc. All Rights Reserved.
+  </div>
+</footer>
+
+<script>
+// Mobile nav (hamburger)
+(function(){
+  const toggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if(!toggle || !mobileMenu) return;
+
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      toggle.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
