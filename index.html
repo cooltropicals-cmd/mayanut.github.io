@@ -21,7 +21,7 @@
 <style>
 :root{
   --bg:#18A7FF;
-  /* Main blue background: shaded, dreamy */
+  /* Main blue background: shaded, dreamy (from your older code) */
   --bg-grad:
     radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
@@ -34,8 +34,7 @@
     radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
     linear-gradient(180deg,#ffffff 0%, #ffffff 100%);
 
-  /* slightly lighter dark blue than original */
-  --bar:#0d5fd0;
+  --bar:#0a56c2;
   --bar-h:60px;
   --card-bg:#ffffff;
 }
@@ -55,7 +54,7 @@ html,body{
   color:#fff;
 }
 
-/* animated lava-lamp background */
+/* animated lava-lamp background using your favorite gradient */
 body{
   background:var(--bg-grad);
   background-size:200% 200%;
@@ -174,7 +173,7 @@ body{
   top:var(--bar-h);
   left:0;
   right:0;
-  background:#0d5fd0;
+  background:#0a56c2;
   z-index:900;
   padding:10px 16px 14px;
   box-shadow:0 4px 12px rgba(0,0,0,0.35);
@@ -505,10 +504,39 @@ canvas#snow{
   text-align:center;
 }
 
-/* GALLERY – same dramatic background as main */
-.section--gallery{
+/* RESEARCH – now uses the dramatic gradient background */
+.section--research{
   background:var(--bg-grad);
   background-size:200% 200%;
+  color:#ffffff;
+}
+
+.research-grid{
+  display:grid;
+  grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+
+.research-image-wrap img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 2px 10px rgba(0,0,0,0.22);
+}
+
+.research-text{
+  font-size:15px;
+  line-height:1.7;
+}
+
+.research-text p{
+  margin:0 0 12px;
+}
+
+/* GALLERY – now solid dark blue like the tab, at the bottom */
+.section--gallery{
+  background:var(--bar);
 }
 
 .gallery-inner{
@@ -547,35 +575,6 @@ canvas#snow{
 .gallery-tile:hover{
   transform:translateY(-2px) scale(1.02);
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
-}
-
-/* RESEARCH – new section */
-.section--research{
-  background:#ffffff;
-  color:#1f355c;
-}
-
-.research-grid{
-  display:grid;
-  grid-template-columns:minmax(0,320px) minmax(0,1fr);
-  gap:28px;
-  align-items:flex-start;
-}
-
-.research-image-wrap img{
-  width:100%;
-  border-radius:14px;
-  object-fit:cover;
-  box-shadow:0 2px 10px rgba(0,0,0,0.22);
-}
-
-.research-text{
-  font-size:15px;
-  line-height:1.7;
-}
-
-.research-text p{
-  margin:0 0 12px;
 }
 
 /* Bottom logo section – solid dark blue like the tab */
@@ -894,7 +893,6 @@ footer{
 
         <div class="hero-image-wrap">
           <a href="#buy" class="hero-image-link">
-            <!-- UPDATED SRC HERE -->
             <img src="rach20.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
           </a>
         </div>
@@ -983,10 +981,31 @@ footer{
     </div>
   </section>
 
-  <!-- TRANSITION: GALLERY -->
+  <!-- TRANSITION: RESEARCH -->
+  <div class="transition-strip">RESEARCH</div>
+
+  <!-- RESEARCH (now above Gallery, with dramatic gradient background) -->
+  <section class="section section--research" id="research">
+    <div class="section-inner">
+      <div class="research-grid">
+        <div class="research-image-wrap">
+          <img src="rach18.jpg" alt="Brosimum alicastrum research image">
+        </div>
+        <div class="research-text">
+          <p><strong>Brosimum alicastrum</strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it does occur in more sporadic populations all the way north to Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica, possibly through deliberate human seed migration for agricultural or religious reasons.</p>
+
+          <p>Historically, the species <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people but probably many other cultures overlapping its range. The tree was probably used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
+
+          <p>Today, it is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient rainforest tree. The MayaNut Company is working in South Florida to establish America's first <em>Brosimum alicastrum</em> farm, as this species is widely underutilized.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: GALLERY (now at the bottom) -->
   <div class="transition-strip">GALLERY</div>
 
-  <!-- GALLERY -->
+  <!-- GALLERY – now solid dark blue like the tab and placed after Research -->
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
       <h2>Gallery</h2>
@@ -1009,27 +1028,6 @@ footer{
         </div>
         <div class="gallery-tile">
           <img src="rach13.jpg" alt="MayaNut gallery image">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRANSITION: RESEARCH -->
-  <div class="transition-strip">RESEARCH</div>
-
-  <!-- RESEARCH -->
-  <section class="section section--research" id="research">
-    <div class="section-inner">
-      <div class="research-grid">
-        <div class="research-image-wrap">
-          <img src="rach18.jpg" alt="Brosimum alicastrum research image">
-        </div>
-        <div class="research-text">
-          <p><strong>Brosimum alicastrum</strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it does occur in more sporadic populations all the way north to Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica, possibly through deliberate human seed migration for agricultural or religious reasons.</p>
-
-          <p>Historically, the species <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people but probably many other cultures overlapping its range. The tree was probably used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
-
-          <p>Today, it is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient rainforest tree. The MayaNut Company is working in South Florida to establish America's first <em>Brosimum alicastrum</em> farm, as this species is widely underutilized.</p>
         </div>
       </div>
     </div>
