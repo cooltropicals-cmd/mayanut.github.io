@@ -409,54 +409,75 @@ html,body{
   color:#30346a;
 }
 
-/* STORE – white + lavender at edges, flat transitions */
+/* STORE – white + lavender at edges, with horizontal scroller */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
+  padding:40px 16px 60px; /* slightly thinner vertically */
 }
 
-.buy-grid{
-  display:grid;
-  grid-template-columns:minmax(0,280px) minmax(0,1fr);
-  gap:28px;
+.store-inner{
+  max-width:900px;
+  margin:0 auto;
+}
+
+.store-heading{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.store-heading h2{
+  margin:0 0 6px;
+  font-size:22px;
+  color:#2b346c;
+}
+.store-heading p{
+  margin:0;
+  font-size:14px;
+  color:#4a5288;
+}
+
+/* horizontal scroll area */
+.store-scroller-wrapper{
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+
+.store-scroller{
+  display:flex;
+  gap:16px;
+  padding-bottom:4px;
+}
+
+.store-item{
+  flex:0 0 220px;
+  background:linear-gradient(135deg,#f0e8ff 0%,#ffffff 45%,#e4defe 100%);
+  border-radius:18px;
+  padding:14px 14px 18px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.16);
+  display:flex;
+  flex-direction:column;
   align-items:center;
-  margin-bottom:36px;
 }
 
-.buy-image-placeholder{
+.store-item-image{
   width:100%;
   aspect-ratio:4/5;
-  border-radius:18px;
+  border-radius:14px;
   background:radial-gradient(circle at 30% 20%, #f0e8ff 0, #ffffff 45%, #e4defe 100%);
   display:flex;
   align-items:center;
   justify-content:center;
   color:#5f63a8;
   font-weight:600;
-  font-size:15px;
-  box-shadow:0 3px 12px rgba(0,0,0,0.14);
+  font-size:14px;
+  margin-bottom:10px;
 }
 
-.buy-image-placeholder img{
-  max-width:90%;
-  max-height:90%;
-}
-
-.buy-text-box{
-  background:#ffffff;
-  border-radius:18px;
-  padding:18px 20px 20px;
-  box-shadow:0 3px 12px rgba(0,0,0,0.16);
-}
-
-.buy-text-box h2{
-  margin:0 0 8px;
-  font-size:20px;
-}
-.buy-text-box p{
-  margin:0;
-  font-size:15px;
-  line-height:1.6;
+.store-item-label{
+  font-size:14px;
+  color:#40437a;
+  text-align:center;
 }
 
 /* GALLERY – flat, no curved transition */
@@ -753,7 +774,6 @@ footer{
   }
 
   .about-grid,
-  .buy-grid,
   .research-grid{
     grid-template-columns:1fr;
   }
@@ -775,6 +795,10 @@ footer{
   .transition-strip{
     font-size:13px;
     letter-spacing:0.04em;
+  }
+
+  .store-item{
+    flex:0 0 70vw; /* easier to scroll on phones */
   }
 }
 
@@ -891,24 +915,34 @@ footer{
 
   <!-- STORE (BUY) -->
   <section class="section section--buy" id="buy">
-    <div class="section-inner">
-      <div class="buy-grid">
-        <div class="buy-image-placeholder">
-          <img src="rach19.png" alt="MayaNut Beverage glass placeholder">
-        </div>
-        <div class="buy-text-box">
-          <h2>MayaNut™ Beverage — Coming Soon</h2>
-          <p>Our flagship chilled MayaNut™ Beverage will blend roasted <em>Brosimum alicastrum</em> seed with subtle natural flavors for a smooth, lightly sweet drink that’s perfect over ice. We’re dialing in the roast profile and recipe now so it’s ready for grocery shelves in the years ahead.</p>
-        </div>
+    <div class="section-inner store-inner">
+      <div class="store-heading">
+        <h2>MayaNut™ Store — Coming Soon</h2>
+        <p>Scroll to preview future beverages, flours, and more. These are placeholder products while the first plantation grows.</p>
       </div>
 
-      <div class="buy-grid">
-        <div class="buy-image-placeholder">
-          <span>Product Image Placeholder</span>
-        </div>
-        <div class="buy-text-box">
-          <h2>MayaNut™ Flour — Coming Soon</h2>
-          <p>MayaNut™ Flour will allow bakers and home cooks to bring this ancient ingredient into everyday recipes — breads, cookies, and more. Our goal is to make it easy to add nutrition and flavor while supporting a tree that helps restore forests.</p>
+      <div class="store-scroller-wrapper">
+        <div class="store-scroller">
+          <div class="store-item">
+            <div class="store-item-image">Product 1</div>
+            <div class="store-item-label">Chilled MayaNut™ Beverage</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 2</div>
+            <div class="store-item-label">MayaNut™ Beverage – Vanilla</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 3</div>
+            <div class="store-item-label">MayaNut™ Beverage – Mocha</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 4</div>
+            <div class="store-item-label">MayaNut™ Flour</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 5</div>
+            <div class="store-item-label">Future MayaNut™ Treats</div>
+          </div>
         </div>
       </div>
     </div>
