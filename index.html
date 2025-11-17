@@ -21,7 +21,7 @@
 <style>
 :root{
   --bg:#18A7FF;
-  /* Main blue background: shaded, dreamy (your favorite gradient) */
+  /* Your favorite blue background: lighter center, darker edges */
   --bg-grad:
     radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
@@ -54,17 +54,10 @@ html,body{
   color:#fff;
 }
 
-/* animated lava-lamp background using your gradient */
+/* MAIN BACKGROUND – static gradient, like the original */
 body{
   background:var(--bg-grad);
-  background-size:200% 200%;
-  animation:bgFloat 40s ease-in-out infinite alternate;
-}
-
-@keyframes bgFloat{
-  0%   { background-position:0% 0%; }
-  50%  { background-position:50% 100%; }
-  100% { background-position:100% 0%; }
+  background-attachment:fixed;
 }
 
 /* TOP BAR */
@@ -104,9 +97,7 @@ body{
   animation:merrygiggle 6s ease-in-out infinite;
 }
 
-/* REMOVE old desktop nav – everything goes into hamburger overlay now */
-
-/* Hamburger button – now in the upper-left of the bar */
+/* Hamburger button – upper-left of bar */
 .menu-toggle{
   position:absolute;
   left:16px;
@@ -154,7 +145,7 @@ body{
   display:flex;
 }
 
-/* Nav modal uses same “welcome” gradient vibe */
+/* Nav modal – uses same style as welcome popup */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -205,22 +196,12 @@ body{
   position:relative;
   min-height:100vh;
   padding-top:var(--bar-h);
+  /* IMPORTANT: hero background is just the main gradient now */
+  background:transparent;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
-}
-
-/* subtle glow behind hero content */
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.18), transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12), transparent 65%);
-  pointer-events:none;
-  z-index:0;
 }
 
 .hero-inner{
@@ -280,13 +261,13 @@ canvas#snow{
   text-decoration:underline;
   text-decoration-color:var(--bar);
   text-underline-offset:4px;
-  white-space:nowrap; /* keep “Coming Soon!” on one line */
+  white-space:nowrap; /* “Coming Soon!” on one line */
 }
 
 /* Glass image */
 .hero-image-wrap{
   flex:0 0 auto;
-  margin-left:auto; /* push to the right */
+  margin-left:auto;
 }
 
 .hero-image-link{
@@ -294,7 +275,7 @@ canvas#snow{
 }
 
 .hero-glass{
-  width:480px;          /* a bit bigger */
+  width:480px;
   max-width:80vw;
   display:block;
   cursor:pointer;
@@ -315,7 +296,7 @@ canvas#snow{
   100% { transform:translateX(0); }
 }
 
-/* THIN TRANSITION STRIPS – little purple center, mostly blues */
+/* THIN TRANSITION STRIPS */
 .transition-strip{
   background:linear-gradient(
     90deg,
@@ -344,7 +325,7 @@ canvas#snow{
   padding:70px 16px 80px;
   position:relative;
   z-index:1;
-  overflow:hidden; /* no weird edges */
+  overflow:hidden;
 }
 
 .section-inner{
@@ -363,16 +344,16 @@ canvas#snow{
   height:120px;
   border-radius:50% 50% 0 0;
   z-index:-1;
-  background:var(--bar); /* same dark blue */
+  background:var(--bar);
 }
 
-/* ABOUT (keep as solid dark blue) */
+/* ABOUT – solid dark blue */
 .section--about{
   background:var(--bar);
   color:#fff;
 }
 
-/* ABOUT layout – 2 columns: images left, text cards right */
+/* ABOUT layout */
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
@@ -411,7 +392,7 @@ canvas#snow{
   line-height:1.7;
 }
 
-/* Individualized white → lavender streaks left-to-right */
+/* White → lavender streaks */
 .about-card-1{
   background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
 }
@@ -435,7 +416,7 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE – keep white + lavender at edges */
+/* STORE – keep white + lavender */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
@@ -506,10 +487,9 @@ canvas#snow{
   text-align:center;
 }
 
-/* RESEARCH – uses the dramatic blue gradient background too */
+/* RESEARCH – same blue gradient background as main */
 .section--research{
   background:var(--bg-grad);
-  background-size:200% 200%;
   color:#ffffff;
 }
 
@@ -536,7 +516,7 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY – keep solid dark blue like the tab */
+/* GALLERY – solid dark blue */
 .section--gallery{
   background:var(--bar);
 }
@@ -579,7 +559,7 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – keep solid dark blue */
+/* Bottom logo section – solid dark blue */
 .section--bottom-logo{
   background:var(--bar);
   text-align:center;
@@ -592,7 +572,7 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* Footer – keep privacy area as before */
+/* Footer – keep same */
 footer{
   background:var(--bar);
   color:#d5e3ff;
@@ -1069,7 +1049,7 @@ footer{
 </div>
 
 <script>
-// Canvas snowflakes in hero (slow + few, visible immediately)
+// Canvas snowflakes in hero (slow + present immediately)
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1201,7 +1181,7 @@ footer{
   requestAnimationFrame(animate);
 })();
 
-// Simple modal logic (Privacy / DNS)
+// Modal logic (Privacy / DNS)
 (function(){
   const backdrop = document.getElementById('modal-backdrop');
   const titleEl = document.getElementById('modal-title');
@@ -1302,7 +1282,7 @@ footer{
   });
 })();
 
-// Logo tooltip logic (unchanged from earlier behavior)
+// Logo tooltip behavior (desktop hover + mobile tap)
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
