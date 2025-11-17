@@ -112,14 +112,22 @@ body{
   top:50%;
   transform:translateY(-50%);
   display:flex;
-  gap:18px;
+  gap:14px;
   font-size:14px;
+  align-items:center;
 }
 
 .topbar-nav a{
   color:#fff;
   text-decoration:none;
   font-weight:600;
+}
+
+/* vertical bar separators */
+.topbar-nav a + a::before{
+  content:"|";
+  margin-right:8px;
+  color:rgba(255,255,255,0.75);
 }
 
 .topbar-nav a:hover{
@@ -181,6 +189,12 @@ body{
   text-decoration:none;
   font-weight:600;
   font-size:15px;
+}
+
+/* MOBILE menu separators as subtle top borders */
+.mobile-menu a + a{
+  border-top:1px solid rgba(255,255,255,0.25);
+  padding-top:6px;
 }
 
 /* HERO */
@@ -263,7 +277,7 @@ canvas#snow{
   text-decoration:underline;
   text-decoration-color:var(--bar);
   text-underline-offset:4px;
-  white-space:nowrap; /* keep "Coming Soon!" on one line */
+  white-space:nowrap; /* keep “Coming Soon!” on one line */
 }
 
 /* Glass image */
@@ -491,9 +505,10 @@ canvas#snow{
   text-align:center;
 }
 
-/* GALLERY – see animated body background through it */
+/* GALLERY – same dramatic background as main */
 .section--gallery{
-  background:transparent;
+  background:var(--bg-grad);
+  background-size:200% 200%;
 }
 
 .gallery-inner{
@@ -835,13 +850,14 @@ footer{
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
 
-  <!-- Desktop nav -->
+  <!-- Desktop nav: STORE | ABOUT | RESEARCH | GALLERY | FAQ | BLOG -->
   <nav class="topbar-nav">
-    <a href="#buy">Store</a>
-    <a href="#about">About</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#research">Research</a>
-    <a href="blog.html">Blog</a>
+    <a href="#buy">STORE</a>
+    <a href="#about">ABOUT</a>
+    <a href="#research">RESEARCH</a>
+    <a href="#gallery">GALLERY</a>
+    <a href="faq.html">FAQ</a>
+    <a href="blog.html">BLOG</a>
   </nav>
 
   <!-- Hamburger (mobile) -->
@@ -852,13 +868,14 @@ footer{
   </button>
 </header>
 
-<!-- Mobile dropdown menu -->
+<!-- Mobile dropdown menu (same order) -->
 <nav class="mobile-menu" id="mobile-menu">
-  <a href="#buy">Store</a>
-  <a href="#about">About</a>
-  <a href="#gallery">Gallery</a>
-  <a href="#research">Research</a>
-  <a href="blog.html">Blog</a>
+  <a href="#buy">STORE</a>
+  <a href="#about">ABOUT</a>
+  <a href="#research">RESEARCH</a>
+  <a href="#gallery">GALLERY</a>
+  <a href="faq.html">FAQ</a>
+  <a href="blog.html">BLOG</a>
 </nav>
 
 <main>
@@ -877,7 +894,8 @@ footer{
 
         <div class="hero-image-wrap">
           <a href="#buy" class="hero-image-link">
-            <img src="rach19.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
+            <!-- UPDATED SRC HERE -->
+            <img src="rach20.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
           </a>
         </div>
       </div>
@@ -885,7 +903,7 @@ footer{
   </section>
 
   <!-- TRANSITION: ABOUT -->
-  <div class="transition-strip">About</div>
+  <div class="transition-strip">ABOUT</div>
 
   <!-- ABOUT -->
   <section class="section section--about" id="about">
@@ -928,7 +946,7 @@ footer{
   </section>
 
   <!-- TRANSITION: STORE -->
-  <div class="transition-strip">Store</div>
+  <div class="transition-strip">STORE</div>
 
   <!-- STORE (BUY) -->
   <section class="section section--buy" id="buy">
@@ -966,7 +984,7 @@ footer{
   </section>
 
   <!-- TRANSITION: GALLERY -->
-  <div class="transition-strip">Gallery</div>
+  <div class="transition-strip">GALLERY</div>
 
   <!-- GALLERY -->
   <section class="section section--gallery" id="gallery">
@@ -997,7 +1015,7 @@ footer{
   </section>
 
   <!-- TRANSITION: RESEARCH -->
-  <div class="transition-strip">Research</div>
+  <div class="transition-strip">RESEARCH</div>
 
   <!-- RESEARCH -->
   <section class="section section--research" id="research">
@@ -1071,7 +1089,7 @@ footer{
 </div>
 
 <script>
-// Canvas snowflakes in hero (slow + few)
+// Canvas snowflakes in hero (slow + few, and visible immediately)
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1097,10 +1115,11 @@ footer{
     return Math.random() * (max - min) + min;
   }
 
-  function createFlake() {
+  function createFlake(initial = false) {
     return {
       x: random(0, width),
-      y: random(-height, 0),
+      // initial: place within view so we see snow immediately
+      y: initial ? random(0, height) : random(-height * 0.2, 0),
       size: random(2, 5),
       speedY: random(0.03, 0.12),   // slower vertical speed
       speedX: random(-0.03, 0.03),  // gentle horizontal drift
@@ -1115,7 +1134,7 @@ footer{
   function initFlakes() {
     flakes.length = 0;
     for (let i = 0; i < FLAKE_COUNT; i++) {
-      flakes.push(createFlake());
+      flakes.push(createFlake(true)); // all visible at start
     }
   }
 
@@ -1172,9 +1191,16 @@ footer{
 
     // recycle when out of view
     if (flake.y > height + flake.size * 2) {
-      flake.x = random(0, width);
-      flake.y = random(-height * 0.2, 0);
-      flake.speedY = random(0.03, 0.12);
+      const replacement = createFlake(false);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
     }
 
     // wrap horizontally
