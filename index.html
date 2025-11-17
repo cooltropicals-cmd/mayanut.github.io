@@ -28,23 +28,11 @@
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
 
-  /* Deep blue section (About + bottom logo + footer) – subtle darker edges */
-  --about-grad:
-    radial-gradient(circle at 0% 0%, rgba(0,0,0,0.35) 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(0,0,0,0.4) 0, transparent 55%),
-    linear-gradient(160deg,#0b4ca6 0%, #07336f 45%, #052652 100%);
-
   /* Buy page – mostly white with lavender at edges */
   --buy-grad:
     radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
     radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
     linear-gradient(180deg,#ffffff 0%, #ffffff 100%);
-
-  /* Dark footer bar – same family as about, just slightly deeper */
-  --darkbar-grad:
-    radial-gradient(circle at 0% 0%, rgba(0,0,0,0.55) 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(0,0,0,0.55) 0, transparent 55%),
-    linear-gradient(180deg,#06274f 0%, #03172f 100%);
 
   --bar:#0a56c2;
   --bar-h:60px;
@@ -269,7 +257,7 @@ html,body{
   box-shadow:0 0 40px rgba(255,255,255,0.95);
 }
 
-/* Snow only on hero */
+/* Snow only in hero */
 .snow-layer{
   pointer-events:none;
   position:absolute;
@@ -321,7 +309,7 @@ html,body{
   z-index:0;
 }
 
-/* CIRCULAR transitions between sections (desktop only, we’ll hide on mobile) */
+/* CIRCULAR transitions between sections (desktop only, flat on mobile) */
 .section--about::before,
 .section--buy::before,
 .section--gallery::before,
@@ -335,19 +323,19 @@ html,body{
   height:120px;
   border-radius:50% 50% 0 0;
   z-index:-1;
-  background:inherit;  /* use same gradient as section */
+  background:inherit;  /* use same background as the section */
 }
 
 /* ABOUT */
 .section--about{
-  background:var(--about-grad);
+  background:var(--bar);  /* solid dark blue */
   color:#fff;
 }
 .section--about::before{
   /* background inherited from section--about */
 }
 
-/* ABOUT layout */
+/* ABOUT layout – 2 columns: images left, 4 text cards right */
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
@@ -358,7 +346,7 @@ html,body{
 .about-images{
   display:flex;
   flex-direction:column;
-  gap:1px;
+  gap:12px;
 }
 .about-images img{
   width:100%;
@@ -370,28 +358,42 @@ html,body{
   aspect-ratio:1/1;
 }
 
+/* Right column: 4 cards aligned roughly with the 4 images */
+.about-text-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
 .about-text-card{
-  background:var(--card-bg);
-  color:#083b7c;
+  background:#ffffff;
   border-radius:18px;
-  padding:20px 22px 22px;
+  padding:18px 20px 20px;
   box-shadow:0 3px 14px rgba(0,0,0,0.25);
-}
-
-.about-text-card h2{
-  margin:0 0 10px;
-  font-size:22px;
-}
-
-.about-text-card h3{
-  margin:18px 0 8px;
-  font-size:18px;
-}
-
-.about-text-card p{
-  margin:0 0 10px;
+  color:#3b3f7a;
   font-size:15px;
   line-height:1.7;
+}
+
+/* Individualized white → lavender streaks left-to-right */
+.about-card-1{
+  background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
+}
+.about-card-2{
+  background:linear-gradient(90deg, #efe3ff 0%, #ffffff 70%);
+}
+.about-card-3{
+  background:linear-gradient(90deg, #eadbff 0%, #ffffff 70%);
+}
+.about-card-4{
+  background:linear-gradient(90deg, #e3d2ff 0%, #ffffff 70%);
+}
+
+.about-text-card h2,
+.about-text-card h3{
+  margin-top:0;
+  margin-bottom:8px;
+  color:#30346a;
 }
 
 /* BUY – white + lavender at edges */
@@ -493,9 +495,9 @@ html,body{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – same deep blue gradient as About */
+/* Bottom logo section – solid dark blue like the tab */
 .section--bottom-logo{
-  background:var(--about-grad);
+  background:var(--bar);
   text-align:center;
 }
 .section--bottom-logo::before{
@@ -509,9 +511,9 @@ html,body{
   cursor:pointer;
 }
 
-/* Footer – shaded dark blue to match About family */
+/* Footer – solid dark blue as well */
 footer{
-  background:var(--darkbar-grad);
+  background:var(--bar);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -674,7 +676,7 @@ footer{
     justify-content:space-between;
   }
 
-  /* MOBILE: hide wave/circle transitions (prevents zoom glitches) */
+  /* MOBILE: hide wave/circle transitions (flat transitions) */
   .section--about::before,
   .section--buy::before,
   .section--gallery::before,
@@ -759,27 +761,30 @@ footer{
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <!-- first image now rach13.jpg -->
-          <img src="rach13.jpg" alt="MayaNut fruit (Brosimum alicastrum)">
-          <img src="rach11.jpg" class="square" alt="Founder August Kokus">
-          <img src="rach12.jpg" alt="Brosimum alicastrum plantation">
+          <img src="rach15.jpg" alt="MayaNut fruit (Brosimum alicastrum)">
+          <img src="rach16.jpg" class="square" alt="Founder August Kokus">
+          <img src="rach17.jpg" alt="Brosimum alicastrum plantation">
+          <img src="rach14.jpg" alt="MayaNut products and development">
         </div>
 
-        <div class="about-text-card">
-          <h2>About MayaNut™</h2>
-          <p>MayaNut™ is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit that is chewy with a syrupy, slightly tangy taste. The fruit, which is elusively talked about, is best eaten fresh when red — it has a very short shelf life.</p>
-          <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an under-utilized species, which is why we are developing the first MayaNut™ plantation in the United States.</p>
+        <div class="about-text-col">
+          <div class="about-text-card about-card-1">
+            <h2>About MayaNut™</h2>
+            <p>MayaNut™ is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit that is chewy with a syrupy, slightly tangy taste. The fruit, which is elusively talked about, is best eaten fresh when red — it has a very short shelf life.</p>
+          </div>
 
-          <h3>About August Kokus</h3>
-          <p>August Kokus had a vision to create something that lasts. In 2025, he founded The MayaNut Company, Inc. to preserve a species. He realized he could create whatever he wanted, but whatever that was, it had to endure. It couldn’t simply be a painting or a song — those fade and are forgotten. Give humanity something they love, though, and it will be carried forward.</p>
-          <p>August realized his “creation” would have to be loved to be passed down through the ages, and his species would survive because people cared about it. Wherever humans go in the galaxy, they’ll bring what’s necessary with them. He’s counting on MayaNut™ being part of that list — a unique new creation grounded in an ancient tree.</p>
+          <div class="about-text-card about-card-2">
+            <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an under-utilized species, which is why we are developing the first MayaNut™ plantation in the United States.</p>
+          </div>
 
-          <h3>Our Work in South Florida</h3>
-          <p>MayaNut™ appears to grow reliably only up to USDA zone 9 in the United States. Temperatures below 50°F can begin to damage new growth, temperatures under 38°F can cause defoliation, and sustained freezes under 32°F can kill mature trees. That leaves South Florida and parts of southern Texas as the only places in the continental U.S. suitable for long-term agricultural projects.</p>
-          <p>South Florida’s subtropical climate makes it especially well suited, which is why Florida’s first dedicated MayaNut™ plantation is scheduled to open in January 2027.</p>
+          <div class="about-text-card about-card-3">
+            <h3>About August Kokus</h3>
+            <p>August Kokus had a vision to create something that lasts. In 2025, he founded The MayaNut Company, Inc. to preserve a species. He realized he could create whatever he wanted, but whatever that was, it had to endure. It couldn’t simply be a painting or a song — those fade and are forgotten. Give humanity something they love, though, and it will be carried forward.</p>
+          </div>
 
-          <h3>Future Products</h3>
-          <p>The MayaNut Company plans to feature MayaNut™ powder in our chilled MayaNut™ beverages. Our culinary team is already developing two additional MayaNut™ creations that will be unveiled in July 2027.</p>
+          <div class="about-text-card about-card-4">
+            <p>August realized his “creation” would have to be loved to be passed down through the ages, and his species would survive because people cared about it. South Florida’s subtropical climate makes it especially well suited, which is why Florida’s first dedicated MayaNut™ plantation is scheduled to open in January 2027 — the foundation for future MayaNut™ beverages, flours, and more.</p>
+          </div>
         </div>
       </div>
     </div>
