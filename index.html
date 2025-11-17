@@ -34,7 +34,8 @@
     radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
     linear-gradient(180deg,#ffffff 0%, #ffffff 100%);
 
-  --bar:#0a56c2;
+  /* slightly lighter dark blue than original */
+  --bar:#0d5fd0;
   --bar-h:60px;
   --card-bg:#ffffff;
 }
@@ -165,7 +166,7 @@ body{
   top:var(--bar-h);
   left:0;
   right:0;
-  background:#0a56c2;
+  background:#0d5fd0;
   z-index:900;
   padding:10px 16px 14px;
   box-shadow:0 4px 12px rgba(0,0,0,0.35);
@@ -262,6 +263,7 @@ canvas#snow{
   text-decoration:underline;
   text-decoration-color:var(--bar);
   text-underline-offset:4px;
+  white-space:nowrap; /* keep "Coming Soon!" on one line */
 }
 
 /* Glass image */
@@ -296,15 +298,15 @@ canvas#snow{
   100% { transform:translateX(0); }
 }
 
-/* THIN TRANSITION STRIPS – purple center, blue edges */
+/* THIN TRANSITION STRIPS – little purple center, mostly blues */
 .transition-strip{
   background:linear-gradient(
     90deg,
-    #4aa9ff 0%,
-    #041b49 22%,
+    #7bc4ff 0%,
+    #0e4fb8 24%,
     #aa00fe 50%,
-    #041b49 78%,
-    #4aa9ff 100%
+    #0e4fb8 76%,
+    #7bc4ff 100%
   );
   color:#f5fbff;
   text-align:center;
@@ -353,7 +355,7 @@ canvas#snow{
   color:#fff;
 }
 
-/* ABOUT layout – 2 columns: images left, 4 text cards right */
+/* ABOUT layout – 2 columns: images left, text cards right */
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
@@ -376,7 +378,7 @@ canvas#snow{
   aspect-ratio:1/1;
 }
 
-/* Right column: 4 cards aligned with 4 images */
+/* Right column: text cards aligned with 4 images + extra card */
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -405,6 +407,10 @@ canvas#snow{
 }
 .about-card-4{
   background:linear-gradient(90deg, #e3d2ff 0%, #ffffff 70%);
+}
+/* "More Information Coming Soon!" */
+.about-card-5{
+  background:linear-gradient(90deg, #dde7ff 0%, #ffffff 70%);
 }
 
 .about-text-card h2,
@@ -910,6 +916,12 @@ footer{
           <div class="about-text-card about-card-4">
             <p>August realized his “creation” would have to be loved to be passed down through the ages, and his species would survive because people cared about it. South Florida’s subtropical climate makes it especially well suited, which is why Florida’s first dedicated MayaNut™ plantation is scheduled to open in January 2027 — the foundation for future MayaNut™ beverages, flours, and more.</p>
           </div>
+
+          <!-- New "More Information Coming Soon!" card -->
+          <div class="about-text-card about-card-5">
+            <p><strong>More Information Coming Soon!</strong></p>
+          </div>
+
         </div>
       </div>
     </div>
@@ -1004,9 +1016,6 @@ footer{
       </div>
     </div>
   </section>
-
-  <!-- TRANSITION: PUP DEDICATION -->
-  <div class="transition-strip">Dedicated to My Pup 💙</div>
 
   <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
@@ -1274,6 +1283,123 @@ footer{
   welcomeClose.addEventListener('click', closeWelcome);
   welcomeBackdrop.addEventListener('click', (e) => {
     if(e.target === welcomeBackdrop) closeWelcome();
+  });
+})();
+
+// Logo tooltip logic (desktop + mobile behavior)
+(function(){
+  const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
+  if (!logos.length) return;
+
+  const tooltip = document.createElement('div');
+  tooltip.className = 'logo-tooltip';
+  Object.assign(tooltip.style, {
+    position: 'fixed',
+    padding: '6px 10px',
+    borderRadius: '999px',
+    background: '#ffffff',
+    color: '#123055',
+    fontSize: '12px',
+    boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
+    zIndex: '3000',
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 0.15s ease'
+  });
+  document.body.appendChild(tooltip);
+
+  let tooltipVisible = false;
+  let lastLogo = null;
+
+  function atTop(){
+    return window.scrollY <= 0;
+  }
+
+  function getMessage(){
+    if (atTop()){
+      return 'Welcome to mayanut.com Home of The MayaNut Company';
+    }
+    return '👆 Click to Return Home 👆';
+  }
+
+  function showTooltipFor(el){
+    const rect = el.getBoundingClientRect();
+    tooltip.textContent = getMessage();
+
+    // reset before measuring
+    tooltip.style.top = '0px';
+    tooltip.style.left = '0px';
+
+    const width = tooltip.offsetWidth || 220;
+    const top = rect.top + rect.height + 8;  // just below logo (viewport coords)
+    const centerX = rect.left + rect.width / 2;
+
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${centerX - width / 2}px`;
+    tooltip.style.opacity = '1';
+
+    tooltipVisible = true;
+    lastLogo = el;
+  }
+
+  function hideTooltip(){
+    tooltip.style.opacity = '0';
+    tooltipVisible = false;
+    lastLogo = null;
+  }
+
+  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+
+  if (!isCoarse){
+    // Desktop: hover shows tooltip, leave hides. Click behaves normally.
+    logos.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        showTooltipFor(link);
+      });
+      link.addEventListener('mouseleave', () => {
+        hideTooltip();
+      });
+    });
+  } else {
+    // Mobile / coarse pointer: tap once shows tooltip, second tap (if scrolled) scrolls home.
+    logos.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        if (!tooltipVisible || lastLogo !== link){
+          // first tap -> show tooltip, no navigation
+          e.preventDefault();
+          showTooltipFor(link);
+          return;
+        }
+
+        // second tap while tooltip visible on same logo
+        if (atTop()){
+          // at top: do nothing, tooltip stays up, no nav
+          e.preventDefault();
+          return;
+        }
+
+        // scrolled: go home smoothly
+        e.preventDefault();
+        hideTooltip();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Clicking anywhere else hides tooltip
+    document.addEventListener('click', () => {
+      if (tooltipVisible){
+        hideTooltip();
+      }
+    });
+  }
+
+  // If user scrolls while tooltip is visible, update its text/position
+  window.addEventListener('scroll', () => {
+    if (tooltipVisible && lastLogo){
+      showTooltipFor(lastLogo);
+    }
   });
 })();
 </script>
