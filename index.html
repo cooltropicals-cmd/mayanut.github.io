@@ -21,14 +21,14 @@
 <style>
 :root{
   --bg:#18A7FF;
-  /* Main blue background: shaded, dreamy (from your older code) */
+  /* Main blue background: shaded, dreamy (your favorite gradient) */
   --bg-grad:
     radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
 
-  /* Store page – mostly white with lavender at edges */
+  /* Store page – mostly white with lavender at edges (unchanged) */
   --buy-grad:
     radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
     radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
@@ -54,7 +54,7 @@ html,body{
   color:#fff;
 }
 
-/* animated lava-lamp background using your favorite gradient */
+/* animated lava-lamp background using your gradient */
 body{
   background:var(--bg-grad);
   background-size:200% 200%;
@@ -83,7 +83,7 @@ body{
   box-sizing:border-box;
 }
 
-/* Logo in upper-left of the blue tab – stays fixed relative to bar */
+/* Logo in upper-left, below tab */
 .topbar-logo-link{
   position:absolute;
   left:10px;
@@ -104,50 +104,24 @@ body{
   animation:merrygiggle 6s ease-in-out infinite;
 }
 
-/* Desktop nav */
-.topbar-nav{
-  position:absolute;
-  right:26px;
-  top:50%;
-  transform:translateY(-50%);
-  display:flex;
-  gap:14px;
-  font-size:14px;
-  align-items:center;
-}
+/* REMOVE old desktop nav – everything goes into hamburger overlay now */
 
-.topbar-nav a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-}
-
-/* vertical bar separators */
-.topbar-nav a + a::before{
-  content:"|";
-  margin-right:8px;
-  color:rgba(255,255,255,0.75);
-}
-
-.topbar-nav a:hover{
-  text-decoration:underline;
-}
-
-/* Hamburger button (hidden on desktop) */
+/* Hamburger button – now in the upper-left of the bar */
 .menu-toggle{
   position:absolute;
-  right:16px;
+  left:16px;
   top:50%;
   transform:translateY(-50%);
   width:32px;
   height:26px;
   border:none;
   background:transparent;
-  display:none;
+  display:flex;
   flex-direction:column;
   justify-content:space-between;
   padding:0;
   cursor:pointer;
+  z-index:1100;
 }
 .menu-toggle span{
   display:block;
@@ -166,34 +140,64 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* Mobile dropdown menu */
-.mobile-menu{
-  display:none;
+/* FULL-SCREEN NAV OVERLAY */
+.nav-backdrop{
   position:fixed;
-  top:var(--bar-h);
-  left:0;
-  right:0;
-  background:#0a56c2;
-  z-index:900;
-  padding:10px 16px 14px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.35);
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2400;
 }
-.mobile-menu.open{
+.nav-backdrop.open{
+  display:flex;
+}
+
+/* Nav modal uses same “welcome” gradient vibe */
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+}
+
+.nav-modal-title{
+  margin:0 0 10px;
+  font-weight:700;
+  font-size:18px;
+}
+
+.nav-modal-links{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:10px;
+  margin-top:8px;
 }
-.mobile-menu a{
-  color:#fff;
+
+.nav-modal-links a{
+  color:#ffffff;
   text-decoration:none;
   font-weight:600;
   font-size:15px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.25);
 }
-
-/* MOBILE menu separators as subtle top borders */
-.mobile-menu a + a{
-  border-top:1px solid rgba(255,255,255,0.25);
-  padding-top:6px;
+.nav-modal-links a:last-child{
+  border-bottom:none;
+}
+.nav-modal-links a:hover{
+  text-decoration:underline;
 }
 
 /* HERO */
@@ -362,9 +366,9 @@ canvas#snow{
   background:var(--bar); /* same dark blue */
 }
 
-/* ABOUT */
+/* ABOUT (keep as solid dark blue) */
 .section--about{
-  background:var(--bar);  /* solid dark blue */
+  background:var(--bar);
   color:#fff;
 }
 
@@ -391,7 +395,6 @@ canvas#snow{
   aspect-ratio:1/1;
 }
 
-/* Right column: text cards aligned with 4 images + extra card */
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -421,7 +424,6 @@ canvas#snow{
 .about-card-4{
   background:linear-gradient(90deg, #e3d2ff 0%, #ffffff 70%);
 }
-/* "More Information Coming Soon!" */
 .about-card-5{
   background:linear-gradient(90deg, #dde7ff 0%, #ffffff 70%);
 }
@@ -433,11 +435,11 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE – white + lavender at edges, with horizontal scroller */
+/* STORE – keep white + lavender at edges */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
-  padding:40px 16px 60px; /* slightly thinner vertically */
+  padding:40px 16px 60px;
 }
 
 .store-inner{
@@ -504,7 +506,7 @@ canvas#snow{
   text-align:center;
 }
 
-/* RESEARCH – now uses the dramatic gradient background */
+/* RESEARCH – uses the dramatic blue gradient background too */
 .section--research{
   background:var(--bg-grad);
   background-size:200% 200%;
@@ -534,7 +536,7 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY – now solid dark blue like the tab, at the bottom */
+/* GALLERY – keep solid dark blue like the tab */
 .section--gallery{
   background:var(--bar);
 }
@@ -577,7 +579,7 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – solid dark blue like the tab */
+/* Bottom logo section – keep solid dark blue */
 .section--bottom-logo{
   background:var(--bar);
   text-align:center;
@@ -590,7 +592,7 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* Footer – solid dark blue as well */
+/* Footer – keep privacy area as before */
 footer{
   background:var(--bar);
   color:#d5e3ff;
@@ -644,7 +646,7 @@ footer{
   text-decoration:none;
 }
 .footer-instagram span{
-  display:none; /* hide IG text */
+  display:none;
 }
 .footer-instagram a::before{
   content:"";
@@ -762,24 +764,14 @@ footer{
 
 /* Responsive */
 @media(max-width:800px){
-  /* hide desktop nav, show hamburger */
-  .topbar-nav{
-    display:none;
-  }
-
-  .menu-toggle{
-    display:flex;
-  }
-
   .hero-inner{
     flex-direction:column;
     padding-top:8px;
     gap:32px;
   }
 
-  /* MOBILE HERO: image on top, text below */
   .hero-right{
-    flex-direction:column-reverse; /* image first, text second */
+    flex-direction:column-reverse;
     align-items:center;
     gap:24px;
   }
@@ -812,22 +804,17 @@ footer{
     justify-content:space-between;
   }
 
-  /* MOBILE: no curved transition (flat only) */
-  .section--about::before{
-    display:none;
-  }
-
   .transition-strip{
     font-size:13px;
     letter-spacing:0.04em;
   }
 
   .store-item{
-    flex:0 0 70vw; /* easier to scroll on phones */
+    flex:0 0 70vw;
   }
 }
 
-/* Extra-small screens: gently reduce hero glass + text */
+/* Extra-small screens */
 @media(max-width:500px){
   .hero-glass{
     max-width:70vw;
@@ -842,40 +829,36 @@ footer{
 <body>
 
 <header class="topbar">
-  <a href="#top" class="topbar-logo-link">
-    <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
-  </a>
-  <div class="topbar-title">
-    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
-  </div>
-
-  <!-- Desktop nav: STORE | ABOUT | RESEARCH | GALLERY | FAQ | BLOG -->
-  <nav class="topbar-nav">
-    <a href="#buy">STORE</a>
-    <a href="#about">ABOUT</a>
-    <a href="#research">RESEARCH</a>
-    <a href="#gallery">GALLERY</a>
-    <a href="faq.html">FAQ</a>
-    <a href="blog.html">BLOG</a>
-  </nav>
-
-  <!-- Hamburger (mobile) -->
-  <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">
+  <!-- Menu icon upper-left in the bar -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
+
+  <a href="#top" class="topbar-logo-link">
+    <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
+  </a>
+
+  <div class="topbar-title">
+    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  </div>
 </header>
 
-<!-- Mobile dropdown menu (same order) -->
-<nav class="mobile-menu" id="mobile-menu">
-  <a href="#buy">STORE</a>
-  <a href="#about">ABOUT</a>
-  <a href="#research">RESEARCH</a>
-  <a href="#gallery">GALLERY</a>
-  <a href="faq.html">FAQ</a>
-  <a href="blog.html">BLOG</a>
-</nav>
+<!-- Full-screen NAV overlay -->
+<div class="nav-backdrop" id="nav-backdrop">
+  <div class="nav-modal">
+    <h2 class="nav-modal-title">Navigation</h2>
+    <div class="nav-modal-links">
+      <a href="#buy" data-close-nav="true">STORE</a>
+      <a href="#about" data-close-nav="true">ABOUT</a>
+      <a href="#research" data-close-nav="true">RESEARCH</a>
+      <a href="#gallery" data-close-nav="true">GALLERY</a>
+      <a href="faq.html" data-close-nav="true">FAQ</a>
+      <a href="blog.html" data-close-nav="true">BLOG</a>
+    </div>
+  </div>
+</div>
 
 <main>
 
@@ -933,7 +916,6 @@ footer{
             <p>August realized his “creation” would have to be loved to be passed down through the ages, and his species would survive because people cared about it. South Florida’s subtropical climate makes it especially well suited, which is why Florida’s first dedicated MayaNut™ plantation is scheduled to open in January 2027 — the foundation for future MayaNut™ beverages, flours, and more.</p>
           </div>
 
-          <!-- New "More Information Coming Soon!" card -->
           <div class="about-text-card about-card-5">
             <p><strong>More Information Coming Soon!</strong></p>
           </div>
@@ -946,7 +928,7 @@ footer{
   <!-- TRANSITION: STORE -->
   <div class="transition-strip">STORE</div>
 
-  <!-- STORE (BUY) -->
+  <!-- STORE / BUY -->
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
@@ -984,7 +966,7 @@ footer{
   <!-- TRANSITION: RESEARCH -->
   <div class="transition-strip">RESEARCH</div>
 
-  <!-- RESEARCH (now above Gallery, with dramatic gradient background) -->
+  <!-- RESEARCH -->
   <section class="section section--research" id="research">
     <div class="section-inner">
       <div class="research-grid">
@@ -1002,10 +984,10 @@ footer{
     </div>
   </section>
 
-  <!-- TRANSITION: GALLERY (now at the bottom) -->
+  <!-- TRANSITION: GALLERY -->
   <div class="transition-strip">GALLERY</div>
 
-  <!-- GALLERY – now solid dark blue like the tab and placed after Research -->
+  <!-- GALLERY -->
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
       <h2>Gallery</h2>
@@ -1087,7 +1069,7 @@ footer{
 </div>
 
 <script>
-// Canvas snowflakes in hero (slow + few, and visible immediately)
+// Canvas snowflakes in hero (slow + few, visible immediately)
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1106,7 +1088,7 @@ footer{
   resize();
   window.addEventListener("resize", resize);
 
-  const FLAKE_COUNT = 60; // reduced snow
+  const FLAKE_COUNT = 60;
   const flakes = [];
 
   function random(min, max) {
@@ -1116,11 +1098,10 @@ footer{
   function createFlake(initial = false) {
     return {
       x: random(0, width),
-      // initial: place within view so we see snow immediately
       y: initial ? random(0, height) : random(-height * 0.2, 0),
       size: random(2, 5),
-      speedY: random(0.03, 0.12),   // slower vertical speed
-      speedX: random(-0.03, 0.03),  // gentle horizontal drift
+      speedY: random(0.03, 0.12),
+      speedX: random(-0.03, 0.03),
       sway: random(0.5, 1.5),
       swaySpeed: random(0.0005, 0.002),
       swayOffset: Math.random() * Math.PI * 2,
@@ -1132,7 +1113,7 @@ footer{
   function initFlakes() {
     flakes.length = 0;
     for (let i = 0; i < FLAKE_COUNT; i++) {
-      flakes.push(createFlake(true)); // all visible at start
+      flakes.push(createFlake(true));
     }
   }
 
@@ -1151,11 +1132,9 @@ footer{
       const x = Math.cos(angle) * armLength;
       const y = Math.sin(angle) * armLength;
 
-      // main arm
       ctx.moveTo(0, 0);
       ctx.lineTo(x, y);
 
-      // side branches
       const branchLen = armLength * 0.4;
       const sideAngle1 = angle + Math.PI / 6;
       const sideAngle2 = angle - Math.PI / 6;
@@ -1177,17 +1156,13 @@ footer{
   }
 
   function updateFlake(flake, deltaTime) {
-    // sway horizontally
     flake.x += flake.speedX * deltaTime +
       Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
-    // fall vertically
     flake.y += flake.speedY * deltaTime;
 
-    // rotate slowly
     flake.rotation += flake.rotationSpeed * deltaTime;
 
-    // recycle when out of view
     if (flake.y > height + flake.size * 2) {
       const replacement = createFlake(false);
       flake.x = replacement.x;
@@ -1201,7 +1176,6 @@ footer{
       flake.rotationSpeed = replacement.rotationSpeed;
     }
 
-    // wrap horizontally
     if (flake.x < -20) flake.x = width + 20;
     if (flake.x > width + 20) flake.x = -20;
   }
@@ -1209,7 +1183,7 @@ footer{
   let lastTime = performance.now();
 
   function animate(now) {
-    const TIME_SCALE = 0.15; // slow everything down
+    const TIME_SCALE = 0.15;
     const deltaTime = (now - lastTime) * TIME_SCALE;
     lastTime = now;
 
@@ -1268,23 +1242,41 @@ footer{
   }
 })();
 
-// Mobile nav (hamburger)
+// NAV overlay (hamburger menu)
 (function(){
   const toggle = document.getElementById('menu-toggle');
-  const mobileMenu = document.getElementById('mobile-menu');
+  const navBackdrop = document.getElementById('nav-backdrop');
 
-  if(!toggle || !mobileMenu) return;
+  if(!toggle || !navBackdrop) return;
 
-  toggle.addEventListener('click', () => {
-    toggle.classList.toggle('open');
-    mobileMenu.classList.toggle('open');
+  function openNav(){
+    navBackdrop.classList.add('open');
+    toggle.classList.add('open');
+  }
+
+  function closeNav(){
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(navBackdrop.classList.contains('open')){
+      closeNav();
+    }else{
+      openNav();
+    }
   });
 
-  // Close menu when a link is clicked
-  mobileMenu.querySelectorAll('a').forEach(link => {
+  navBackdrop.addEventListener('click', (e) => {
+    if(e.target === navBackdrop){
+      closeNav();
+    }
+  });
+
+  navBackdrop.querySelectorAll('[data-close-nav="true"]').forEach(link => {
     link.addEventListener('click', () => {
-      toggle.classList.remove('open');
-      mobileMenu.classList.remove('open');
+      closeNav();
     });
   });
 })();
@@ -1310,7 +1302,7 @@ footer{
   });
 })();
 
-// Logo tooltip logic (desktop + mobile behavior)
+// Logo tooltip logic (unchanged from earlier behavior)
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
@@ -1350,12 +1342,11 @@ footer{
     const rect = el.getBoundingClientRect();
     tooltip.textContent = getMessage();
 
-    // reset before measuring
     tooltip.style.top = '0px';
     tooltip.style.left = '0px';
 
     const width = tooltip.offsetWidth || 220;
-    const top = rect.top + rect.height + 8;  // just below logo (viewport coords)
+    const top = rect.top + rect.height + 8;
     const centerX = rect.left + rect.width / 2;
 
     tooltip.style.top = `${top}px`;
@@ -1375,7 +1366,6 @@ footer{
   const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
 
   if (!isCoarse){
-    // Desktop: hover shows tooltip, leave hides. Click behaves normally.
     logos.forEach(link => {
       link.addEventListener('mouseenter', () => {
         showTooltipFor(link);
@@ -1385,33 +1375,27 @@ footer{
       });
     });
   } else {
-    // Mobile / coarse pointer: tap once shows tooltip, second tap (if scrolled) scrolls home.
     logos.forEach(link => {
       link.addEventListener('click', (e) => {
         e.stopPropagation();
 
         if (!tooltipVisible || lastLogo !== link){
-          // first tap -> show tooltip, no navigation
           e.preventDefault();
           showTooltipFor(link);
           return;
         }
 
-        // second tap while tooltip visible on same logo
         if (atTop()){
-          // at top: do nothing, tooltip stays up, no nav
           e.preventDefault();
           return;
         }
 
-        // scrolled: go home smoothly
         e.preventDefault();
         hideTooltip();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
 
-    // Clicking anywhere else hides tooltip
     document.addEventListener('click', () => {
       if (tooltipVisible){
         hideTooltip();
@@ -1419,7 +1403,6 @@ footer{
     });
   }
 
-  // If user scrolls while tooltip is visible, update its text/position
   window.addEventListener('scroll', () => {
     if (tooltipVisible && lastLogo){
       showTooltipFor(lastLogo);
