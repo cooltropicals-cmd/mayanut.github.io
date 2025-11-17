@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MayaNut Blog</title>
+<title>The MayaNut Company</title>
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
@@ -21,13 +21,22 @@
 <style>
 :root{
   --bg:#18A7FF;
+  /* Main blue background: shaded, dreamy */
   --bg-grad:
     radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
+
+  /* Store page – mostly white with lavender at edges */
+  --buy-grad:
+    radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
+    linear-gradient(180deg,#ffffff 0%, #ffffff 100%);
+
   --bar:#0a56c2;
   --bar-h:60px;
+  --card-bg:#ffffff;
 }
 
 /* GLOBAL */
@@ -45,10 +54,17 @@ html,body{
   color:#fff;
 }
 
-/* Background */
+/* animated lava-lamp background */
 body{
   background:var(--bg-grad);
-  background-attachment:fixed;
+  background-size:200% 200%;
+  animation:bgFloat 40s ease-in-out infinite alternate;
+}
+
+@keyframes bgFloat{
+  0%   { background-position:0% 0%; }
+  50%  { background-position:50% 100%; }
+  100% { background-position:100% 0%; }
 }
 
 /* TOP BAR */
@@ -67,7 +83,7 @@ body{
   box-sizing:border-box;
 }
 
-/* Hamburger */
+/* Hamburger (always visible, left) */
 .menu-toggle{
   position:absolute;
   left:16px;
@@ -88,7 +104,7 @@ body{
   display:block;
   height:3px;
   border-radius:999px;
-  background:#ffffff;
+  background:#ffffff; /* stays white even when overlay is open */
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
@@ -101,7 +117,7 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* Logo */
+/* Logo under bar */
 .topbar-logo-link{
   position:absolute;
   left:10px;
@@ -114,6 +130,7 @@ body{
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
 
+/* Title */
 .topbar-title{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
@@ -165,6 +182,8 @@ body{
   margin:0 0 10px;
   font-weight:700;
   font-size:18px;
+  text-decoration:underline;
+  text-underline-offset:4px;
 }
 .nav-modal-links{
   display:flex;
@@ -198,44 +217,376 @@ body{
   cursor:pointer;
 }
 
-/* MAIN CONTENT */
-main{
+/* HERO */
+.hero{
+  position:relative;
+  min-height:100vh;
   padding-top:var(--bar-h);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
 }
 
-/* Blog section */
-.section{
-  padding:90px 16px 80px;
+/* subtle glow behind hero content */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.18), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12), transparent 65%);
+  pointer-events:none;
+  z-index:0;
 }
+
+.hero-inner{
+  width:100%;
+  max-width:1100px;
+  padding:0 16px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:40px;
+  position:relative;
+  z-index:1;
+}
+
+/* Snow canvas over hero */
+canvas#snow{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Right side – text + image */
+.hero-right{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  width:100%;
+}
+
+/* Glass Headline */
+.hero-headline{
+  flex:1;
+  max-width:520px;
+  margin-left:8px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:70px;
+  line-height:1.05;
+  font-weight:400;
+  color:#ffffff;
+  -webkit-text-stroke:3px #0057c8;
+  text-stroke:3px #0057c8;
+  text-shadow:
+    0 3px 0 #0057c8,
+    0 6px 12px rgba(0,0,0,0.4);
+}
+
+.hero-headline span{
+  display:block;
+}
+
+.hero-headline .headline-coming{
+  text-decoration:underline;
+  text-decoration-color:var(--bar);
+  text-underline-offset:4px;
+}
+
+/* Glass image */
+.hero-image-wrap{
+  flex:0 0 auto;
+  margin-left:auto; /* push to the right */
+}
+
+.hero-image-link{
+  display:inline-block;
+}
+
+.hero-glass{
+  width:480px;          /* a bit bigger */
+  max-width:80vw;
+  display:block;
+  cursor:pointer;
+  transition:transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.hero-image-link:hover .hero-glass{
+  transform:scale(1.08);
+  box-shadow:0 0 40px rgba(255,255,255,0.95);
+}
+
+/* THIN TRANSITION STRIPS */
+.transition-strip{
+  background:linear-gradient(
+    90deg,
+    #4aa9ff 0%,
+    #041b49 22%,
+    #aa00fe 50%,
+    #041b49 78%,
+    #4aa9ff 100%
+  );
+  color:#f5fbff;
+  text-align:center;
+  padding:14px 16px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing:0.06em;
+  font-size:15px;
+  position:relative;
+  z-index:1;
+  text-shadow:0 1px 2px rgba(0,0,0,0.45);
+  border-top:1px solid rgba(255,255,255,0.4);
+  border-bottom:1px solid rgba(0,0,0,0.45);
+  box-shadow:0 3px 8px rgba(0,0,0,0.45);
+}
+
+/* SECTIONS */
+.section{
+  padding:70px 16px 80px;
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+
 .section-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* ONLY CURVED TRANSITION: Top of ABOUT on desktop */
+.section--about::before{
+  content:"";
+  position:absolute;
+  top:-60px;
+  left:50%;
+  transform:translateX(-50%);
+  width:130%;
+  height:120px;
+  border-radius:50% 50% 0 0;
+  z-index:-1;
+  background:var(--bar); /* same dark blue */
+}
+
+/* ABOUT */
+.section--about{
+  background:var(--bar);  /* solid dark blue */
+  color:#fff;
+}
+
+/* ABOUT layout – 2 columns: images left, 4 text cards right */
+.about-grid{
+  display:grid;
+  grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+
+.about-images{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.about-images img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+}
+.about-images .square{
+  aspect-ratio:1/1;
+}
+
+/* Right column: 4 cards aligned with 4 images */
+.about-text-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.about-text-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 20px 20px;
+  box-shadow:0 3px 14px rgba(0,0,0,0.25);
+  color:#3b3f7a;
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* Individualized white → lavender streaks left-to-right */
+.about-card-1{
+  background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
+}
+.about-card-2{
+  background:linear-gradient(90deg, #efe3ff 0%, #ffffff 70%);
+}
+.about-card-3{
+  background:linear-gradient(90deg, #eadbff 0%, #ffffff 70%);
+}
+.about-card-4{
+  background:linear-gradient(90deg, #e3d2ff 0%, #ffffff 70%);
+}
+
+.about-text-card h2,
+.about-text-card h3{
+  margin-top:0;
+  margin-bottom:8px;
+  color:#30346a;
+}
+
+/* STORE – white + lavender at edges, with horizontal scroller */
+.section--buy{
+  background:var(--buy-grad);
+  color:#083b7c;
+  padding:40px 16px 60px; /* slightly thinner vertically */
+}
+
+.store-inner{
   max-width:900px;
   margin:0 auto;
 }
 
-.blog-card{
-  background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
-  border-radius:20px;
-  padding:24px 24px 26px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.35);
-  color:#2f3564;
+.store-heading{
+  text-align:center;
+  margin-bottom:22px;
 }
-.blog-card h1{
-  margin:0 0 10px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:28px;
-  color:#273053;
+
+.store-heading h2{
+  margin:0 0 6px;
+  font-size:22px;
+  color:#2b346c;
 }
-.blog-card p{
-  margin:0 0 10px;
-  line-height:1.8;
+.store-heading p{
+  margin:0;
+  font-size:14px;
+  color:#4a5288;
+}
+
+/* horizontal scroll area */
+.store-scroller-wrapper{
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+
+.store-scroller{
+  display:flex;
+  gap:16px;
+  padding-bottom:4px;
+}
+
+.store-item{
+  flex:0 0 220px;
+  background:linear-gradient(135deg,#f0e8ff 0%,#ffffff 45%,#e4defe 100%);
+  border-radius:18px;
+  padding:14px 14px 18px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.16);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.store-item-image{
+  width:100%;
+  aspect-ratio:4/5;
+  border-radius:14px;
+  background:radial-gradient(circle at 30% 20%, #f0e8ff 0, #ffffff 45%, #e4defe 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#5f63a8;
+  font-weight:600;
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.store-item-label{
+  font-size:14px;
+  color:#40437a;
+  text-align:center;
+}
+
+/* RESEARCH – blue gradient background like main */
+.section--research{
+  background:var(--bg-grad);
+  color:#fff;
+}
+
+.research-grid{
+  display:grid;
+  grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+
+.research-image-wrap img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 2px 10px rgba(0,0,0,0.22);
+}
+
+.research-text{
+  font-size:15px;
+  line-height:1.7;
+}
+
+.research-text p{
+  margin:0 0 12px;
+}
+
+/* GALLERY – see animated body background through it */
+.section--gallery{
+  background:transparent;
+}
+
+.gallery-inner{
+  text-align:center;
+}
+
+.gallery-inner h2{
+  margin:0 0 12px;
+  font-size:22px;
+}
+
+.gallery-inner p{
+  margin:0 0 18px;
   font-size:15px;
 }
 
-/* Bottom logo section */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  max-width:900px;
+  margin:0 auto;
+}
+.gallery-tile{
+  aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
+}
+.gallery-tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.gallery-tile:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* Bottom logo section – gradient like main */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
-  padding:50px 16px 70px;
 }
 .section--bottom-logo img{
   width:200px;
@@ -244,22 +595,26 @@ main{
   cursor:pointer;
 }
 
-/* Footer same as main */
+/* Footer – solid dark blue */
 footer{
   background:var(--bar);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
 }
+
 .footer-inner{
   max-width:1100px;
   margin:0 auto;
 }
+
 .footer-line{
   border:none;
   border-top:1px solid rgba(255,255,255,0.25);
   margin:0 0 10px;
 }
+
+/* Layout: text links left, icon right */
 .footer-row{
   display:flex;
   align-items:center;
@@ -267,54 +622,49 @@ footer{
   gap:16px;
   flex-wrap:wrap;
 }
+
 .footer-links{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
 }
+
 .footer-links a{
   color:#d5e3ff;
   text-decoration:none;
   border-bottom:1px dashed rgba(213,227,255,0.6);
   cursor:pointer;
 }
+
+/* Instagram icon – cleaned up */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:30px;
-  height:30px;
-  border-radius:8px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
   border:2px solid #ffffff;
-  position:relative;
   text-decoration:none;
 }
 .footer-instagram span{
-  display:none;
+  display:inline-block;
+  font-size:13px;
+  font-weight:600;
+  color:#ffffff;
+  letter-spacing:0.05em;
 }
-.footer-instagram a::before{
-  content:"";
-  width:14px;
-  height:14px;
-  border:2px solid #ffffff;
-  border-radius:4px;
-}
+.footer-instagram a::before,
 .footer-instagram a::after{
-  content:"";
-  position:absolute;
-  width:3px;
-  height:3px;
-  border-radius:50%;
-  background:#ffffff;
-  top:8px;
-  right:8px;
+  content:none;
 }
+
 .footer-copy{
   font-size:12px;
   margin-top:6px;
 }
 
-/* Privacy modal */
+/* Modal (Privacy / DNS) */
 .modal-backdrop{
   position:fixed;
   inset:0;
@@ -324,6 +674,7 @@ footer{
   justify-content:center;
   z-index:2000;
 }
+
 .modal{
   background:#ffffff;
   color:#123055;
@@ -334,14 +685,17 @@ footer{
   box-shadow:0 6px 20px rgba(0,0,0,0.35);
   font-size:14px;
 }
+
 .modal h3{
   margin:0 0 8px;
   font-size:16px;
 }
+
 .modal p{
   margin:0 0 6px;
   line-height:1.6;
 }
+
 .modal-close{
   margin-top:10px;
   display:inline-flex;
@@ -354,20 +708,123 @@ footer{
   cursor:pointer;
 }
 
-/* Responsive tweaks */
-@media(max-width:600px){
-  .section{
-    padding:80px 14px 60px;
+/* WELCOME POPUP */
+.welcome-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2500;
+}
+.welcome-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:20px 22px 22px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  position:relative;
+  text-align:left;
+  font-size:14px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+}
+.welcome-title{
+  margin:0 0 8px;
+  font-weight:700;
+  font-size:18px;
+}
+.welcome-modal p{
+  margin:0 0 8px;
+}
+.welcome-close{
+  position:absolute;
+  top:10px;
+  right:14px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* Responsive */
+@media(max-width:800px){
+  .hero-inner{
+    flex-direction:column;
+    padding-top:8px;
+    gap:32px;
   }
-  .blog-card{
-    padding:20px 18px 22px;
+
+  /* MOBILE HERO: image on top, text below */
+  .hero-right{
+    flex-direction:column-reverse; /* image first, text second */
+    align-items:center;
+    gap:24px;
   }
-  .blog-card h1{
-    font-size:24px;
+
+  .hero-headline{
+    font-size:40px;
+    max-width:none;
+    -webkit-text-stroke:2px #0057c8;
+    text-stroke:2px #0057c8;
+    text-align:center;
+    margin-left:0;
+  }
+
+  .hero-image-wrap{
+    margin-left:0;
+    align-self:center;
+  }
+
+  .about-grid,
+  .research-grid{
+    grid-template-columns:1fr;
+  }
+
+  .gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .footer-row{
+    flex-direction:row;
+    justify-content:space-between;
+  }
+
+  /* MOBILE: no curved transition (flat only) */
+  .section--about::before{
+    display:none;
+  }
+
+  .transition-strip{
+    font-size:13px;
+    letter-spacing:0.04em;
+  }
+
+  .store-item{
+    flex:0 0 70vw; /* easier to scroll on phones */
+  }
+}
+
+/* Extra-small screens: gently reduce hero glass + text */
+@media(max-width:500px){
+  .hero-glass{
+    max-width:70vw;
+  }
+  .hero-headline{
+    font-size:32px;
   }
 }
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -377,10 +834,9 @@ footer{
     <span></span>
   </button>
 
-  <a href="index.html#top" class="topbar-logo-link">
+  <a href="#top" class="topbar-logo-link">
     <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
   </a>
-
   <div class="topbar-title">
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
@@ -390,12 +846,12 @@ footer{
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Navigation</h2>
+    <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
-      <a href="index.html#buy" data-close-nav="true">STORE</a>
-      <a href="index.html#about" data-close-nav="true">ABOUT</a>
-      <a href="index.html#research" data-close-nav="true">RESEARCH</a>
-      <a href="index.html#gallery" data-close-nav="true">GALLERY</a>
+      <a href="#buy" data-close-nav="true">STORE</a>
+      <a href="#about" data-close-nav="true">ABOUT</a>
+      <a href="#research" data-close-nav="true">RESEARCH</a>
+      <a href="#gallery" data-close-nav="true">GALLERY</a>
       <a href="faq.html" data-close-nav="true">FAQ</a>
       <a href="blog.html" data-close-nav="true">BLOG</a>
     </div>
@@ -403,24 +859,165 @@ footer{
 </div>
 
 <main>
-  <section class="section">
-    <div class="section-inner">
-      <div class="blog-card">
-        <h1>MayaNut Blog</h1>
-        <p>Hello, this is the blog for mayanut.com and I just want to say it's been a real cool journey bringing these plants into reality.</p>
-        <p>As our trees grow and the first plantation takes shape in South Florida, this space will be where we share updates, experiments, tiny victories, and lessons learned along the way. From seed germination and field notes to beverage testing days, this is where the story lives.</p>
-        <p>Thanks for visiting and for caring about Brosimum alicastrum — the ancient rainforest tree at the heart of The MayaNut Company.</p>
+
+  <!-- HERO / TOP -->
+  <section class="hero" id="top">
+    <canvas id="snow"></canvas>
+
+    <div class="hero-inner">
+      <div class="hero-right">
+        <div class="hero-headline">
+          <span>MayaNut</span>
+          <span>Beverage</span>
+          <span class="headline-coming">Coming Soon!</span>
+        </div>
+
+        <div class="hero-image-wrap">
+          <a href="#buy" class="hero-image-link">
+            <img src="rach20.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section--bottom-logo">
+  <!-- TRANSITION: ABOUT -->
+  <div class="transition-strip">About</div>
+
+  <!-- ABOUT -->
+  <section class="section section--about" id="about">
     <div class="section-inner">
-      <a href="index.html#top">
+      <div class="about-grid">
+        <div class="about-images">
+          <img src="rach15.jpg" alt="MayaNut fruit (Brosimum alicastrum)">
+          <img src="rach16.jpg" class="square" alt="Founder August Kokus">
+          <img src="rach17.jpg" alt="Brosimum alicastrum plantation">
+          <img src="rach14.jpg" alt="MayaNut products and development">
+        </div>
+
+        <div class="about-text-col">
+          <div class="about-text-card about-card-1">
+            <h2>About MayaNut™</h2>
+            <p>MayaNut™ is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit that is chewy with a syrupy, slightly tangy taste. The fruit, which is elusively talked about, is best eaten fresh when red — it has a very short shelf life.</p>
+          </div>
+
+          <div class="about-text-card about-card-2">
+            <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an under-utilized species, which is why we are developing the first MayaNut™ plantation in the United States.</p>
+          </div>
+
+          <div class="about-text-card about-card-3">
+            <h3>About August Kokus</h3>
+            <p>August Kokus had a vision to create something that lasts. In 2025, he founded The MayaNut Company, Inc. to preserve a species. He realized he could create whatever he wanted, but whatever that was, it had to endure. It couldn’t simply be a painting or a song — those fade and are forgotten. Give humanity something they love, though, and it will be carried forward.</p>
+          </div>
+
+          <div class="about-text-card about-card-4">
+            <p>August realized his “creation” would have to be loved to be passed down through the ages, and his species would survive because people cared about it. South Florida’s subtropical climate makes it especially well suited, which is why Florida’s first dedicated MayaNut™ plantation is scheduled to open in January 2027 — the foundation for future MayaNut™ beverages, flours, and more.</p>
+            <p><strong>More Information Coming Soon!</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: STORE -->
+  <div class="transition-strip">Store</div>
+
+  <!-- STORE (BUY) -->
+  <section class="section section--buy" id="buy">
+    <div class="section-inner store-inner">
+      <div class="store-heading">
+        <h2>MayaNut™ Store — Coming Soon</h2>
+        <p>Scroll to preview future beverages, flours, and more. These are placeholder products while the first plantation grows.</p>
+      </div>
+
+      <div class="store-scroller-wrapper">
+        <div class="store-scroller">
+          <div class="store-item">
+            <div class="store-item-image">Product 1</div>
+            <div class="store-item-label">Chilled MayaNut™ Beverage</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 2</div>
+            <div class="store-item-label">MayaNut™ Beverage – Vanilla</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 3</div>
+            <div class="store-item-label">MayaNut™ Beverage – Mocha</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 4</div>
+            <div class="store-item-label">MayaNut™ Flour</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 5</div>
+            <div class="store-item-label">Future MayaNut™ Treats</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: RESEARCH -->
+  <div class="transition-strip">Research</div>
+
+  <!-- RESEARCH -->
+  <section class="section section--research" id="research">
+    <div class="section-inner">
+      <div class="research-grid">
+        <div class="research-image-wrap">
+          <img src="rach18.jpg" alt="Brosimum alicastrum research image">
+        </div>
+        <div class="research-text">
+          <p><strong>Brosimum alicastrum</strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it does occur in more sporadic populations all the way north to Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica, possibly through deliberate human seed migration for agricultural or religious reasons.</p>
+
+          <p>Historically, the species <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people but probably many other cultures overlapping its range. The tree was probably used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
+
+          <p>Today, it is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient rainforest tree. The MayaNut Company is working in South Florida to establish America's first <em>Brosimum alicastrum</em> farm, as this species is widely underutilized.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: GALLERY -->
+  <div class="transition-strip">Gallery</div>
+
+  <!-- GALLERY -->
+  <section class="section section--gallery" id="gallery">
+    <div class="section-inner gallery-inner">
+      <h2>Gallery</h2>
+      <p>Images from our trees, fruit, and future products — coming soon.</p>
+      <div class="gallery-grid">
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery image">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM LOGO SECTION -->
+  <section class="section section--bottom-logo">
+    <div class="section-inner">
+      <a href="#top">
         <img src="rach3.png" alt="The MayaNut Company logo">
       </a>
     </div>
   </section>
+
 </main>
 
 <footer>
@@ -443,6 +1040,16 @@ footer{
   </div>
 </footer>
 
+<!-- Welcome popup -->
+<div class="welcome-backdrop" id="welcome-backdrop">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
+    <h2 class="welcome-title">Welcome to MayaNut.com</h2>
+    <p>We are currently developing Florida's first MayaNut plantation.</p>
+    <p>Thank you — we hope to be serving you our delicious MayaNut Beverage by 2028. Thank you for your patience!</p>
+  </div>
+</div>
+
 <!-- Privacy / DNS Modal -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -456,7 +1063,180 @@ footer{
 </div>
 
 <script>
-// NAV overlay
+// Canvas snowflakes in hero (slow + few)
+(function () {
+  const canvas = document.getElementById("snow");
+  if (!canvas) return;
+  const hero = canvas.parentElement;
+  const ctx = canvas.getContext("2d");
+
+  let width = hero.clientWidth;
+  let height = hero.clientHeight;
+
+  function resize() {
+    width = hero.clientWidth;
+    height = hero.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const FLAKE_COUNT = 60; // reduced snow
+  const flakes = [];
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createFlake() {
+    return {
+      x: random(0, width),
+      y: random(-height, 0),
+      size: random(2, 5),
+      speedY: random(0.03, 0.12),   // slower vertical speed
+      speedX: random(-0.03, 0.03),  // gentle horizontal drift
+      sway: random(0.5, 1.5),
+      swaySpeed: random(0.0005, 0.002),
+      swayOffset: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: random(-0.003, 0.003)
+    };
+  }
+
+  function initFlakes() {
+    flakes.length = 0;
+    for (let i = 0; i < FLAKE_COUNT; i++) {
+      flakes.push(createFlake());
+    }
+  }
+
+  function drawFlake(flake) {
+    ctx.save();
+    ctx.translate(flake.x, flake.y);
+    ctx.rotate(flake.rotation);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.lineWidth = 1;
+
+    const armLength = flake.size;
+
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 / 6) * i;
+      const x = Math.cos(angle) * armLength;
+      const y = Math.sin(angle) * armLength;
+
+      // main arm
+      ctx.moveTo(0, 0);
+      ctx.lineTo(x, y);
+
+      // side branches
+      const branchLen = armLength * 0.4;
+      const sideAngle1 = angle + Math.PI / 6;
+      const sideAngle2 = angle - Math.PI / 6;
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle1) * branchLen,
+        y * 0.4 + Math.sin(sideAngle1) * branchLen
+      );
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle2) * branchLen,
+        y * 0.4 + Math.sin(sideAngle2) * branchLen
+      );
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function updateFlake(flake, deltaTime) {
+    // sway horizontally
+    flake.x += flake.speedX * deltaTime +
+      Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
+
+    // fall vertically
+    flake.y += flake.speedY * deltaTime;
+
+    // rotate slowly
+    flake.rotation += flake.rotationSpeed * deltaTime;
+
+    // recycle when out of view
+    if (flake.y > height + flake.size * 2) {
+      flake.x = random(0, width);
+      flake.y = random(-height * 0.2, 0);
+      flake.speedY = random(0.03, 0.12);
+    }
+
+    // wrap horizontally
+    if (flake.x < -20) flake.x = width + 20;
+    if (flake.x > width + 20) flake.x = -20;
+  }
+
+  let lastTime = performance.now();
+
+  function animate(now) {
+    const TIME_SCALE = 0.15; // slow everything down
+    const deltaTime = (now - lastTime) * TIME_SCALE;
+    lastTime = now;
+
+    ctx.clearRect(0, 0, width, height);
+
+    for (const flake of flakes) {
+      updateFlake(flake, deltaTime);
+      drawFlake(flake);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  initFlakes();
+  requestAnimationFrame(animate);
+})();
+
+// Privacy / DNS modal
+(function(){
+  const backdrop = document.getElementById('modal-backdrop');
+  const titleEl = document.getElementById('modal-title');
+  const bodyEl  = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('modal-close');
+  const privacyLink = document.getElementById('privacy-link');
+  const dnsLink = document.getElementById('dns-link');
+
+  function openModal(kind){
+    if(kind === 'privacy'){
+      titleEl.textContent = 'Privacy Policy';
+      bodyEl.innerHTML = `
+        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+        <p>We do not sell your personal information.</p>
+      `;
+    }else{
+      titleEl.textContent = 'Do Not Sell My Info';
+      bodyEl.innerHTML = `
+        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
+        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+      `;
+    }
+    backdrop.style.display = 'flex';
+  }
+
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
+})();
+
+// NAV overlay (hamburger)
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
@@ -502,48 +1282,28 @@ footer{
   });
 })();
 
-// Privacy modal
+// Welcome popup
 (function(){
-  const backdrop = document.getElementById('modal-backdrop');
-  const titleEl = document.getElementById('modal-title');
-  const bodyEl  = document.getElementById('modal-body');
-  const closeBtn = document.getElementById('modal-close');
-  const privacyLink = document.getElementById('privacy-link');
-  const dnsLink = document.getElementById('dns-link');
+  const welcomeBackdrop = document.getElementById('welcome-backdrop');
+  const welcomeClose = document.getElementById('welcome-close');
 
-  function openModal(kind){
-    if(kind === 'privacy'){
-      titleEl.textContent = 'Privacy Policy';
-      bodyEl.innerHTML = `
-        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-        <p>We do not sell your personal information.</p>
-      `;
-    }else{
-      titleEl.textContent = 'Do Not Sell My Info';
-      bodyEl.innerHTML = `
-        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
-        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
-      `;
-    }
-    backdrop.style.display = 'flex';
+  if(!welcomeBackdrop || !welcomeClose) return;
+
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+  });
+
+  function closeWelcome(){
+    welcomeBackdrop.style.display = 'none';
   }
 
-  function closeModal(){
-    backdrop.style.display = 'none';
-  }
-
-  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
-  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (backdrop) {
-    backdrop.addEventListener('click', (e) => {
-      if(e.target === backdrop) closeModal();
-    });
-  }
+  welcomeClose.addEventListener('click', closeWelcome);
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if(e.target === welcomeBackdrop) closeWelcome();
+  });
 })();
 
-// Logo tooltip (same behavior as main)
+// Logo tooltip (desktop hover + mobile tap behavior)
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
@@ -627,7 +1387,7 @@ footer{
 
         e.preventDefault();
         hideTooltip();
-        window.location.href = 'index.html#top';
+        window.location.href = '#top';
       });
     });
 
