@@ -114,7 +114,7 @@ body{
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
 
-/* Title centered */
+/* Title centered (desktop) */
 .topbar-title{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
@@ -138,18 +138,7 @@ body{
   white-space:nowrap;
 }
 
-@media (max-width: 600px){
-  .topbar-title{
-    font-size:14px;
-    max-width:45%;
-  }
-  .topbar-home{
-    font-size:11px;
-    padding:3px 10px;
-  }
-}
-
-/* Hamburger button – upper-left of bar */
+/* Hamburger button – default (desktop) */
 .menu-toggle{
   position:absolute;
   left:16px;
@@ -183,7 +172,7 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* LANGUAGE SWITCHER – upper right */
+/* LANGUAGE SWITCHER – default (desktop) */
 .topbar-lang{
   position:absolute;
   right:12px;
@@ -212,17 +201,6 @@ body{
 }
 .topbar-lang select option{
   color:#000;
-}
-
-/* Mobile: hide label text if tight */
-@media (max-width: 600px){
-  .topbar-lang-label{
-    display:none;
-  }
-  .topbar-lang select{
-    font-size:11px;
-    padding:2px 5px;
-  }
 }
 
 /* FULL-SCREEN NAV OVERLAY */
@@ -857,7 +835,7 @@ footer{
   cursor:pointer;
 }
 
-/* Responsive */
+/* Responsive layout adjustments */
 @media(max-width:800px){
   .hero-inner{
     flex-direction:column;
@@ -909,6 +887,57 @@ footer{
   }
 }
 
+/* MOBILE-SPECIFIC HEADER LAYOUT */
+@media (max-width:600px){
+  .topbar{
+    justify-content:space-between;
+  }
+
+  /* Move menu into the normal flex flow on the left */
+  .menu-toggle{
+    position:relative;
+    left:auto;
+    top:auto;
+    transform:none;
+    order:1;
+    margin-right:6px;
+  }
+
+  /* Christmas text smaller, wraps nicely in center */
+  .topbar-title{
+    order:2;
+    font-size:13px;
+    max-width:60%;
+    white-space:normal;
+    line-height:1.2;
+  }
+
+  /* Home button stays by the title, if visible */
+  .topbar-home{
+    order:3;
+    font-size:11px;
+    padding:3px 10px;
+  }
+
+  /* Language selector on the right, no overlap */
+  .topbar-lang{
+    position:relative;
+    right:auto;
+    top:auto;
+    transform:none;
+    order:4;
+  }
+
+  .topbar-lang-label{
+    display:none;
+  }
+
+  .topbar-lang select{
+    font-size:11px;
+    padding:2px 5px;
+  }
+}
+
 /* Extra-small screens */
 @media(max-width:500px){
   .hero-glass{
@@ -924,7 +953,7 @@ footer{
 <body>
 
 <header class="topbar">
-  <!-- Menu icon upper-left -->
+  <!-- Menu icon -->
   <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span>
     <span></span>
