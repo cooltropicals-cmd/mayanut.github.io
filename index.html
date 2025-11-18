@@ -32,14 +32,14 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
 <style>
 :root{
   --bg:#18A7FF;
-  /* Your favorite blue background: lighter center, darker edges */
+  /* Favorite blue background: lighter center, darker edges */
   --bg-grad:
     radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
 
-  /* Store page – mostly white with lavender at edges (unchanged) */
+  /* Store page – mostly white with lavender at edges */
   --buy-grad:
     radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
     radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
@@ -50,7 +50,7 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
   --card-bg:#ffffff;
 }
 
-/* Give a bit more height on small screens so things don't get cut off */
+/* Slightly taller bar on very small screens so nothing gets cut off */
 @media (max-width: 600px){
   :root{
     --bar-h:70px;
@@ -70,9 +70,14 @@ html,body{
   scroll-behavior:smooth;
   font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color:#fff;
+  overflow-x:hidden; /* prevent sideways scroll on mobile */
 }
 
-/* MAIN BACKGROUND – static gradient, like the original */
+html{
+  background:#ffffff; /* “outside” of site is white if you overscroll */
+}
+
+/* MAIN BACKGROUND */
 body{
   background:var(--bg-grad);
   background-attachment:fixed;
@@ -92,11 +97,10 @@ body{
   border-bottom:1px solid rgba(255,255,255,0.25);
   padding:0 16px;
   box-sizing:border-box;
-  /* small safe-area padding on modern phones */
   padding-top:calc(4px + env(safe-area-inset-top, 0px));
 }
 
-/* Logo in upper-left, below tab */
+/* Logo in upper-left */
 .topbar-logo-link{
   position:absolute;
   left:10px;
@@ -119,7 +123,7 @@ body{
   max-width:60%;
 }
 
-/* Hamburger button – upper-left of bar */
+/* Hamburger button – upper-left */
 .menu-toggle{
   position:absolute;
   left:16px;
@@ -134,7 +138,7 @@ body{
   justify-content:space-between;
   padding:0;
   cursor:pointer;
-  z-index:2601; /* ABOVE nav overlay so it stays bright white */
+  z-index:2601;
 }
 .menu-toggle span{
   display:block;
@@ -166,6 +170,7 @@ body{
 }
 .topbar-lang-label{
   font-size:12px;
+  white-space:nowrap;
 }
 .topbar-lang select{
   font-size:12px;
@@ -180,11 +185,11 @@ body{
   color:#000;
 }
 
-/* Mobile: shrink title + hide label text so nothing is cut off */
+/* Mobile adjustments to avoid cut-off */
 @media (max-width: 600px){
   .topbar-title{
     font-size:14px;
-    max-width:55%;
+    max-width:52%;
   }
   .topbar-lang-label{
     display:none;
@@ -209,7 +214,7 @@ body{
   display:flex;
 }
 
-/* Nav modal – uses same style as welcome popup */
+/* Nav modal */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -225,23 +230,41 @@ body{
     radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
     radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
     #0a56c2;
-  position:relative; /* so the close X positions inside */
+  position:relative;
 }
 
+/* Title row: "Menu" + Home button */
 .nav-modal-title{
   margin:0 0 10px;
   font-weight:700;
   font-size:18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.nav-modal-title-text{
   text-decoration:underline;
 }
+.nav-home-link{
+  font-size:14px;
+  color:#ffffff;
+  text-decoration:none;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.7);
+  padding:3px 10px;
+  display:none; /* becomes visible via JS */
+}
+.nav-home-link.visible{
+  display:inline-flex;
+}
 
+/* Nav links */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
   gap:10px;
   margin-top:8px;
 }
-
 .nav-modal-links a{
   color:#ffffff;
   text-decoration:none;
@@ -494,7 +517,7 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE – keep white + lavender */
+/* STORE – white + lavender */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
@@ -637,7 +660,7 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – now uses the blue gradient */
+/* Bottom logo section – uses the blue gradient */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
@@ -650,7 +673,7 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* Footer – keep same solid dark blue */
+/* Footer */
 footer{
   background:var(--bar);
   color:#d5e3ff;
@@ -904,15 +927,23 @@ footer{
 
   <!-- Language selector upper-right -->
   <div class="topbar-lang">
-    <span class="topbar-lang-label">Language:</span>
+    <span class="topbar-lang-label">🌎 Language</span>
     <select id="language-select" aria-label="Site language">
-      <!-- For now everything points to English until you create the others -->
-      <option value="index.html" selected>English</option>
-      <option value="index-zh.html">中文</option>
-      <option value="index-hi.html">हिन्दी</option>
-      <option value="index-ru.html">Русский</option>
-      <option value="index-es.html">Español</option>
-      <option value="index-ar.html">العربية</option>
+      <!-- Order now with Portuguese after Spanish -->
+      <option value="index.html" selected>🌎 English</option>
+      <option value="index-es.html">🌎 Español</option>
+      <option value="index-pt.html">🌎 Português</option>
+      <option value="index-fr.html">🌍 Français</option>
+      <option value="index-de.html">🌍 Deutsch</option>
+      <option value="index-ru.html">🌍 Русский</option>
+      <option value="index-zh.html">🌏 中文</option>
+      <option value="index-ja.html">🌏 日本語</option>
+      <option value="index-id.html">🌏 Bahasa Indonesia</option>
+      <option value="index-hi.html">🌏 हिन्दी</option>
+      <option value="index-bn.html">🌏 বাংলা</option>
+      <option value="index-ur.html">🌏 اردو</option>
+      <option value="index-ar.html">🌍 العربية</option>
+      <option value="index-sw.html">🌍 Kiswahili</option>
     </select>
   </div>
 </header>
@@ -921,7 +952,10 @@ footer{
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Menu</h2>
+    <h2 class="nav-modal-title">
+      <span class="nav-modal-title-text">Menu</span>
+      <a href="#top" class="nav-home-link" id="nav-home-link">Home</a>
+    </h2>
     <div class="nav-modal-links">
       <a href="#buy" data-close-nav="true">STORE</a>
       <a href="#about" data-close-nav="true">ABOUT</a>
@@ -1088,7 +1122,7 @@ footer{
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION (gradient background now) -->
+  <!-- BOTTOM LOGO SECTION (gradient background) -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
@@ -1147,7 +1181,7 @@ footer{
   const select = document.getElementById('language-select');
   if (!select) return;
 
-  // If URL matches one of the language file names, set the dropdown accordingly
+  // detect current file name so dropdown matches
   const path = window.location.pathname;
   const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
@@ -1164,7 +1198,7 @@ footer{
   });
 })();
 
-// Canvas snowflakes in hero (slow + present immediately)
+// Canvas snowflakes in hero
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1406,8 +1440,7 @@ footer{
   });
 })();
 
-// Logo tooltip behavior (desktop hover + mobile tap)
-// FIXED so it doesn't get cut off at screen edges.
+// Logo tooltip behavior (desktop hover + mobile tap), with edge protection
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
@@ -1438,7 +1471,7 @@ footer{
 
   function getMessage(){
     if (atTop()){
-      return 'Welcome to mayanut.com Home of The MayaNut Company';
+      return 'Welcome to mayanut.com — Home of The MayaNut Company';
     }
     return '👆 Click to Return Home 👆';
   }
@@ -1481,12 +1514,8 @@ footer{
 
   if (!isCoarse){
     logos.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        showTooltipFor(link);
-      });
-      link.addEventListener('mouseleave', () => {
-        hideTooltip();
-      });
+      link.addEventListener('mouseenter', () => showTooltipFor(link));
+      link.addEventListener('mouseleave', hideTooltip);
     });
   } else {
     logos.forEach(link => {
@@ -1511,9 +1540,7 @@ footer{
     });
 
     document.addEventListener('click', () => {
-      if (tooltipVisible){
-        hideTooltip();
-      }
+      if (tooltipVisible) hideTooltip();
     });
   }
 
@@ -1522,6 +1549,33 @@ footer{
       positionTooltip(lastLogo.getBoundingClientRect());
     }
   });
+})();
+
+// HOME button visibility logic inside the Menu overlay
+(function(){
+  const homeLink = document.getElementById('nav-home-link');
+  if (!homeLink) return;
+
+  function onScrollOrLoad(){
+    const path = window.location.pathname;
+    const file = path.substring(path.lastIndexOf('/') + 1);
+    const isHome = (file === '' || file === 'index.html');
+
+    if (isHome){
+      // On home page: only show Home when scrolled down a bit
+      if (window.scrollY > 10){
+        homeLink.classList.add('visible');
+      } else {
+        homeLink.classList.remove('visible');
+      }
+    } else {
+      // On other pages, always visible (you'll reuse this script there)
+      homeLink.classList.add('visible');
+    }
+  }
+
+  window.addEventListener('scroll', onScrollOrLoad);
+  window.addEventListener('load', onScrollOrLoad);
 })();
 </script>
 
