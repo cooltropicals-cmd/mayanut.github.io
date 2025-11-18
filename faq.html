@@ -18,6 +18,17 @@
 
 <meta name="theme-color" content="#18A7FF" />
 
+<!-- SEO keywords + translations -->
+<meta name="description" content="Frequently asked questions about MayaNut™ (mayanut, maya nut), Brosimum alicastrum, breadnut and our future tropical tree plantation and products.">
+<meta name="keywords" content="
+MayaNut, mayanut, maya nut, Maya Nut, Brosimum alicastrum, breadnut, bread nut, tropical trees, rainforest tree, agroforestry,
+玛雅坚果, 热带树木, 热带雨林树,
+मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़,
+Маянат, хлебное дерево, тропические деревья,
+nuez maya, árbol tropical, Brosimum alicastrum,
+مايانَت, جوز المايا, أشجار استوائية
+">
+
 <style>
 :root{
   --bg:#18A7FF;
@@ -28,6 +39,13 @@
     #0a56c2;
   --bar:#0a56c2;
   --bar-h:60px;
+}
+
+/* More room on small screens */
+@media (max-width:600px){
+  :root{
+    --bar-h:70px;
+  }
 }
 
 /* GLOBAL */
@@ -65,6 +83,7 @@ body{
   border-bottom:1px solid rgba(255,255,255,0.25);
   padding:0 16px;
   box-sizing:border-box;
+  padding-top:calc(4px + env(safe-area-inset-top, 0px));
 }
 
 /* Hamburger */
@@ -101,37 +120,6 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* LANGUAGE SWITCHER – upper right of blue bar */
-.lang-switcher{
-  position:absolute;
-  right:16px;
-  top:50%;
-  transform:translateY(-50%);
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:12px;
-}
-.lang-label{
-  font-size:16px;
-}
-.lang-select{
-  font-size:12px;
-  padding:3px 8px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.7);
-  background:rgba(10,86,194,0.9);
-  color:#ffffff;
-  outline:none;
-  cursor:pointer;
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  appearance:none;
-}
-.lang-select option{
-  color:#000;
-}
-
 /* Logo */
 .topbar-logo-link{
   position:absolute;
@@ -151,6 +139,7 @@ body{
   text-align:center;
   display:inline-block;
   animation:merrygiggle 6s ease-in-out infinite;
+  max-width:60%;
 }
 
 @keyframes merrygiggle{
@@ -159,6 +148,47 @@ body{
   50%  { transform:translateX(0); }
   75%  { transform:translateX(-4px); }
   100% { transform:translateX(0); }
+}
+
+/* LANGUAGE SWITCHER – upper right */
+.topbar-lang{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+}
+.topbar-lang-label{
+  font-size:12px;
+}
+.topbar-lang select{
+  font-size:12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.7);
+  background:rgba(10,86,194,0.9);
+  color:#fff;
+  padding:3px 6px;
+  outline:none;
+}
+.topbar-lang select option{
+  color:#000;
+}
+
+@media (max-width:600px){
+  .topbar-title{
+    font-size:14px;
+    max-width:55%;
+  }
+  .topbar-lang-label{
+    display:none;
+  }
+  .topbar-lang select{
+    font-size:11px;
+    padding:2px 5px;
+  }
 }
 
 /* NAV OVERLAY */
@@ -196,6 +226,7 @@ body{
   margin:0 0 10px;
   font-weight:700;
   font-size:18px;
+  text-decoration:underline;
 }
 .nav-modal-links{
   display:flex;
@@ -434,15 +465,13 @@ footer{
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
 
-  <!-- LANGUAGE SWITCHER (upper right) -->
-  <div class="lang-switcher">
-    <span class="lang-label" aria-hidden="true">🌎</span>
-    <select class="lang-select" aria-label="Choose language"
-      onchange="if(this.value){ window.location.href=this.value; }">
-      <!-- Update these hrefs to your actual localized pages when you create them -->
-      <option value="index.html">EN</option>
+  <!-- Language selector -->
+  <div class="topbar-lang">
+    <span class="topbar-lang-label">Language:</span>
+    <select id="language-select" aria-label="Site language">
+      <option value="index.html">English</option>
       <option value="index-zh.html">中文</option>
-      <option value="index-hi.html">हिंदी</option>
+      <option value="index-hi.html">हिन्दी</option>
       <option value="index-ru.html">Русский</option>
       <option value="index-es.html">Español</option>
       <option value="index-ar.html">العربية</option>
@@ -454,7 +483,7 @@ footer{
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Navigation</h2>
+    <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
       <a href="index.html#buy" data-close-nav="true">STORE</a>
       <a href="index.html#about" data-close-nav="true">ABOUT</a>
@@ -471,33 +500,33 @@ footer{
     <div class="section-inner">
       <div class="faq-header">
         <h1>Frequently Asked Questions</h1>
-        <p>Answers to common questions about MayaNut™, our trees, and our future products.</p>
+        <p>Answers to common questions about MayaNut™ (mayanut, maya nut), our trees, and our future products.</p>
       </div>
 
       <div class="faq-list">
         <div class="faq-card">
           <h2>What is MayaNut™?</h2>
-          <p>MayaNut™ is the roasted seed of <em>Brosimum alicastrum</em>, a tropical rainforest tree. The seeds can be ground and used in beverages, baked goods, and other recipes, with a flavor that’s often compared to mild coffee or toasted cereal.</p>
+          <p>MayaNut™ is the roasted seed of <em>Brosimum alicastrum</em>, a tropical rainforest tree sometimes called breadnut. The seeds can be ground and used in beverages, baked goods, and other recipes, with a flavor that’s often compared to mild coffee or toasted cereal—but naturally caffeine-free.</p>
         </div>
 
         <div class="faq-card">
           <h2>When will your products be available?</h2>
-          <p>We are currently establishing Florida’s first dedicated <em>Brosimum alicastrum</em> plantation. Our goal is to have a chilled MayaNut™ Beverage ready for the public by around 2028, with flour and additional creations to follow.</p>
+          <p>We are currently establishing Florida’s first dedicated <em>Brosimum alicastrum</em> plantation of tropical trees. Our goal is to have a chilled MayaNut™ Beverage ready for the public by around 2028, with flour and additional creations to follow.</p>
         </div>
 
         <div class="faq-card">
           <h2>Where will the plantation be located?</h2>
-          <p>The project is based in South Florida, one of the few regions in the continental United States with the climate needed to support long-term MayaNut™ agriculture.</p>
+          <p>The project is based in South Florida, one of the few regions in the continental United States with the climate needed to support long-term MayaNut™ agriculture and tropical tree growth.</p>
         </div>
 
         <div class="faq-card">
           <h2>Is MayaNut™ coffee?</h2>
-          <p>No. MayaNut™ is naturally caffeine-free. While some people enjoy it as a coffee-like beverage due to its roasty flavor, it’s made from tree seeds, not coffee beans.</p>
+          <p>No. MayaNut™ is naturally caffeine-free. While some people enjoy it as a coffee-like beverage due to its roasty flavor, it’s made from tree seeds (breadnut) of <em>Brosimum alicastrum</em>, not coffee beans.</p>
         </div>
 
         <div class="faq-card">
           <h2>How can I stay updated?</h2>
-          <p>For now, the best way is to check this website and our Instagram page. As the plantation grows and products get closer to launch, we plan to share more updates through the blog and social media.</p>
+          <p>For now, the best way is to check this website and our Instagram page. As the plantation of tropical trees grows and products get closer to launch, we plan to share more updates through the blog and social media.</p>
         </div>
       </div>
     </div>
@@ -545,6 +574,29 @@ footer{
 </div>
 
 <script>
+// Language selector for FAQ page
+(function(){
+  const select = document.getElementById('language-select');
+  if (!select) return;
+
+  const path = window.location.pathname;
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+
+  // On FAQ we still point selector to the index.* versions,
+  // so user can hop between full home pages in different languages.
+  for (const opt of select.options){
+    if (opt.value === file){
+      opt.selected = true;
+      break;
+    }
+  }
+
+  select.addEventListener('change', function(){
+    const target = this.value || 'index.html';
+    window.location.href = target;
+  });
+})();
+
 // NAV overlay
 (function(){
   const toggle = document.getElementById('menu-toggle');
@@ -632,7 +684,7 @@ footer{
   }
 })();
 
-// Logo tooltip
+// Logo tooltip – same behavior as main page, with edge clamping
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
@@ -667,9 +719,7 @@ footer{
     return '👆 Click to Return Home 👆';
   }
 
-  function showTooltipFor(el){
-    const rect = el.getBoundingClientRect();
-    tooltip.textContent = getMessage();
+  function positionTooltip(rect){
     tooltip.style.top = '0px';
     tooltip.style.left = '0px';
 
@@ -677,10 +727,22 @@ footer{
     const top = rect.top + rect.height + 8;
     const centerX = rect.left + rect.width / 2;
 
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${centerX - width / 2}px`;
-    tooltip.style.opacity = '1';
+    const margin = 8;
+    let left = centerX - width / 2;
+    const maxLeft = window.innerWidth - width - margin;
 
+    if (left < margin) left = margin;
+    if (left > maxLeft) left = maxLeft;
+
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${left}px`;
+  }
+
+  function showTooltipFor(el){
+    const rect = el.getBoundingClientRect();
+    tooltip.textContent = getMessage();
+    tooltip.style.opacity = '1';
+    positionTooltip(rect);
     tooltipVisible = true;
     lastLogo = el;
   }
@@ -727,7 +789,7 @@ footer{
 
   window.addEventListener('scroll', () => {
     if (tooltipVisible && lastLogo){
-      showTooltipFor(lastLogo);
+      positionTooltip(lastLogo.getBoundingClientRect());
     }
   });
 })();
