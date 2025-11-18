@@ -54,7 +54,7 @@ html,body{
   color:#fff;
 }
 
-/* MAIN BACKGROUND – static gradient, like the original */
+/* MAIN BACKGROUND – static gradient */
 body{
   background:var(--bg-grad);
   background-attachment:fixed;
@@ -76,25 +76,59 @@ body{
   box-sizing:border-box;
 }
 
-/* Logo in upper-left, below tab */
+/* Logo under bar */
 .topbar-logo-link{
   position:absolute;
   left:10px;
   top:70px;
 }
 .topbar-logo{
-  height:150px;
-  width:150px;
+  height:100px;
+  width:100px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+  transition:transform 0.2s ease;
+}
+.topbar-logo-link:hover .topbar-logo{
+  transform:scale(1.05);
 }
 
+/* Merry text */
 .topbar-title{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
   display:inline-block;
   animation:merrygiggle 6s ease-in-out infinite;
+}
+
+/* LANGUAGE SWITCHER – upper right */
+.lang-switch{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+}
+.lang-label{
+  font-size:12px;
+  opacity:0.9;
+}
+.lang-select{
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.4);
+  color:#ffffff;
+  border-radius:999px;
+  padding:4px 10px;
+  font-size:12px;
+  cursor:pointer;
+  outline:none;
+}
+.lang-select option{
+  color:#000;
 }
 
 /* Hamburger button – upper-left of bar */
@@ -112,7 +146,7 @@ body{
   justify-content:space-between;
   padding:0;
   cursor:pointer;
-  z-index:2601; /* ABOVE nav overlay so it stays bright white */
+  z-index:2601; /* stays bright above overlay */
 }
 .menu-toggle span{
   display:block;
@@ -144,8 +178,6 @@ body{
 .nav-backdrop.open{
   display:flex;
 }
-
-/* Nav modal – uses same style as welcome popup */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -161,22 +193,19 @@ body{
     radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
     radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
     #0a56c2;
-  position:relative; /* so the close X positions inside */
+  position:relative;
 }
-
 .nav-modal-title{
   margin:0 0 10px;
   font-weight:700;
   font-size:18px;
 }
-
 .nav-modal-links{
   display:flex;
   flex-direction:column;
   gap:10px;
   margin-top:8px;
 }
-
 .nav-modal-links a{
   color:#ffffff;
   text-decoration:none;
@@ -191,8 +220,6 @@ body{
 .nav-modal-links a:hover{
   text-decoration:underline;
 }
-
-/* Small X inside menu popup */
 .nav-close{
   position:absolute;
   top:10px;
@@ -216,7 +243,6 @@ body{
   justify-content:center;
   overflow:hidden;
 }
-
 .hero-inner{
   width:100%;
   max-width:1100px;
@@ -240,7 +266,7 @@ canvas#snow{
   z-index:0;
 }
 
-/* Right side – text + image */
+/* Hero layout */
 .hero-right{
   display:flex;
   align-items:center;
@@ -249,7 +275,7 @@ canvas#snow{
   width:100%;
 }
 
-/* Glass Headline */
+/* Hero headline */
 .hero-headline{
   flex:1;
   max-width:520px;
@@ -265,11 +291,9 @@ canvas#snow{
     0 3px 0 #0057c8,
     0 6px 12px rgba(0,0,0,0.4);
 }
-
 .hero-headline span{
   display:block;
 }
-
 .hero-headline .headline-coming{
   text-decoration:underline;
   text-decoration-color:var(--bar);
@@ -277,16 +301,24 @@ canvas#snow{
   white-space:nowrap;
 }
 
+/* Hero subline with translations */
+.hero-subline{
+  margin-top:16px;
+  font-size:15px;
+  max-width:520px;
+  color:#e5f1ff;
+  text-shadow:0 1px 2px rgba(0,0,0,0.4);
+}
+
 /* Glass image */
 .hero-image-wrap{
   flex:0 0 auto;
   margin-left:auto;
 }
-
 .hero-image-link{
   display:inline-block;
+  position:relative;
 }
-
 .hero-glass{
   width:480px;
   max-width:80vw;
@@ -294,10 +326,31 @@ canvas#snow{
   cursor:pointer;
   transition:transform 0.22s ease, box-shadow 0.22s ease;
 }
-
 .hero-image-link:hover .hero-glass{
   transform:scale(1.08);
   box-shadow:0 0 40px rgba(255,255,255,0.95);
+}
+/* Tooltip for glass */
+.hero-image-link::after{
+  content:"Click to Learn More";
+  position:absolute;
+  bottom:-28px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#ffffff;
+  color:#123055;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+  transition:opacity 0.15s ease, transform 0.15s ease;
+}
+.hero-image-link:hover::after{
+  opacity:1;
+  transform:translateX(-50%) translateY(2px);
 }
 
 /* Merry Christmas wiggle */
@@ -340,7 +393,6 @@ canvas#snow{
   z-index:1;
   overflow:hidden;
 }
-
 .section-inner{
   max-width:1100px;
   margin:0 auto;
@@ -373,7 +425,6 @@ canvas#snow{
   gap:28px;
   align-items:flex-start;
 }
-
 .about-images{
   display:flex;
   flex-direction:column;
@@ -388,13 +439,11 @@ canvas#snow{
 .about-images .square{
   aspect-ratio:1/1;
 }
-
 .about-text-col{
   display:flex;
   flex-direction:column;
   gap:16px;
 }
-
 .about-text-card{
   background:#ffffff;
   border-radius:18px;
@@ -404,7 +453,6 @@ canvas#snow{
   font-size:15px;
   line-height:1.7;
 }
-
 /* White → lavender streaks */
 .about-card-1{
   background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
@@ -421,7 +469,6 @@ canvas#snow{
 .about-card-5{
   background:linear-gradient(90deg, #dde7ff 0%, #ffffff 70%);
 }
-
 .about-text-card h2,
 .about-text-card h3{
   margin-top:0;
@@ -429,23 +476,20 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE – keep white + lavender */
+/* STORE – white + lavender */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
   padding:40px 16px 60px;
 }
-
 .store-inner{
   max-width:900px;
   margin:0 auto;
 }
-
 .store-heading{
   text-align:center;
   margin-bottom:22px;
 }
-
 .store-heading h2{
   margin:0 0 6px;
   font-size:22px;
@@ -456,19 +500,16 @@ canvas#snow{
   font-size:14px;
   color:#4a5288;
 }
-
 /* horizontal scroll area */
 .store-scroller-wrapper{
   overflow-x:auto;
   padding-bottom:10px;
 }
-
 .store-scroller{
   display:flex;
   gap:16px;
   padding-bottom:4px;
 }
-
 .store-item{
   flex:0 0 220px;
   background:linear-gradient(135deg,#f0e8ff 0%,#ffffff 45%,#e4defe 100%);
@@ -479,7 +520,6 @@ canvas#snow{
   flex-direction:column;
   align-items:center;
 }
-
 .store-item-image{
   width:100%;
   aspect-ratio:4/5;
@@ -493,7 +533,6 @@ canvas#snow{
   font-size:14px;
   margin-bottom:10px;
 }
-
 .store-item-label{
   font-size:14px;
   color:#40437a;
@@ -505,26 +544,22 @@ canvas#snow{
   background:var(--bg-grad);
   color:#ffffff;
 }
-
 .research-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
   gap:28px;
   align-items:flex-start;
 }
-
 .research-image-wrap img{
   width:100%;
   border-radius:14px;
   object-fit:cover;
   box-shadow:0 2px 10px rgba(0,0,0,0.22);
 }
-
 .research-text{
   font-size:15px;
   line-height:1.7;
 }
-
 .research-text p{
   margin:0 0 12px;
 }
@@ -533,21 +568,13 @@ canvas#snow{
 .section--gallery{
   background:var(--bar);
 }
-
 .gallery-inner{
   text-align:center;
 }
-
 .gallery-inner h2{
   margin:0 0 12px;
   font-size:22px;
 }
-
-.gallery-inner p{
-  margin:0 0 18px;
-  font-size:15px;
-}
-
 .gallery-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -572,39 +599,92 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – now uses the blue gradient */
+/* Show more button under gallery */
+.gallery-more-wrap{
+  margin-top:18px;
+  text-align:center;
+}
+.gallery-more-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.85);
+  background:rgba(10,86,194,0.4);
+  color:#ffffff;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+  transition:transform 0.15s ease, box-shadow 0.15s ease;
+}
+.gallery-more-btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 3px 10px rgba(0,0,0,0.4);
+}
+.gallery-more-btn::after{
+  content:"Click to Show More";
+  position:absolute;
+  top:-26px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#ffffff;
+  color:#123055;
+  padding:3px 8px;
+  border-radius:999px;
+  font-size:11px;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+  transition:opacity 0.15s ease, transform 0.15s ease;
+}
+.gallery-more-btn:hover::after{
+  opacity:1;
+  transform:translateX(-50%) translateY(-2px);
+}
+
+/* extra grid initially hidden */
+.gallery-grid-extra{
+  display:none;
+  margin-top:14px;
+}
+
+/* Bottom logo section – gradient background */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
 }
-
 .section--bottom-logo img{
   width:200px;
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
   cursor:pointer;
+  transition:transform 0.2s ease;
+}
+.section--bottom-logo a:hover img{
+  transform:scale(1.05);
 }
 
-/* Footer – keep same solid dark blue */
+/* Footer – solid dark blue */
 footer{
   background:var(--bar);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
 }
-
 .footer-inner{
   max-width:1100px;
   margin:0 auto;
 }
-
 .footer-line{
   border:none;
   border-top:1px solid rgba(255,255,255,0.25);
   margin:0 0 10px;
 }
-
-/* Layout: text links left, icon right */
 .footer-row{
   display:flex;
   align-items:center;
@@ -612,13 +692,11 @@ footer{
   gap:16px;
   flex-wrap:wrap;
 }
-
 .footer-links{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
 }
-
 .footer-links a{
   color:#d5e3ff;
   text-decoration:none;
@@ -626,7 +704,7 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – white camera icon */
+/* Instagram icon – white camera */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -658,7 +736,6 @@ footer{
   top:8px;
   right:8px;
 }
-
 .footer-copy{
   font-size:12px;
   margin-top:6px;
@@ -674,7 +751,6 @@ footer{
   justify-content:center;
   z-index:2000;
 }
-
 .modal{
   background:#ffffff;
   color:#123055;
@@ -685,17 +761,14 @@ footer{
   box-shadow:0 6px 20px rgba(0,0,0,0.35);
   font-size:14px;
 }
-
 .modal h3{
   margin:0 0 8px;
   font-size:16px;
 }
-
 .modal p{
   margin:0 0 6px;
   line-height:1.6;
 }
-
 .modal-close{
   margin-top:10px;
   display:inline-flex;
@@ -762,13 +835,11 @@ footer{
     padding-top:8px;
     gap:32px;
   }
-
   .hero-right{
     flex-direction:column-reverse;
     align-items:center;
     gap:24px;
   }
-
   .hero-headline{
     font-size:40px;
     max-width:none;
@@ -777,31 +848,30 @@ footer{
     text-align:center;
     margin-left:0;
   }
-
+  .hero-subline{
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+  }
   .hero-image-wrap{
     margin-left:0;
     align-self:center;
   }
-
   .about-grid,
   .research-grid{
     grid-template-columns:1fr;
   }
-
   .gallery-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
-
   .footer-row{
     flex-direction:row;
     justify-content:space-between;
   }
-
   .transition-strip{
     font-size:13px;
     letter-spacing:0.04em;
   }
-
   .store-item{
     flex:0 0 70vw;
   }
@@ -822,19 +892,34 @@ footer{
 <body>
 
 <header class="topbar">
-  <!-- Menu icon upper-left in the bar -->
+  <!-- Menu icon -->
   <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
 
+  <!-- Logo -->
   <a href="#top" class="topbar-logo-link">
     <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
   </a>
 
+  <!-- Title -->
   <div class="topbar-title">
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  </div>
+
+  <!-- Language switcher -->
+  <div class="lang-switch">
+    <span class="lang-label">Language</span>
+    <select id="lang-select" class="lang-select" aria-label="Select language">
+      <option value="en">EN</option>
+      <option value="zh">中文</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ru">РУС</option>
+      <option value="es">ES</option>
+      <option value="ar">العربية</option>
+    </select>
   </div>
 </header>
 
@@ -862,10 +947,15 @@ footer{
 
     <div class="hero-inner">
       <div class="hero-right">
-        <div class="hero-headline">
-          <span>MayaNut</span>
-          <span>Beverage</span>
-          <span class="headline-coming">Coming Soon!</span>
+        <div>
+          <div class="hero-headline">
+            <span>MayaNut</span>
+            <span>Beverage</span>
+            <span class="headline-coming">Coming Soon!</span>
+          </div>
+          <p id="hero-subline" class="hero-subline">
+            Welcome to The MayaNut Company — developing Florida's first MayaNut plantation.
+          </p>
         </div>
 
         <div class="hero-image-wrap">
@@ -985,7 +1075,8 @@ footer{
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
       <h2>Gallery</h2>
-      <p>Images from our trees, fruit, and future products — coming soon.</p>
+
+      <!-- First 6 images -->
       <div class="gallery-grid">
         <div class="gallery-tile">
           <img src="rach13.jpg" alt="MayaNut gallery image">
@@ -1006,10 +1097,40 @@ footer{
           <img src="rach13.jpg" alt="MayaNut gallery image">
         </div>
       </div>
+
+      <!-- Extra images initially hidden -->
+      <div class="gallery-grid gallery-grid-extra" id="gallery-extra">
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery placeholder">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery placeholder">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery placeholder">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery placeholder">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery placeholder">
+        </div>
+        <div class="gallery-tile">
+          <img src="rach13.jpg" alt="MayaNut gallery placeholder">
+        </div>
+      </div>
+
+      <!-- Show more button -->
+      <div class="gallery-more-wrap">
+        <button class="gallery-more-btn" id="gallery-more-btn">
+          <span>Show More</span>
+          <span>⬇️</span>
+        </button>
+      </div>
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION (gradient background now) -->
+  <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
@@ -1154,7 +1275,6 @@ footer{
       Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
     flake.y += flake.speedY * deltaTime;
-
     flake.rotation += flake.rotationSpeed * deltaTime;
 
     if (flake.y > height + flake.size * 2) {
@@ -1271,7 +1391,6 @@ footer{
   }
 
   navBackdrop.addEventListener('click', (e) => {
-    // click outside the modal closes
     if(e.target === navBackdrop){
       closeNav();
     }
@@ -1305,111 +1424,46 @@ footer{
   });
 })();
 
-// Logo tooltip behavior (desktop hover + mobile tap)
+// Gallery "Show More" toggle
 (function(){
-  const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
-  if (!logos.length) return;
+  const btn = document.getElementById('gallery-more-btn');
+  const extra = document.getElementById('gallery-extra');
+  if(!btn || !extra) return;
+  let open = false;
 
-  const tooltip = document.createElement('div');
-  tooltip.className = 'logo-tooltip';
-  Object.assign(tooltip.style, {
-    position: 'fixed',
-    padding: '6px 10px',
-    borderRadius: '999px',
-    background: '#ffffff',
-    color: '#123055',
-    fontSize: '12px',
-    boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
-    zIndex: '3000',
-    pointerEvents: 'none',
-    opacity: '0',
-    transition: 'opacity 0.15s ease'
+  btn.addEventListener('click', () => {
+    open = !open;
+    extra.style.display = open ? 'grid' : 'none';
+    const labelSpan = btn.querySelector('span:first-child');
+    const arrowSpan = btn.querySelector('span:last-child');
+    if (open){
+      if (labelSpan) labelSpan.textContent = 'Show Less';
+      if (arrowSpan) arrowSpan.textContent = '⬆️';
+    } else {
+      if (labelSpan) labelSpan.textContent = 'Show More';
+      if (arrowSpan) arrowSpan.textContent = '⬇️';
+    }
   });
-  document.body.appendChild(tooltip);
+})();
 
-  let tooltipVisible = false;
-  let lastLogo = null;
+// Language switcher (hero subline)
+(function(){
+  const select = document.getElementById('lang-select');
+  const heroSub = document.getElementById('hero-subline');
+  if(!select || !heroSub) return;
 
-  function atTop(){
-    return window.scrollY <= 0;
-  }
+  const translations = {
+    en: "Welcome to The MayaNut Company — developing Florida's first MayaNut plantation.",
+    zh: "欢迎来到 The MayaNut Company —— 我们正在佛罗里达建立首个 MayaNut 种植园。",
+    hi: "The MayaNut Company में आपका स्वागत है — हम फ्लोरिडा का पहला MayaNut फार्म विकसित कर रहे हैं।",
+    ru: "Добро пожаловать в The MayaNut Company — мы создаём первую плантацию MayaNut во Флориде.",
+    es: "Bienvenido a The MayaNut Company: estamos desarrollando la primera plantación de MayaNut en Florida.",
+    ar: "مرحبًا بكم في The MayaNut Company — نحن نطوّر أول مزرعة MayaNut في فلوريدا."
+  };
 
-  function getMessage(){
-    if (atTop()){
-      return 'Welcome to mayanut.com Home of The MayaNut Company';
-    }
-    return '👆 Click to Return Home 👆';
-  }
-
-  function showTooltipFor(el){
-    const rect = el.getBoundingClientRect();
-    tooltip.textContent = getMessage();
-
-    tooltip.style.top = '0px';
-    tooltip.style.left = '0px';
-
-    const width = tooltip.offsetWidth || 220;
-    const top = rect.top + rect.height + 8;
-    const centerX = rect.left + rect.width / 2;
-
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${centerX - width / 2}px`;
-    tooltip.style.opacity = '1';
-
-    tooltipVisible = true;
-    lastLogo = el;
-  }
-
-  function hideTooltip(){
-    tooltip.style.opacity = '0';
-    tooltipVisible = false;
-    lastLogo = null;
-  }
-
-  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-
-  if (!isCoarse){
-    logos.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        showTooltipFor(link);
-      });
-      link.addEventListener('mouseleave', () => {
-        hideTooltip();
-      });
-    });
-  } else {
-    logos.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        if (!tooltipVisible || lastLogo !== link){
-          e.preventDefault();
-          showTooltipFor(link);
-          return;
-        }
-
-        if (atTop()){
-          e.preventDefault();
-          return;
-        }
-
-        e.preventDefault();
-        hideTooltip();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-
-    document.addEventListener('click', () => {
-      if (tooltipVisible){
-        hideTooltip();
-      }
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (tooltipVisible && lastLogo){
-      showTooltipFor(lastLogo);
-    }
+  select.addEventListener('change', () => {
+    const lang = select.value;
+    heroSub.textContent = translations[lang] || translations.en;
   });
 })();
 </script>
