@@ -24,7 +24,8 @@
 MayaNut, mayanut, maya nut, Maya Nut, Brosimum alicastrum, breadnut, bread nut, tropical trees, tropical tree, rainforest tree, agroforestry,
 玛雅坚果, 热带树木, 热带雨林树, 面包果,
 मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़,
-nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum
+nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
+noz maia, árvore tropical, Brosimum alicastrum
 ">
 
 <style>
@@ -37,7 +38,7 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
 
-  /* Store page – mostly white with lavender at edges */
+  /* Store page – mostly white with lavender at edges (unchanged) */
   --buy-grad:
     radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
     radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
@@ -48,10 +49,10 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum
   --card-bg:#ffffff;
 }
 
-/* Small screens: a bit more bar height */
+/* Give a bit more height on small screens so things don't get cut off */
 @media (max-width: 600px){
   :root{
-    --bar-h:70px;
+    --bar-h:72px;
   }
 }
 
@@ -65,23 +66,18 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum
 html{
   margin:0;
   padding:0;
-  background:#ffffff;      /* Outside edges on mobile = white */
-  overflow-x:hidden;
+  background:#ffffff; /* When you scroll outside the site, edges are white */
 }
 
-html,body{
+body{
   margin:0;
   padding:0;
   scroll-behavior:smooth;
   font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color:#fff;
-  overflow-x:hidden;
-}
-
-/* MAIN BACKGROUND */
-body{
   background:var(--bg-grad);
   background-attachment:fixed;
+  overflow-x:hidden;
 }
 
 /* TOP BAR */
@@ -101,7 +97,7 @@ body{
   padding-top:calc(4px + env(safe-area-inset-top, 0px));
 }
 
-/* Logo below bar, upper-left */
+/* Logo in upper-left, below tab */
 .topbar-logo-link{
   position:absolute;
   left:10px;
@@ -114,31 +110,18 @@ body{
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
 
-/* Title centered (desktop) */
+/* Title centered */
 .topbar-title{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
   display:inline-block;
   animation:merrygiggle 6s ease-in-out infinite;
-  max-width:50%;
+  max-width:55%;
+  line-height:1.2;
 }
 
-/* HOME button in top bar – appears after scroll */
-.topbar-home{
-  margin-left:10px;
-  padding:4px 12px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.85);
-  background:rgba(10,86,194,0.95);
-  color:#ffffff;
-  font-size:12px;
-  cursor:pointer;
-  display:none; /* shown via JS when scrolled */
-  white-space:nowrap;
-}
-
-/* Hamburger button – default (desktop) */
+/* Hamburger button – upper-left of bar */
 .menu-toggle{
   position:absolute;
   left:16px;
@@ -153,7 +136,7 @@ body{
   justify-content:space-between;
   padding:0;
   cursor:pointer;
-  z-index:2601;
+  z-index:2601; /* ABOVE nav overlay so it stays bright white */
 }
 .menu-toggle span{
   display:block;
@@ -172,7 +155,7 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* LANGUAGE SWITCHER – default (desktop) */
+/* LANGUAGE SWITCHER – upper right in blue bar */
 .topbar-lang{
   position:absolute;
   right:12px;
@@ -183,24 +166,43 @@ body{
   gap:6px;
   font-size:12px;
 }
-.topbar-lang-emoji{
-  font-size:22px;          /* Big globe */
+
+.topbar-lang-icon{
+  font-size:18px; /* bigger globe emoji */
   line-height:1;
 }
+
 .topbar-lang-label{
   font-size:12px;
 }
+
 .topbar-lang select{
   font-size:12px;
   border-radius:999px;
-  border:1px solid rgba(255,255,255,0.7);
-  background:rgba(10,86,194,0.9);
+  border:1px solid rgba(255,255,255,0.8);
+  background:rgba(10,86,194,0.95);
   color:#fff;
-  padding:3px 6px;
+  padding:3px 8px;
   outline:none;
 }
 .topbar-lang select option{
   color:#000;
+}
+
+/* Mobile: shrink title + hide label text so nothing is cut off */
+@media (max-width: 600px){
+  .topbar-title{
+    font-size:14px;
+    max-width:52%;
+    line-height:1.25;
+  }
+  .topbar-lang-label{
+    display:none;
+  }
+  .topbar-lang select{
+    font-size:11px;
+    padding:2px 6px;
+  }
 }
 
 /* FULL-SCREEN NAV OVERLAY */
@@ -243,13 +245,13 @@ body{
   text-decoration:underline;
 }
 
-/* Links in nav modal */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
   gap:10px;
   margin-top:8px;
 }
+
 .nav-modal-links a{
   color:#ffffff;
   text-decoration:none;
@@ -322,7 +324,7 @@ canvas#snow{
   width:100%;
 }
 
-/* Headline */
+/* Glass Headline */
 .hero-headline{
   flex:1;
   max-width:520px;
@@ -419,7 +421,7 @@ canvas#snow{
   margin:0 auto;
 }
 
-/* Curved transition above ABOUT */
+/* ONLY CURVED TRANSITION: Top of ABOUT on desktop */
 .section--about::before{
   content:"";
   position:absolute;
@@ -433,12 +435,13 @@ canvas#snow{
   background:var(--bar);
 }
 
-/* ABOUT */
+/* ABOUT – solid dark blue */
 .section--about{
   background:var(--bar);
   color:#fff;
 }
 
+/* ABOUT layout */
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
@@ -477,7 +480,7 @@ canvas#snow{
   line-height:1.7;
 }
 
-/* Gradients for cards */
+/* White → lavender streaks */
 .about-card-1{
   background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
 }
@@ -501,7 +504,7 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE */
+/* STORE – keep white + lavender */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
@@ -572,7 +575,7 @@ canvas#snow{
   text-align:center;
 }
 
-/* RESEARCH */
+/* RESEARCH – same blue gradient background as main */
 .section--research{
   background:var(--bg-grad);
   color:#ffffff;
@@ -601,7 +604,7 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY */
+/* GALLERY – solid dark blue */
 .section--gallery{
   background:var(--bar);
 }
@@ -644,7 +647,7 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section */
+/* Bottom logo section – now uses the blue gradient */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
@@ -657,7 +660,7 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* Footer */
+/* Footer – keep same solid dark blue */
 footer{
   background:var(--bar);
   color:#d5e3ff;
@@ -698,7 +701,7 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – rebuilt (thicker, correct dot) */
+/* Instagram icon – thicker square + dot in upper-right */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -709,34 +712,30 @@ footer{
   border:3px solid #ffffff;
   position:relative;
   text-decoration:none;
-  box-sizing:border-box;
 }
-.footer-instagram span.visually-hidden{
+.footer-instagram span{
   display:none;
 }
-.ig-icon{
-  position:relative;
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.ig-camera{
-  width:16px;
-  height:16px;
-  border:2px solid #ffffff;
-  border-radius:5px;
-  box-sizing:border-box;
-}
-.ig-dot{
+.footer-instagram a::before{
+  content:"";
   position:absolute;
-  width:4px;
-  height:4px;
+  width:18px;
+  height:18px;
+  border:3px solid #ffffff;
+  border-radius:5px;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+}
+.footer-instagram a::after{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:5px;
   border-radius:50%;
   background:#ffffff;
   top:6px;
-  right:6px; /* true upper-right corner */
+  right:6px;
 }
 
 .footer-copy{
@@ -835,7 +834,7 @@ footer{
   cursor:pointer;
 }
 
-/* Responsive layout adjustments */
+/* Responsive */
 @media(max-width:800px){
   .hero-inner{
     flex-direction:column;
@@ -887,57 +886,6 @@ footer{
   }
 }
 
-/* MOBILE-SPECIFIC HEADER LAYOUT */
-@media (max-width:600px){
-  .topbar{
-    justify-content:space-between;
-  }
-
-  /* Move menu into the normal flex flow on the left */
-  .menu-toggle{
-    position:relative;
-    left:auto;
-    top:auto;
-    transform:none;
-    order:1;
-    margin-right:6px;
-  }
-
-  /* Christmas text smaller, wraps nicely in center */
-  .topbar-title{
-    order:2;
-    font-size:13px;
-    max-width:60%;
-    white-space:normal;
-    line-height:1.2;
-  }
-
-  /* Home button stays by the title, if visible */
-  .topbar-home{
-    order:3;
-    font-size:11px;
-    padding:3px 10px;
-  }
-
-  /* Language selector on the right, no overlap */
-  .topbar-lang{
-    position:relative;
-    right:auto;
-    top:auto;
-    transform:none;
-    order:4;
-  }
-
-  .topbar-lang-label{
-    display:none;
-  }
-
-  .topbar-lang select{
-    font-size:11px;
-    padding:2px 5px;
-  }
-}
-
 /* Extra-small screens */
 @media(max-width:500px){
   .hero-glass{
@@ -953,7 +901,7 @@ footer{
 <body>
 
 <header class="topbar">
-  <!-- Menu icon -->
+  <!-- Menu icon upper-left in the bar -->
   <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span>
     <span></span>
@@ -968,12 +916,10 @@ footer{
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
 
-  <button class="topbar-home" id="topbar-home">Home</button>
-
-  <!-- Language selector -->
+  <!-- Language selector upper-right -->
   <div class="topbar-lang">
-    <span class="topbar-lang-emoji" aria-hidden="true">🌎</span>
-    <span class="topbar-lang-label">Language</span>
+    <span class="topbar-lang-icon" aria-hidden="true">🌎</span>
+    <span class="topbar-lang-label">Language:</span>
     <select id="language-select" aria-label="Site language">
       <option value="index.html" selected>English</option>
       <option value="index-es.html">Español</option>
@@ -991,6 +937,7 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
+      <a href="#top" data-close-nav="true">HOME</a>
       <a href="#buy" data-close-nav="true">STORE</a>
       <a href="#about" data-close-nav="true">ABOUT</a>
       <a href="#research" data-close-nav="true">RESEARCH</a>
@@ -1156,7 +1103,7 @@ footer{
     </div>
   </section>
 
-  <!-- BOTTOM LOGO -->
+  <!-- BOTTOM LOGO SECTION (gradient background now) -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
@@ -1177,11 +1124,7 @@ footer{
       </div>
       <div class="footer-instagram">
         <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company on Instagram">
-          <span class="visually-hidden">Instagram</span>
-          <span class="ig-icon">
-            <span class="ig-camera"></span>
-            <span class="ig-dot"></span>
-          </span>
+          <span>IG</span>
         </a>
       </div>
     </div>
@@ -1207,8 +1150,8 @@ footer{
     <h3 id="modal-title">Privacy Policy</h3>
     <div id="modal-body">
       <p>We collect only basic information needed to operate this website, such as standard server logs and anonymous analytics.</p>
-      <p>Some website translations from English may be wrong. We are working to improve accuracy across all languages.</p>
       <p>We do not sell your personal information. Any data shared with service providers is used only to support site functionality and security.</p>
+      <p>Some website translations from English may be wrong. We are working to improve accuracy over time.</p>
     </div>
     <button class="modal-close" id="modal-close">Close</button>
   </div>
@@ -1220,6 +1163,7 @@ footer{
   const select = document.getElementById('language-select');
   if (!select) return;
 
+  // If URL matches one of the language file names, set the dropdown accordingly
   const path = window.location.pathname;
   const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
@@ -1236,7 +1180,7 @@ footer{
   });
 })();
 
-// Canvas snowflakes
+// Canvas snowflakes in hero (slow + present immediately)
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1382,15 +1326,16 @@ footer{
       titleEl.textContent = 'Privacy Policy';
       bodyEl.innerHTML = `
         <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-        <p>Some website translations from English may be wrong. We are working to improve accuracy across all languages.</p>
         <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-        <p>We do not sell your personal information.</p>
+        <p>We do not sell your personal information. Any data shared with service providers is used only to support site functionality and security.</p>
+        <p>Some website translations from English may be wrong. We are working to improve accuracy over time.</p>
       `;
     }else{
       titleEl.textContent = 'Do Not Sell My Info';
       bodyEl.innerHTML = `
         <p>The MayaNut Company, Inc. does not sell your personal information.</p>
         <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+        <p>Some website translations from English may be wrong. We are working to improve accuracy over time.</p>
       `;
     }
     backdrop.style.display = 'flex';
@@ -1445,6 +1390,7 @@ footer{
   }
 
   navBackdrop.addEventListener('click', (e) => {
+    // click outside the modal closes
     if(e.target === navBackdrop){
       closeNav();
     }
@@ -1478,29 +1424,7 @@ footer{
   });
 })();
 
-// HOME button – appears after small scroll
-(function(){
-  const homeBtn = document.getElementById('topbar-home');
-  if (!homeBtn) return;
-
-  function updateVisibility(){
-    if (window.scrollY > 10){
-      homeBtn.style.display = 'inline-flex';
-    } else {
-      homeBtn.style.display = 'none';
-    }
-  }
-
-  window.addEventListener('scroll', updateVisibility);
-  updateVisibility();
-
-  homeBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-})();
-
-// Logo tooltip behavior
+// Logo tooltip behavior (desktop hover + mobile tap)
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
