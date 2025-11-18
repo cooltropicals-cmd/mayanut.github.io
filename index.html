@@ -32,7 +32,7 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
 <style>
 :root{
   --bg:#18A7FF;
-  /* Favorite blue background: lighter center, darker edges */
+  /* Your favorite blue background: lighter center, darker edges */
   --bg-grad:
     radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
@@ -50,7 +50,7 @@ nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
   --card-bg:#ffffff;
 }
 
-/* Slightly taller bar on very small screens so nothing gets cut off */
+/* Give a bit more height on small screens so things don't get cut off */
 @media (max-width: 600px){
   :root{
     --bar-h:70px;
@@ -70,14 +70,11 @@ html,body{
   scroll-behavior:smooth;
   font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color:#fff;
-  overflow-x:hidden; /* prevent sideways scroll on mobile */
+  max-width:100%;
+  overflow-x:hidden; /* prevent side-scrolling; outside edges won't show */
 }
 
-html{
-  background:#ffffff; /* “outside” of site is white if you overscroll */
-}
-
-/* MAIN BACKGROUND */
+/* MAIN BACKGROUND – static gradient */
 body{
   background:var(--bg-grad);
   background-attachment:fixed;
@@ -123,7 +120,7 @@ body{
   max-width:60%;
 }
 
-/* Hamburger button – upper-left */
+/* Hamburger button – upper-left in the bar */
 .menu-toggle{
   position:absolute;
   left:16px;
@@ -168,9 +165,12 @@ body{
   gap:6px;
   font-size:12px;
 }
+.topbar-lang-emoji{
+  font-size:20px;
+  line-height:1;
+}
 .topbar-lang-label{
   font-size:12px;
-  white-space:nowrap;
 }
 .topbar-lang select{
   font-size:12px;
@@ -185,11 +185,11 @@ body{
   color:#000;
 }
 
-/* Mobile adjustments to avoid cut-off */
+/* Mobile: shrink title + hide "Language" text to give room */
 @media (max-width: 600px){
   .topbar-title{
     font-size:14px;
-    max-width:52%;
+    max-width:55%;
   }
   .topbar-lang-label{
     display:none;
@@ -233,32 +233,35 @@ body{
   position:relative;
 }
 
-/* Title row: "Menu" + Home button */
-.nav-modal-title{
-  margin:0 0 10px;
-  font-weight:700;
-  font-size:18px;
+/* Header row inside nav: "Menu" + Home on scroll */
+.nav-modal-header-row{
   display:flex;
   align-items:center;
+  justify-content:space-between;
   gap:12px;
+  margin-bottom:10px;
 }
-.nav-modal-title-text{
+.nav-modal-title{
+  margin:0;
+  font-weight:700;
+  font-size:18px;
   text-decoration:underline;
 }
-.nav-home-link{
+.nav-modal-home{
+  display:none; /* becomes visible when user scrolls */
   font-size:14px;
+  font-weight:600;
   color:#ffffff;
   text-decoration:none;
+  padding:4px 10px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.7);
-  padding:3px 10px;
-  display:none; /* becomes visible via JS */
 }
-.nav-home-link.visible{
-  display:inline-flex;
+.nav-modal-home:hover{
+  background:rgba(255,255,255,0.15);
 }
 
-/* Nav links */
+/* Links list */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
@@ -353,11 +356,9 @@ canvas#snow{
     0 3px 0 #0057c8,
     0 6px 12px rgba(0,0,0,0.4);
 }
-
 .hero-headline span{
   display:block;
 }
-
 .hero-headline .headline-coming{
   text-decoration:underline;
   text-decoration-color:var(--bar);
@@ -370,11 +371,9 @@ canvas#snow{
   flex:0 0 auto;
   margin-left:auto;
 }
-
 .hero-image-link{
   display:inline-block;
 }
-
 .hero-glass{
   width:480px;
   max-width:80vw;
@@ -382,7 +381,6 @@ canvas#snow{
   cursor:pointer;
   transition:transform 0.22s ease, box-shadow 0.22s ease;
 }
-
 .hero-image-link:hover .hero-glass{
   transform:scale(1.08);
   box-shadow:0 0 40px rgba(255,255,255,0.95);
@@ -428,7 +426,6 @@ canvas#snow{
   z-index:1;
   overflow:hidden;
 }
-
 .section-inner{
   max-width:1100px;
   margin:0 auto;
@@ -461,7 +458,6 @@ canvas#snow{
   gap:28px;
   align-items:flex-start;
 }
-
 .about-images{
   display:flex;
   flex-direction:column;
@@ -476,13 +472,11 @@ canvas#snow{
 .about-images .square{
   aspect-ratio:1/1;
 }
-
 .about-text-col{
   display:flex;
   flex-direction:column;
   gap:16px;
 }
-
 .about-text-card{
   background:#ffffff;
   border-radius:18px;
@@ -509,7 +503,6 @@ canvas#snow{
 .about-card-5{
   background:linear-gradient(90deg, #dde7ff 0%, #ffffff 70%);
 }
-
 .about-text-card h2,
 .about-text-card h3{
   margin-top:0;
@@ -523,17 +516,14 @@ canvas#snow{
   color:#083b7c;
   padding:40px 16px 60px;
 }
-
 .store-inner{
   max-width:900px;
   margin:0 auto;
 }
-
 .store-heading{
   text-align:center;
   margin-bottom:22px;
 }
-
 .store-heading h2{
   margin:0 0 6px;
   font-size:22px;
@@ -550,13 +540,11 @@ canvas#snow{
   overflow-x:auto;
   padding-bottom:10px;
 }
-
 .store-scroller{
   display:flex;
   gap:16px;
   padding-bottom:4px;
 }
-
 .store-item{
   flex:0 0 220px;
   background:linear-gradient(135deg,#f0e8ff 0%,#ffffff 45%,#e4defe 100%);
@@ -567,7 +555,6 @@ canvas#snow{
   flex-direction:column;
   align-items:center;
 }
-
 .store-item-image{
   width:100%;
   aspect-ratio:4/5;
@@ -581,38 +568,33 @@ canvas#snow{
   font-size:14px;
   margin-bottom:10px;
 }
-
 .store-item-label{
   font-size:14px;
   color:#40437a;
   text-align:center;
 }
 
-/* RESEARCH – same blue gradient background as main */
+/* RESEARCH – same blue gradient */
 .section--research{
   background:var(--bg-grad);
   color:#ffffff;
 }
-
 .research-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
   gap:28px;
   align-items:flex-start;
 }
-
 .research-image-wrap img{
   width:100%;
   border-radius:14px;
   object-fit:cover;
   box-shadow:0 2px 10px rgba(0,0,0,0.22);
 }
-
 .research-text{
   font-size:15px;
   line-height:1.7;
 }
-
 .research-text p{
   margin:0 0 12px;
 }
@@ -621,21 +603,17 @@ canvas#snow{
 .section--gallery{
   background:var(--bar);
 }
-
 .gallery-inner{
   text-align:center;
 }
-
 .gallery-inner h2{
   margin:0 0 12px;
   font-size:22px;
 }
-
 .gallery-inner p{
   margin:0 0 18px;
   font-size:15px;
 }
-
 .gallery-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -660,12 +638,11 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – uses the blue gradient */
+/* Bottom logo section */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
 }
-
 .section--bottom-logo img{
   width:200px;
   height:auto;
@@ -680,19 +657,15 @@ footer{
   padding:18px 16px 28px;
   font-size:13px;
 }
-
 .footer-inner{
   max-width:1100px;
   margin:0 auto;
 }
-
 .footer-line{
   border:none;
   border-top:1px solid rgba(255,255,255,0.25);
   margin:0 0 10px;
 }
-
-/* Layout: text links left, icon right */
 .footer-row{
   display:flex;
   align-items:center;
@@ -700,13 +673,11 @@ footer{
   gap:16px;
   flex-wrap:wrap;
 }
-
 .footer-links{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
 }
-
 .footer-links a{
   color:#d5e3ff;
   text-decoration:none;
@@ -714,7 +685,7 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – white camera icon */
+/* Instagram icon – white camera icon with dot in upper-right */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -739,14 +710,13 @@ footer{
 .footer-instagram a::after{
   content:"";
   position:absolute;
-  width:3px;
-  height:3px;
+  width:4px;
+  height:4px;
   border-radius:50%;
   background:#ffffff;
-  top:8px;
-  right:8px;
+  top:6px;
+  right:6px; /* ensure it sits clearly at the upper-right corner */
 }
-
 .footer-copy{
   font-size:12px;
   margin-top:6px;
@@ -762,7 +732,6 @@ footer{
   justify-content:center;
   z-index:2000;
 }
-
 .modal{
   background:#ffffff;
   color:#123055;
@@ -773,17 +742,14 @@ footer{
   box-shadow:0 6px 20px rgba(0,0,0,0.35);
   font-size:14px;
 }
-
 .modal h3{
   margin:0 0 8px;
   font-size:16px;
 }
-
 .modal p{
   margin:0 0 6px;
   line-height:1.6;
 }
-
 .modal-close{
   margin-top:10px;
   display:inline-flex;
@@ -850,13 +816,11 @@ footer{
     padding-top:8px;
     gap:32px;
   }
-
   .hero-right{
     flex-direction:column-reverse;
     align-items:center;
     gap:24px;
   }
-
   .hero-headline{
     font-size:40px;
     max-width:none;
@@ -865,31 +829,25 @@ footer{
     text-align:center;
     margin-left:0;
   }
-
   .hero-image-wrap{
     margin-left:0;
     align-self:center;
   }
-
   .about-grid,
   .research-grid{
     grid-template-columns:1fr;
   }
-
   .gallery-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
-
   .footer-row{
     flex-direction:row;
     justify-content:space-between;
   }
-
   .transition-strip{
     font-size:13px;
     letter-spacing:0.04em;
   }
-
   .store-item{
     flex:0 0 70vw;
   }
@@ -927,23 +885,23 @@ footer{
 
   <!-- Language selector upper-right -->
   <div class="topbar-lang">
-    <span class="topbar-lang-label">🌎 Language</span>
+    <span class="topbar-lang-emoji" aria-hidden="true">🌍</span>
+    <span class="topbar-lang-label">Language</span>
     <select id="language-select" aria-label="Site language">
-      <!-- Order now with Portuguese after Spanish -->
-      <option value="index.html" selected>🌎 English</option>
-      <option value="index-es.html">🌎 Español</option>
-      <option value="index-pt.html">🌎 Português</option>
-      <option value="index-fr.html">🌍 Français</option>
-      <option value="index-de.html">🌍 Deutsch</option>
-      <option value="index-ru.html">🌍 Русский</option>
-      <option value="index-zh.html">🌏 中文</option>
-      <option value="index-ja.html">🌏 日本語</option>
-      <option value="index-id.html">🌏 Bahasa Indonesia</option>
-      <option value="index-hi.html">🌏 हिन्दी</option>
-      <option value="index-bn.html">🌏 বাংলা</option>
-      <option value="index-ur.html">🌏 اردو</option>
-      <option value="index-ar.html">🌍 العربية</option>
-      <option value="index-sw.html">🌍 Kiswahili</option>
+      <option value="index.html" selected>English</option>
+      <option value="index-es.html">Español</option>
+      <option value="index-pt.html">Português</option>
+      <option value="index-fr.html">Français</option>
+      <option value="index-de.html">Deutsch</option>
+      <option value="index-ru.html">Русский</option>
+      <option value="index-zh.html">中文</option>
+      <option value="index-ja.html">日本語</option>
+      <option value="index-id.html">Bahasa Indonesia</option>
+      <option value="index-hi.html">हिन्दी</option>
+      <option value="index-bn.html">বাংলা</option>
+      <option value="index-ur.html">اردو</option>
+      <option value="index-ar.html">العربية</option>
+      <option value="index-sw.html">Kiswahili</option>
     </select>
   </div>
 </header>
@@ -952,10 +910,12 @@ footer{
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">
-      <span class="nav-modal-title-text">Menu</span>
-      <a href="#top" class="nav-home-link" id="nav-home-link">Home</a>
-    </h2>
+
+    <div class="nav-modal-header-row">
+      <h2 class="nav-modal-title">Menu</h2>
+      <a href="#top" class="nav-modal-home" id="nav-home-link">Home</a>
+    </div>
+
     <div class="nav-modal-links">
       <a href="#buy" data-close-nav="true">STORE</a>
       <a href="#about" data-close-nav="true">ABOUT</a>
@@ -1122,7 +1082,7 @@ footer{
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION (gradient background) -->
+  <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
@@ -1170,6 +1130,7 @@ footer{
     <div id="modal-body">
       <p>We collect only basic information needed to operate this website, such as standard server logs and anonymous analytics.</p>
       <p>We do not sell your personal information. Any data shared with service providers is used only to support site functionality and security.</p>
+      <p>Some website translations from English may be incorrect.</p>
     </div>
     <button class="modal-close" id="modal-close">Close</button>
   </div>
@@ -1181,7 +1142,6 @@ footer{
   const select = document.getElementById('language-select');
   if (!select) return;
 
-  // detect current file name so dropdown matches
   const path = window.location.pathname;
   const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
@@ -1289,7 +1249,6 @@ footer{
       Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
     flake.y += flake.speedY * deltaTime;
-
     flake.rotation += flake.rotationSpeed * deltaTime;
 
     if (flake.y > height + flake.size * 2) {
@@ -1345,13 +1304,15 @@ footer{
       bodyEl.innerHTML = `
         <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
         <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-        <p>We do not sell your personal information.</p>
+        <p>We do not sell your personal information. Any data shared with service providers is used only to support site functionality and security.</p>
+        <p>Some website translations from English may be incorrect.</p>
       `;
     }else{
       titleEl.textContent = 'Do Not Sell My Info';
       bodyEl.innerHTML = `
         <p>The MayaNut Company, Inc. does not sell your personal information.</p>
         <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+        <p>Some website translations from English may be incorrect.</p>
       `;
     }
     backdrop.style.display = 'flex';
@@ -1371,11 +1332,12 @@ footer{
   }
 })();
 
-// NAV overlay (hamburger menu)
+// NAV overlay (hamburger menu) + Home button on scroll
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
   const navClose = document.getElementById('nav-close');
+  const navHome = document.getElementById('nav-home-link');
 
   if(!toggle || !navBackdrop) return;
 
@@ -1406,7 +1368,6 @@ footer{
   }
 
   navBackdrop.addEventListener('click', (e) => {
-    // click outside the modal closes
     if(e.target === navBackdrop){
       closeNav();
     }
@@ -1417,6 +1378,19 @@ footer{
       closeNav();
     });
   });
+
+  // Show "Home" link in menu when page is scrolled a bit
+  function updateNavHome(){
+    if (!navHome) return;
+    if (window.scrollY > 10){
+      navHome.style.display = 'inline-flex';
+    } else {
+      navHome.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('scroll', updateNavHome);
+  updateNavHome();
 })();
 
 // Welcome popup
@@ -1440,7 +1414,7 @@ footer{
   });
 })();
 
-// Logo tooltip behavior (desktop hover + mobile tap), with edge protection
+// Logo tooltip behavior (desktop hover + mobile tap) with edge clamp
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
@@ -1471,7 +1445,7 @@ footer{
 
   function getMessage(){
     if (atTop()){
-      return 'Welcome to mayanut.com — Home of The MayaNut Company';
+      return 'Welcome to mayanut.com Home of The MayaNut Company';
     }
     return '👆 Click to Return Home 👆';
   }
@@ -1514,8 +1488,12 @@ footer{
 
   if (!isCoarse){
     logos.forEach(link => {
-      link.addEventListener('mouseenter', () => showTooltipFor(link));
-      link.addEventListener('mouseleave', hideTooltip);
+      link.addEventListener('mouseenter', () => {
+        showTooltipFor(link);
+      });
+      link.addEventListener('mouseleave', () => {
+        hideTooltip();
+      });
     });
   } else {
     logos.forEach(link => {
@@ -1540,7 +1518,9 @@ footer{
     });
 
     document.addEventListener('click', () => {
-      if (tooltipVisible) hideTooltip();
+      if (tooltipVisible){
+        hideTooltip();
+      }
     });
   }
 
@@ -1549,33 +1529,6 @@ footer{
       positionTooltip(lastLogo.getBoundingClientRect());
     }
   });
-})();
-
-// HOME button visibility logic inside the Menu overlay
-(function(){
-  const homeLink = document.getElementById('nav-home-link');
-  if (!homeLink) return;
-
-  function onScrollOrLoad(){
-    const path = window.location.pathname;
-    const file = path.substring(path.lastIndexOf('/') + 1);
-    const isHome = (file === '' || file === 'index.html');
-
-    if (isHome){
-      // On home page: only show Home when scrolled down a bit
-      if (window.scrollY > 10){
-        homeLink.classList.add('visible');
-      } else {
-        homeLink.classList.remove('visible');
-      }
-    } else {
-      // On other pages, always visible (you'll reuse this script there)
-      homeLink.classList.add('visible');
-    }
-  }
-
-  window.addEventListener('scroll', onScrollOrLoad);
-  window.addEventListener('load', onScrollOrLoad);
 })();
 </script>
 
