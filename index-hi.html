@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The MayaNut Company</title>
+<title>माया नट (maya nut / Brosimum alicastrum) पेय और उष्णकटिबंधीय वृक्ष – The Maya Nut Company</title>
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
@@ -19,41 +19,36 @@
 <meta name="theme-color" content="#18A7FF" />
 
 <!-- SEO: keywords + translated variants -->
-<meta name="description" content="MayaNut™ (mayanut, maya nut) beverage and products made from Brosimum alicastrum, also known as breadnut, a tropical rainforest tree. Tropical trees, agroforestry and future MayaNut beverages and flours.">
+<meta name="description" content="माया नट (maya nut, Brosimum alicastrum, जिसे breadnut, ojoche, ramón, guáimaro भी कहा जाता है) एक उष्णकटिबंधीय वर्षावन वृक्ष का पौष्टिक बीज है जिससे पेय, आटा और बेकरी उत्पाद बनाए जा सकते हैं। The Maya Nut Company फ़्लोरिडा में माया नट के पेड़ (Brosimum alicastrum) उगाकर एग्रोफ़ोरेस्ट्री और भविष्य के माया नट पेय विकसित कर रही है।">
 <meta name="keywords" content="
-MayaNut, mayanut, maya nut, Maya Nut, Brosimum alicastrum, breadnut, bread nut, tropical trees, tropical tree, rainforest tree, agroforestry,
-玛雅坚果, 热带树木, 热带雨林树, 面包果,
-मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़,
-Маянат, хлебное дерево, тропические деревья,
-nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
-مايانَت, جوز المايا, شجرة استوائية, أشجار استوائية
+माया नट, maya nut, mayanut, माया नट पेय, माया नट पेड़, माया नट आटा,
+Brosimum alicastrum, ब्रॉसिमुम एलिएकास्त्रम, breadnut, bread nut, ojoche, ramón, guáimaro,
+उष्णकटिबंधीय वृक्ष, वर्षावन वृक्ष, agroforestry, एग्रोफ़ोरेस्ट्री
 ">
 
 <style>
 :root{
   --bg:#18A7FF;
-  /* Your favorite blue background: lighter center, darker edges */
+  /* Symmetric blue-purple gradient, darker on lower corners, lighter center */
   --bg-grad:
-    radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
-    radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
-    radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
+    radial-gradient(circle at 15% 85%, #1b2f80 0, #0b1a4f 40%, transparent 75%),
+    radial-gradient(circle at 85% 85%, #1b2f80 0, #0b1a4f 40%, transparent 75%),
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 70%),
     #0a56c2;
 
-  /* Store page – mostly white with lavender at edges (unchanged) */
+  /* Store section: soft white center, fading to pink then lavender */
   --buy-grad:
-    radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
-    linear-gradient(180deg,#ffffff 0%, #ffffff 100%);
+    radial-gradient(circle at 50% 20%, #ffffff 0, #ffffff 38%, #ffe7f4 55%, #e3d2ff 78%, #d5c3ff 100%);
 
   --bar:#0a56c2;
-  --bar-h:60px;
-  --card-bg:#ffffff;
+  --bar-h:72px; /* baseline bar height */
+  --logo-offset:10px; /* distance from left */
 }
 
-/* Give a bit more height on small screens so things don't get cut off */
+/* Slightly taller bar on very small screens */
 @media (max-width: 600px){
   :root{
-    --bar-h:70px;
+    --bar-h:82px;
   }
 }
 
@@ -72,59 +67,33 @@ html,body{
   color:#fff;
 }
 
-/* MAIN BACKGROUND – static gradient, like the original */
+/* Blue gradient everywhere, including mobile */
 body{
   background:var(--bg-grad);
   background-attachment:fixed;
 }
 
-/* TOP BAR */
+/* TOP BAR – grid: menu | title | language */
 .topbar{
   position:fixed;
   top:0; left:0; right:0;
-  height:var(--bar-h);
   background:var(--bar);
   color:#fff;
-  display:flex;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  grid-template-areas:"menu title lang";
   align-items:center;
-  justify-content:center;
+  column-gap:6px;
+  padding:8px 10px;
+  min-height:var(--bar-h);
   z-index:1000;
   border-bottom:1px solid rgba(255,255,255,0.25);
-  padding:0 16px;
-  box-sizing:border-box;
-  /* small safe-area padding on modern phones */
-  padding-top:calc(4px + env(safe-area-inset-top, 0px));
+  padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
-/* Logo in upper-left, below tab */
-.topbar-logo-link{
-  position:absolute;
-  left:10px;
-  top:70px;
-}
-.topbar-logo{
-  height:100px;
-  width:100px;
-  display:block;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-}
-
-/* Title centered */
-.topbar-title{
-  font-family:"Mountains of Christmas", cursive;
-  font-size:18px;
-  text-align:center;
-  display:inline-block;
-  animation:merrygiggle 6s ease-in-out infinite;
-  max-width:60%;
-}
-
-/* Hamburger button – upper-left of bar */
+/* Hamburger menu (left) – pulled in from edge */
 .menu-toggle{
-  position:absolute;
-  left:16px;
-  top:50%;
-  transform:translateY(-50%);
+  grid-area:menu;
   width:32px;
   height:26px;
   border:none;
@@ -134,7 +103,9 @@ body{
   justify-content:space-between;
   padding:0;
   cursor:pointer;
-  z-index:2601; /* ABOVE nav overlay so it stays bright white */
+  justify-self:start;
+  margin-left:8px;
+  z-index:1100;
 }
 .menu-toggle span{
   display:block;
@@ -153,19 +124,59 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* LANGUAGE SWITCHER – upper right in blue bar */
+/* Title (center) */
+.topbar-title{
+  grid-area:title;
+  font-family:"Mountains of Christmas", cursive;
+  font-size:18px;
+  text-align:center;
+  animation:merrygiggle 6s ease-in-out infinite;
+  max-width:100%;
+  justify-self:center;
+  padding:0 6px;
+}
+
+/* Make title smaller AND move it to its own row on mobile */
+@media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+      "menu . lang"
+      "title title title";
+    align-items:center;
+  }
+
+  .topbar-title{
+    font-size:14px;
+    line-height:1.2;
+    margin-top:4px;
+    padding:0 12px;
+  }
+}
+
+/* LANGUAGE SWITCHER (right) – stacked label + dropdown */
 .topbar-lang{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
+  grid-area:lang;
   display:flex;
-  align-items:center;
-  gap:6px;
+  flex-direction:column;
+  align-items:center;   /* center label + select */
+  gap:3px;
+  justify-self:end;
   font-size:12px;
+  margin-right:4px;     /* nudged slightly left for visual centering */
 }
 .topbar-lang-label{
-  font-size:12px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.topbar-lang-label-emoji{
+  font-size:20px;
+  line-height:1;
+}
+.topbar-lang-label-text{
+  font-size:13px;
 }
 .topbar-lang select{
   font-size:12px;
@@ -173,113 +184,48 @@ body{
   border:1px solid rgba(255,255,255,0.7);
   background:rgba(10,86,194,0.9);
   color:#fff;
-  padding:3px 6px;
+  padding:3px 8px;
   outline:none;
 }
 .topbar-lang select option{
   color:#000;
 }
 
-/* Mobile: shrink title + hide label text so nothing is cut off */
-@media (max-width: 600px){
-  .topbar-title{
-    font-size:14px;
-    max-width:55%;
-  }
-  .topbar-lang-label{
+/* On very narrow screens, hide the word "Language" to save space */
+@media (max-width: 420px){
+  .topbar-lang-label-text{
     display:none;
   }
   .topbar-lang select{
     font-size:11px;
-    padding:2px 5px;
+    padding:2px 6px;
   }
 }
 
-/* FULL-SCREEN NAV OVERLAY */
-.nav-backdrop{
+/* LOGO – just under bar, slightly closer so spacing matches left margin */
+.topbar-logo-link{
   position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:2400;
+  left:var(--logo-offset);
+  top:calc(var(--bar-h) + 6px);
+  z-index:900;
 }
-.nav-backdrop.open{
-  display:flex;
-}
-
-/* Nav modal – uses same style as welcome popup */
-.nav-modal{
-  max-width:420px;
-  width:min(90vw, 420px);
-  border-radius:18px;
-  padding:22px 24px 24px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.55);
-  color:#ffffff;
-  text-align:left;
-  font-size:15px;
-  line-height:1.7;
-  background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
-    #0a56c2;
-  position:relative; /* so the close X positions inside */
-}
-
-.nav-modal-title{
-  margin:0 0 10px;
-  font-weight:700;
-  font-size:18px;
-  text-decoration:underline;
-}
-
-.nav-modal-links{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:8px;
-}
-
-.nav-modal-links a{
-  color:#ffffff;
-  text-decoration:none;
-  font-weight:600;
-  font-size:15px;
-  padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,0.25);
-}
-.nav-modal-links a:last-child{
-  border-bottom:none;
-}
-.nav-modal-links a:hover{
-  text-decoration:underline;
-}
-
-/* Small X inside menu popup */
-.nav-close{
-  position:absolute;
-  top:10px;
-  right:12px;
-  border:none;
-  background:transparent;
-  color:#ffffff;
-  font-size:20px;
-  line-height:1;
-  cursor:pointer;
+.topbar-logo{
+  width:100px;
+  height:100px;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
 
 /* HERO */
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:var(--bar-h);
-  background:transparent;
+  padding-top:calc(var(--bar-h) + 150px);
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
+  background:var(--bg-grad);
 }
 
 .hero-inner{
@@ -294,7 +240,7 @@ body{
   z-index:1;
 }
 
-/* Snow canvas over hero */
+/* Snow canvas */
 canvas#snow{
   position:absolute;
   inset:0;
@@ -330,11 +276,9 @@ canvas#snow{
     0 3px 0 #0057c8,
     0 6px 12px rgba(0,0,0,0.4);
 }
-
 .hero-headline span{
   display:block;
 }
-
 .hero-headline .headline-coming{
   text-decoration:underline;
   text-decoration-color:var(--bar);
@@ -347,11 +291,9 @@ canvas#snow{
   flex:0 0 auto;
   margin-left:auto;
 }
-
 .hero-image-link{
   display:inline-block;
 }
-
 .hero-glass{
   width:480px;
   max-width:80vw;
@@ -359,7 +301,6 @@ canvas#snow{
   cursor:pointer;
   transition:transform 0.22s ease, box-shadow 0.22s ease;
 }
-
 .hero-image-link:hover .hero-glass{
   transform:scale(1.08);
   box-shadow:0 0 40px rgba(255,255,255,0.95);
@@ -405,13 +346,12 @@ canvas#snow{
   z-index:1;
   overflow:hidden;
 }
-
 .section-inner{
   max-width:1100px;
   margin:0 auto;
 }
 
-/* ONLY CURVED TRANSITION: Top of ABOUT on desktop */
+/* ABOUT SECTION */
 .section--about::before{
   content:"";
   position:absolute;
@@ -424,21 +364,17 @@ canvas#snow{
   z-index:-1;
   background:var(--bar);
 }
-
-/* ABOUT – solid dark blue */
 .section--about{
-  background:var(--bar);
+  background:var(--bg-grad);
   color:#fff;
 }
 
-/* ABOUT layout */
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
   gap:28px;
   align-items:flex-start;
 }
-
 .about-images{
   display:flex;
   flex-direction:column;
@@ -453,13 +389,11 @@ canvas#snow{
 .about-images .square{
   aspect-ratio:1/1;
 }
-
 .about-text-col{
   display:flex;
   flex-direction:column;
   gap:16px;
 }
-
 .about-text-card{
   background:#ffffff;
   border-radius:18px;
@@ -469,8 +403,6 @@ canvas#snow{
   font-size:15px;
   line-height:1.7;
 }
-
-/* White → lavender streaks */
 .about-card-1{
   background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%);
 }
@@ -486,7 +418,6 @@ canvas#snow{
 .about-card-5{
   background:linear-gradient(90deg, #dde7ff 0%, #ffffff 70%);
 }
-
 .about-text-card h2,
 .about-text-card h3{
   margin-top:0;
@@ -494,23 +425,20 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE – keep white + lavender */
+/* STORE */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
   padding:40px 16px 60px;
 }
-
 .store-inner{
   max-width:900px;
   margin:0 auto;
 }
-
 .store-heading{
   text-align:center;
   margin-bottom:22px;
 }
-
 .store-heading h2{
   margin:0 0 6px;
   font-size:22px;
@@ -521,19 +449,15 @@ canvas#snow{
   font-size:14px;
   color:#4a5288;
 }
-
-/* horizontal scroll area */
 .store-scroller-wrapper{
   overflow-x:auto;
   padding-bottom:10px;
 }
-
 .store-scroller{
   display:flex;
   gap:16px;
   padding-bottom:4px;
 }
-
 .store-item{
   flex:0 0 220px;
   background:linear-gradient(135deg,#f0e8ff 0%,#ffffff 45%,#e4defe 100%);
@@ -544,7 +468,6 @@ canvas#snow{
   flex-direction:column;
   align-items:center;
 }
-
 .store-item-image{
   width:100%;
   aspect-ratio:4/5;
@@ -558,61 +481,52 @@ canvas#snow{
   font-size:14px;
   margin-bottom:10px;
 }
-
 .store-item-label{
   font-size:14px;
   color:#40437a;
   text-align:center;
 }
 
-/* RESEARCH – same blue gradient background as main */
+/* RESEARCH */
 .section--research{
   background:var(--bg-grad);
   color:#ffffff;
 }
-
 .research-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
   gap:28px;
   align-items:flex-start;
 }
-
 .research-image-wrap img{
   width:100%;
   border-radius:14px;
   object-fit:cover;
   box-shadow:0 2px 10px rgba(0,0,0,0.22);
 }
-
 .research-text{
   font-size:15px;
   line-height:1.7;
 }
-
 .research-text p{
   margin:0 0 12px;
 }
 
-/* GALLERY – solid dark blue */
+/* GALLERY */
 .section--gallery{
-  background:var(--bar);
+  background:var(--bg-grad);
 }
-
 .gallery-inner{
   text-align:center;
 }
-
 .gallery-inner h2{
   margin:0 0 12px;
   font-size:22px;
 }
-
 .gallery-inner p{
   margin:0 0 18px;
   font-size:15px;
 }
-
 .gallery-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -637,12 +551,11 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – now uses the blue gradient */
+/* Bottom logo section – gradient */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
 }
-
 .section--bottom-logo img{
   width:200px;
   height:auto;
@@ -650,26 +563,22 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* Footer – keep same solid dark blue */
+/* FOOTER */
 footer{
-  background:var(--bar);
+  background:var(--bg-grad);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
 }
-
 .footer-inner{
   max-width:1100px;
   margin:0 auto;
 }
-
 .footer-line{
   border:none;
   border-top:1px solid rgba(255,255,255,0.25);
   margin:0 0 10px;
 }
-
-/* Layout: text links left, icon right */
 .footer-row{
   display:flex;
   align-items:center;
@@ -677,13 +586,11 @@ footer{
   gap:16px;
   flex-wrap:wrap;
 }
-
 .footer-links{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
 }
-
 .footer-links a{
   color:#d5e3ff;
   text-decoration:none;
@@ -691,14 +598,14 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – white camera icon */
+/* Instagram icon */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:30px;
-  height:30px;
-  border-radius:8px;
+  width:32px;
+  height:32px;
+  border-radius:9px;
   border:2px solid #ffffff;
   position:relative;
   text-decoration:none;
@@ -708,25 +615,96 @@ footer{
 }
 .footer-instagram a::before{
   content:"";
-  width:14px;
-  height:14px;
+  position:absolute;
+  width:16px;
+  height:16px;
   border:2px solid #ffffff;
   border-radius:4px;
+  top:7px;
+  left:6px;
 }
 .footer-instagram a::after{
   content:"";
   position:absolute;
-  width:3px;
-  height:3px;
+  width:4px;
+  height:4px;
   border-radius:50%;
   background:#ffffff;
-  top:8px;
-  right:8px;
+  top:3px;
+  right:3px;
 }
 
 .footer-copy{
   font-size:12px;
   margin-top:6px;
+}
+
+/* NAV OVERLAY (full-screen menu) */
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1400;
+}
+.nav-backdrop.open{
+  display:flex;
+}
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+  position:relative;
+}
+.nav-modal-title{
+  margin:0 0 10px;
+  font-weight:700;
+  font-size:18px;
+  text-decoration:underline;
+}
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-links a{
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+}
+.nav-modal-links a:last-child{
+  border-bottom:none;
+}
+.nav-modal-links a:hover{
+  text-decoration:underline;
+}
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
 }
 
 /* Modal (Privacy / DNS) */
@@ -739,7 +717,6 @@ footer{
   justify-content:center;
   z-index:2000;
 }
-
 .modal{
   background:#ffffff;
   color:#123055;
@@ -750,17 +727,14 @@ footer{
   box-shadow:0 6px 20px rgba(0,0,0,0.35);
   font-size:14px;
 }
-
 .modal h3{
   margin:0 0 8px;
   font-size:16px;
 }
-
 .modal p{
   margin:0 0 6px;
   line-height:1.6;
 }
-
 .modal-close{
   margin-top:10px;
   display:inline-flex;
@@ -820,20 +794,18 @@ footer{
   cursor:pointer;
 }
 
-/* Responsive */
+/* Responsive layouts */
 @media(max-width:800px){
   .hero-inner{
     flex-direction:column;
     padding-top:8px;
     gap:32px;
   }
-
   .hero-right{
     flex-direction:column-reverse;
     align-items:center;
     gap:24px;
   }
-
   .hero-headline{
     font-size:40px;
     max-width:none;
@@ -842,37 +814,29 @@ footer{
     text-align:center;
     margin-left:0;
   }
-
   .hero-image-wrap{
     margin-left:0;
     align-self:center;
   }
-
   .about-grid,
   .research-grid{
     grid-template-columns:1fr;
   }
-
   .gallery-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
-
   .footer-row{
     flex-direction:row;
     justify-content:space-between;
   }
-
   .transition-strip{
     font-size:13px;
     letter-spacing:0.04em;
   }
-
   .store-item{
     flex:0 0 70vw;
   }
 }
-
-/* Extra-small screens */
 @media(max-width:500px){
   .hero-glass{
     max-width:70vw;
@@ -887,48 +851,53 @@ footer{
 <body>
 
 <header class="topbar">
-  <!-- Menu icon upper-left in the bar -->
-  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+  <!-- Menu icon (left) -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="मेनू खोलें">
     <span></span>
     <span></span>
     <span></span>
   </button>
 
-  <a href="#top" class="topbar-logo-link">
-    <img src="rach3.png" alt="The MayaNut Company logo" class="topbar-logo">
-  </a>
-
+  <!-- Center title -->
   <div class="topbar-title">
-    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+    ❄️ The Maya Nut Company आपको 2025 की क्रिसमस की शुभकामनाएँ देता है ❄️
   </div>
 
-  <!-- Language selector upper-right -->
+  <!-- Language selector (right) -->
   <div class="topbar-lang">
-    <span class="topbar-lang-label">Language:</span>
-    <select id="language-select" aria-label="Site language">
-      <!-- For now everything points to English until you create the others -->
-      <option value="index.html" selected>English</option>
-      <option value="index-zh.html">中文</option>
-      <option value="index-hi.html">हिन्दी</option>
-      <option value="index-ru.html">Русский</option>
+    <span class="topbar-lang-label">
+      <span class="topbar-lang-label-emoji">🌎</span>
+      <span class="topbar-lang-label-text">Language</span>
+    </span>
+    <select id="language-select" aria-label="वेबसाइट भाषा चुनें">
+      <option value="index.html">English</option>
       <option value="index-es.html">Español</option>
-      <option value="index-ar.html">العربية</option>
+      <option value="index-pt.html">Português</option>
+      <option value="index-fr.html">Français</option>
+      <option value="index-ru.html">Русский</option>
+      <option value="index-zh.html">中文</option>
+      <option value="index-hi.html" selected>हिन्दी</option>
     </select>
   </div>
 </header>
 
+<!-- Logo below the bar -->
+<a href="#top" class="topbar-logo-link">
+  <img src="the-maya-nut-company-logo-themayanutcompanylogo.png" alt="The Maya Nut Company लोगो" class="topbar-logo">
+</a>
+
 <!-- Full-screen NAV overlay -->
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
-    <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Menu</h2>
+    <button class="nav-close" id="nav-close" aria-label="मेनू बंद करें">&times;</button>
+    <h2 class="nav-modal-title">मेनू</h2>
     <div class="nav-modal-links">
-      <a href="#buy" data-close-nav="true">STORE</a>
-      <a href="#about" data-close-nav="true">ABOUT</a>
-      <a href="#research" data-close-nav="true">RESEARCH</a>
-      <a href="#gallery" data-close-nav="true">GALLERY</a>
-      <a href="faq.html" data-close-nav="true">FAQ</a>
-      <a href="blog.html" data-close-nav="true">BLOG</a>
+      <a href="#buy" data-close-nav="true">स्टोर</a>
+      <a href="#about" data-close-nav="true">परिचय</a>
+      <a href="#research" data-close-nav="true">शोध</a>
+      <a href="#gallery" data-close-nav="true">गैलरी</a>
+      <a href="faq.html" data-close-nav="true">FAQ / अक्सर पूछे जाने वाले प्रश्न</a>
+      <a href="blog.html" data-close-nav="true">ब्लॉग</a>
     </div>
   </div>
 </div>
@@ -942,14 +911,14 @@ footer{
     <div class="hero-inner">
       <div class="hero-right">
         <div class="hero-headline">
-          <span>MayaNut</span>
-          <span>Beverage</span>
-          <span class="headline-coming">Coming Soon!</span>
+          <span>माया नट</span>
+          <span>पेय</span>
+          <span class="headline-coming">जल्द ही आ रहा है!</span>
         </div>
 
         <div class="hero-image-wrap">
           <a href="#buy" class="hero-image-link">
-            <img src="rach20.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
+            <img src="rach20.png" alt="बर्फ़ीला माया नट (maya nut) पेय गिलास में" class="hero-glass">
           </a>
         </div>
       </div>
@@ -957,40 +926,40 @@ footer{
   </section>
 
   <!-- TRANSITION: ABOUT -->
-  <div class="transition-strip">ABOUT</div>
+  <div class="transition-strip">ABOUT परिचय</div>
 
   <!-- ABOUT -->
   <section class="section section--about" id="about">
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <img src="rach15.jpg" alt="MayaNut fruit (Brosimum alicastrum) on a tropical tree">
-          <img src="rach16.jpg" class="square" alt="Founder August Kokus">
-          <img src="rach17.jpg" alt="Brosimum alicastrum plantation of tropical trees">
-          <img src="rach14.jpg" alt="MayaNut products and development">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="उष्णकटिबंधीय पेड़ पर लगे माया नट (maya nut / Brosimum alicastrum) के फल">
+          <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="The Maya Nut Company के संस्थापक August Kokus">
+          <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="नर्सरी में उग रहे माया नट Brosimum alicastrum के छोटे पौधे">
+          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="मोरासी परिवार (Moraceae) का माया नट वृक्ष Brosimum alicastrum">
         </div>
 
         <div class="about-text-col">
           <div class="about-text-card about-card-1">
-            <h2>About MayaNut™</h2>
-            <p>MayaNut™ is a delicious tree seed of <em>Brosimum alicastrum</em>, a tall rainforest tree capable of producing many hundreds of seeds. In Florida, due to moderate rainfall patterns, trees only fruit once in March and April, producing sweet fig-like fruit that is chewy with a syrupy, slightly tangy taste. The fruit, which is elusively talked about, is best eaten fresh when red — it has a very short shelf life.</p>
+            <h2>माया नट (maya nut) के बारे में</h2>
+            <p>माया नट (maya nut) वास्तव में <em>Brosimum alicastrum</em> नामक उष्णकटिबंधीय वर्षावन वृक्ष का बीज है। इस पेड़ को कई नामों से जाना जाता है – breadnut, ojoche, ramón, guáimaro आदि। एक पेड़ हर साल सैकड़ों बीज दे सकता है। फ़्लोरिडा में, मध्यम वर्षा पैटर्न के कारण ये पेड़ आमतौर पर मार्च–अप्रैल के बीच एक बार फल देते हैं। फल हल्की खट्टास के साथ मीठे, मुलायम और थोड़ा सा फ़िग (fig) जैसे स्वाद वाले होते हैं, लेकिन इनकी शेल्फ लाइफ़ बहुत कम होती है और इन्हें लाल होने पर ताज़ा ही खाना बेहतर माना जाता है।</p>
           </div>
 
           <div class="about-text-card about-card-2">
-            <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature MayaNut™ Beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an under-utilized species, which is why we are developing the first MayaNut™ plantation in the United States.</p>
+            <p>बीज स्वयं अत्यंत पौष्टिक है। इसे भूनकर पीसा जा सकता है और उससे माया नट पेय (maya nut beverage) बनाया जाता है। यही माया नट पाउडर पानी के साथ मिलाकर आटा तैयार करने, ब्रेड और कुकीज़ बेक करने में भी काम आता है। इसके बावजूद, <em>Brosimum alicastrum</em> आज भी एक कम उपयोग में लाया गया, लगभग भूला हुआ वृक्ष है। इसी कारण The Maya Nut Company संयुक्त राज्य अमेरिका में समर्पित माया नट प्लांटेशन विकसित कर रही है, ताकि agroforestry (एग्रोफ़ोरेस्ट्री) मॉडल के अंतर्गत इस प्रजाति को आगे बढ़ाया जा सके।</p>
           </div>
 
           <div class="about-text-card about-card-3">
-            <h3>About August Kokus</h3>
-            <p>August Kokus had a vision to create something that lasts. In 2025, he founded The MayaNut Company, Inc. to preserve a species. He realized he could create whatever he wanted, but whatever that was, it had to endure. It couldn’t simply be a painting or a song — those fade and are forgotten. Give humanity something they love, though, and it will be carried forward.</p>
+            <h3>August Kokus के बारे में</h3>
+            <p>August Kokus कुछ ऐसा बनाना चाहते थे जो सचमुच लंबे समय तक टिका रहे। 2025 में उन्होंने The Maya Nut Company, Inc. की स्थापना की, ताकि इस वृक्ष प्रजाति को संरक्षित करने में मदद मिल सके। उनके लिए यह समझना महत्वपूर्ण था कि वे कुछ भी बना सकते हैं – पर अगर वह केवल एक पेंटिंग या कोई गीत बनकर रह जाए, तो समय के साथ भुला दिया जाएगा। लेकिन अगर इंसान किसी चीज़ से सचमुच प्यार कर लें – जैसे स्वादिष्ट पेय या भोजन – तो वे उसे पीढ़ी दर पीढ़ी आगे बढ़ाते हैं।</p>
           </div>
 
           <div class="about-text-card about-card-4">
-            <p>August realized his “creation” would have to be loved to be passed down through the ages, and his species would survive because people cared about it. South Florida’s subtropical climate makes it especially well suited, which is why Florida’s first dedicated MayaNut™ plantation is scheduled to open in January 2027 — the foundation for future MayaNut™ beverages, flours, and more.</p>
+            <p>इसी सोच से उन्होंने महसूस किया कि उनका “सृजन” ऐसा होना चाहिए जिसे लोग पसंद करें, रोजमर्रा की ज़िंदगी का हिस्सा बना लें। तभी माया नट (maya nut / Brosimum alicastrum) और इसके जैसे पेड़ जीवित रहेंगे, क्योंकि लोग उनकी परवाह करेंगे। दक्षिण फ़्लोरिडा की उपोष्णकटिबंधीय जलवायु इस वृक्ष के लिए विशेष रूप से उपयुक्त है, इसलिए यहीं एक समर्पित माया नट प्लांटेशन तैयार किया जा रहा है – जो भविष्य के माया नट पेय, आटे और अन्य उत्पादों की नींव बनेगा।</p>
           </div>
 
           <div class="about-text-card about-card-5">
-            <p><strong>More Information Coming Soon!</strong></p>
+            <p><strong>माया नट (maya nut / Brosimum alicastrum, breadnut, ojoche, ramón, guáimaro) के बारे में और जानकारी जल्द ही जोड़ी जाएगी!</strong></p>
           </div>
 
         </div>
@@ -999,37 +968,37 @@ footer{
   </section>
 
   <!-- TRANSITION: STORE -->
-  <div class="transition-strip">STORE</div>
+  <div class="transition-strip">STORE स्टोर</div>
 
   <!-- STORE / BUY -->
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>MayaNut™ Store — Coming Soon</h2>
-        <p>Scroll to preview future beverages, flours, and more. These are placeholder products while the first plantation grows.</p>
+        <h2>माया नट स्टोर — जल्द ही आ रहा है</h2>
+        <p>स्क्रॉल कर के भविष्य के माया नट पेय, माया नट आटा और अन्य उष्णकटिबंधीय ट्रीट्स की झलक देखें। जब तक पहला माया नट प्लांटेशन बढ़ रहा है, ये उत्पाद केवल प्लेसहोल्डर प्रीव्यू हैं।</p>
       </div>
 
       <div class="store-scroller-wrapper">
         <div class="store-scroller">
           <div class="store-item">
-            <div class="store-item-image">Product 1</div>
-            <div class="store-item-label">Chilled MayaNut™ Beverage</div>
+            <div class="store-item-image">उत्पाद 1</div>
+            <div class="store-item-label">आइस्ड माया नट पेय (Maya Nut Beverage)</div>
           </div>
           <div class="store-item">
-            <div class="store-item-image">Product 2</div>
-            <div class="store-item-label">MayaNut™ Beverage – Vanilla</div>
+            <div class="store-item-image">उत्पाद 2</div>
+            <div class="store-item-label">वनीला फ़्लेवर माया नट पेय</div>
           </div>
           <div class="store-item">
-            <div class="store-item-image">Product 3</div>
-            <div class="store-item-label">MayaNut™ Beverage – Mocha</div>
+            <div class="store-item-image">उत्पाद 3</div>
+            <div class="store-item-label">मोचा फ़्लेवर माया नट पेय</div>
           </div>
           <div class="store-item">
-            <div class="store-item-image">Product 4</div>
-            <div class="store-item-label">MayaNut™ Flour (Breadnut-style)</div>
+            <div class="store-item-image">उत्पाद 4</div>
+            <div class="store-item-label">माया नट आटा (breadnut स्टाइल)</div>
           </div>
           <div class="store-item">
-            <div class="store-item-image">Product 5</div>
-            <div class="store-item-label">Future MayaNut™ Tropical Treats</div>
+            <div class="store-item-image">उत्पाद 5</div>
+            <div class="store-item-label">भविष्य के माया नट ट्रॉपिकल ट्रीट्स</div>
           </div>
         </div>
       </div>
@@ -1037,62 +1006,62 @@ footer{
   </section>
 
   <!-- TRANSITION: RESEARCH -->
-  <div class="transition-strip">RESEARCH</div>
+  <div class="transition-strip">RESEARCH शोध</div>
 
   <!-- RESEARCH -->
   <section class="section section--research" id="research">
     <div class="section-inner">
       <div class="research-grid">
         <div class="research-image-wrap">
-          <img src="rach18.jpg" alt="Brosimum alicastrum (MayaNut breadnut tree) research image">
+          <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="माया नट वृक्ष Brosimum alicastrum की पत्तियाँ और शाखाएँ">
         </div>
         <div class="research-text">
-          <p><strong>Brosimum alicastrum</strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it does occur in more sporadic populations all the way north to Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica, possibly through deliberate human seed migration for agricultural or religious reasons.</p>
+          <p><strong>Brosimum alicastrum</strong> मोरासी (Moraceae) परिवार की एक वृक्ष प्रजाति है। यह प्रजाति मुख्य रूप से मेक्सिको के दक्षिणी उष्णकटिबंधीय वनों में प्रमुख वृक्ष के रूप में पाई जाती है, लेकिन इसका वितरण और उत्तर में तमाउलिपास (Tamaulipas) तक, पश्चिमी मेक्सिको, मध्य अमेरिका के हिस्सों, उत्तरी दक्षिण अमेरिका और कैरेबियन क्षेत्र (जैसे क्यूबा और जमैका) तक फैला हुआ है। माना जाता है कि कुछ क्षेत्रों में लोगों ने बीजों को जानबूझकर स्थानांतरित किया, ताकि कृषि या धार्मिक कारणों से माया नट (maya nut / breadnut / ojoche / ramón / guáimaro) की खेती की जा सके।</p>
 
-          <p>Historically, the species <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people but probably many other cultures overlapping its range. The tree was probably used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
+          <p>ऐतिहासिक रूप से, माना जाता है कि <em>Brosimum alicastrum</em> न सिर्फ़ माया सभ्यता के लिए, बल्कि इसके प्राकृतिक क्षेत्र में रहने वाली कई प्राचीन संस्कृतियों के लिए भी एक महत्त्वपूर्ण भोजन स्रोत रहा है। कुछ शोध यह संकेत देते हैं कि लगभग 10,000 ईसा पूर्व के शुरुआती मेसोअमेरिकी शिकारी–संग्रहकर्ता भी इस वृक्ष का उपयोग कर सकते थे। फिर भी, निकट इतिहास में हमारे पास बहुत स्पष्ट लिखित अभिलेख या चित्र नहीं हैं जो यह बताएं कि प्राचीन संस्कृतियाँ माया नट (maya nut) को ठीक किस तरह पकाती या उपयोग करती थीं।</p>
 
-          <p>Today, it is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish America's first <em>Brosimum alicastrum</em> farm, as this species is widely underutilized.</p>
+          <p>आज, मेक्सिको के कई पशुपालक Brosimum alicastrum को चारे के वृक्ष के रूप में इस्तेमाल करते हैं और इसके बीजों से टॉर्टिला, ब्रेड और कॉफ़ी जैसे पेय तैयार किए जाते हैं। The Maya Nut Company दक्षिण फ़्लोरिडा में एक समर्पित माया नट (maya nut / Brosimum alicastrum) फ़ार्म स्थापित कर रही है, ताकि इस कम उपयोग में लाई गई उष्णकटिबंधीय प्रजाति को नए बाज़ारों और नई पीढ़ियों तक पहुँचाया जा सके।</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- TRANSITION: GALLERY -->
-  <div class="transition-strip">GALLERY</div>
+  <div class="transition-strip">GALLERY गैलरी</div>
 
   <!-- GALLERY -->
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
-      <h2>Gallery</h2>
-      <p>Images from our trees, fruit, and future products — coming soon.</p>
+      <h2>माया नट गैलरी</h2>
+      <p>हमारे पेड़ों, फलों और भविष्य के माया नट उत्पादों की कुछ झलकियाँ।</p>
       <div class="gallery-grid">
         <div class="gallery-tile">
-          <img src="rach13.jpg" alt="MayaNut gallery image">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="पेड़ पर लगे माया नट Brosimum alicastrum के फल का क्लोज़-अप">
         </div>
         <div class="gallery-tile">
-          <img src="rach13.jpg" alt="MayaNut gallery image">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="शाखाओं पर लटके माया नट के कई फल">
         </div>
         <div class="gallery-tile">
-          <img src="rach13.jpg" alt="MayaNut gallery image">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="वर्षावन की रोशनी में चमकते माया नट के फल">
         </div>
         <div class="gallery-tile">
-          <img src="rach13.jpg" alt="MayaNut gallery image">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="पेड़ के तने से सटे उगते माया नट फल">
         </div>
         <div class="gallery-tile">
-          <img src="rach13.jpg" alt="MayaNut gallery image">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="पक चुके माया नट फल की सतह का क्लोज़-अप">
         </div>
         <div class="gallery-tile">
-          <img src="rach13.jpg" alt="MayaNut gallery image">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Brosimum alicastrum की शाखाओं पर उगे कई माया नट फल">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION (gradient background now) -->
+  <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
-        <img src="rach3.png" alt="The MayaNut Company logo">
+        <img src="the-maya-nut-company-logo-themayanutcompanylogo.png" alt="The Maya Nut Company लोगो">
       </a>
     </div>
   </section>
@@ -1104,17 +1073,17 @@ footer{
     <hr class="footer-line" />
     <div class="footer-row">
       <div class="footer-links">
-        <a id="privacy-link">Privacy Policy</a>
-        <a id="dns-link">Do Not Sell My Info</a>
+        <a id="privacy-link">गोपनीयता नीति</a>
+        <a id="dns-link">मेरी जानकारी न बेचें</a>
       </div>
       <div class="footer-instagram">
-        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company on Instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="Instagram पर The Maya Nut Company को फ़ॉलो करें">
           <span>IG</span>
         </a>
       </div>
     </div>
     <div class="footer-copy">
-      © 2025 The MayaNut Company, Inc. All Rights Reserved.
+      © 2025 The Maya Nut Company, Inc. सर्वाधिकार सुरक्षित।
     </div>
   </div>
 </footer>
@@ -1122,22 +1091,23 @@ footer{
 <!-- Welcome popup -->
 <div class="welcome-backdrop" id="welcome-backdrop">
   <div class="welcome-modal">
-    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
-    <h2 class="welcome-title">Welcome to MayaNut.com</h2>
-    <p>We are currently developing Florida's first MayaNut (Brosimum alicastrum) plantation of tropical trees.</p>
-    <p>We hope to be serving you our delicious MayaNut Beverage by 2028. Thank you for your patience!</p>
+    <button class="welcome-close" id="welcome-close" aria-label="स्वागत संदेश बंद करें">&times;</button>
+    <h2 class="welcome-title">mayanut.com पर आपका स्वागत है</h2>
+    <p>हम वर्तमान में फ़्लोरिडा में माया नट (maya nut, Brosimum alicastrum) के उष्णकटिबंधीय वृक्षों की पहली समर्पित प्लांटेशन विकसित कर रहे हैं।</p>
+    <p>हमारा लक्ष्य है कि लगभग 2028 तक आपको स्वादिष्ट माया नट पेय परोस सकें। आपके धैर्य के लिए धन्यवाद!</p>
   </div>
 </div>
 
 <!-- Privacy / DNS Modal -->
 <div class="modal-backdrop" id="modal-backdrop">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <h3 id="modal-title">Privacy Policy</h3>
+    <h3 id="modal-title">गोपनीयता नीति</h3>
     <div id="modal-body">
-      <p>We collect only basic information needed to operate this website, such as standard server logs and anonymous analytics.</p>
-      <p>We do not sell your personal information. Any data shared with service providers is used only to support site functionality and security.</p>
+      <p>हम केवल इस वेबसाइट को चलाने के लिए ज़रूरी न्यूनतम तकनीकी जानकारी इकट्ठा करते हैं, जैसे मानक सर्वर लॉग और अनाम उपयोग डेटा।</p>
+      <p>आप द्वारा ईमेल आदि के माध्यम से स्वेच्छा से भेजी गई कोई भी जानकारी केवल आपके प्रश्नों का उत्तर देने और हमारी सेवाओं को बेहतर बनाने के लिए उपयोग की जाती है।</p>
+      <p>हम आपकी व्यक्तिगत जानकारी नहीं बेचते हैं। कृपया ध्यान दें कि अंग्रेज़ी से स्वचालित अनुवादित कुछ पाठ में त्रुटियाँ हो सकती हैं।</p>
     </div>
-    <button class="modal-close" id="modal-close">Close</button>
+    <button class="modal-close" id="modal-close">बंद करें</button>
   </div>
 </div>
 
@@ -1147,9 +1117,8 @@ footer{
   const select = document.getElementById('language-select');
   if (!select) return;
 
-  // If URL matches one of the language file names, set the dropdown accordingly
   const path = window.location.pathname;
-  const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'index-hi.html';
 
   for (const opt of select.options){
     if (opt.value === file){
@@ -1159,12 +1128,12 @@ footer{
   }
 
   select.addEventListener('change', function(){
-    const target = this.value || 'index.html';
+    const target = this.value || 'index-hi.html';
     window.location.href = target;
   });
 })();
 
-// Canvas snowflakes in hero (slow + present immediately)
+// Canvas snowflakes in hero
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1255,7 +1224,6 @@ footer{
       Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
     flake.y += flake.speedY * deltaTime;
-
     flake.rotation += flake.rotationSpeed * deltaTime;
 
     if (flake.y > height + flake.size * 2) {
@@ -1307,17 +1275,17 @@ footer{
 
   function openModal(kind){
     if(kind === 'privacy'){
-      titleEl.textContent = 'Privacy Policy';
+      titleEl.textContent = 'गोपनीयता नीति';
       bodyEl.innerHTML = `
-        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-        <p>We do not sell your personal information.</p>
+        <p>हम केवल इस वेबसाइट को चलाने के लिए ज़रूरी न्यूनतम तकनीकी जानकारी इकट्ठा करते हैं, जैसे मानक सर्वर लॉग और अनाम उपयोग डेटा।</p>
+        <p>आप द्वारा स्वेच्छा से भेजी गई कोई भी जानकारी (उदाहरण के लिए ईमेल के माध्यम से) केवल आपके प्रश्नों का उत्तर देने और हमारी सेवाओं को बेहतर बनाने के लिए उपयोग की जाती है।</p>
+        <p>हम आपकी व्यक्तिगत जानकारी नहीं बेचते हैं। कृपया ध्यान दें कि अंग्रेज़ी से स्वचालित अनुवादित कुछ पाठ में त्रुटियाँ हो सकती हैं।</p>
       `;
     }else{
-      titleEl.textContent = 'Do Not Sell My Info';
+      titleEl.textContent = 'मेरी जानकारी न बेचें';
       bodyEl.innerHTML = `
-        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
-        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+        <p>The Maya Nut Company, Inc. आपकी व्यक्तिगत जानकारी नहीं बेचती है।</p>
+        <p>यदि आप यह जानना चाहते हैं कि हमारे पास आपके बारे में कौन-सी जानकारी हो सकती है, या आप उसे हटवाना चाहते हैं, तो कृपया हमसे संपर्क करें। हम यथाशीघ्र उत्तर देंगे।</p>
       `;
     }
     backdrop.style.display = 'flex';
@@ -1372,7 +1340,6 @@ footer{
   }
 
   navBackdrop.addEventListener('click', (e) => {
-    // click outside the modal closes
     if(e.target === navBackdrop){
       closeNav();
     }
@@ -1407,7 +1374,6 @@ footer{
 })();
 
 // Logo tooltip behavior (desktop hover + mobile tap)
-// FIXED so it doesn't get cut off at screen edges.
 (function(){
   const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
   if (!logos.length) return;
@@ -1438,9 +1404,9 @@ footer{
 
   function getMessage(){
     if (atTop()){
-      return 'Welcome to mayanut.com Home of The MayaNut Company';
+      return 'mayanut.com पर आपका स्वागत है – The Maya Nut Company का घर';
     }
-    return '👆 Click to Return Home 👆';
+    return '👆 ऊपर वापस जाने के लिए क्लिक करें 👆';
   }
 
   function positionTooltip(rect){
