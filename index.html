@@ -27,7 +27,7 @@ MayaNut, mayanut, maya nut, Maya Nut, Brosimum alicastrum, breadnut, bread nut, 
 Маянат, хлебное дерево, тропические деревья,
 nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
 noz maia, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
-مايانَت, جوز المايا, شجرة استوائية, أشجار استوائية
+مايانَت, جوز المايا, शجرة استوائية, أشجار استوائية
 ">
 
 <style>
@@ -85,6 +85,7 @@ body{
   color:#fff;
   display:grid;
   grid-template-columns:auto 1fr auto;
+  grid-template-areas:"menu title lang";
   align-items:center;
   column-gap:6px;
   padding:8px 10px;
@@ -96,6 +97,7 @@ body{
 
 /* Hamburger menu (left) – pulled in from edge */
 .menu-toggle{
+  grid-area:menu;
   width:32px;
   height:26px;
   border:none;
@@ -128,6 +130,7 @@ body{
 
 /* Title (center) */
 .topbar-title{
+  grid-area:title;
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
@@ -137,16 +140,28 @@ body{
   padding:0 6px;
 }
 
-/* Make title smaller and wrap nicely on mobile */
+/* Make title smaller AND move it to its own row on mobile */
 @media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+      "menu . lang"
+      "title title title";
+    align-items:center;
+  }
+
   .topbar-title{
     font-size:14px;
     line-height:1.2;
+    margin-top:4px;
+    padding:0 12px;
   }
 }
 
 /* LANGUAGE SWITCHER (right) – stacked label + dropdown */
 .topbar-lang{
+  grid-area:lang;
   display:flex;
   flex-direction:column;
   align-items:flex-end;
