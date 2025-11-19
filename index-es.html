@@ -1,1 +1,1287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The MayaNut Company</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+<link rel="icon" type="image/png" href="faviconmayanut.png" />
+<link rel="shortcut icon" type="image/png" href="faviconmayanut.png" />
+
+<meta name="theme-color" content="#18A7FF" />
+
+<meta name="description" content="Bebidas y productos MayaNut™ (maya nut, mayanut) elaborados con Brosimum alicastrum, también conocido como breadnut, un árbol tropical de selva lluviosa. Árboles tropicales, agroforestería y futuras bebidas y harinas MayaNut.">
+<meta name="keywords" content="MayaNut, mayanut, maya nut, Brosimum alicastrum, breadnut, árbol tropical, árbol de selva tropical, agroforestería">
+
+<style>
+:root{
+  --bg:#18A7FF;
+  --bg-grad:
+    radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
+    radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
+    radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
+    #0a56c2;
+  --buy-grad:
+    radial-gradient(circle at 0% 0%, rgba(222,208,255,0.7) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(222,208,255,0.7) 0, transparent 55%),
+    linear-gradient(180deg,#ffffff 0%, #ffffff 100%);
+  --bar:#0a56c2;
+  --bar-h:70px;
+  --card-bg:#ffffff;
+}
+@media (max-width: 600px){
+  :root{ --bar-h:80px; }
+}
+*,
+*::before,
+*::after{ box-sizing:border-box; }
+html,body{
+  margin:0;
+  padding:0;
+  scroll-behavior:smooth;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:#fff;
+  background:var(--bg-grad);
+  background-attachment:fixed;
+}
+
+/* TOP BAR */
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:var(--bar-h);
+  background:var(--bar);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+  padding:0 16px;
+  box-sizing:border-box;
+  padding-top:calc(4px + env(safe-area-inset-top, 0px));
+}
+.topbar-logo-link{
+  position:absolute;
+  left:10px;
+  top:70px;
+}
+.topbar-logo{
+  height:100px;
+  width:100px;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+}
+.topbar-title{
+  font-family:"Mountains of Christmas", cursive;
+  font-size:18px;
+  text-align:center;
+  display:inline-block;
+  animation:merrygiggle 6s ease-in-out infinite;
+  max-width:60%;
+  line-height:1.2;
+}
+.menu-toggle{
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:32px;
+  height:26px;
+  border:none;
+  background:transparent;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:0;
+  cursor:pointer;
+  z-index:2601;
+}
+.menu-toggle span{
+  display:block;
+  height:3px;
+  border-radius:999px;
+  background:#ffffff;
+  transition:transform 0.2s ease, opacity 0.2s ease;
+}
+.menu-toggle.open span:nth-child(1){ transform:translateY(11px) rotate(45deg); }
+.menu-toggle.open span:nth-child(2){ opacity:0; }
+.menu-toggle.open span:nth-child(3){ transform:translateY(-11px) rotate(-45deg); }
+
+/* LANGUAGE */
+.topbar-lang{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+  white-space:nowrap;
+}
+.topbar-lang-label{ font-size:13px; }
+.topbar-lang-label span.globe{
+  font-size:18px;
+  margin-right:2px;
+}
+.topbar-lang select{
+  font-size:13px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.7);
+  background:rgba(10,86,194,0.95);
+  color:#fff;
+  padding:3px 8px;
+  outline:none;
+}
+.topbar-lang select option{ color:#000; }
+
+@media (max-width: 600px){
+  .topbar-title{
+    font-size:14px;
+    max-width:55%;
+  }
+  .topbar-lang-label{ font-size:12px; }
+  .topbar-lang-label span.globe{ font-size:18px; }
+  .topbar-lang select{
+    font-size:12px;
+    padding:2px 6px;
+  }
+}
+
+/* NAV OVERLAY */
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2400;
+}
+.nav-backdrop.open{ display:flex; }
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+  position:relative;
+}
+.nav-modal-title{
+  margin:0 0 10px;
+  font-weight:700;
+  font-size:18px;
+  text-decoration:underline;
+}
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-links a{
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+}
+.nav-modal-links a:last-child{ border-bottom:none; }
+.nav-modal-links a:hover{ text-decoration:underline; }
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero{
+  position:relative;
+  min-height:100vh;
+  padding-top:var(--bar-h);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.hero-inner{
+  width:100%;
+  max-width:1100px;
+  padding:0 16px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:40px;
+  position:relative;
+  z-index:1;
+}
+canvas#snow{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+.hero-right{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  width:100%;
+}
+.hero-headline{
+  flex:1;
+  max-width:520px;
+  margin-left:8px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:70px;
+  line-height:1.05;
+  font-weight:400;
+  color:#ffffff;
+  -webkit-text-stroke:3px #0057c8;
+  text-stroke:3px #0057c8;
+  text-shadow:0 3px 0 #0057c8, 0 6px 12px rgba(0,0,0,0.4);
+}
+.hero-headline span{ display:block; }
+.hero-headline .headline-coming{
+  text-decoration:underline;
+  text-decoration-color:var(--bar);
+  text-underline-offset:4px;
+  white-space:nowrap;
+}
+.hero-image-wrap{
+  flex:0 0 auto;
+  margin-left:auto;
+}
+.hero-image-link{ display:inline-block; }
+.hero-glass{
+  width:480px;
+  max-width:80vw;
+  display:block;
+  cursor:pointer;
+  transition:transform 0.22s ease, box-shadow 0.22s ease;
+}
+.hero-image-link:hover .hero-glass{
+  transform:scale(1.08);
+  box-shadow:0 0 40px rgba(255,255,255,0.95);
+}
+@keyframes merrygiggle{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(4px);}
+  50%{transform:translateX(0);}
+  75%{transform:translateX(-4px);}
+  100%{transform:translateX(0);}
+}
+
+/* STRIPS */
+.transition-strip{
+  background:linear-gradient(90deg,#7bc4ff 0%,#0e4fb8 24%,#aa00fe 50%,#0e4fb8 76%,#7bc4ff 100%);
+  color:#f5fbff;
+  text-align:center;
+  padding:14px 16px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing:0.06em;
+  font-size:15px;
+  position:relative;
+  z-index:1;
+  text-shadow:0 1px 2px rgba(0,0,0,0.45);
+  border-top:1px solid rgba(255,255,255,0.4);
+  border-bottom:1px solid rgba(0,0,0,0.45);
+  box-shadow:0 3px 8px rgba(0,0,0,0.45);
+}
+
+/* SECTIONS */
+.section{
+  padding:70px 16px 80px;
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+.section-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* ABOUT */
+.section--about::before{
+  content:"";
+  position:absolute;
+  top:-60px;
+  left:50%;
+  transform:translateX(-50%);
+  width:130%;
+  height:120px;
+  border-radius:50% 50% 0 0;
+  z-index:-1;
+  background:var(--bar);
+}
+.section--about{
+  background:var(--bar);
+  color:#fff;
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+.about-images{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.about-images img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+}
+.about-images .square{ aspect-ratio:1/1; }
+.about-text-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.about-text-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 20px 20px;
+  box-shadow:0 3px 14px rgba(0,0,0,0.25);
+  color:#3b3f7a;
+  font-size:15px;
+  line-height:1.7;
+}
+.about-card-1{ background:linear-gradient(90deg, #f4ecff 0%, #ffffff 70%); }
+.about-card-2{ background:linear-gradient(90deg, #efe3ff 0%, #ffffff 70%); }
+.about-card-3{ background:linear-gradient(90deg, #eadbff 0%, #ffffff 70%); }
+.about-card-4{ background:linear-gradient(90deg, #e3d2ff 0%, #ffffff 70%); }
+.about-card-5{ background:linear-gradient(90deg, #dde7ff 0%, #ffffff 70%); }
+.about-text-card h2,
+.about-text-card h3{
+  margin-top:0;
+  margin-bottom:8px;
+  color:#30346a;
+}
+
+/* STORE */
+.section--buy{
+  background:var(--buy-grad);
+  color:#083b7c;
+  padding:40px 16px 60px;
+}
+.store-inner{
+  max-width:900px;
+  margin:0 auto;
+}
+.store-heading{
+  text-align:center;
+  margin-bottom:22px;
+}
+.store-heading h2{
+  margin:0 0 6px;
+  font-size:22px;
+  color:#2b346c;
+}
+.store-heading p{
+  margin:0;
+  font-size:14px;
+  color:#4a5288;
+}
+.store-scroller-wrapper{
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+.store-scroller{
+  display:flex;
+  gap:16px;
+  padding-bottom:4px;
+}
+.store-item{
+  flex:0 0 220px;
+  background:linear-gradient(135deg,#f0e8ff 0%,#ffffff 45%,#e4defe 100%);
+  border-radius:18px;
+  padding:14px 14px 18px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.16);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.store-item-image{
+  width:100%;
+  aspect-ratio:4/5;
+  border-radius:14px;
+  background:radial-gradient(circle at 30% 20%, #f0e8ff 0, #ffffff 45%, #e4defe 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#5f63a8;
+  font-weight:600;
+  font-size:14px;
+  margin-bottom:10px;
+}
+.store-item-label{
+  font-size:14px;
+  color:#40437a;
+  text-align:center;
+}
+
+/* RESEARCH */
+.section--research{
+  background:var(--bg-grad);
+  color:#ffffff;
+}
+.research-grid{
+  display:grid;
+  grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+.research-image-wrap img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 2px 10px rgba(0,0,0,0.22);
+}
+.research-text{
+  font-size:15px;
+  line-height:1.7;
+}
+.research-text p{ margin:0 0 12px; }
+
+/* GALLERY */
+.section--gallery{ background:var(--bar); }
+.gallery-inner{ text-align:center; }
+.gallery-inner h2{
+  margin:0 0 12px;
+  font-size:22px;
+}
+.gallery-inner p{
+  margin:0 0 18px;
+  font-size:15px;
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  max-width:900px;
+  margin:0 auto;
+}
+.gallery-tile{
+  aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
+}
+.gallery-tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.gallery-tile:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* BOTTOM LOGO */
+.section--bottom-logo{
+  background:var(--bg-grad);
+  text-align:center;
+}
+.section--bottom-logo img{
+  width:200px;
+  height:auto;
+  filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
+  cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+  background:var(--bar);
+  color:#d5e3ff;
+  padding:18px 16px 28px;
+  font-size:13px;
+}
+.footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+.footer-line{
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.25);
+  margin:0 0 10px;
+}
+.footer-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.footer-links a{
+  color:#d5e3ff;
+  text-decoration:none;
+  border-bottom:1px dashed rgba(213,227,255,0.6);
+  cursor:pointer;
+}
+
+/* INSTAGRAM ICON */
+.footer-instagram a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  border:2.5px solid #ffffff;
+  position:relative;
+  text-decoration:none;
+}
+.footer-instagram span{ display:none; }
+.footer-instagram a::before{
+  content:"";
+  position:absolute;
+  width:18px;
+  height:18px;
+  border:2.5px solid #ffffff;
+  border-radius:6px;
+}
+.footer-instagram a::after{
+  content:"";
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#ffffff;
+  top:8px;
+  right:8px;
+}
+.footer-copy{
+  font-size:12px;
+  margin-top:6px;
+}
+
+/* MODAL */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+.modal{
+  background:#ffffff;
+  color:#123055;
+  max-width:420px;
+  width:90%;
+  border-radius:14px;
+  padding:18px 18px 16px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  font-size:14px;
+}
+.modal h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+.modal p{
+  margin:0 0 6px;
+  line-height:1.6;
+}
+.modal-close{
+  margin-top:10px;
+  display:inline-flex;
+  padding:4px 10px;
+  border-radius:999px;
+  border:none;
+  background:#0a56c2;
+  color:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
+
+/* WELCOME POPUP */
+.welcome-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2500;
+}
+.welcome-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:20px 22px 22px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  position:relative;
+  text-align:left;
+  font-size:14px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+}
+.welcome-title{
+  margin:0 0 8px;
+  font-weight:700;
+  font-size:18px;
+}
+.welcome-modal p{ margin:0 0 8px; }
+.welcome-close{
+  position:absolute;
+  top:10px;
+  right:14px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* RESPONSIVE */
+@media(max-width:800px){
+  .hero-inner{
+    flex-direction:column;
+    padding-top:8px;
+    gap:32px;
+  }
+  .hero-right{
+    flex-direction:column-reverse;
+    align-items:center;
+    gap:24px;
+  }
+  .hero-headline{
+    font-size:40px;
+    max-width:none;
+    -webkit-text-stroke:2px #0057c8;
+    text-stroke:2px #0057c8;
+    text-align:center;
+    margin-left:0;
+  }
+  .hero-image-wrap{
+    margin-left:0;
+    align-self:center;
+  }
+  .about-grid,
+  .research-grid{
+    grid-template-columns:1fr;
+  }
+  .gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .footer-row{
+    flex-direction:row;
+    justify-content:space-between;
+  }
+  .transition-strip{
+    font-size:13px;
+    letter-spacing:0.04em;
+  }
+  .store-item{
+    flex:0 0 70vw;
+  }
+}
+@media(max-width:500px){
+  .hero-glass{ max-width:70vw; }
+  .hero-headline{ font-size:32px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+
+  <a href="#top" class="topbar-logo-link">
+    <img src="the-maya-nut-company-logo-themayanutcompanylogo.png" alt="Logotipo de The MayaNut Company" class="topbar-logo">
+  </a>
+
+  <div class="topbar-title">
+    ❄️ The MayaNut Company te desea una muy Feliz Navidad 2025 ❄️
+  </div>
+
+  <div class="topbar-lang">
+    <span class="topbar-lang-label"><span class="globe">🌎</span>Language</span>
+    <select id="language-select" aria-label="Site language">
+      <option value="index.html">English</option>
+      <option value="index-es.html" selected>Español</option>
+      <option value="index-pt.html">Português</option>
+      <option value="index-fr.html">Français</option>
+      <option value="index-ru.html">Русский</option>
+      <option value="index-zh.html">中文</option>
+      <option value="index-hi.html">हिन्दी</option>
+    </select>
+  </div>
+</header>
+
+<div class="nav-backdrop" id="nav-backdrop">
+  <div class="nav-modal">
+    <button class="nav-close" id="nav-close" aria-label="Cerrar menú">&times;</button>
+    <h2 class="nav-modal-title">Menú</h2>
+    <div class="nav-modal-links">
+      <a href="#buy" data-close-nav="true">TIENDA</a>
+      <a href="#about" data-close-nav="true">ACERCA DE</a>
+      <a href="#research" data-close-nav="true">INVESTIGACIÓN</a>
+      <a href="#gallery" data-close-nav="true">GALERÍA</a>
+      <a href="faq.html" data-close-nav="true">PREGUNTAS FRECUENTES</a>
+      <a href="blog.html" data-close-nav="true">BLOG</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <section class="hero" id="top">
+    <canvas id="snow"></canvas>
+    <div class="hero-inner">
+      <div class="hero-right">
+        <div class="hero-headline">
+          <span>MayaNut</span>
+          <span>Bebida</span>
+          <span class="headline-coming">¡Muy pronto!</span>
+        </div>
+        <div class="hero-image-wrap">
+          <a href="#buy" class="hero-image-link">
+            <img src="rach20.png" alt="Bebida fría MayaNut elaborada con Brosimum alicastrum (maya nut, breadnut) en un vaso" class="hero-glass">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition-strip">ACERCA DE</div>
+
+  <section class="section section--about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-images">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Frutos de MayaNut de Brosimum alicastrum (maya nut, breadnut) en un árbol tropical">
+          <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Fundador August Kokus cerca de árboles Brosimum alicastrum (MayaNut, breadnut)">
+          <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Árboles MayaNut de Brosimum alicastrum creciendo en vivero">
+          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Productos y desarrollo de MayaNut a partir de Brosimum alicastrum, un árbol tropical de la familia Moraceae">
+        </div>
+
+        <div class="about-text-col">
+          <div class="about-text-card about-card-1">
+            <h2>Acerca de MayaNut™</h2>
+            <p>MayaNut™ es una deliciosa semilla de árbol de <em>Brosimum alicastrum</em>, un alto árbol tropical de selva lluviosa de la familia Moraceae capaz de producir cientos de semillas. En Florida, debido a los patrones de lluvia moderados, los árboles solo fructifican una vez al año, en marzo y abril, produciendo frutos dulces parecidos al higo, masticables y con un sabor almibarado y ligeramente ácido. El fruto, del que casi no se habla con detalle, se disfruta mejor fresco y rojo —su vida útil es muy corta.</p>
+          </div>
+
+          <div class="about-text-card about-card-2">
+            <p>Sin embargo, la semilla interior es muy nutritiva. Se puede tostar y moler hasta obtener un polvo que usamos en nuestra bebida insignia MayaNut™. También puede molerse y mezclarse con agua para hacer pan o galletas, de forma similar a usos tradicionales del breadnut. Aun así, <em>Brosimum alicastrum</em> (maya nut, breadnut) sigue siendo una especie de árbol tropical poco aprovechada, por lo que estamos desarrollando la primera plantación dedicada de MayaNut™ en Estados Unidos.</p>
+          </div>
+
+          <div class="about-text-card about-card-3">
+            <h3>Acerca de August Kokus</h3>
+            <p>August Kokus tenía la visión de crear algo que perdurara. En 2025 fundó The MayaNut Company, Inc. para ayudar a preservar una especie. Se dio cuenta de que podía crear lo que quisiera, pero fuera lo que fuera, tenía que durar. No podía ser solo una pintura o una canción —esas pueden desvanecerse y olvidarse. Pero si le das a la humanidad algo que ama, lo seguirá llevando consigo.</p>
+          </div>
+
+          <div class="about-text-card about-card-4">
+            <p>August comprendió que su “creación” debía ser querida para transmitirse a través de las generaciones, y que esta especie de árbol sobreviviría porque la gente se preocuparía por ella. El clima subtropical del sur de Florida es especialmente adecuado, por eso la primera plantación dedicada de MayaNut™ de Florida está prevista para abrir en enero de 2027 —la base para futuras bebidas, harinas y más productos MayaNut™.</p>
+          </div>
+
+          <div class="about-text-card about-card-5">
+            <p><strong>¡Más información muy pronto!</strong></p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition-strip">TIENDA</div>
+
+  <section class="section section--buy" id="buy">
+    <div class="section-inner store-inner">
+      <div class="store-heading">
+        <h2>Tienda MayaNut™ — Muy pronto</h2>
+        <p>Desplázate para ver un adelanto de futuras bebidas, harinas y otras creaciones inspiradas en Brosimum alicastrum (maya nut, breadnut). Estos son productos de muestra mientras crece la primera plantación.</p>
+      </div>
+
+      <div class="store-scroller-wrapper">
+        <div class="store-scroller">
+          <div class="store-item">
+            <div class="store-item-image">Producto 1</div>
+            <div class="store-item-label">Bebida fría MayaNut™</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Producto 2</div>
+            <div class="store-item-label">Bebida MayaNut™ – Vainilla</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Producto 3</div>
+            <div class="store-item-label">Bebida MayaNut™ – Moca</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Producto 4</div>
+            <div class="store-item-label">Harina MayaNut™ (estilo breadnut)</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Producto 5</div>
+            <div class="store-item-label">Futuros dulces tropicales MayaNut™</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition-strip">INVESTIGACIÓN</div>
+
+  <section class="section section--research" id="research">
+    <div class="section-inner">
+      <div class="research-grid">
+        <div class="research-image-wrap">
+          <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="Hojas verdes del árbol MayaNut Brosimum alicastrum en un árbol tropical breadnut">
+        </div>
+        <div class="research-text">
+          <p><strong>Brosimum alicastrum</strong> es una especie de árbol de la familia Moraceae. Es dominante principalmente en los bosques tropicales del sur de México, pero también aparece en poblaciones más dispersas hasta Tamaulipas, en zonas del oeste de México y Centroamérica, extendiéndose hacia el norte de Sudamérica, así como partes del Caribe, incluyendo Cuba y Jamaica, posiblemente gracias al traslado deliberado de semillas por motivos agrícolas o culturales.</p>
+
+          <p>Históricamente, se cree que <em>Brosimum alicastrum</em> —a veces llamado maya nut o breadnut— fue importante no solo para el pueblo maya sino también para muchas otras culturas dentro de su área de distribución. Probablemente este árbol fue utilizado por cazadores-recolectores mesoamericanos desde alrededor del 10.000 a. C. Sin embargo, en la historia más reciente casi no existe evidencia escrita directa de sus usos específicos en la antigüedad. No se conocen textos o arte supervivientes que describan con claridad recetas detalladas o usos cotidianos.</p>
+
+          <p>Hoy en día se utiliza como árbol forrajero para ganaderos en México y para elaborar tortillas, pan e incluso una bebida tipo café, todo a partir de las semillas de este antiguo árbol tropical de selva lluviosa. The MayaNut Company trabaja en el sur de Florida para establecer la primera finca dedicada de <em>Brosimum alicastrum</em> en Estados Unidos, ya que esta especie de maya nut (breadnut) sigue siendo ampliamente infrautilizada en la agroforestería moderna.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition-strip">GALERÍA</div>
+
+  <section class="section section--gallery" id="gallery">
+    <div class="section-inner gallery-inner">
+      <h2>Galería</h2>
+      <p>Imágenes de nuestros árboles tropicales, frutos y futuros productos MayaNut — más contenido muy pronto.</p>
+      <div class="gallery-grid">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Primer plano del fruto MayaNut de Brosimum alicastrum en el árbol">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Racimo de frutos MayaNut en el árbol tropical breadnut Brosimum alicastrum">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Frutos maduros y rojos de maya nut en una rama de Brosimum alicastrum">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Frutos de Brosimum alicastrum (MayaNut, breadnut) colgando de un árbol tropical">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Detalle del fruto MayaNut mostrando las semillas de Brosimum alicastrum">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Frutos tropicales MayaNut de Brosimum alicastrum en una plantación del sur de Florida">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--bottom-logo">
+    <div class="section-inner">
+      <a href="#top">
+        <img src="the-maya-nut-company-logo-themayanutcompanylogo.png" alt="Logotipo de The MayaNut Company">
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <hr class="footer-line" />
+    <div class="footer-row">
+      <div class="footer-links">
+        <a id="privacy-link">Política de privacidad</a>
+        <a id="dns-link">No vender mi información</a>
+      </div>
+      <div class="footer-instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company en Instagram">
+          <span>IG</span>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      © 2025 The MayaNut Company, Inc. Todos los derechos reservados.
+    </div>
+  </div>
+</footer>
+
+<div class="welcome-backdrop" id="welcome-backdrop">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcome-close" aria-label="Cerrar mensaje de bienvenida">&times;</button>
+    <h2 class="welcome-title">Bienvenido a MayaNut.com</h2>
+    <p>Actualmente estamos desarrollando la primera plantación de MayaNut (Brosimum alicastrum) en Florida con árboles tropicales.</p>
+    <p>Esperamos poder servirte nuestra deliciosa bebida MayaNut para 2028. ¡Gracias por tu paciencia y por apoyar a esta especie de selva tropical poco utilizada!</p>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Política de privacidad</h3>
+    <div id="modal-body">
+      <p>Recopilamos únicamente la información básica necesaria para operar este sitio web, como registros estándar del servidor y datos de uso anónimos.</p>
+      <p>No vendemos tu información personal. Cualquier dato compartido con proveedores de servicios se usa solo para mantener la funcionalidad y la seguridad del sitio.</p>
+      <p>Algunas traducciones de este sitio desde el inglés pueden ser imperfectas o contener errores. En caso de duda, la versión original en inglés de este sitio web es la referencia principal.</p>
+    </div>
+    <button class="modal-close" id="modal-close">Cerrar</button>
+  </div>
+</div>
+
+<script>
+// Language selector
+(function(){
+  const select = document.getElementById('language-select');
+  if (!select) return;
+  const path = window.location.pathname;
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'index-es.html';
+  for (const opt of select.options){
+    if (opt.value === file){
+      opt.selected = true;
+      break;
+    }
+  }
+  select.addEventListener('change', function(){
+    const target = this.value || 'index-es.html';
+    window.location.href = target;
+  });
+})();
+
+// Snow
+(function () {
+  const canvas = document.getElementById("snow");
+  if (!canvas) return;
+  const hero = canvas.parentElement;
+  const ctx = canvas.getContext("2d");
+  let width = hero.clientWidth;
+  let height = hero.clientHeight;
+  function resize() {
+    width = hero.clientWidth;
+    height = hero.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+  const FLAKE_COUNT = 60;
+  const flakes = [];
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  function createFlake(initial = false) {
+    return {
+      x: random(0, width),
+      y: initial ? random(0, height) : random(-height * 0.2, 0),
+      size: random(2, 5),
+      speedY: random(0.03, 0.12),
+      speedX: random(-0.03, 0.03),
+      sway: random(0.5, 1.5),
+      swaySpeed: random(0.0005, 0.002),
+      swayOffset: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: random(-0.003, 0.003)
+    };
+  }
+  function initFlakes() {
+    flakes.length = 0;
+    for (let i = 0; i < FLAKE_COUNT; i++) {
+      flakes.push(createFlake(true));
+    }
+  }
+  function drawFlake(flake) {
+    ctx.save();
+    ctx.translate(flake.x, flake.y);
+    ctx.rotate(flake.rotation);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.lineWidth = 1;
+    const armLength = flake.size;
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 / 6) * i;
+      const x = Math.cos(angle) * armLength;
+      const y = Math.sin(angle) * armLength;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(x, y);
+      const branchLen = armLength * 0.4;
+      const sideAngle1 = angle + Math.PI / 6;
+      const sideAngle2 = angle - Math.PI / 6;
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle1) * branchLen,
+        y * 0.4 + Math.sin(sideAngle1) * branchLen
+      );
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle2) * branchLen,
+        y * 0.4 + Math.sin(sideAngle2) * branchLen
+      );
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+  function updateFlake(flake, deltaTime) {
+    flake.x += flake.speedX * deltaTime +
+      Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
+    flake.y += flake.speedY * deltaTime;
+    flake.rotation += flake.rotationSpeed * deltaTime;
+    if (flake.y > height + flake.size * 2) {
+      const replacement = createFlake(false);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
+    }
+    if (flake.x < -20) flake.x = width + 20;
+    if (flake.x > width + 20) flake.x = -20;
+  }
+  let lastTime = performance.now();
+  function animate(now) {
+    const TIME_SCALE = 0.15;
+    const deltaTime = (now - lastTime) * TIME_SCALE;
+    lastTime = now;
+    ctx.clearRect(0, 0, width, height);
+    for (const flake of flakes) {
+      updateFlake(flake, deltaTime);
+      drawFlake(flake);
+    }
+    requestAnimationFrame(animate);
+  }
+  initFlakes();
+  requestAnimationFrame(animate);
+})();
+
+// Privacy / DNS modal
+(function(){
+  const backdrop = document.getElementById('modal-backdrop');
+  const titleEl = document.getElementById('modal-title');
+  const bodyEl  = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('modal-close');
+  const privacyLink = document.getElementById('privacy-link');
+  const dnsLink = document.getElementById('dns-link');
+
+  function openModal(kind){
+    if(kind === 'privacy'){
+      titleEl.textContent = 'Política de privacidad';
+      bodyEl.innerHTML = `
+        <p>Recopilamos únicamente la información básica necesaria para operar este sitio web, como registros estándar del servidor y datos de uso anónimos.</p>
+        <p>No vendemos tu información personal. Cualquier dato compartido con proveedores de servicios se usa solo para mantener la funcionalidad y la seguridad del sitio.</p>
+        <p>Algunas traducciones de este sitio desde el inglés pueden ser imperfectas o contener errores. En caso de duda, la versión original en inglés de este sitio web es la referencia principal.</p>
+      `;
+    }else{
+      titleEl.textContent = 'No vender mi información';
+      bodyEl.innerHTML = `
+        <p>The MayaNut Company, Inc. no vende tu información personal.</p>
+        <p>Si tienes preguntas o deseas solicitar o eliminar información que podamos tener sobre ti, contáctanos y responderemos lo antes posible.</p>
+        <p>Ten en cuenta que algunas traducciones de este sitio desde el inglés pueden contener errores. Para obtener la información más exacta, consulta la versión en inglés.</p>
+      `;
+    }
+    backdrop.style.display = 'flex';
+  }
+
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop){
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
+})();
+
+// NAV overlay
+(function(){
+  const toggle = document.getElementById('menu-toggle');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const navClose = document.getElementById('nav-close');
+  if(!toggle || !navBackdrop) return;
+
+  function openNav(){
+    navBackdrop.classList.add('open');
+    toggle.classList.add('open');
+  }
+  function closeNav(){
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(navBackdrop.classList.contains('open')){
+      closeNav();
+    }else{
+      openNav();
+    }
+  });
+  if (navClose){
+    navClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeNav();
+    });
+  }
+  navBackdrop.addEventListener('click', (e) => {
+    if(e.target === navBackdrop){
+      closeNav();
+    }
+  });
+  navBackdrop.querySelectorAll('[data-close-nav="true"]').forEach(link => {
+    link.addEventListener('click', () => closeNav());
+  });
+})();
+
+// Welcome popup
+(function(){
+  const welcomeBackdrop = document.getElementById('welcome-backdrop');
+  const welcomeClose = document.getElementById('welcome-close');
+  if(!welcomeBackdrop || !welcomeClose) return;
+
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+  });
+  function closeWelcome(){
+    welcomeBackdrop.style.display = 'none';
+  }
+  welcomeClose.addEventListener('click', closeWelcome);
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if(e.target === welcomeBackdrop) closeWelcome();
+  });
+})();
+
+// Logo tooltip
+(function(){
+  const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
+  if (!logos.length) return;
+
+  const tooltip = document.createElement('div');
+  Object.assign(tooltip.style, {
+    position: 'fixed',
+    padding: '6px 10px',
+    borderRadius: '999px',
+    background: '#ffffff',
+    color: '#123055',
+    fontSize: '12px',
+    boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
+    zIndex: '3000',
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 0.15s ease'
+  });
+  document.body.appendChild(tooltip);
+
+  let tooltipVisible = false;
+  let lastLogo = null;
+
+  function atTop(){ return window.scrollY <= 0; }
+  function getMessage(){
+    if (atTop()){
+      return 'Bienvenido a mayanut.com, hogar de The MayaNut Company';
+    }
+    return '👆 Haz clic para volver arriba 👆';
+  }
+  function positionTooltip(rect){
+    tooltip.style.top = '0px';
+    tooltip.style.left = '0px';
+    const width = tooltip.offsetWidth || 220;
+    const top = rect.top + rect.height + 8;
+    const centerX = rect.left + rect.width / 2;
+    let left = centerX - width / 2;
+    const margin = 8;
+    const maxLeft = window.innerWidth - width - margin;
+    if (left < margin) left = margin;
+    if (left > maxLeft) left = maxLeft;
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${left}px`;
+  }
+  function showTooltipFor(el){
+    const rect = el.getBoundingClientRect();
+    tooltip.textContent = getMessage();
+    tooltip.style.opacity = '1';
+    positionTooltip(rect);
+    tooltipVisible = true;
+    lastLogo = el;
+  }
+  function hideTooltip(){
+    tooltip.style.opacity = '0';
+    tooltipVisible = false;
+    lastLogo = null;
+  }
+  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (!isCoarse){
+    logos.forEach(link => {
+      link.addEventListener('mouseenter', () => showTooltipFor(link));
+      link.addEventListener('mouseleave', hideTooltip);
+    });
+  } else {
+    logos.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!tooltipVisible || lastLogo !== link){
+          e.preventDefault();
+          showTooltipFor(link);
+          return;
+        }
+        if (atTop()){
+          e.preventDefault();
+          return;
+        }
+        e.preventDefault();
+        hideTooltip();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+    document.addEventListener('click', () => {
+      if (tooltipVisible) hideTooltip();
+    });
+  }
+  window.addEventListener('scroll', () => {
+    if (tooltipVisible && lastLogo){
+      positionTooltip(lastLogo.getBoundingClientRect());
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
