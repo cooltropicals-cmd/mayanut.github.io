@@ -27,7 +27,7 @@ MayaNut, mayanut, maya nut, Maya Nut, Brosimum alicastrum, breadnut, bread nut, 
 Маянат, хлебное дерево, тропические деревья,
 nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
 noz maia, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
-مايانَت, جوز المايا, شجرة استوائية, أشجار استوائية
+مايانَت, جوز المايا, शجرة استوائية, أشجار استوائية
 ">
 
 <style>
@@ -39,17 +39,13 @@ noz maia, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
     radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
     #0a56c2;
 
-  /* STORE: white center -> pink -> lavender edge */
+  /* NEW: softer white–pink–lavender for STORE */
   --buy-grad:
-    radial-gradient(circle at 50% 20%, #ffffff 0, #ffe6f5 30%, #f9c0ff 55%, #ebc6ff 75%, #e0b3ff 100%);
+    radial-gradient(circle at 50% 20%, #ffffff 0%, #fff7fc 35%, #f5e5ff 70%, #e2d4ff 100%);
 
   --bar:#0a56c2;
   --bar-h:72px; /* baseline bar height */
   --logo-offset:14px; /* distance from left and from bar */
-
-  /* Deep blue vignette for ABOUT / GALLERY / FOOTER */
-  --deep-blue-grad:
-    radial-gradient(circle at 50% 20%, #0a56c2 0, #0a56c2 45%, #001996 100%);
 }
 
 /* Slightly taller bar on very small screens */
@@ -98,7 +94,7 @@ body{
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
-/* Hamburger menu (left) – pulled in from edge */
+/* Hamburger menu (left) */
 .menu-toggle{
   grid-area:menu;
   width:32px;
@@ -111,7 +107,7 @@ body{
   padding:0;
   cursor:pointer;
   justify-self:start;
-  margin-left:8px; /* move in from absolute edge so not clipped */
+  margin-left:8px;
   z-index:1100;
 }
 .menu-toggle span{
@@ -143,7 +139,7 @@ body{
   padding:0 6px;
 }
 
-/* Make title smaller AND move it to its own row on mobile */
+/* Make title smaller + own row on mobile */
 @media (max-width: 600px){
   .topbar{
     grid-template-columns:auto 1fr auto;
@@ -162,21 +158,20 @@ body{
   }
 }
 
-/* LANGUAGE SWITCHER (right) – stacked label + dropdown */
+/* LANGUAGE SWITCHER (right) */
 .topbar-lang{
   grid-area:lang;
   display:flex;
   flex-direction:column;
-  align-items:center;   /* center globe + text over select */
+  align-items:flex-end;
   gap:3px;
   justify-self:end;
   font-size:12px;
-  text-align:center;
+  margin-right:6px; /* nudge whole stack slightly left */
 }
 .topbar-lang-label{
   display:flex;
   align-items:center;
-  justify-content:center;
   gap:4px;
 }
 .topbar-lang-label-emoji{
@@ -199,7 +194,7 @@ body{
   color:#000;
 }
 
-/* On very narrow screens, hide the word "Language" to save space */
+/* On very narrow screens, hide the word "Language" */
 @media (max-width: 420px){
   .topbar-lang-label-text{
     display:none;
@@ -214,7 +209,7 @@ body{
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset) + 8px); /* clear gap under bar */
+  top:calc(var(--bar-h) + var(--logo-offset) + 8px);
   z-index:900;
 }
 .topbar-logo{
@@ -224,16 +219,16 @@ body{
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
 
-/* HERO – make sure gradient shows behind on mobile too */
+/* HERO */
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 150px); /* space for bar + logo */
+  padding-top:calc(var(--bar-h) + 150px);
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
-  background:var(--bg-grad);  /* force gradient under hero content */
+  background:var(--bg-grad);
 }
 
 .hero-inner{
@@ -359,7 +354,7 @@ canvas#snow{
   margin:0 auto;
 }
 
-/* ABOUT SECTION */
+/* ABOUT SECTION with darker blue vignette */
 .section--about::before{
   content:"";
   position:absolute;
@@ -373,7 +368,10 @@ canvas#snow{
   background:var(--bar);
 }
 .section--about{
-  background:var(--deep-blue-grad);
+  background:
+    radial-gradient(circle at 0% 0%, #001996 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #00144a 0, transparent 60%),
+    var(--bar);
   color:#fff;
 }
 
@@ -433,7 +431,7 @@ canvas#snow{
   color:#30346a;
 }
 
-/* STORE */
+/* STORE – new gradient from variable */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
@@ -495,7 +493,7 @@ canvas#snow{
   text-align:center;
 }
 
-/* RESEARCH – blue gradient */
+/* RESEARCH – existing blue gradient */
 .section--research{
   background:var(--bg-grad);
   color:#ffffff;
@@ -520,9 +518,12 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY – deep blue vignette */
+/* GALLERY – same bar color + darker edge vignette */
 .section--gallery{
-  background:var(--deep-blue-grad);
+  background:
+    radial-gradient(circle at 0% 20%, #001996 0, transparent 55%),
+    radial-gradient(circle at 100% 80%, #00144a 0, transparent 55%),
+    var(--bar);
 }
 .gallery-inner{
   text-align:center;
@@ -559,7 +560,7 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – gradient */
+/* Bottom logo section – keep nice global gradient */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
@@ -571,9 +572,12 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* FOOTER – deep blue vignette */
+/* FOOTER – bar color + darker outer blue */
 footer{
-  background:var(--deep-blue-grad);
+  background:
+    radial-gradient(circle at 0% 0%, #001996 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, #00144a 0, transparent 60%),
+    var(--bar);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -606,7 +610,7 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – thicker, proper dot */
+/* Instagram icon */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -638,7 +642,7 @@ footer{
   height:4px;
   border-radius:50%;
   background:#ffffff;
-  top:3px;   /* dot at (3px,3px) from top-right */
+  top:3px;   /* upper-right of inner square */
   right:3px;
 }
 
@@ -647,7 +651,7 @@ footer{
   margin-top:6px;
 }
 
-/* NAV OVERLAY (full-screen menu) */
+/* NAV OVERLAY */
 .nav-backdrop{
   position:fixed;
   inset:0;
