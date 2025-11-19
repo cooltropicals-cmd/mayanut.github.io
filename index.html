@@ -46,13 +46,13 @@ noz maia, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
 
   --bar:#0a56c2;
   --bar-h:72px; /* baseline bar height */
-  --logo-offset:10px; /* distance from left and from bar */
+  --logo-offset:14px; /* distance from left and from bar */
 }
 
 /* Slightly taller bar on very small screens */
 @media (max-width: 600px){
   :root{
-    --bar-h:80px;
+    --bar-h:82px;
   }
 }
 
@@ -71,6 +71,7 @@ html,body{
   color:#fff;
 }
 
+/* Blue gradient everywhere, including mobile */
 body{
   background:var(--bg-grad);
   background-attachment:fixed;
@@ -85,15 +86,15 @@ body{
   display:grid;
   grid-template-columns:auto 1fr auto;
   align-items:center;
-  column-gap:8px;
-  padding:8px 12px;
+  column-gap:6px;
+  padding:8px 10px;
   min-height:var(--bar-h);
   z-index:1000;
   border-bottom:1px solid rgba(255,255,255,0.25);
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
-/* Hamburger menu (left) */
+/* Hamburger menu (left) – pulled in from edge */
 .menu-toggle{
   width:32px;
   height:26px;
@@ -105,6 +106,7 @@ body{
   padding:0;
   cursor:pointer;
   justify-self:start;
+  margin-left:8px; /* move in from absolute edge so not clipped */
   z-index:1100;
 }
 .menu-toggle span{
@@ -132,6 +134,7 @@ body{
   animation:merrygiggle 6s ease-in-out infinite;
   max-width:100%;
   justify-self:center;
+  padding:0 6px;
 }
 
 /* Make title smaller and wrap nicely on mobile */
@@ -139,7 +142,6 @@ body{
   .topbar-title{
     font-size:14px;
     line-height:1.2;
-    padding:0 4px;
   }
 }
 
@@ -148,7 +150,7 @@ body{
   display:flex;
   flex-direction:column;
   align-items:flex-end;
-  gap:2px;
+  gap:3px;               /* label stacked above select */
   justify-self:end;
   font-size:12px;
 }
@@ -158,7 +160,7 @@ body{
   gap:4px;
 }
 .topbar-lang-label-emoji{
-  font-size:18px;
+  font-size:20px;
   line-height:1;
 }
 .topbar-lang-label-text{
@@ -170,7 +172,7 @@ body{
   border:1px solid rgba(255,255,255,0.7);
   background:rgba(10,86,194,0.9);
   color:#fff;
-  padding:3px 6px;
+  padding:3px 8px;
   outline:none;
 }
 .topbar-lang select option{
@@ -184,6 +186,7 @@ body{
   }
   .topbar-lang select{
     font-size:11px;
+    padding:2px 6px;
   }
 }
 
@@ -191,7 +194,7 @@ body{
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset));
+  top:calc(var(--bar-h) + var(--logo-offset) + 8px); /* clear gap under bar */
   z-index:900;
 }
 .topbar-logo{
@@ -201,15 +204,16 @@ body{
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
 }
 
-/* HERO */
+/* HERO – make sure gradient shows behind on mobile too */
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 120px); /* space for bar + logo */
+  padding-top:calc(var(--bar-h) + 150px); /* space for bar + logo */
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
+  background:var(--bg-grad);  /* force gradient under hero content */
 }
 
 .hero-inner{
@@ -621,6 +625,74 @@ footer{
 .footer-copy{
   font-size:12px;
   margin-top:6px;
+}
+
+/* NAV OVERLAY (full-screen menu) */
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1400;
+}
+.nav-backdrop.open{
+  display:flex;
+}
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
+  position:relative;
+}
+.nav-modal-title{
+  margin:0 0 10px;
+  font-weight:700;
+  font-size:18px;
+  text-decoration:underline;
+}
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-links a{
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+}
+.nav-modal-links a:last-child{
+  border-bottom:none;
+}
+.nav-modal-links a:hover{
+  text-decoration:underline;
+}
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
 }
 
 /* Modal (Privacy / DNS) */
