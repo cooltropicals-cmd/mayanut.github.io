@@ -18,37 +18,44 @@
 
 <meta name="theme-color" content="#18A7FF" />
 
-<!-- SEO: keywords + translated variants -->
-<meta name="description" content="Maya nut (maya nut, mayanut) beverage and products made from Brosimum alicastrum, also known as breadnut, a tropical rainforest tree. Tropical trees, agroforestry and future Maya nut beverages and flours.">
+<!-- SEO: description + multilingual keywords -->
+<meta name="description" content="Maya nut (mayanut, Maya Nut) beverage and products made from Brosimum alicastrum, also known as breadnut, ojoche, ramón or guiamaro, a tropical rainforest tree. Tropical trees, agroforestry and future Maya nut beverages and flours grown in Florida.">
 <meta name="keywords" content="
-MayaNut, mayanut, maya nut, Maya Nut, Brosimum alicastrum, breadnut, bread nut, tropical trees, tropical tree, rainforest tree, agroforestry,
-玛雅坚果, 热带树木, 热带雨林树, 面包果,
-मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़,
-Маянат, хлебное дерево, тропические деревья,
-nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
-noz maia, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
-مايانَت, جوز المايا, शجرة استوائية, أشجار استوائية
+Maya nut, maya nut, mayanut, MayaNut, Maya Nut, Maya nut beverage, Maya nut coffee alternative,
+Brosimum alicastrum, brosimum alicastrum, breadnut, bread nut,
+ojoche, ojite, árbol de ojoche, árbol ojite,
+ramon, árbol ramón, árbol de ramón,
+guiamaro, guáimaro, guaimaro tree, guáimaro tree,
+tropical tree, tropical trees, rainforest tree, rainforest trees, agroforestry, tropical agroforestry,
+Central America, Mesoamerica, Florida Maya nut plantation,
+
+玛雅坚果, 玛雅坚果饮品, Brosimum alicastrum 热带树木, 热带雨林树,
+маянский орех, Brosimum alicastrum тропическое дерево, лесное дерево,
+nuez maya, bebida de nuez maya, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
+noz maia, bebida de noz maia, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
+مايانَت, جوز المايا, شراب جوز المايا, شجرة استوائية
 ">
 
 <style>
 :root{
   --bg:#18A7FF;
+  /* Global blue gradient – lighter center, vivid purple-blue in both lower corners */
   --bg-grad:
-    radial-gradient(circle at 50% 25%, #49d5ff 0, #18A7FF 40%, transparent 70%),
-    radial-gradient(circle at 10% 90%, #0c6fda 0, #083f94 55%, transparent 75%),
-    radial-gradient(circle at 90% 85%, #0c6fda 0, #07336f 55%, transparent 75%),
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 70%),
+    radial-gradient(circle at 0% 100%, #4c2dd9 0, #001996 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #4c2dd9 0, #001996 55%, transparent 80%),
     #0a56c2;
 
-  /* Store background: mostly white center, gentle purple outer glow */
+  /* Store / buy gradient – mostly white center, soft pink mid, lavender outer */
   --buy-grad:
-    radial-gradient(circle at 50% 0%, #ffffff 0, #ffffff 40%, #fbe9ff 65%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #ede4ff 0, #d5c6ff 45%, #c1acff 80%),
-    radial-gradient(circle at 100% 100%, #ede4ff 0, #d5c6ff 45%, #c1acff 80%),
+    radial-gradient(circle at 50% 25%, #ffffff 0, #ffffff 45%, #ffe6f3 65%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #f3e6ff 0, #e1cfff 45%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #f3e6ff 0, #d6c0ff 45%, transparent 80%),
     #ffffff;
 
   --bar:#0a56c2;
   --bar-h:72px; /* baseline bar height */
-  --logo-offset:10px; /* distance from left and from bar (slightly closer now) */
+  --logo-offset:14px; /* distance from left and from bar */
 }
 
 /* Slightly taller bar on very small screens */
@@ -161,21 +168,21 @@ body{
   }
 }
 
-/* LANGUAGE SWITCHER (right) – stacked label + dropdown, centered together */
+/* LANGUAGE SWITCHER (right) – stacked label + dropdown */
 .topbar-lang{
   grid-area:lang;
   display:flex;
   flex-direction:column;
-  align-items:center;      /* center globe+text over the select */
-  gap:3px;                 /* label stacked above select */
+  align-items:flex-end;
+  gap:3px;               /* label stacked above select */
   justify-self:end;
   font-size:12px;
-  text-align:center;
 }
 .topbar-lang-label{
   display:flex;
   align-items:center;
   gap:4px;
+  margin-right:6px;      /* nudge label slightly left so it visually centers over the select */
 }
 .topbar-lang-label-emoji{
   font-size:20px;
@@ -208,11 +215,11 @@ body{
   }
 }
 
-/* LOGO – below the blue bar, not overlapping, slightly closer to bar */
+/* LOGO – below the blue bar, not overlapping, slightly closer to the bar */
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset)); /* smaller gap under bar now */
+  top:calc(var(--bar-h) + var(--logo-offset)); /* no extra +8px so distance from bar ~ distance from left */
   z-index:900;
 }
 .topbar-logo{
@@ -371,7 +378,11 @@ canvas#snow{
   background:var(--bar);
 }
 .section--about{
-  background:var(--bar);
+  /* same base blue, with subtle darker vivid blue at outer edges */
+  background:
+    radial-gradient(circle at 0% 100%, rgba(0,25,150,0.7) 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(0,25,150,0.7) 0, transparent 60%),
+    var(--bar);
   color:#fff;
 }
 
@@ -518,9 +529,12 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY – solid dark blue */
+/* GALLERY – same blue, darker vivid outer edges */
 .section--gallery{
-  background:var(--bar);
+  background:
+    radial-gradient(circle at 0% 100%, rgba(0,25,150,0.7) 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(0,25,150,0.7) 0, transparent 60%),
+    var(--bar);
 }
 .gallery-inner{
   text-align:center;
@@ -571,7 +585,10 @@ canvas#snow{
 
 /* FOOTER */
 footer{
-  background:var(--bar);
+  background:
+    radial-gradient(circle at 0% 100%, rgba(0,25,150,0.7) 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(0,25,150,0.7) 0, transparent 60%),
+    var(--bar);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -604,7 +621,7 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – thicker, proper dot (your tuned placement) */
+/* Instagram icon – thicker, proper dot (kept as you liked it) */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -636,7 +653,7 @@ footer{
   height:4px;
   border-radius:50%;
   background:#ffffff;
-  top:3px;
+  top:3px;   /* dot in upper-right area of inner square */
   right:3px;
 }
 
@@ -917,7 +934,7 @@ footer{
     <div class="hero-inner">
       <div class="hero-right">
         <div class="hero-headline">
-          <span>MayaNut</span>
+          <span>Maya nut</span>
           <span>Beverage</span>
           <span class="headline-coming">Coming Soon!</span>
         </div>
@@ -952,7 +969,7 @@ footer{
           </div>
 
           <div class="about-text-card about-card-2">
-            <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature Maya nut beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> continues to be an under-utilized species, which is why we are developing one of the first dedicated Maya nut plantations in the United States.</p>
+            <p>The seed inside, however, is very nutritious. It can be roasted and ground into a powder used in our signature Maya nut beverage. It can also be ground and mixed with water to make delicious bread or cookies. Nevertheless, <em>Brosimum alicastrum</em> — sometimes called breadnut, ojoche, ramón or guiamaro in different parts of Central and South America — continues to be an under-utilized species. This is why we are developing one of the first dedicated Maya nut plantations in the United States.</p>
           </div>
 
           <div class="about-text-card about-card-3">
@@ -965,7 +982,7 @@ footer{
           </div>
 
           <div class="about-text-card about-card-5">
-            <p><strong>More Information Coming Soon!</strong></p>
+            <p><strong>More information about Maya nut, Brosimum alicastrum, breadnut, ojoche, ramón and guiamaro is coming soon.</strong></p>
           </div>
 
         </div>
@@ -980,8 +997,8 @@ footer{
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>Maya nut store — coming soon</h2>
-        <p>Scroll to preview future beverages, flours, and more. These are placeholder products while the first plantation grows.</p>
+        <h2>Maya nut Store — Coming Soon</h2>
+        <p>Scroll to preview future Maya nut beverages, flours, and more. These are placeholder products while the first plantation grows.</p>
       </div>
 
       <div class="store-scroller-wrapper">
@@ -992,11 +1009,11 @@ footer{
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 2</div>
-            <div class="store-item-label">Maya nut beverage – vanilla</div>
+            <div class="store-item-label">Maya nut beverage – Vanilla</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 3</div>
-            <div class="store-item-label">Maya nut beverage – mocha</div>
+            <div class="store-item-label">Maya nut beverage – Mocha</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 4</div>
@@ -1022,11 +1039,11 @@ footer{
           <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="Leaves and branches of the Maya nut tree Brosimum alicastrum">
         </div>
         <div class="research-text">
-          <p><strong>Brosimum alicastrum</strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it also occurs in more sporadic populations as far north as Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica, possibly through deliberate human seed migration for agricultural or religious reasons.</p>
+          <p><strong>Brosimum alicastrum</strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it also occurs in more sporadic populations as far north as Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica. In different regions, it is also known as Maya nut, breadnut, ojoche, ramón or guiamaro.</p>
 
-          <p>Historically, the species <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people, but probably many other cultures overlapping its range. The tree was likely used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
+          <p>Historically, <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people, but probably many other cultures overlapping its range. The tree was likely used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
 
-          <p>Today, it is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, as this species is widely underutilized.</p>
+          <p>Today, Maya nut is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, often called a Maya nut plantation, as this species is widely underutilized in modern agroforestry systems.</p>
         </div>
       </div>
     </div>
@@ -1039,7 +1056,7 @@ footer{
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
       <h2>Gallery</h2>
-      <p>Images from our trees, fruit, and future products — coming soon.</p>
+      <p>Images from our Maya nut trees, fruit, and future products — coming soon.</p>
       <div class="gallery-grid">
         <div class="gallery-tile">
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of Maya nut fruit Brosimum alicastrum on the tree">
@@ -1277,7 +1294,7 @@ footer{
   const titleEl = document.getElementById('modal-title');
   const bodyEl  = document.getElementById('modal-body');
   const closeBtn = document.getElementById('modal-close');
-  const privacyLink = document.getElementById('privacy-link');
+  const privacyLink = document.getElementElementById ? document.getElementById('privacy-link') : document.querySelector('#privacy-link');
   const dnsLink = document.getElementById('dns-link');
 
   function openModal(kind){
