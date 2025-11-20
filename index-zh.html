@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The MayaNut Company 玛雅坚果公司</title>
+<title>The MayaNut Company - 玛雅坚果</title>
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
@@ -19,9 +19,9 @@
 <meta name="theme-color" content="#18A7FF" />
 
 <!-- SEO: keywords + translated variants -->
-<meta name="description" content="玛雅坚果（Maya nut, mayanut）饮品和产品，源自热带雨林树种 Brosimum alicastrum，又叫 breadnut、ojoche、ramón、guiamaro。The MayaNut Company 在美国佛罗里达致力于种植玛雅坚果树，开发玛雅坚果饮品、粉末和面粉。">
+<meta name="description" content="玛雅坚果（Maya nut, mayanut），学名 Brosimum alicastrum，也叫 breadnut、ojoche、ramón、guiamaro。The MayaNut Company 正在佛罗里达种植玛雅坚果树，开发新的饮料、粉末和烘焙产品。">
 <meta name="keywords" content="
-玛雅坚果, 玛雅坚果饮品, 玛雅坚果粉, maya nut, mayanut, brosimum alicastrum, breadnut, 面包果, ojoche, ramón, guiamaro, 热带树木, 热带雨林树, 农林复合经营, agroforestry
+玛雅坚果, Maya nut, mayanut, Brosimum alicastrum, 面包果, breadnut, ojoche, ramón, guiamaro, 热带树木, 雨林树木, 农林复合, agroforestry
 ">
 
 <style>
@@ -40,7 +40,7 @@
 
   --bar:#0a56c2;
   --bar-h:72px; /* baseline bar height */
-  --logo-offset:12px; /* distance from left and from bar */
+  --logo-offset:14px; /* distance from left and from bar */
 }
 
 /* Slightly taller bar on very small screens */
@@ -89,7 +89,7 @@ body{
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
-/* Hamburger menu (left) – always visible on mobile */
+/* Hamburger menu (left) – pulled in from edge */
 .menu-toggle{
   grid-area:menu;
   width:32px;
@@ -102,7 +102,7 @@ body{
   padding:0;
   cursor:pointer;
   justify-self:start;
-  margin-left:8px;
+  margin-left:8px; /* move in from absolute edge so not clipped */
   z-index:1100;
 }
 .menu-toggle span{
@@ -134,13 +134,32 @@ body{
   padding:0 6px;
 }
 
+/* Make title smaller AND move it to its own row on mobile */
+@media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+      "menu . lang"
+      "title title title";
+    align-items:center;
+  }
+
+  .topbar-title{
+    font-size:14px;
+    line-height:1.2;
+    margin-top:4px;
+    padding:0 12px;
+  }
+}
+
 /* LANGUAGE SWITCHER (right) – stacked label + dropdown */
 .topbar-lang{
   grid-area:lang;
   display:flex;
   flex-direction:column;
-  align-items:center;  /* center globe+text over select */
-  gap:3px;
+  align-items:flex-end;
+  gap:3px;               /* label stacked above select */
   justify-self:end;
   font-size:12px;
 }
@@ -180,34 +199,11 @@ body{
   }
 }
 
-/* MOBILE LAYOUT – menu bars clearly visible */
-@media (max-width: 600px){
-  .topbar{
-    grid-template-columns:auto 1fr auto;
-    grid-template-rows:auto auto;
-    grid-template-areas:
-      "menu . lang"
-      "title title title";
-    align-items:center;
-  }
-
-  .topbar-title{
-    font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 12px;
-  }
-
-  .menu-toggle{
-    margin-left:0;
-  }
-}
-
-/* LOGO – below the blue bar, slightly closer to the bar */
+/* LOGO – below the blue bar, not overlapping */
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset));
+  top:calc(var(--bar-h) + var(--logo-offset) + 8px); /* clear gap under bar */
   z-index:900;
 }
 .topbar-logo{
@@ -599,7 +595,7 @@ footer{
   cursor:pointer;
 }
 
-/* Instagram icon – same as English (dot already placed how you like) */
+/* Instagram icon – thicker, proper dot */
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -631,7 +627,7 @@ footer{
   height:4px;
   border-radius:50%;
   background:#ffffff;
-  top:3px;
+  top:3px;   /* upper-right area of inner square */
   right:3px;
 }
 
@@ -893,10 +889,10 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="关闭菜单">&times;</button>
     <h2 class="nav-modal-title">菜单</h2>
     <div class="nav-modal-links">
-      <a href="#buy" data-close-nav="true">商店（Store）</a>
-      <a href="#about" data-close-nav="true">关于（About）</a>
-      <a href="#research" data-close-nav="true">研究（Research）</a>
-      <a href="#gallery" data-close-nav="true">图库（Gallery）</a>
+      <a href="#buy" data-close-nav="true">商店 (STORE)</a>
+      <a href="#about" data-close-nav="true">关于 (ABOUT)</a>
+      <a href="#research" data-close-nav="true">研究 (RESEARCH)</a>
+      <a href="#gallery" data-close-nav="true">画廊 (GALLERY)</a>
       <a href="faq.html" data-close-nav="true">常见问题 FAQ</a>
       <a href="blog.html" data-close-nav="true">博客 Blog</a>
     </div>
@@ -914,12 +910,12 @@ footer{
         <div class="hero-headline">
           <span>MayaNut</span>
           <span>饮品</span>
-          <span class="headline-coming">即将推出！</span>
+          <span class="headline-coming">即将上市！</span>
         </div>
 
         <div class="hero-image-wrap">
           <a href="#buy" class="hero-image-link">
-            <img src="rach20.png" alt="冰镇玛雅坚果（Maya nut）饮品玻璃杯" class="hero-glass">
+            <img src="rach20.png" alt="以玛雅坚果（Maya nut）制成的冰镇饮品" class="hero-glass">
           </a>
         </div>
       </div>
@@ -927,43 +923,43 @@ footer{
   </section>
 
   <!-- TRANSITION: ABOUT -->
-  <div class="transition-strip">关于 ABOUT</div>
+  <div class="transition-strip">ABOUT 关于</div>
 
   <!-- ABOUT -->
   <section class="section section--about" id="about">
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="玛雅坚果（Maya nut, Brosimum alicastrum）果实挂在热带树上">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="玛雅坚果果实 (Maya nut, Brosimum alicastrum) 挂在热带雨林树上">
           <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="The MayaNut Company 创始人 August Kokus">
-          <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="苗圃中生长的年轻玛雅坚果树（Brosimum alicastrum）">
-          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="桑科树种 Brosimum alicastrum（玛雅坚果树）在热带环境中生长">
+          <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="苗圃中生长的玛雅坚果树 (Brosimum alicastrum) 幼树">
+          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="桑科 (Moraceae) 植物 Brosimum alicastrum 的玛雅坚果树">
         </div>
 
         <div class="about-text-col">
           <div class="about-text-card about-card-1">
             <h2>欢迎来到 The MayaNut Company</h2>
-            <p>欢迎访问 <strong>mayanut.com</strong>，The MayaNut Company 的线上之家。公司由南佛罗里达的植物学家和植物探索者 <strong>August Kokus</strong> 于 2025 年创立，他的使命是把玛雅坚果植物 <em>Brosimum alicastrum</em>（也叫 Maya nut、breadnut、ojoche、ramón、guiamaro）发展为在美国具有潜力的新农作物。</p>
+            <p>欢迎访问 <strong>mayanut.com</strong> —— <strong>The MayaNut Company</strong> 的线上之家。公司由南佛罗里达的植物学家与植物探索者 <strong>August Kokus</strong> 于 2025 年创立，他的使命是把玛雅坚果植物 <em>Brosimum alicastrum</em>（常被称为 <strong>Maya nut、mayanut、玛雅坚果、breadnut、ojoche、ramón、guiamaro</strong>）培育成美国的新型农业作物。</p>
           </div>
 
           <div class="about-text-card about-card-2">
             <h3>August Kokus</h3>
-            <p>August Kokus 一直想创造一些全新的东西——一种可以真正“留下来”的发明或创作。但到底该是什么呢？实用发明很难想出来，写一首歌也许不错，但歌曲终会被遗忘；画一幅杰作或做一件雕塑也很好，但画作会老化、雕塑会破碎，诗歌和艺术终有淡去的一天。</p>
-            <p>“如果我能创造出某种真正长久的东西，既能适应不断变化的世界，又会被人们喜爱，那会怎样呢？”他这样思考着。也许，我们可以栽培一种被忽视的树种——<em>Brosimum alicastrum</em>（玛雅坚果树）——并围绕它创造一个全新的产业。2025 年，The MayaNut Company 正是怀着这样的愿景成立的。</p>
+            <p>August Kokus 一直想创造一些全新的东西——一种可以真正“留下来”的发明或作品。但问题是：到底是什么？全新的发明并不容易出现；也许他可以写一首歌，但歌曲终究会被遗忘。也许可以画一幅杰作，但画作会老化，雕塑会破碎；诗歌与艺术最终也会淡出人们的视线。</p>
+            <p>他想：“如果我能创造出某种真正‘长久存在’的东西，既能适应不断变化的世界，又能被人们所喜爱，会不会更好？” 也许答案是：栽培一种被忽视的物种——像 <em>Brosimum alicastrum</em> 这样的玛雅坚果树（Maya nut, mayanut, breadnut, ojoche, ramón, guiamaro），并围绕它建立一个全新的产业。2025 年，The MayaNut Company 正是在这种想法下诞生的。</p>
           </div>
 
           <div class="about-text-card about-card-3">
-            <h3>我们在哪里种植</h3>
-            <p>南佛罗里达的亚热带气候非常适合玛雅坚果树生长。因此，我们正在这里建立一座专门的玛雅坚果种植园（Maya nut plantation），作为未来玛雅坚果饮品、粉末和面粉等产品的基础。</p>
+            <h3>我们在哪里种植玛雅坚果</h3>
+            <p>南佛罗里达的亚热带气候非常适合玛雅坚果树 <em>Brosimum alicastrum</em> 生长。因此，我们正在这里建立一片专门的玛雅坚果种植园（Maya nut plantation），作为未来玛雅坚果饮品、粉末与烘焙原料等产品的基础。</p>
           </div>
 
           <div class="about-text-card about-card-4">
             <h3>我们的使命</h3>
-            <p>我们希望在未来的几个世纪里留下持久的影响——用美丽而全新的方式，将这一树种带入人们的日常生活。我们的目标是让 <em>Brosimum alicastrum</em>（玛雅坚果树，Maya nut, mayanut, breadnut, ojoche, ramón, guiamaro 等多种名称）不再被忽视，而是被美国文化和全球消费者真正欣赏和享用。</p>
+            <p>我们希望在未来的几个世纪里留下持久的影响，用一种美好而崭新的方式建立起某种“会被一代代传承下去”的事物。我们希望 <em>Brosimum alicastrum</em> 这一物种——不论你叫它 <strong>Maya nut、mayanut、玛雅坚果、breadnut、ojoche、ramón、guiamaro</strong>——不再被忽视，而是能在美国文化乃至全球文化中被认识、喜爱和享用。</p>
           </div>
 
           <div class="about-text-card about-card-5">
-            <p><strong>更多关于玛雅坚果（Maya nut, Brosimum alicastrum）的信息即将上线，敬请期待！</strong></p>
+            <p><strong>关于玛雅坚果（Maya nut, mayanut, Brosimum alicastrum）以及 The MayaNut Company 的更多信息即将公开，感谢你在这个早期阶段的关注！</strong></p>
           </div>
 
         </div>
@@ -972,37 +968,37 @@ footer{
   </section>
 
   <!-- TRANSITION: STORE -->
-  <div class="transition-strip">商店 STORE</div>
+  <div class="transition-strip">STORE 商店</div>
 
   <!-- STORE / BUY -->
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>Maya nut 商店 —— 敬请期待</h2>
-        <p>向下滑动预览未来可能推出的玛雅坚果饮品、粉末和烘焙产品。在玛雅坚果种植园成长期间，这些商品仅作为占位示意。</p>
+        <h2>玛雅坚果 (Maya nut) 商店——即将上线</h2>
+        <p>向右滑动即可预览未来可能推出的玛雅坚果饮品、粉末和烘焙产品。这些只是 The MayaNut Company 在玛雅坚果种植园成长期间的占位示例。</p>
       </div>
 
       <div class="store-scroller-wrapper">
         <div class="store-scroller">
           <div class="store-item">
             <div class="store-item-image">产品 1</div>
-            <div class="store-item-label">冰镇玛雅坚果饮品（Maya nut beverage）</div>
+            <div class="store-item-label">冰镇玛雅坚果饮品 (Maya nut)</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">产品 2</div>
-            <div class="store-item-label">玛雅坚果香草饮品</div>
+            <div class="store-item-label">香草风味玛雅坚果饮品</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">产品 3</div>
-            <div class="store-item-label">玛雅坚果摩卡风味饮品</div>
+            <div class="store-item-label">摩卡风味玛雅坚果饮品</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">产品 4</div>
-            <div class="store-item-label">玛雅坚果面粉（Maya nut flour / breadnut-style）</div>
+            <div class="store-item-label">玛雅坚果粉 / 面粉 (Maya nut flour, breadnut-style)</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">产品 5</div>
-            <div class="store-item-label">未来玛雅坚果热带甜点和零食</div>
+            <div class="store-item-label">未来的玛雅坚果热带甜点与零食</div>
           </div>
         </div>
       </div>
@@ -1010,56 +1006,56 @@ footer{
   </section>
 
   <!-- TRANSITION: RESEARCH -->
-  <div class="transition-strip">研究 RESEARCH</div>
+  <div class="transition-strip">RESEARCH 研究</div>
 
   <!-- RESEARCH -->
   <section class="section section--research" id="research">
     <div class="section-inner">
       <div class="research-grid">
         <div class="research-image-wrap">
-          <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="玛雅坚果树（Brosimum alicastrum）树叶与枝条">
+          <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="玛雅坚果树 Brosimum alicastrum 的叶片与树枝">
         </div>
         <div class="research-text">
-          <p><strong>Brosimum alicastrum</strong> 属于桑科（Moraceae）的一种热带乔木，在墨西哥南部热带雨林中占优势地位。同时，它也以较为零散的种群分布在更北的塔毛利帕斯州，以及墨西哥和中美洲西部地区，并向南延伸到南美北部；在加勒比部分地区（包括古巴和牙买加）也有分布。在不同区域，这种树被称为 <strong>Maya nut（玛雅坚果）</strong>、<strong>breadnut（面包果）</strong>、<strong>ojoche</strong>、<strong>ramón</strong> 或 <strong>guiamaro</strong> 等。</p>
+          <p><strong>Brosimum alicastrum</strong> 属于桑科 (Moraceae)，是一种热带树种。在墨西哥南部的许多热带森林中，这一物种非常常见；在更北边的塔毛利帕斯州，以及墨西哥西部和中美洲其他地区也有零星分布。其分布范围一直延伸到南美北部和加勒比地区的一些岛屿，包括古巴和牙买加。在不同地区，人们会把它叫作 <strong>Maya nut、mayanut、玛雅坚果、breadnut、ojoche、ramón、guiamaro</strong> 等。</p>
 
-          <p>对于这一树种，在各地独立种群上的科学研究仍然不足。The MayaNut Company 正在积极从不同遗传来源获取 <strong>Brosimum alicastrum</strong>（Maya nut, mayanut）种子，以确保在农业栽培中拥有足够的遗传多样性，帮助这一树种在未来更好地适应环境和病虫害压力。</p>
+          <p>针对当地种群的科学研究仍然远远不够。The MayaNut Company 正在积极收集来自不同遗传来源的 <strong>Brosimum alicastrum</strong>（玛雅坚果）种子，以确保有足够的遗传多样性，使这一物种能在农业与农林复合系统中长期、有效地栽培。</p>
 
-          <p>迄今为止，玛雅文明对 <em>Brosimum alicastrum</em> 的驯化和栽培记录有限。我们认为，该树种在未来有潜力通过选择育种，发展出更稳定的品系，拥有更大、更均匀且更富营养价值的种子。</p>
+          <p>目前的证据表明，玛雅文化对 <em>Brosimum alicastrum</em> 的驯化程度可能有限。我们认为，这一物种完全可以通过选择与育种，发展出更稳定的品系，结出更大、更均一、营养更丰富的玛雅坚果种子。</p>
 
-          <p>从历史角度看，<em>Brosimum alicastrum</em> 很可能不仅对玛雅人重要，对许多与其分布范围重叠的早期中美洲文化同样具有意义。这种树可能早在公元前一万年，就被中美洲的狩猎采集者利用。然而，在较近的历史时期，关于它在古代文化中具体如何食用和应用的直接证据非常少。现存文献与艺术作品中，几乎没有清晰描述它在食谱或礼仪中的用途。</p>
+          <p>从历史上看，人们普遍认为 <em>Brosimum alicastrum</em> 不仅对玛雅人十分重要，对分布区内的许多其他古代文化也具有意义。考古学家推测，早在公元前 10000 年左右，中美洲的远古狩猎采集群体就已经利用这一树种。然而，在较近的史料中，我们几乎找不到足够直接的证据来说明它在古代文化中的具体用途；目前并没有明确的文字或艺术作品详细描述当时的食谱或用法。</p>
 
-          <p>在今天，Maya nut（玛雅坚果，Brosimum alicastrum）在墨西哥常被作为牧场饲料树，同时也被用来制作玉米饼、面包，甚至是类似咖啡的饮品，这些都来自这棵古老热带雨林树木的种子。The MayaNut Company 正在佛罗里达南部建立专门的玛雅坚果农场（Maya nut plantation），将这一在现代农林复合系统（agroforestry）中仍被严重低估的树种，带入更广泛的公众视野。</p>
+          <p>如今，玛雅坚果 (Maya nut, mayanut) 在墨西哥常被用作牧场饲料树，也被制成玉米饼、面包以及类似咖啡风味的饮品——全部都源于这棵古老雨林树木的种子。The MayaNut Company 正在美国佛罗里达州南部建立一座专门的 <em>Brosimum alicastrum</em> 农场，也就是人们常说的玛雅坚果种植园 (Maya nut plantation)，因为这种树在现代农林复合系统中仍属于极度“被低估、被忽视”的物种。</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- TRANSITION: GALLERY -->
-  <div class="transition-strip">图库 GALLERY</div>
+  <div class="transition-strip">GALLERY 画廊</div>
 
   <!-- GALLERY -->
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
-      <h2>图库</h2>
-      <p>来自我们玛雅坚果树、果实和未来产品的图片 —— 更多内容即将上线。</p>
+      <h2>画廊</h2>
+      <p>这里将展示我们的玛雅坚果树、果实与未来产品的照片 —— 更多内容即将上线。</p>
       <div class="gallery-grid">
         <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="玛雅坚果（Maya nut, Brosimum alicastrum）果实特写">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="玛雅坚果 (Maya nut, Brosimum alicastrum) 果实特写">
         </div>
         <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="多颗玛雅坚果果实成簇生长在枝条上">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="玛雅坚果果实簇生在树枝上的样子">
         </div>
         <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="热带森林光线下的玛雅坚果果实">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="雨林阳光下的玛雅坚果果实">
         </div>
         <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="雨林环境中树干上的玛雅坚果果实">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="雨林树干上生长的 Brosimum alicastrum 果实">
         </div>
         <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="成熟玛雅坚果果实表面的细节纹理">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="成熟玛雅坚果果实表面纹理细节">
         </div>
         <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="多颗 Brosimum alicastrum（玛雅坚果树）果实挂在枝条上">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="多枚 Brosimum alicastrum (玛雅坚果) 果实长在树枝上">
         </div>
       </div>
     </div>
@@ -1069,7 +1065,7 @@ footer{
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
-        <img src="the-maya-nut-company-logo-themayanutcompanylogo.png" alt="The MayaNut Company 标志" />
+        <img src="the-maya-nut-company-logo-themayanutcompanylogo.png" alt="The MayaNut Company 品牌标志">
       </a>
     </div>
   </section>
@@ -1082,10 +1078,10 @@ footer{
     <div class="footer-row">
       <div class="footer-links">
         <a id="privacy-link">隐私政策</a>
-        <a id="dns-link">不出售我的信息</a>
+        <a id="dns-link">不要出售我的个人信息</a>
       </div>
       <div class="footer-instagram">
-        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company 的 Instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="在 Instagram 上关注 The MayaNut Company">
           <span>IG</span>
         </a>
       </div>
@@ -1101,8 +1097,8 @@ footer{
   <div class="welcome-modal">
     <button class="welcome-close" id="welcome-close" aria-label="关闭欢迎信息">&times;</button>
     <h2 class="welcome-title">欢迎来到 MayaNut.com</h2>
-    <p>我们正在佛罗里达州建立首批专门的玛雅坚果（Maya nut，Brosimum alicastrum）热带树种种植园之一。</p>
-    <p>我们希望在 2028 年之前，为您带来美味的玛雅坚果饮品。感谢您的耐心等待！</p>
+    <p>我们正在佛罗里达州开发首批专门种植玛雅坚果树 (Maya nut, Brosimum alicastrum) 的热带农场。</p>
+    <p>我们期待在 2028 年为你奉上美味的玛雅坚果饮品。感谢你的耐心等待！</p>
   </div>
 </div>
 
@@ -1111,9 +1107,9 @@ footer{
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <h3 id="modal-title">隐私政策</h3>
     <div id="modal-body">
-      <p>我们只收集运行本网站所需的最少信息，例如标准服务器日志和匿名使用数据。</p>
-      <p>您自愿提供的任何信息（例如通过电子邮件联系我们时）仅用于回复您的咨询并改进我们的服务。</p>
-      <p>我们不会出售您的个人信息。网站从英语翻译成其他语言的文本，可能存在一定误差。</p>
+      <p>我们只收集运营本网站所需的最少信息，例如标准服务器日志和匿名使用数据。</p>
+      <p>你通过电子邮件等方式自愿提供的信息，仅用于回复你的咨询并改进我们的服务。</p>
+      <p>我们不会出售你的个人信息。部分从英文自动翻译的文本可能存在错误。</p>
     </div>
     <button class="modal-close" id="modal-close">关闭</button>
   </div>
@@ -1286,15 +1282,15 @@ footer{
     if(kind === 'privacy'){
       titleEl.textContent = '隐私政策';
       bodyEl.innerHTML = `
-        <p>我们只收集运行本网站所需的最少信息，例如标准服务器日志和匿名使用数据。</p>
-        <p>您自愿提供的任何信息（例如通过电子邮件联系我们时）仅用于回复您的咨询并改进我们的服务。</p>
-        <p>我们不会出售您的个人信息。网站从英语翻译成其他语言的文本，可能存在一定误差。</p>
+        <p>我们只收集运营本网站所需的最少信息，例如标准服务器日志和匿名使用数据。</p>
+        <p>你通过电子邮件等方式自愿提供的信息，仅用于回复你的咨询并改进我们的服务。</p>
+        <p>我们不会出售你的个人信息。部分从英文自动翻译的文本可能存在错误。</p>
       `;
     }else{
-      titleEl.textContent = '不出售我的信息';
+      titleEl.textContent = '不要出售我的个人信息';
       bodyEl.innerHTML = `
-        <p>The MayaNut Company, Inc. 不会出售您的个人信息。</p>
-        <p>如果您对我们可能持有的关于您的信息有任何疑问，或希望访问、更新或删除这些信息，请联系我们，我们会尽快回复。</p>
+        <p>The MayaNut Company, Inc. 不会出售你的个人信息。</p>
+        <p>如果你对自己的数据有任何疑问，或希望请求访问、更正或删除我们可能持有的资料，请与我们联系，我们会尽快回复。</p>
       `;
     }
     backdrop.style.display = 'flex';
@@ -1379,123 +1375,6 @@ footer{
   welcomeClose.addEventListener('click', closeWelcome);
   welcomeBackdrop.addEventListener('click', (e) => {
     if(e.target === welcomeBackdrop) closeWelcome();
-  });
-})();
-
-// Logo tooltip behavior (desktop hover + mobile tap)
-(function(){
-  const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
-  if (!logos.length) return;
-
-  const tooltip = document.createElement('div');
-  tooltip.className = 'logo-tooltip';
-  Object.assign(tooltip.style, {
-    position: 'fixed',
-    padding: '6px 10px',
-    borderRadius: '999px',
-    background: '#ffffff',
-    color: '#123055',
-    fontSize: '12px',
-    boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
-    zIndex: '3000',
-    pointerEvents: 'none',
-    opacity: '0',
-    transition: 'opacity 0.15s ease'
-  });
-  document.body.appendChild(tooltip);
-
-  let tooltipVisible = false;
-  let lastLogo = null;
-
-  function atTop(){
-    return window.scrollY <= 0;
-  }
-
-  function getMessage(){
-    if (atTop()){
-      return '欢迎来到 mayanut.com —— The MayaNut Company 官方网站';
-    }
-    return '👆 点击返回顶部 👆';
-  }
-
-  function positionTooltip(rect){
-    tooltip.style.top = '0px';
-    tooltip.style.left = '0px';
-
-    const width = tooltip.offsetWidth || 220;
-    const top = rect.top + rect.height + 8;
-    const centerX = rect.left + rect.width / 2;
-
-    let left = centerX - width / 2;
-    const margin = 8;
-    const maxLeft = window.innerWidth - width - margin;
-
-    if (left < margin) left = margin;
-    if (left > maxLeft) left = maxLeft;
-
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
-  }
-
-  function showTooltipFor(el){
-    const rect = el.getBoundingClientRect();
-    tooltip.textContent = getMessage();
-    tooltip.style.opacity = '1';
-    positionTooltip(rect);
-    tooltipVisible = true;
-    lastLogo = el;
-  }
-
-  function hideTooltip(){
-    tooltip.style.opacity = '0';
-    tooltipVisible = false;
-    lastLogo = null;
-  }
-
-  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-
-  if (!isCoarse){
-    logos.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        showTooltipFor(link);
-      });
-      link.addEventListener('mouseleave', () => {
-        hideTooltip();
-      });
-    });
-  } else {
-    logos.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        if (!tooltipVisible || lastLogo !== link){
-          e.preventDefault();
-          showTooltipFor(link);
-          return;
-        }
-
-        if (atTop()){
-          e.preventDefault();
-          return;
-        }
-
-        e.preventDefault();
-        hideTooltip();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-
-    document.addEventListener('click', () => {
-      if (tooltipVisible){
-        hideTooltip();
-      }
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (tooltipVisible && lastLogo){
-      positionTooltip(lastLogo.getBoundingClientRect());
-    }
   });
 })();
 </script>
