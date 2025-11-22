@@ -12,11 +12,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 
-<!-- Favicon -->
+<!-- Favicon (new) -->
 <link rel="icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 <link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 
-<meta name="theme-color" content="#18A7FF" />
+<meta name="theme-color" content="#003cc7" />
 
 <!-- SEO: keywords + translated variants -->
 <meta name="description" content="Maya nut (maya nut, mayanut) beverage and products made from Brosimum alicastrum, also known as breadnut, ojoche, ramón, guiamaro – a tropical rainforest tree. Tropical trees, agroforestry and future Maya nut beverages, powder and flours.">
@@ -32,12 +32,23 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 
 <style>
 :root{
-  --bg:#003cc7;
-  /* Balanced blue–purple gradient: lighter center, vivid corners */
+  --bg:#18A7FF;
+
+  /* Main page background: balanced blue–purple gradient */
   --bg-grad:
     radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #6c46ff 0, #0032a0 55%, transparent 80%),
+    #0a56c2;
+
+  /* Top/Bottom "tab" + gallery gradient – vivid 003cc7 with purple corners */
+  --bar-base:#003cc7;
+  --bar-grad:
+    radial-gradient(circle at 50% 50%, #296cff 0, #003cc7 40%, transparent 80%),
+    radial-gradient(circle at 0% 0%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 0% 100%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 100% 0%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, #7a4dff 0, transparent 60%),
     #003cc7;
 
   /* BUY background – mostly white, soft pink, lavender at edges */
@@ -45,7 +56,6 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
     radial-gradient(circle at 50% 30%, #ffffff 0, #ffffff 40%, #ffe9f5 65%, #e8ddff 90%),
     #ffffff;
 
-  --bar:#003cc7;
   --bar-h:72px; /* baseline bar height */
   --logo-offset:12px; /* distance from left and from bar */
 }
@@ -78,11 +88,11 @@ body{
   background-attachment:fixed;
 }
 
-/* TOP BAR – grid: menu | title | language */
+/* TOP BAR – uses vivid bar gradient with purple corners */
 .topbar{
   position:fixed;
   top:0; left:0; right:0;
-  background:var(--bar);
+  background:var(--bar-grad);
   color:#fff;
   display:grid;
   grid-template-columns:auto 1fr auto;
@@ -146,7 +156,7 @@ body{
   grid-area:lang;
   display:flex;
   flex-direction:column;
-  align-items:center;   /* center globe+text over the select */
+  align-items:center;
   gap:3px;
   justify-self:end;
   font-size:12px;
@@ -219,7 +229,7 @@ body{
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset)); /* a bit closer to bar */
+  top:calc(var(--bar-h) + var(--logo-offset));
   z-index:900;
 }
 .topbar-logo{
@@ -233,7 +243,7 @@ body{
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 150px); /* space for bar + logo */
+  padding-top:calc(var(--bar-h) + 150px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -294,7 +304,7 @@ canvas#snow{
 }
 .hero-headline .headline-coming{
   text-decoration:underline;
-  text-decoration-color:var(--bar);
+  text-decoration-color:#003cc7;
   text-underline-offset:4px;
   white-space:nowrap;
 }
@@ -333,9 +343,9 @@ canvas#snow{
   background:linear-gradient(
     90deg,
     #7bc4ff 0%,
-    #0e4fb8 24%,
+    #003cc7 24%,
     #aa00fe 50%,
-    #0e4fb8 76%,
+    #003cc7 76%,
     #7bc4ff 100%
   );
   color:#f5fbff;
@@ -375,7 +385,7 @@ canvas#snow{
   height:120px;
   border-radius:50% 50% 0 0;
   z-index:-1;
-  background:var(--bar);
+  background:var(--bar-grad);
 }
 .section--about{
   background:var(--bg-grad);
@@ -416,6 +426,7 @@ canvas#snow{
   font-size:15px;
   line-height:1.7;
 }
+
 /* Soft lavender gradients on cards */
 .about-card-1{
   background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
@@ -424,10 +435,10 @@ canvas#snow{
   background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #e7dcff 100%);
 }
 .about-card-3{
-  background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #e7dcff 100%);
+  background:linear-gradient(135deg, #f4ecff 0%, #ffffff 55%, #e3d8ff 100%);
 }
 .about-card-4{
-  background:linear-gradient(135deg, #f4ecff 0%, #ffffff 55%, #e3d8ff 100%);
+  background:linear-gradient(135deg, #f3eaff 0%, #ffffff 55%, #ded2ff 100%);
 }
 .about-card-5{
   background:linear-gradient(135deg, #f2e8ff 0%, #ffffff 55%, #d9ccff 100%);
@@ -526,9 +537,9 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY – same gradient family */
+/* GALLERY – use the vivid bar gradient so it ties together */
 .section--gallery{
-  background:var(--bg-grad);
+  background:var(--bar-grad);
 }
 .gallery-inner{
   text-align:center;
@@ -541,15 +552,14 @@ canvas#snow{
   margin:0 0 18px;
   font-size:15px;
 }
+
+/* GALLERY grid with "view more" toggle */
 .gallery-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
   max-width:900px;
   margin:0 auto;
-}
-.gallery-grid-extra{
-  display:none;
 }
 .gallery-tile{
   aspect-ratio:4/3;
@@ -568,52 +578,47 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* Gallery “More images” trigger */
-.gallery-more{
-  margin:20px auto 0;
-  display:flex;
-  justify-content:center;
+/* "View more images" button */
+.gallery-more-wrap{
+  margin-top:18px;
+  text-align:center;
 }
 .gallery-more-button{
-  width:72px;
-  height:72px;
-  border-radius:50%;
-  border:2px solid #d0d4e8;
-  background:rgba(255,255,255,0.12);
-  color:#e0e4ff;
-  display:flex;
-  flex-direction:column;
+  display:inline-flex;
   align-items:center;
   justify-content:center;
+  gap:8px;
+  padding:8px 18px;
+  border-radius:999px;
+  border:none;
+  background:#f0f2ff;
+  color:#24356a;
+  font-size:14px;
   cursor:pointer;
-  position:relative;
-  font-size:24px;
-  transition:transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);
+  transition:transform 0.15s ease, box-shadow 0.15s ease;
 }
-.gallery-more-button .arrow{
-  color:#d0d4e8;
-}
-.gallery-more-button .hint{
-  position:absolute;
-  bottom:-34px;
-  left:50%;
-  transform:translateX(-50%);
-  white-space:nowrap;
-  font-size:11px;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 0.18s ease;
+.gallery-more-circle{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#d0d3e8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
 }
 .gallery-more-button:hover{
-  transform:scale(1.06);
-  box-shadow:0 4px 12px rgba(0,0,0,0.45);
-  background:rgba(255,255,255,0.18);
-}
-.gallery-more-button:hover .hint{
-  opacity:1;
+  transform:scale(1.04);
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
 }
 
-/* Bottom logo section – gradient */
+/* Initially hide the extra 6 tiles */
+.gallery-extra{
+  display:none;
+}
+
+/* Bottom logo section – match main gradient family */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
@@ -625,9 +630,9 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* FOOTER – same gradient family */
+/* FOOTER – same vivid blue tab with purple fade as the top bar */
 footer{
-  background:var(--bg-grad);
+  background:var(--bar-grad);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -714,6 +719,8 @@ footer{
 .nav-backdrop.open{
   display:flex;
 }
+
+/* Menu background: vivid blue with purple edges */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -724,17 +731,13 @@ footer{
   text-align:left;
   font-size:15px;
   line-height:1.7;
-  background:
-    radial-gradient(circle at 50% 20%, #55d9ff 0, #2c75ff 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #7d4bff 0, #3b1696 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #7d4bff 0, #3b1696 55%, transparent 80%),
-    #003cc7;
+  background:var(--bar-grad);
   position:relative;
 }
 .nav-modal-title{
   margin:0 0 10px;
-  font-weight:700;
-  font-size:20px;
+  font-weight:800;
+  font-size:20px; /* Bigger so “Menu” stands out */
   text-decoration:underline;
 }
 .nav-modal-links{
@@ -750,15 +753,17 @@ footer{
   font-size:15px;
   padding:6px 0;
   border-bottom:1px solid rgba(255,255,255,0.25);
+  transition:transform 0.15s ease, text-decoration 0.15s ease;
 }
 .nav-modal-links a:last-child{
   border-bottom:none;
 }
 .nav-modal-links a:hover{
-  text-decoration:none;
+  text-decoration:underline;
+  transform:scale(1.04); /* Slightly bigger on hover (desktop) */
 }
-.nav-modal-links a.nav-link-active{
-  border-bottom:2px solid #ffffff;
+.nav-modal-links a.active{
+  text-decoration:underline;
 }
 .nav-close{
   position:absolute;
@@ -812,7 +817,7 @@ footer{
   cursor:pointer;
 }
 
-/* WELCOME POPUP */
+/* WELCOME POPUP – purple edge gradient, lowercase mayanut.com */
 .welcome-backdrop{
   position:fixed;
   inset:0;
@@ -833,11 +838,7 @@ footer{
   text-align:left;
   font-size:14px;
   line-height:1.7;
-  background:
-    radial-gradient(circle at 50% 20%, #55d9ff 0, #2c75ff 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #7d4bff 0, #3b1696 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #7d4bff 0, #3b1696 55%, transparent 80%),
-    #003cc7;
+  background:var(--bar-grad);
 }
 .welcome-title{
   margin:0 0 8px;
@@ -857,21 +858,6 @@ footer{
   font-size:20px;
   line-height:1;
   cursor:pointer;
-}
-
-/* Logo tooltip */
-.logo-tooltip{
-  position:fixed;
-  padding:6px 10px;
-  border-radius:999px;
-  background:#ffffff;
-  color:#123055;
-  font-size:12px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.35);
-  z-index:3000;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 0.15s ease;
 }
 
 /* Responsive layouts */
@@ -972,12 +958,14 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
-      <a href="#buy" data-section="buy">STORE</a>
+      <!-- ABOUT above STORE; added CONTACT at bottom -->
       <a href="#about" data-section="about">ABOUT</a>
+      <a href="#buy" data-section="buy">STORE</a>
       <a href="#research" data-section="research">RESEARCH</a>
       <a href="#gallery" data-section="gallery">GALLERY</a>
       <a href="faq.html">FAQ</a>
       <a href="blog.html">BLOG</a>
+      <a href="contact.html">CONTACT</a>
     </div>
   </div>
 </div>
@@ -1027,8 +1015,9 @@ footer{
 
           <div class="about-text-card about-card-2">
             <h3>August Kokus</h3>
-            <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. He wanted an immortal grasp upon the world in the form of something that would be wanted by humanity, something that can adapt to an ever-changing world. What if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
-            <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the only way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up—literally—was a challenge worth accepting. By 2030, August expects to have at least one functional farm, at least one acre in size, for the world to start enjoying.</p>
+            <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. He wanted an immortal grasp upon the world in the form of something that would be wanted by humanity, something that can adapt to an ever-changing world.</p>
+            <p>What if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
+            <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the only way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up — literally — was a challenge worth accepting. By 2030, August expects to have at least one functional farm at least one acre in size for the world to start enjoying.</p>
           </div>
 
           <div class="about-text-card about-card-3">
@@ -1122,8 +1111,8 @@ footer{
       <h2>Gallery</h2>
       <p>Images from our trees, fruit, and future products — coming soon.</p>
 
-      <!-- First 6 images -->
-      <div class="gallery-grid" id="gallery-grid-main">
+      <div class="gallery-grid">
+        <!-- First 6 tiles always visible -->
         <div class="gallery-tile">
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of maya nut fruit Brosimum alicastrum on the tree">
         </div>
@@ -1142,36 +1131,33 @@ footer{
         <div class="gallery-tile">
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Multiple maya nut fruits of Brosimum alicastrum on branches">
         </div>
+
+        <!-- Extra 6 tiles, hidden until click -->
+        <div class="gallery-tile gallery-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 1">
+        </div>
+        <div class="gallery-tile gallery-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 2">
+        </div>
+        <div class="gallery-tile gallery-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 3">
+        </div>
+        <div class="gallery-tile gallery-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 4">
+        </div>
+        <div class="gallery-tile gallery-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 5">
+        </div>
+        <div class="gallery-tile gallery-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 6">
+        </div>
       </div>
 
-      <!-- “View more” circle -->
-      <div class="gallery-more">
-        <button id="gallery-more-button" class="gallery-more-button" type="button">
-          <span class="arrow">⬇</span>
-          <span class="hint">👆 Click to View More Images 👆</span>
+      <div class="gallery-more-wrap">
+        <button class="gallery-more-button" id="gallery-more-button">
+          <span class="gallery-more-circle">⬇</span>
+          <span>👆 Click to View More Images 👆</span>
         </button>
-      </div>
-
-      <!-- Extra 6 placeholder images -->
-      <div class="gallery-grid gallery-grid-extra" id="gallery-grid-extra">
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder maya nut image – extra 1">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder maya nut image – extra 2">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder maya nut image – extra 3">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder maya nut image – extra 4">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder maya nut image – extra 5">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder maya nut image – extra 6">
-        </div>
       </div>
     </div>
   </section>
@@ -1384,6 +1370,23 @@ footer{
   requestAnimationFrame(animate);
 })();
 
+// Gallery "view more" toggle
+(function(){
+  const btn = document.getElementById('gallery-more-button');
+  if (!btn) return;
+  const extras = document.querySelectorAll('.gallery-extra');
+  let expanded = false;
+
+  btn.addEventListener('click', () => {
+    expanded = !expanded;
+    extras.forEach(el => {
+      el.style.display = expanded ? 'block' : 'none';
+    });
+    btn.querySelector('span:nth-child(2)').textContent =
+      expanded ? '👆 Click to Show Fewer Images 👆' : '👆 Click to View More Images 👆';
+  });
+})();
+
 // Modal logic (Privacy / DNS)
 (function(){
   const backdrop = document.getElementById('modal-backdrop');
@@ -1500,6 +1503,19 @@ footer{
 
   const tooltip = document.createElement('div');
   tooltip.className = 'logo-tooltip';
+  Object.assign(tooltip.style, {
+    position: 'fixed',
+    padding: '6px 10px',
+    borderRadius: '999px',
+    background: '#ffffff',
+    color: '#123055',
+    fontSize: '12px',
+    boxShadow: '0 3px 10px rgba(0,0,0,0.35)',
+    zIndex: '3000',
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 0.15s ease'
+  });
   document.body.appendChild(tooltip);
 
   let tooltipVisible = false;
@@ -1597,53 +1613,50 @@ footer{
   });
 })();
 
-// Gallery "view more" button
-(function(){
-  const btn = document.getElementById('gallery-more-button');
-  const extra = document.getElementById('gallery-grid-extra');
-  if (!btn || !extra) return;
-
-  btn.addEventListener('click', () => {
-    extra.style.display = 'grid';
-    btn.style.display = 'none';
-  });
-})();
-
-// Dynamic menu underline based on scroll position
+// Scroll-based active underline in menu for sections
 (function(){
   const links = Array.from(document.querySelectorAll('.nav-modal-links a[data-section]'));
   if (!links.length) return;
 
-  function getSectionForLink(link){
-    const id = link.getAttribute('href').replace('#','');
-    if (!id) return null;
-    return document.getElementById(id);
-  }
+  const sectionIds = links.map(a => a.getAttribute('data-section'));
+  const sections = sectionIds
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
 
-  function updateActive(){
-    const midpoint = window.scrollY + window.innerHeight / 2;
-    let activeLink = null;
+  if (!sections.length) return;
 
-    links.forEach(link => {
-      const section = getSectionForLink(link);
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
-      const top = rect.top + window.scrollY;
-      const bottom = top + rect.height;
-      if (midpoint >= top && midpoint <= bottom){
-        activeLink = link;
+  const sectionMap = new Map();
+  sections.forEach(sec => {
+    sectionMap.set(sec.id, sec);
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    let mostVisible = null;
+    let maxRatio = 0;
+
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > maxRatio) {
+        maxRatio = entry.intersectionRatio;
+        mostVisible = entry.target;
       }
     });
 
-    links.forEach(link => link.classList.remove('nav-link-active'));
-    if (activeLink){
-      activeLink.classList.add('nav-link-active');
-    }
-  }
+    if (!mostVisible) return;
 
-  window.addEventListener('scroll', updateActive);
-  window.addEventListener('resize', updateActive);
-  window.addEventListener('load', updateActive);
+    const id = mostVisible.id;
+    links.forEach(link => {
+      if (link.getAttribute('data-section') === id){
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }, {
+    root:null,
+    threshold:[0.4, 0.6, 0.75]
+  });
+
+  sections.forEach(sec => observer.observe(sec));
 })();
 </script>
 
