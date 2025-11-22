@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact – The MayaNut Company</title>
+
+<!-- Christmas font -->
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+
+<!-- Base + headline fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+<!-- Favicon (same as main site) -->
+<link rel="icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
+<link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
+
+<meta name="theme-color" content="#003cc7" />
+
+<meta name="description" content="Contact The MayaNut Company about Brosimum alicastrum (maya nut) and bulk orders for future beverages, powder, and flours.">
+<meta name="keywords" content="Maya nut contact, Brosimum alicastrum contact, maya nut bulk orders, The MayaNut Company contact">
+
+<style>
+:root{
+  --bg:#18A7FF;
+
+  /* Main page background: balanced blue–purple gradient */
+  --bg-grad:
+    radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #6c46ff 0, #0032a0 55%, transparent 80%),
+    #0a56c2;
+
+  /* Top/Bottom "tab" gradient – vivid 003cc7 with purple corners */
+  --bar-base:#003cc7;
+  --bar-grad:
+    radial-gradient(circle at 50% 50%, #296cff 0, #003cc7 40%, transparent 80%),
+    radial-gradient(circle at 0% 0%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 0% 100%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 100% 0%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, #7a4dff 0, transparent 60%),
+    #003cc7;
+
+  --bar-h:72px;
+  --logo-offset:12px;
+}
+
+/* Slightly taller bar on very small screens */
+@media (max-width: 600px){
+  :root{
+    --bar-h:82px;
+  }
+}
+
+/* GLOBAL */
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+html,body{
+  margin:0;
+  padding:0;
+  scroll-behavior:smooth;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:#fff;
+}
+body{
+  background:var(--bg-grad);
+  background-attachment:fixed;
+}
+
+/* TOP BAR */
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  background:var(--bar-grad);
+  color:#fff;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  grid-template-areas:"menu title lang";
+  align-items:center;
+  column-gap:6px;
+  padding:8px 10px;
+  min-height:var(--bar-h);
+  z-index:1000;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+  padding-top:calc(8px + env(safe-area-inset-top, 0px));
+}
+
+/* Hamburger menu (left) */
+.menu-toggle{
+  grid-area:menu;
+  width:32px;
+  height:26px;
+  border:none;
+  background:transparent;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:0;
+  cursor:pointer;
+  justify-self:start;
+  margin-left:8px;
+  z-index:1100;
+}
+.menu-toggle span{
+  display:block;
+  height:3px;
+  border-radius:999px;
+  background:#ffffff;
+  transition:transform 0.2s ease, opacity 0.2s ease;
+}
+.menu-toggle.open span:nth-child(1){
+  transform:translateY(11px) rotate(45deg);
+}
+.menu-toggle.open span:nth-child(2){
+  opacity:0;
+}
+.menu-toggle.open span:nth-child(3){
+  transform:translateY(-11px) rotate(-45deg);
+}
+
+/* Title (center) */
+.topbar-title{
+  grid-area:title;
+  font-family:"Mountains of Christmas", cursive;
+  font-size:18px;
+  text-align:center;
+  animation:merrygiggle 6s ease-in-out infinite;
+  max-width:100%;
+  justify-self:center;
+  padding:0 6px;
+}
+
+/* LANGUAGE SWITCHER (right) */
+.topbar-lang{
+  grid-area:lang;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  justify-self:end;
+  font-size:12px;
+}
+.topbar-lang-label{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.topbar-lang-label-emoji{
+  font-size:20px;
+  line-height:1;
+}
+.topbar-lang-label-text{
+  font-size:13px;
+}
+.topbar-lang select{
+  font-size:12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.7);
+  background:rgba(10,86,194,0.9);
+  color:#fff;
+  padding:3px 8px;
+  outline:none;
+}
+.topbar-lang select option{
+  color:#000;
+}
+
+/* Very small screens */
+@media (max-width: 420px){
+  .topbar-lang-label-text{
+    display:none;
+  }
+  .topbar-lang select{
+    font-size:11px;
+    padding:2px 6px;
+  }
+}
+@media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+      "menu .   lang"
+      "title title title";
+    align-items:center;
+    padding-left:10px;
+  }
+  .topbar-title{
+    font-size:14px;
+    line-height:1.2;
+    margin-top:4px;
+    padding:0 12px;
+    text-align:center;
+  }
+  .menu-toggle{
+    position:relative;
+    top:auto;
+    left:auto;
+    margin-left:0;
+  }
+}
+
+/* LOGO – below bar */
+.topbar-logo-link{
+  position:fixed;
+  left:var(--logo-offset);
+  top:calc(var(--bar-h) + var(--logo-offset));
+  z-index:900;
+}
+.topbar-logo{
+  width:100px;
+  height:100px;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+}
+
+/* HERO (Contact) */
+.hero{
+  position:relative;
+  min-height:100vh;
+  padding-top:calc(var(--bar-h) + 150px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:var(--bg-grad);
+}
+.hero-inner{
+  width:100%;
+  max-width:900px;
+  padding:0 16px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:40px;
+  position:relative;
+  z-index:1;
+}
+
+/* Optional snow canvas (keeps look consistent) */
+canvas#snow{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  pointer-events:none;
+  z-index:0;
+}
+
+.hero-right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:24px;
+  width:100%;
+}
+
+/* Contact headline */
+.hero-headline{
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:54px;
+  line-height:1.05;
+  font-weight:400;
+  color:#ffffff;
+  -webkit-text-stroke:2px #0057c8;
+  text-stroke:2px #0057c8;
+  text-shadow:
+    0 3px 0 #0057c8,
+    0 6px 12px rgba(0,0,0,0.4);
+  margin-left:8px;
+}
+.hero-headline span{
+  display:block;
+}
+
+/* Contact card */
+.contact-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:20px 22px 20px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.28);
+  color:#2c346a;
+  font-size:15px;
+  line-height:1.8;
+  max-width:520px;
+}
+.contact-card h2{
+  margin:0 0 10px;
+  font-size:20px;
+  color:#28305f;
+}
+.contact-card a{
+  color:#0b5fff; /* blue to signal link */
+  text-decoration:underline;
+}
+.contact-instagram{
+  font-weight:600;
+}
+
+/* Bottom logo section */
+.section--bottom-logo{
+  background:var(--bg-grad);
+  text-align:center;
+  padding:50px 16px 60px;
+}
+.section--bottom-logo .section-inner{
+  max-width:900px;
+  margin:0 auto;
+}
+.section--bottom-logo img{
+  width:200px;
+  height:auto;
+  filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
+  cursor:pointer;
+}
+
+/* FOOTER – same vivid blue tab with purple fade */
+footer{
+  background:var(--bar-grad);
+  color:#d5e3ff;
+  padding:18px 16px 28px;
+  font-size:13px;
+}
+.footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+.footer-line{
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.25);
+  margin:0 0 10px;
+}
+.footer-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.footer-links a{
+  color:#d5e3ff;
+  text-decoration:none;
+  border-bottom:1px dashed rgba(213,227,255,0.6);
+  cursor:pointer;
+}
+
+/* Instagram icon in footer */
+.footer-instagram a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  border:2px solid #ffffff;
+  position:relative;
+  text-decoration:none;
+}
+.footer-instagram span{
+  display:none;
+}
+.footer-instagram a::before{
+  content:"";
+  position:absolute;
+  width:16px;
+  height:16px;
+  border:2px solid #ffffff;
+  border-radius:4px;
+  top:7px;
+  left:6px;
+}
+.footer-instagram a::after{
+  content:"";
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#ffffff;
+  top:3px;
+  right:3px;
+}
+.footer-copy{
+  font-size:12px;
+  margin-top:6px;
+}
+
+/* NAV OVERLAY (full-screen menu) */
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1400;
+}
+.nav-backdrop.open{
+  display:flex;
+}
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:var(--bar-grad);
+  position:relative;
+}
+.nav-modal-title{
+  margin:0 0 10px;
+  font-weight:800;
+  font-size:20px; /* larger for MENU */
+  text-decoration:underline;
+}
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-links a{
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,0.25);
+  transition:transform 0.15s ease, text-decoration 0.15s ease;
+}
+.nav-modal-links a:last-child{
+  border-bottom:none;
+}
+.nav-modal-links a:hover{
+  text-decoration:underline;
+  transform:scale(1.04);
+}
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* Modal (Privacy / DNS) */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+.modal{
+  background:#ffffff;
+  color:#123055;
+  max-width:420px;
+  width:90%;
+  border-radius:14px;
+  padding:18px 18px 16px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  font-size:14px;
+}
+.modal h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+.modal p{
+  margin:0 0 6px;
+  line-height:1.6;
+}
+.modal-close{
+  margin-top:10px;
+  display:inline-flex;
+  padding:4px 10px;
+  border-radius:999px;
+  border:none;
+  background:#003cc7;
+  color:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
+
+/* Welcome popup – same look, but simpler text for contact page */
+.welcome-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2500;
+}
+.welcome-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:20px 22px 22px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
+  color:#ffffff;
+  position:relative;
+  text-align:left;
+  font-size:14px;
+  line-height:1.7;
+  background:var(--bar-grad);
+}
+.welcome-title{
+  margin:0 0 8px;
+  font-weight:700;
+  font-size:18px;
+}
+.welcome-modal p{
+  margin:0 0 8px;
+}
+.welcome-close{
+  position:absolute;
+  top:10px;
+  right:14px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* Wiggle animation */
+@keyframes merrygiggle{
+  0%   { transform:translateX(0); }
+  25%  { transform:translateX(4px); }
+  50%  { transform:translateX(0); }
+  75%  { transform:translateX(-4px); }
+  100% { transform:translateX(0); }
+}
+
+/* Responsive tweaks */
+@media (max-width:800px){
+  .hero-inner{
+    padding-top:8px;
+  }
+  .hero-headline{
+    font-size:40px;
+    text-align:center;
+    margin-left:0;
+  }
+  .hero-right{
+    align-items:center;
+  }
+  .contact-card{
+    max-width:none;
+  }
+}
+@media (max-width:500px){
+  .hero-headline{
+    font-size:32px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <!-- Menu icon (left) -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Center title -->
+  <div class="topbar-title">
+    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+  </div>
+
+  <!-- Language selector (right) -->
+  <div class="topbar-lang">
+    <span class="topbar-lang-label">
+      <span class="topbar-lang-label-emoji">🌎</span>
+      <span class="topbar-lang-label-text">Language</span>
+    </span>
+    <select id="language-select" aria-label="Site language">
+      <option value="index.html">English</option>
+      <option value="index-es.html">Español</option>
+      <option value="index-pt.html">Português</option>
+      <option value="index-fr.html">Français</option>
+      <option value="index-ru.html">Русский</option>
+      <option value="index-zh.html">中文</option>
+      <option value="index-hi.html">हिन्दी</option>
+    </select>
+  </div>
+</header>
+
+<!-- Logo under the bar -->
+<a href="index.html#top" class="topbar-logo-link">
+  <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
+</a>
+
+<!-- Full-screen NAV overlay -->
+<div class="nav-backdrop" id="nav-backdrop">
+  <div class="nav-modal">
+    <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
+    <h2 class="nav-modal-title">Menu</h2>
+    <div class="nav-modal-links">
+      <!-- On Contact page, send these back to main page anchors -->
+      <a href="index.html#about">ABOUT</a>
+      <a href="index.html#buy">STORE</a>
+      <a href="index.html#research">RESEARCH</a>
+      <a href="index.html#gallery">GALLERY</a>
+      <a href="faq.html">FAQ</a>
+      <a href="blog.html">BLOG</a>
+      <a href="contact.html">CONTACT</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- HERO CONTACT BLOCK -->
+  <section class="hero" id="top">
+    <canvas id="snow"></canvas>
+    <div class="hero-inner">
+      <div class="hero-right">
+        <div class="hero-headline">
+          <span>Contact</span>
+          <span>The MayaNut Company</span>
+        </div>
+
+        <div class="contact-card">
+          <h2>Contact Us</h2>
+          <p>
+            If you have any questions about <em>Brosimum alicastrum</em> or maya nut bulk orders,
+            please email us at
+            <a href="mailto:themayanutcompany@gmail.com">themayanutcompany@gmail.com</a>.
+          </p>
+          <p>
+            Or check us out on Instagram
+            <a
+              href="https://instagram.com/themayanutcompany"
+              target="_blank"
+              rel="noopener"
+              class="contact-instagram"
+            >@themayanutcompany</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM LOGO SECTION -->
+  <section class="section--bottom-logo">
+    <div class="section-inner">
+      <a href="index.html#top">
+        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <hr class="footer-line" />
+    <div class="footer-row">
+      <div class="footer-links">
+        <a id="privacy-link">Privacy Policy</a>
+        <a id="dns-link">Do Not Sell My Info</a>
+      </div>
+      <div class="footer-instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company on Instagram">
+          <span>IG</span>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      © 2025 The MayaNut Company, Inc. All Rights Reserved.
+    </div>
+  </div>
+</footer>
+
+<!-- Welcome popup -->
+<div class="welcome-backdrop" id="welcome-backdrop">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
+    <h2 class="welcome-title">Welcome to mayanut.com</h2>
+    <p>This is our contact page for questions about maya nut (<em>Brosimum alicastrum</em>) and future bulk orders.</p>
+  </div>
+</div>
+
+<!-- Privacy / DNS Modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Privacy Policy</h3>
+    <div id="modal-body">
+      <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+      <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+      <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
+    </div>
+    <button class="modal-close" id="modal-close">Close</button>
+  </div>
+</div>
+
+<script>
+// Language selector: keep behavior consistent
+(function(){
+  const select = document.getElementById('language-select');
+  if (!select) return;
+
+  const path = window.location.pathname;
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'contact.html';
+
+  // Default to English on contact page
+  for (const opt of select.options){
+    if (file.startsWith('index-') && opt.value === file){
+      opt.selected = true;
+      break;
+    } else if (file === 'contact.html' && opt.value === 'index.html') {
+      opt.selected = true;
+    }
+  }
+
+  select.addEventListener('change', function(){
+    const target = this.value || 'index.html';
+    window.location.href = target;
+  });
+})();
+
+// Simple snow animation (same style as main page)
+(function () {
+  const canvas = document.getElementById("snow");
+  if (!canvas) return;
+  const hero = canvas.parentElement;
+  const ctx = canvas.getContext("2d");
+
+  let width = hero.clientWidth;
+  let height = hero.clientHeight;
+
+  function resize() {
+    width = hero.clientWidth;
+    height = hero.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const FLAKE_COUNT = 60;
+  const flakes = [];
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createFlake(initial = false) {
+    return {
+      x: random(0, width),
+      y: initial ? random(0, height) : random(-height * 0.2, 0),
+      size: random(2, 5),
+      speedY: random(0.03, 0.12),
+      speedX: random(-0.03, 0.03),
+      sway: random(0.5, 1.5),
+      swaySpeed: random(0.0005, 0.002),
+      swayOffset: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: random(-0.003, 0.003)
+    };
+  }
+
+  function initFlakes() {
+    flakes.length = 0;
+    for (let i = 0; i < FLAKE_COUNT; i++) {
+      flakes.push(createFlake(true));
+    }
+  }
+
+  function drawFlake(flake) {
+    ctx.save();
+    ctx.translate(flake.x, flake.y);
+    ctx.rotate(flake.rotation);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.lineWidth = 1;
+
+    const armLength = flake.size;
+
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 / 6) * i;
+      const x = Math.cos(angle) * armLength;
+      const y = Math.sin(angle) * armLength;
+
+      ctx.moveTo(0, 0);
+      ctx.lineTo(x, y);
+
+      const branchLen = armLength * 0.4;
+      const sideAngle1 = angle + Math.PI / 6;
+      const sideAngle2 = angle - Math.PI / 6;
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle1) * branchLen,
+        y * 0.4 + Math.sin(sideAngle1) * branchLen
+      );
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle2) * branchLen,
+        y * 0.4 + Math.sin(sideAngle2) * branchLen
+      );
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function updateFlake(flake, deltaTime) {
+    flake.x += flake.speedX * deltaTime +
+      Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
+
+    flake.y += flake.speedY * deltaTime;
+
+    flake.rotation += flake.rotationSpeed * deltaTime;
+
+    if (flake.y > height + flake.size * 2) {
+      const replacement = createFlake(false);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
+    }
+
+    if (flake.x < -20) flake.x = width + 20;
+    if (flake.x > width + 20) flake.x = -20;
+  }
+
+  let lastTime = performance.now();
+
+  function animate(now) {
+    const TIME_SCALE = 0.15;
+    const deltaTime = (now - lastTime) * TIME_SCALE;
+    lastTime = now;
+
+    ctx.clearRect(0, 0, width, height);
+
+    for (const flake of flakes) {
+      updateFlake(flake, deltaTime);
+      drawFlake(flake);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  initFlakes();
+  requestAnimationFrame(animate);
+})();
+
+// Modal logic (Privacy / DNS)
+(function(){
+  const backdrop = document.getElementById('modal-backdrop');
+  const titleEl = document.getElementById('modal-title');
+  const bodyEl  = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('modal-close');
+  const privacyLink = document.getElementById('privacy-link');
+  const dnsLink = document.getElementById('dns-link');
+
+  function openModal(kind){
+    if(kind === 'privacy'){
+      titleEl.textContent = 'Privacy Policy';
+      bodyEl.innerHTML = `
+        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+        <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
+      `;
+    }else{
+      titleEl.textContent = 'Do Not Sell My Info';
+      bodyEl.innerHTML = `
+        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
+        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+      `;
+    }
+    backdrop.style.display = 'flex';
+  }
+
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
+})();
+
+// NAV overlay (hamburger)
+(function(){
+  const toggle = document.getElementById('menu-toggle');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const navClose = document.getElementById('nav-close');
+
+  if(!toggle || !navBackdrop) return;
+
+  function openNav(){
+    navBackdrop.classList.add('open');
+    toggle.classList.add('open');
+  }
+  function closeNav(){
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(navBackdrop.classList.contains('open')){
+      closeNav();
+    }else{
+      openNav();
+    }
+  });
+  if (navClose){
+    navClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeNav();
+    });
+  }
+  navBackdrop.addEventListener('click', (e) => {
+    if(e.target === navBackdrop){
+      closeNav();
+    }
+  });
+})();
+
+// Welcome popup
+(function(){
+  const welcomeBackdrop = document.getElementById('welcome-backdrop');
+  const welcomeClose = document.getElementById('welcome-close');
+
+  if(!welcomeBackdrop || !welcomeClose) return;
+
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+  });
+
+  function closeWelcome(){
+    welcomeBackdrop.style.display = 'none';
+  }
+
+  welcomeClose.addEventListener('click', closeWelcome);
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if(e.target === welcomeBackdrop) closeWelcome();
+  });
+})();
+</script>
+
+</body>
+</html>
