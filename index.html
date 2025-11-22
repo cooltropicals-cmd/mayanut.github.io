@@ -875,41 +875,98 @@ footer{
   justify-content:center;
   z-index:2500;
 }
+
+/* Outer container is transparent so you see the darkened site around the rectangles */
 .welcome-modal{
-  max-width:420px;
-  width:min(90vw, 420px);
+  max-width:760px;
+  width:min(95vw, 760px);
+  margin:20px;
+  display:flex;
+  gap:18px;
+  position:relative;
+  background:transparent;
+  box-shadow:none;
+  padding:0;
+}
+
+/* Left + right rectangles */
+.welcome-panel{
+  flex:1;
   border-radius:18px;
   padding:20px 22px 22px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.55);
-  color:#ffffff;
-  position:relative;
-  text-align:left;
-  font-size:14px;
-  line-height:1.7;
   background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
     #0a56c2;
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
 }
+
+/* Left = text */
+.welcome-panel-left{
+  min-width:0;
+}
+
+/* Right = logo + button */
+.welcome-panel-right{
+  max-width:260px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.welcome-logo{
+  width:160px;
+  height:auto;
+  margin-bottom:16px;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.5));
+}
+
 .welcome-title{
   margin:0 0 8px;
   font-weight:700;
   font-size:18px;
 }
-.welcome-modal p{
+.welcome-panel-left p{
   margin:0 0 8px;
+  font-size:14px;
+  line-height:1.7;
 }
+
+/* Orange "Go to Main Page" button reusing hero style */
+.welcome-main-btn{
+  margin-top:4px;
+  font-size:16px;
+  padding:10px 26px;
+}
+
+/* X in the transparent gap on the top-right of the popup */
 .welcome-close{
   position:absolute;
-  top:10px;
-  right:14px;
+  top:-18px;
+  right:-18px;
   border:none;
   background:transparent;
   color:#ffffff;
-  font-size:20px;
+  font-size:26px;
   line-height:1;
   cursor:pointer;
+}
+
+/* Responsive welcome popup stacking */
+@media(max-width:700px){
+  .welcome-modal{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .welcome-panel-right{
+    max-width:none;
+  }
+  .welcome-close{
+    top:8px;
+    right:8px;
+  }
 }
 
 /* Responsive breakpoints */
@@ -1290,10 +1347,21 @@ footer{
 <!-- Welcome popup -->
 <div class="welcome-backdrop" id="welcome-backdrop">
   <div class="welcome-modal">
+    <!-- X in transparent gap -->
     <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
-    <h2 class="welcome-title">Welcome to mayanut.com</h2>
-    <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>) plantations of tropical trees.</p>
-    <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience!</p>
+
+    <!-- Left rectangle: welcome text -->
+    <div class="welcome-panel welcome-panel-left">
+      <h2 class="welcome-title">Welcome to mayanut.com</h2>
+      <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>) plantations of tropical trees.</p>
+      <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience!</p>
+    </div>
+
+    <!-- Right rectangle: logo + orange button -->
+    <div class="welcome-panel welcome-panel-right">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo">
+      <button class="hero-cta-btn welcome-main-btn" id="welcome-main-btn">Go to Main Page</button>
+    </div>
   </div>
 </div>
 
@@ -1583,18 +1651,33 @@ footer{
 (function(){
   const welcomeBackdrop = document.getElementById('welcome-backdrop');
   const welcomeClose = document.getElementById('welcome-close');
+  const welcomeMainBtn = document.getElementById('welcome-main-btn');
 
   if(!welcomeBackdrop || !welcomeClose) return;
-
-  window.addEventListener('load', () => {
-    welcomeBackdrop.style.display = 'flex';
-  });
 
   function closeWelcome(){
     welcomeBackdrop.style.display = 'none';
   }
 
+  // Show popup on load + auto-close after 60 seconds
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+
+    setTimeout(() => {
+      if (welcomeBackdrop.style.display !== 'none') {
+        closeWelcome();
+      }
+    }, 60000); // 60,000 ms = 60 seconds
+  });
+
   welcomeClose.addEventListener('click', closeWelcome);
+
+  // "Go to Main Page" button just closes the welcome popups
+  if (welcomeMainBtn){
+    welcomeMainBtn.addEventListener('click', closeWelcome);
+  }
+
+  // Click outside the rectangles closes popup
   welcomeBackdrop.addEventListener('click', (e) => {
     if(e.target === welcomeBackdrop) closeWelcome();
   });
