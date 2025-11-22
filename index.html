@@ -301,7 +301,7 @@ canvas#snow{
   white-space:nowrap;
 }
 
-/* Hero CTA button */
+/* Hero CTA button (Store button) */
 .hero-cta-wrap{
   margin-top:18px;
 }
@@ -317,15 +317,32 @@ canvas#snow{
   font-size:18px;
   letter-spacing:0.05em;
   text-transform:uppercase;
-  background:linear-gradient(135deg, #ff7a1a 0%, #ffc152 100%);
+  background:linear-gradient(135deg, #ff7a1a 0%, #ffc152 45%, #ffe27a 100%);
   color:#fff;
   box-shadow:0 4px 14px rgba(0,0,0,0.4);
   cursor:pointer;
   transition:transform 0.18s ease, box-shadow 0.18s ease;
+  animation:waltzPulse 2.4s ease-in-out infinite;
 }
 .hero-cta-btn:hover{
-  transform:translateY(-1px) scale(1.03);
-  box-shadow:0 6px 18px rgba(0,0,0,0.5);
+  transform:translateY(-1px) scale(1.08);
+  box-shadow:0 7px 20px rgba(0,0,0,0.55);
+}
+
+/* Waltz pulse: 1-2-3 pattern (beat 1 still, beats 2 & 3 pump) */
+@keyframes waltzPulse{
+  0%, 100%{
+    transform:scale(1);
+    box-shadow:0 4px 14px rgba(0,0,0,0.4);
+  }
+  33%{
+    transform:scale(1.03);
+    box-shadow:0 5px 16px rgba(0,0,0,0.45);
+  }
+  66%{
+    transform:scale(1.06);
+    box-shadow:0 6px 18px rgba(0,0,0,0.5);
+  }
 }
 
 /* Hero glass image */
@@ -934,11 +951,12 @@ footer{
   line-height:1.7;
 }
 
-/* Orange "Go to Main Page" button reusing hero style */
+/* Orange "Go to Main Page" button: reuse style but no pulse */
 .welcome-main-btn{
   margin-top:4px;
   font-size:16px;
   padding:10px 26px;
+  animation:none;
 }
 
 /* X in the transparent gap on the top-right of the popup */
@@ -1038,7 +1056,7 @@ footer{
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
 
-  <!-- Language selector -->
+  <!-- Language selector (18 languages) -->
   <div class="topbar-lang">
     <span class="topbar-lang-label">
       <span class="topbar-lang-label-emoji">🌎</span>
@@ -1061,6 +1079,8 @@ footer{
       <option value="index-ar.html">العربية</option>
       <option value="index-sw.html">Kiswahili</option>
       <option value="index-ha.html">Hausa</option>
+      <option value="index-fil.html">Filipino</option>
+      <option value="index-yo.html">Yorùbá</option>
     </select>
   </div>
 </header>
@@ -1076,6 +1096,8 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
+      <!-- New HOME tab -->
+      <a href="#top" data-section="top">HOME</a>
       <a href="#about" data-section="about">ABOUT</a>
       <a href="#buy" data-section="buy">STORE</a>
       <a href="#research" data-section="research">RESEARCH</a>
@@ -1123,6 +1145,7 @@ footer{
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
+          <!-- EXACT FILENAMES as requested -->
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
           <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
           <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young Maya nut Brosimum alicastrum trees growing in a nursery">
@@ -1213,7 +1236,8 @@ footer{
     <div class="section-inner">
       <div class="research-grid">
         <div class="research-image-wrap">
-          <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="Leaves and branches of the maya nut tree Brosimum alicastrum">
+          <!-- Research image file as requested -->
+          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Leaves and branches of the maya nut tree Brosimum alicastrum">
         </div>
         <div class="research-text">
           <div class="research-text-card">
