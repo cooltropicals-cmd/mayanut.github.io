@@ -12,11 +12,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 
-<!-- Favicon (new) -->
+<!-- Favicon -->
 <link rel="icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 <link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 
-<meta name="theme-color" content="#003cc7" />
+<meta name="theme-color" content="#18A7FF" />
 
 <!-- SEO: keywords + translated variants -->
 <meta name="description" content="Maya nut (maya nut, mayanut) beverage and products made from Brosimum alicastrum, also known as breadnut, ojoche, ramón, guiamaro – a tropical rainforest tree. Tropical trees, agroforestry and future Maya nut beverages, powder and flours.">
@@ -33,22 +33,11 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 <style>
 :root{
   --bg:#18A7FF;
-
-  /* Main page background: balanced blue–purple gradient */
+  /* Balanced vivid blue–purple gradient: lighter center, vivid purple corners */
   --bg-grad:
     radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
     radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #6c46ff 0, #0032a0 55%, transparent 80%),
-    #0a56c2;
-
-  /* Top/Bottom "tab" + gallery gradient – vivid 003cc7 with purple corners */
-  --bar-base:#003cc7;
-  --bar-grad:
-    radial-gradient(circle at 50% 50%, #296cff 0, #003cc7 40%, transparent 80%),
-    radial-gradient(circle at 0% 0%, #7a4dff 0, transparent 60%),
-    radial-gradient(circle at 0% 100%, #7a4dff 0, transparent 60%),
-    radial-gradient(circle at 100% 0%, #7a4dff 0, transparent 60%),
-    radial-gradient(circle at 100% 100%, #7a4dff 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
     #003cc7;
 
   /* BUY background – mostly white, soft pink, lavender at edges */
@@ -56,6 +45,7 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
     radial-gradient(circle at 50% 30%, #ffffff 0, #ffffff 40%, #ffe9f5 65%, #e8ddff 90%),
     #ffffff;
 
+  --bar:#003cc7;
   --bar-h:72px; /* baseline bar height */
   --logo-offset:12px; /* distance from left and from bar */
 }
@@ -88,11 +78,11 @@ body{
   background-attachment:fixed;
 }
 
-/* TOP BAR – uses vivid bar gradient with purple corners */
+/* TOP BAR – grid: menu | title | language, with gradient + purple edges */
 .topbar{
   position:fixed;
   top:0; left:0; right:0;
-  background:var(--bar-grad);
+  background:var(--bg-grad);
   color:#fff;
   display:grid;
   grid-template-columns:auto 1fr auto;
@@ -229,7 +219,7 @@ body{
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset));
+  top:calc(var(--bar-h) + var(--logo-offset)); /* a bit closer to bar */
   z-index:900;
 }
 .topbar-logo{
@@ -243,7 +233,7 @@ body{
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 150px);
+  padding-top:calc(var(--bar-h) + 150px); /* space for bar + logo */
   display:flex;
   align-items:center;
   justify-content:center;
@@ -304,7 +294,7 @@ canvas#snow{
 }
 .hero-headline .headline-coming{
   text-decoration:underline;
-  text-decoration-color:#003cc7;
+  text-decoration-color:var(--bar);
   text-underline-offset:4px;
   white-space:nowrap;
 }
@@ -343,9 +333,9 @@ canvas#snow{
   background:linear-gradient(
     90deg,
     #7bc4ff 0%,
-    #003cc7 24%,
+    #0e4fb8 24%,
     #aa00fe 50%,
-    #003cc7 76%,
+    #0e4fb8 76%,
     #7bc4ff 100%
   );
   color:#f5fbff;
@@ -385,7 +375,7 @@ canvas#snow{
   height:120px;
   border-radius:50% 50% 0 0;
   z-index:-1;
-  background:var(--bar-grad);
+  background:var(--bg-grad);
 }
 .section--about{
   background:var(--bg-grad);
@@ -426,7 +416,6 @@ canvas#snow{
   font-size:15px;
   line-height:1.7;
 }
-
 /* Soft lavender gradients on cards */
 .about-card-1{
   background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
@@ -537,9 +526,9 @@ canvas#snow{
   margin:0 0 12px;
 }
 
-/* GALLERY – use the vivid bar gradient so it ties together */
+/* GALLERY – vivid blue + purple fade */
 .section--gallery{
-  background:var(--bar-grad);
+  background:var(--bg-grad);
 }
 .gallery-inner{
   text-align:center;
@@ -552,14 +541,12 @@ canvas#snow{
   margin:0 0 18px;
   font-size:15px;
 }
-
-/* GALLERY grid with "view more" toggle */
 .gallery-grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:12px;
   max-width:900px;
-  margin:0 auto;
+  margin:0 auto 18px;
 }
 .gallery-tile{
   aspect-ratio:4/3;
@@ -578,47 +565,51 @@ canvas#snow{
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
 }
 
-/* "View more images" button */
-.gallery-more-wrap{
-  margin-top:18px;
-  text-align:center;
+/* Extra gallery tiles initially hidden */
+.gallery-tile-extra{
+  display:none;
+}
+.gallery-grid.expanded .gallery-tile-extra{
+  display:block;
+}
+
+/* Show-more control */
+.gallery-more{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  user-select:none;
 }
 .gallery-more-button{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:8px 18px;
-  border-radius:999px;
-  border:none;
-  background:#f0f2ff;
-  color:#24356a;
-  font-size:14px;
-  cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,0.25);
-  transition:transform 0.15s ease, box-shadow 0.15s ease;
-}
-.gallery-more-circle{
-  width:20px;
-  height:20px;
+  width:44px;
+  height:44px;
   border-radius:50%;
-  background:#d0d3e8;
+  border:2px solid #d0d7ff;
+  background:#ffffff;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:14px;
+  font-size:20px;
+  color:#555;
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
 }
-.gallery-more-button:hover{
-  transform:scale(1.04);
+.gallery-more-text{
+  font-size:13px;
+  color:#e4ebff;
+  opacity:0;
+  transition:opacity 0.18s ease;
+}
+.gallery-more:hover .gallery-more-button{
+  transform:scale(1.08);
   box-shadow:0 3px 10px rgba(0,0,0,0.35);
 }
-
-/* Initially hide the extra 6 tiles */
-.gallery-extra{
-  display:none;
+.gallery-more:hover .gallery-more-text{
+  opacity:1;
 }
 
-/* Bottom logo section – match main gradient family */
+/* Bottom logo section – gradient */
 .section--bottom-logo{
   background:var(--bg-grad);
   text-align:center;
@@ -630,9 +621,9 @@ canvas#snow{
   cursor:pointer;
 }
 
-/* FOOTER – same vivid blue tab with purple fade as the top bar */
+/* FOOTER – same vivid blue/purple gradient */
 footer{
-  background:var(--bar-grad);
+  background:var(--bg-grad);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -720,7 +711,7 @@ footer{
   display:flex;
 }
 
-/* Menu background: vivid blue with purple edges */
+/* Menu panel with purple-edged gradient */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -731,14 +722,19 @@ footer{
   text-align:left;
   font-size:15px;
   line-height:1.7;
-  background:var(--bar-grad);
+  background:
+    radial-gradient(circle at 50% 10%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    #003cc7;
   position:relative;
 }
 .nav-modal-title{
   margin:0 0 10px;
-  font-weight:800;
-  font-size:20px; /* Bigger so “Menu” stands out */
+  font-weight:900;
+  font-size:20px; /* bigger to distinguish from other tabs */
   text-decoration:underline;
+  text-underline-offset:4px;
 }
 .nav-modal-links{
   display:flex;
@@ -752,18 +748,39 @@ footer{
   font-weight:600;
   font-size:15px;
   padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,0.25);
-  transition:transform 0.15s ease, text-decoration 0.15s ease;
+  position:relative;
+  border-bottom:none;
+  transition:transform 0.15s ease;
+}
+
+/* Short underline on hover via ::after, long underline when active */
+.nav-modal-links a::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%) scaleX(0);
+  bottom:0;
+  height:2px;
+  width:40%;           /* short underline base width */
+  background:#ffffff;
+  opacity:0;
+  transition:transform 0.18s ease, opacity 0.18s ease, width 0.18s ease;
+}
+.nav-modal-links a:hover::after{
+  opacity:1;
+  transform:translateX(-50%) scaleX(1); /* short underline visible on hover */
+}
+.nav-modal-links a.active::after{
+  opacity:1;
+  width:100%;          /* full-width underline when active section/page */
+  transform:translateX(-50%) scaleX(1);
+}
+
+.nav-modal-links a:hover{
+  transform:translateX(2px);
 }
 .nav-modal-links a:last-child{
   border-bottom:none;
-}
-.nav-modal-links a:hover{
-  text-decoration:underline;
-  transform:scale(1.04); /* Slightly bigger on hover (desktop) */
-}
-.nav-modal-links a.active{
-  text-decoration:underline;
 }
 .nav-close{
   position:absolute;
@@ -811,13 +828,13 @@ footer{
   padding:4px 10px;
   border-radius:999px;
   border:none;
-  background:#003cc7;
+  background:#0a56c2;
   color:#fff;
   font-size:13px;
   cursor:pointer;
 }
 
-/* WELCOME POPUP – purple edge gradient, lowercase mayanut.com */
+/* WELCOME POPUP – purple-edged gradient panel */
 .welcome-backdrop{
   position:fixed;
   inset:0;
@@ -838,7 +855,11 @@ footer{
   text-align:left;
   font-size:14px;
   line-height:1.7;
-  background:var(--bar-grad);
+  background:
+    radial-gradient(circle at 50% 15%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    #003cc7;
 }
 .welcome-title{
   margin:0 0 8px;
@@ -958,14 +979,13 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
-      <!-- ABOUT above STORE; added CONTACT at bottom -->
-      <a href="#about" data-section="about">ABOUT</a>
-      <a href="#buy" data-section="buy">STORE</a>
-      <a href="#research" data-section="research">RESEARCH</a>
-      <a href="#gallery" data-section="gallery">GALLERY</a>
-      <a href="faq.html">FAQ</a>
-      <a href="blog.html">BLOG</a>
-      <a href="contact.html">CONTACT</a>
+      <a href="#about" data-close-nav="true" data-section="about">ABOUT</a>
+      <a href="#buy" data-close-nav="true" data-section="buy">STORE</a>
+      <a href="#research" data-close-nav="true" data-section="research">RESEARCH</a>
+      <a href="#gallery" data-close-nav="true" data-section="gallery">GALLERY</a>
+      <a href="blog.html" data-close-nav="true">BLOG</a>
+      <a href="faq.html" data-close-nav="true">FAQ</a>
+      <a href="contact.html" data-close-nav="true">CONTACT</a>
     </div>
   </div>
 </div>
@@ -1015,9 +1035,9 @@ footer{
 
           <div class="about-text-card about-card-2">
             <h3>August Kokus</h3>
-            <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. He wanted an immortal grasp upon the world in the form of something that would be wanted by humanity, something that can adapt to an ever-changing world.</p>
-            <p>What if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
-            <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the only way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up — literally — was a challenge worth accepting. By 2030, August expects to have at least one functional farm at least one acre in size for the world to start enjoying.</p>
+            <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. He wanted an enduring mark on the world in the form of something people would genuinely want—something able to adapt to an ever-changing planet and still feel relevant and valuable.</p>
+            <p>For August, that “something” was not a song, a painting, or a sculpture, all of which can fade, deteriorate, or be forgotten over time. Instead, he asked: what if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and build an entirely new industry around it?</p>
+            <p>In 2025, that is exactly what he set out to do. The foundation of The MayaNut Company became the way to turn his love of botany into something bold and tangible. Building an industry from the ground up—literally, tree by tree—would not be easy, but it was a challenge worth accepting. By 2030, August aims to have at least one fully functional farm, at least an acre in size, producing enough maya nut for the world to finally start enjoying it on a broader scale.</p>
           </div>
 
           <div class="about-text-card about-card-3">
@@ -1027,7 +1047,7 @@ footer{
 
           <div class="about-text-card about-card-4">
             <h3>Our Mission</h3>
-            <p>What we hope to achieve is a lasting effect down through the coming centuries — a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as maya nut, breadnut, ojoche, ramón, or guiamaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
+            <p>What we hope to achieve is a lasting effect down through the coming centuries—a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as maya nut, breadnut, ojoche, ramón, or guiamaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
           </div>
 
           <div class="about-text-card about-card-5">
@@ -1088,15 +1108,92 @@ footer{
           <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="Leaves and branches of the maya nut tree Brosimum alicastrum">
         </div>
         <div class="research-text">
-          <p><strong><em>Brosimum alicastrum</em></strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it also occurs in more sporadic populations as far north as Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica. In different regions, it is also known as maya nut, breadnut, ojoche, ramón, or guiamaro.</p>
+          <p>
+            <strong><em>Brosimum alicastrum</em></strong> is a species of tree in the family Moraceae. It is primarily dominant in the
+            tropical forests of southern Mexico, but also occurs in more scattered populations as far north as Tamaulipas and in
+            western parts of Mexico and Central America, extending into northern South America and parts of the Caribbean,
+            including Cuba and Jamaica. In different regions, it is known as maya nut, breadnut, ojoche, ramón, or guiamaro.
+          </p>
 
-          <p>More research is needed on this species in localized populations. The MayaNut Company is actively working on acquiring new <em>Brosimum alicastrum</em> seeds from different genetic sources to ensure enough genetic diversity for this species to continue surviving effectively in agriculture.</p>
+          <p>
+            In its native range, <em>Brosimum alicastrum</em> can reach up to about 40 meters in height, though it is more typically
+            25–35 meters tall. In South Florida plantings observed so far, trees tend to remain under 20 meters, growing under
+            a rainfall regime of roughly 65 inches per year. Seedlings do not respond well to intense full sun: leaves may turn
+            yellow when ultraviolet exposure is too strong. Young plants prefer moist, partially shaded conditions and generally
+            tolerate more direct light once they are taller than about 2–3 feet. Established trees can tolerate periods of
+            drought, especially once their roots reach deeper moisture.
+          </p>
 
-          <p>Domestication by the Mayan culture is limited, and the species <em>Brosimum alicastrum</em> could be selectively bred into more stable strains, yielding larger and more nutritious seeds.</p>
+          <p>
+            Unlike annual crops that must be replanted, fertilized, and replaced, <em>Brosimum alicastrum</em> behaves like a
+            long-lived forest tree. Productivity does not necessarily decline with age; larger trees can bear more seed than
+            young trees. Deep roots allow access to the water table and help anchor the tree against wind. Because this species
+            evolved in regions exposed to tropical storms and hurricanes, it is naturally suited to hurricane-prone places such
+            as Florida.
+          </p>
 
-          <p>Historically, <em>Brosimum alicastrum</em> is believed to have been an important part of not just the Maya people, but probably many other cultures overlapping its range. The tree was likely used by early Mesoamerican hunter-gatherers as early as 10,000 B.C. More recently in history, however, there is very little, if any, direct evidence of its specific uses in ancient cultures. No known texts or art clearly describe recipes or uses in their culture.</p>
+          <h3>Morphology</h3>
+          <p>
+            As a member of Moraceae, <em>Brosimum alicastrum</em> produces many tiny flowers packed into a globose, fused
+            inflorescence. Trees are usually dioecious (separate male and female trees), but monoecious individuals with both
+            male and female flowers on the same tree also occur. The flower heads are somewhat reminiscent of miniature
+            <em>Treculia</em> inflorescences. Phylogenetic studies indicate that the <em>Brosimum</em> lineage ultimately traces
+            back to an African ancestor within the tribe Dorstenieae, with long-distance “rafting” events thought to have brought
+            ancestral material to the Americas.
+          </p>
 
-          <p>Today, maya nut is used as a fodder tree for ranchers in Mexico and to make tortillas, bread, and even a coffee-like beverage, all made from the seeds of this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, often called a maya nut plantation, as this species is widely underutilized in modern agroforestry systems.</p>
+          <p>
+            In <em>Brosimum</em>, a single seed is usually present in each fruit. The ancestral condition for the group was
+            probably a multi-seeded, golf-ball-sized syncarp composed of many small flowers subtended by green peltate bracts
+            around 2&nbsp;mm in diameter. Over time, <em>Brosimum alicastrum</em> appears to have specialized toward a structure
+            with, in monoecious specimens, one centrally placed pistillate (female) flower surrounded by numerous male flowers in
+            each head. In other individuals, only a single pistillate flower develops. Environmental conditions and stress are
+            thought to influence how sex expression is manifested in different trees.
+          </p>
+
+          <p>
+            More research is still needed on this species in localized populations across its range. The MayaNut Company is
+            actively working on acquiring new <em>Brosimum alicastrum</em> seeds from different genetic sources to help maintain
+            sufficient genetic diversity for long-term use in agriculture and agroforestry.
+          </p>
+
+          <p>
+            Domestication by the Maya and related cultures appears to have been limited compared with some other staple crops.
+            However, the species shows clear potential for selective breeding into more stable strains that could yield larger,
+            more uniform, and more nutritious seeds.
+          </p>
+
+          <p>
+            Historically, <em>Brosimum alicastrum</em> is believed to have been important not only for the Maya but also for other
+            cultures overlapping its range. It was likely used by early Mesoamerican hunter-gatherers as early as 10,000&nbsp;B.C.
+            Direct written or artistic records of specific recipes and culinary uses are scarce, and few surviving texts clearly
+            describe how it was prepared in ancient times. Today, maya nut is still used as a fodder tree for ranchers in Mexico
+            and as a local food resource in some communities.
+          </p>
+
+          <h3>Culinary Uses</h3>
+          <p>
+            The seeds of <em>Brosimum alicastrum</em> (maya nut, breadnut, ojoche, ramón, guiamaro) can be dried, roasted, and
+            ground to make cookies, tortillas, bread, and even a coffee-like beverage. These products all originate from the
+            starch-rich seed inside the fruit. The MayaNut Company is working in South Florida to establish a dedicated
+            <em>Brosimum alicastrum</em> farm, often described as a maya nut plantation, because this tree remains widely
+            underutilized in modern agroforestry systems.
+          </p>
+
+          <p>
+            The fruit itself is also edible. It begins green, then turns orange, and finally ripens to a deep red. In the green
+            stage, the pulp is hard and woody, with a mildly bitter, latex-like taste. As it shifts to orange, the texture
+            softens and the flavor becomes noticeably sweeter. Fully ripe, dark red fruits detach easily from the seed. At this
+            stage the pulp is tender and chewy, with a sweetness reminiscent of dried figs or raisins and a subtle tang similar
+            to tamarind, but generally milder and sweeter.
+          </p>
+
+          <p>
+            Fresh fruit has a very short shelf life and is best eaten directly from the tree. For wider distribution, the pulp
+            would need to be processed into jams, jellies, or other preserved products. The seed, however, can be stored for
+            several months under optimal dry, cool conditions, which makes it a more practical ingredient for long-term use and
+            transport.
+          </p>
         </div>
       </div>
     </div>
@@ -1110,9 +1207,8 @@ footer{
     <div class="section-inner gallery-inner">
       <h2>Gallery</h2>
       <p>Images from our trees, fruit, and future products — coming soon.</p>
-
-      <div class="gallery-grid">
-        <!-- First 6 tiles always visible -->
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- First 6 images -->
         <div class="gallery-tile">
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of maya nut fruit Brosimum alicastrum on the tree">
         </div>
@@ -1132,32 +1228,31 @@ footer{
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Multiple maya nut fruits of Brosimum alicastrum on branches">
         </div>
 
-        <!-- Extra 6 tiles, hidden until click -->
-        <div class="gallery-tile gallery-extra">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 1">
+        <!-- Extra 6 placeholders (shown when expanded) -->
+        <div class="gallery-tile gallery-tile-extra">
+          <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young maya nut Brosimum alicastrum trees in nursery">
         </div>
-        <div class="gallery-tile gallery-extra">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 2">
+        <div class="gallery-tile gallery-tile-extra">
+          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum in the Moraceae family">
         </div>
-        <div class="gallery-tile gallery-extra">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 3">
+        <div class="gallery-tile gallery-tile-extra">
+          <img src="maya-nut-mayanut-leaves-plant-tree.jpg" alt="Canopy of maya nut tree with dense leaves">
         </div>
-        <div class="gallery-tile gallery-extra">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 4">
+        <div class="gallery-tile gallery-tile-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Rainforest scene with maya nut fruit">
         </div>
-        <div class="gallery-tile gallery-extra">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 5">
+        <div class="gallery-tile gallery-tile-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of ripening maya nut fruits">
         </div>
-        <div class="gallery-tile gallery-extra">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Additional maya nut image placeholder 6">
+        <div class="gallery-tile gallery-tile-extra">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruits on branches with green foliage">
         </div>
       </div>
 
-      <div class="gallery-more-wrap">
-        <button class="gallery-more-button" id="gallery-more-button">
-          <span class="gallery-more-circle">⬇</span>
-          <span>👆 Click to View More Images 👆</span>
-        </button>
+      <!-- Show more button -->
+      <div class="gallery-more" id="gallery-more">
+        <div class="gallery-more-button" aria-hidden="true">⬇</div>
+        <div class="gallery-more-text">👆 Click to View More Images 👆</div>
       </div>
     </div>
   </section>
@@ -1368,23 +1463,6 @@ footer{
 
   initFlakes();
   requestAnimationFrame(animate);
-})();
-
-// Gallery "view more" toggle
-(function(){
-  const btn = document.getElementById('gallery-more-button');
-  if (!btn) return;
-  const extras = document.querySelectorAll('.gallery-extra');
-  let expanded = false;
-
-  btn.addEventListener('click', () => {
-    expanded = !expanded;
-    extras.forEach(el => {
-      el.style.display = expanded ? 'block' : 'none';
-    });
-    btn.querySelector('span:nth-child(2)').textContent =
-      expanded ? '👆 Click to Show Fewer Images 👆' : '👆 Click to View More Images 👆';
-  });
 })();
 
 // Modal logic (Privacy / DNS)
@@ -1613,50 +1691,71 @@ footer{
   });
 })();
 
-// Scroll-based active underline in menu for sections
+// Gallery "view more images" toggle
 (function(){
-  const links = Array.from(document.querySelectorAll('.nav-modal-links a[data-section]'));
+  const grid = document.getElementById('gallery-grid');
+  const more = document.getElementById('gallery-more');
+  if (!grid || !more) return;
+
+  let expanded = false;
+
+  more.addEventListener('click', () => {
+    expanded = !expanded;
+    if (expanded){
+      grid.classList.add('expanded');
+      more.querySelector('.gallery-more-button').textContent = '⬆';
+      more.querySelector('.gallery-more-text').textContent = '👆 Click to Hide Images 👆';
+    } else {
+      grid.classList.remove('expanded');
+      more.querySelector('.gallery-more-button').textContent = '⬇';
+      more.querySelector('.gallery-more-text').textContent = '👆 Click to View More Images 👆';
+    }
+  });
+})();
+
+// Scroll-based active underline for menu (ABOUT / STORE / RESEARCH / GALLERY)
+(function(){
+  const links = document.querySelectorAll('.nav-modal-links a[data-section]');
   if (!links.length) return;
 
-  const sectionIds = links.map(a => a.getAttribute('data-section'));
-  const sections = sectionIds
-    .map(id => document.getElementById(id))
-    .filter(Boolean);
-
-  if (!sections.length) return;
-
-  const sectionMap = new Map();
-  sections.forEach(sec => {
-    sectionMap.set(sec.id, sec);
+  const sections = [];
+  links.forEach(link => {
+    const id = link.getAttribute('data-section');
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
   });
 
-  const observer = new IntersectionObserver((entries) => {
-    let mostVisible = null;
-    let maxRatio = 0;
+  function updateActive(){
+    const scrollY = window.scrollY;
+    const viewCenter = scrollY + window.innerHeight * 0.4;
 
-    entries.forEach(entry => {
-      if (entry.intersectionRatio > maxRatio) {
-        maxRatio = entry.intersectionRatio;
-        mostVisible = entry.target;
+    let activeId = null;
+    let bestDist = Infinity;
+
+    sections.forEach(({ id, el }) => {
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const bottom = top + rect.height;
+      const sectionCenter = (top + bottom) / 2;
+      const dist = Math.abs(sectionCenter - viewCenter);
+      if (dist < bestDist){
+        bestDist = dist;
+        activeId = id;
       }
     });
 
-    if (!mostVisible) return;
-
-    const id = mostVisible.id;
     links.forEach(link => {
-      if (link.getAttribute('data-section') === id){
+      if (link.getAttribute('data-section') === activeId){
         link.classList.add('active');
       } else {
         link.classList.remove('active');
       }
     });
-  }, {
-    root:null,
-    threshold:[0.4, 0.6, 0.75]
-  });
+  }
 
-  sections.forEach(sec => observer.observe(sec));
+  updateActive();
+  window.addEventListener('scroll', updateActive);
+  window.addEventListener('resize', updateActive);
 })();
 </script>
 
