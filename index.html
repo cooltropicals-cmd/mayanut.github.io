@@ -753,27 +753,28 @@ footer{
   transition:transform 0.15s ease;
 }
 
-/* Short underline on hover via ::after, long underline when active */
+/* Short underline on hover (left-aligned), long underline when active */
 .nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:50%;
-  transform:translateX(-50%) scaleX(0);
+  left:0;
   bottom:0;
   height:2px;
-  width:40%;           /* short underline base width */
+  width:40%;           /* short underline for hover */
   background:#ffffff;
   opacity:0;
+  transform:scaleX(0);
+  transform-origin:left center;
   transition:transform 0.18s ease, opacity 0.18s ease, width 0.18s ease;
 }
 .nav-modal-links a:hover::after{
   opacity:1;
-  transform:translateX(-50%) scaleX(1); /* short underline visible on hover */
+  transform:scaleX(1); /* short underline visible on hover */
 }
 .nav-modal-links a.active::after{
   opacity:1;
   width:100%;          /* full-width underline when active section/page */
-  transform:translateX(-50%) scaleX(1);
+  transform:scaleX(1);
 }
 
 .nav-modal-links a:hover{
@@ -963,6 +964,9 @@ footer{
       <option value="index-fr.html">Français</option>
       <option value="index-ru.html">Русский</option>
       <option value="index-zh.html">中文</option>
+      <option value="index-ja.html">日本語</option>
+      <option value="index-id.html">Bahasa Indonesia</option>
+      <option value="index-ar.html">العربية</option>
       <option value="index-hi.html">हिन्दी</option>
     </select>
   </div>
