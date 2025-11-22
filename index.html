@@ -143,15 +143,17 @@ body{
   padding:0 6px;
 }
 
-/* LANGUAGE SWITCHER */
+/* LANGUAGE SWITCHER – anchored just below the bar */
 .topbar-lang{
-  grid-area:lang;
+  position:fixed;
+  top:calc(var(--bar-h) + 6px); /* sits just under the blue tab */
+  right:10px;
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:flex-end;
   gap:3px;
-  justify-self:end;
   font-size:12px;
+  z-index:1100;
 }
 .topbar-lang-label{
   display:flex;
@@ -301,48 +303,44 @@ canvas#snow{
   white-space:nowrap;
 }
 
-/* Hero CTA button (Store button) */
+/* Hero CTA button – centered + bigger + side-to-side pulse */
 .hero-cta-wrap{
-  margin-top:18px;
+  margin-top:24px;
+  display:flex;
+  justify-content:center; /* center button on main page */
 }
 .hero-cta-btn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:12px 32px;
+  padding:14px 44px;           /* bigger */
   border-radius:999px;
   border:none;
   text-decoration:none;
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:18px;
+  font-size:20px;              /* bigger text */
   letter-spacing:0.05em;
   text-transform:uppercase;
   background:linear-gradient(135deg, #ff7a1a 0%, #ffc152 45%, #ffe27a 100%);
   color:#fff;
   box-shadow:0 4px 14px rgba(0,0,0,0.4);
   cursor:pointer;
-  transition:transform 0.18s ease, box-shadow 0.18s ease;
-  animation:waltzPulse 2.4s ease-in-out infinite;
-}
-.hero-cta-btn:hover{
-  transform:translateY(-1px) scale(1.08);
-  box-shadow:0 7px 20px rgba(0,0,0,0.55);
+  transition:box-shadow 0.18s ease;
+  animation:buttonWiggle 1.2s ease-in-out infinite;
 }
 
-/* Waltz pulse: 1-2-3 pattern (beat 1 still, beats 2 & 3 pump) */
-@keyframes waltzPulse{
-  0%, 100%{
-    transform:scale(1);
-    box-shadow:0 4px 14px rgba(0,0,0,0.4);
+/* Back-and-forth wiggle */
+@keyframes buttonWiggle{
+  0%,100%{
+    transform:translateX(0);
   }
-  33%{
-    transform:scale(1.03);
-    box-shadow:0 5px 16px rgba(0,0,0,0.45);
+  50%{
+    transform:translateX(4px);
   }
-  66%{
-    transform:scale(1.06);
-    box-shadow:0 6px 18px rgba(0,0,0,0.5);
-  }
+}
+
+.hero-cta-btn:hover{
+  box-shadow:0 7px 20px rgba(0,0,0,0.55);
 }
 
 /* Hero glass image */
@@ -951,7 +949,7 @@ footer{
   line-height:1.7;
 }
 
-/* Orange "Go to Main Page" button: reuse style but no pulse */
+/* Orange "Go to Main Page" button: reuse style but no wiggle */
 .welcome-main-btn{
   margin-top:4px;
   font-size:16px;
@@ -1055,35 +1053,35 @@ footer{
   <div class="topbar-title">
     ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
   </div>
-
-  <!-- Language selector (18 languages) -->
-  <div class="topbar-lang">
-    <span class="topbar-lang-label">
-      <span class="topbar-lang-label-emoji">🌎</span>
-      <span class="topbar-lang-label-text">Language</span>
-    </span>
-    <select id="language-select" aria-label="Site language">
-      <option value="index.html" selected>English</option>
-      <option value="index-es.html">Español</option>
-      <option value="index-pt.html">Português</option>
-      <option value="index-fr.html">Français</option>
-      <option value="index-de.html">Deutsch</option>
-      <option value="index-it.html">Italiano</option>
-      <option value="index-ru.html">Русский</option>
-      <option value="index-zh.html">中文</option>
-      <option value="index-ja.html">日本語</option>
-      <option value="index-hi.html">हिन्दी</option>
-      <option value="index-ur.html">اردو</option>
-      <option value="index-bn.html">বাংলা</option>
-      <option value="index-id.html">Bahasa Indonesia</option>
-      <option value="index-ar.html">العربية</option>
-      <option value="index-sw.html">Kiswahili</option>
-      <option value="index-ha.html">Hausa</option>
-      <option value="index-fil.html">Filipino</option>
-      <option value="index-yo.html">Yorùbá</option>
-    </select>
-  </div>
 </header>
+
+<!-- Language selector (18 languages), now fixed just under the bar -->
+<div class="topbar-lang">
+  <span class="topbar-lang-label">
+    <span class="topbar-lang-label-emoji">🌎</span>
+    <span class="topbar-lang-label-text">Language</span>
+  </span>
+  <select id="language-select" aria-label="Site language">
+    <option value="index.html" selected>English</option>
+    <option value="index-es.html">Español</option>
+    <option value="index-pt.html">Português</option>
+    <option value="index-fr.html">Français</option>
+    <option value="index-de.html">Deutsch</option>
+    <option value="index-it.html">Italiano</option>
+    <option value="index-ru.html">Русский</option>
+    <option value="index-zh.html">中文</option>
+    <option value="index-ja.html">日本語</option>
+    <option value="index-hi.html">हिन्दी</option>
+    <option value="index-ur.html">اردو</option>
+    <option value="index-bn.html">বাংলা</option>
+    <option value="index-id.html">Bahasa Indonesia</option>
+    <option value="index-ar.html">العربية</option>
+    <option value="index-sw.html">Kiswahili</option>
+    <option value="index-ha.html">Hausa</option>
+    <option value="index-fil.html">Filipino</option>
+    <option value="index-yo.html">Yorùbá</option>
+  </select>
+</div>
 
 <!-- Logo below the bar -->
 <a href="#top" class="topbar-logo-link">
@@ -1096,7 +1094,7 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-links">
-      <!-- New HOME tab -->
+      <!-- HOME tab -->
       <a href="#top" data-section="top">HOME</a>
       <a href="#about" data-section="about">ABOUT</a>
       <a href="#buy" data-section="buy">STORE</a>
@@ -1145,7 +1143,6 @@ footer{
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <!-- EXACT FILENAMES as requested -->
           <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
           <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
           <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young Maya nut Brosimum alicastrum trees growing in a nursery">
@@ -1236,7 +1233,6 @@ footer{
     <div class="section-inner">
       <div class="research-grid">
         <div class="research-image-wrap">
-          <!-- Research image file as requested -->
           <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Leaves and branches of the maya nut tree Brosimum alicastrum">
         </div>
         <div class="research-text">
