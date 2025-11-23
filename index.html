@@ -33,6 +33,7 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 <style>
 :root{
   --bg:#18A7FF;
+  /* Blue–purple gradient background */
   --bg-grad:
     radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
     radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
@@ -47,15 +48,12 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
   --bar:#003cc7;
   --bar-h:72px;
   --logo-offset:12px;
-
-  --orange-main:#ffb85c;
-  --orange-light:#ffd28b;
 }
 
 /* Slightly taller bar on very small screens */
 @media (max-width: 600px){
   :root{
-    --bar-h:82px;
+    --bar-h:86px;
   }
 }
 
@@ -84,8 +82,8 @@ body{
   position:fixed;
   top:0; left:0; right:0;
   background:
-    radial-gradient(circle at 0% 100%, #7a4aff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #7a4aff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
     #003cc7;
   color:#fff;
   display:grid;
@@ -139,11 +137,20 @@ body{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
-  animation:merrygiggle 4s ease-in-out infinite;
+  animation:titlewiggle 4.5s ease-in-out infinite;
   max-width:100%;
   justify-self:center;
   padding:0 6px;
   white-space:nowrap;
+}
+
+/* Wiggle animation for title (tilting) */
+@keyframes titlewiggle{
+  0%   { transform:rotate(0deg); }
+  25%  { transform:rotate(-2deg); }
+  50%  { transform:rotate(0deg); }
+  75%  { transform:rotate(2deg); }
+  100% { transform:rotate(0deg); }
 }
 
 /* LANGUAGE SWITCHER – label in bar, dropdown below bar */
@@ -155,6 +162,7 @@ body{
   gap:3px;
   justify-self:end;
   font-size:12px;
+  z-index:1100;
 }
 .topbar-lang-label{
   display:flex;
@@ -202,7 +210,7 @@ body{
   padding:6px 0;
   z-index:1500;
   display:none;
-  min-width:190px;
+  min-width:170px;
 }
 .lang-dropdown.open{
   display:block;
@@ -218,19 +226,23 @@ body{
   color:#ffffff;
   cursor:pointer;
   white-space:nowrap;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  letter-spacing:0.02em;
-  border-radius:10px;
+  position:relative;
 }
 .lang-dropdown li:hover{
   background:rgba(255,255,255,0.16);
 }
 .lang-dropdown li.lang-active{
-  color:var(--orange-main);
-  font-weight:600;
-  text-decoration:underline;
-  text-decoration-thickness:2px;
-  text-underline-offset:3px;
+  color:#ffb75a;
+  font-weight:700;
+}
+.lang-dropdown li.lang-active::after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:2px;
+  height:2px;
+  background:#ffb75a;
 }
 
 /* Narrow screens: hide "Language" word */
@@ -244,33 +256,7 @@ body{
   }
 }
 
-/* MOBILE TOPBAR LAYOUT */
-@media (max-width: 600px){
-  .topbar{
-    grid-template-columns:auto 1fr auto;
-    grid-template-rows:auto auto;
-    grid-template-areas:
-      "menu .   lang"
-      "title title title";
-    align-items:center;
-    padding-left:10px;
-  }
-
-  .topbar-title{
-    font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 6px;
-    text-align:center;
-  }
-
-  .menu-toggle{
-    position:relative;
-    margin-left:0;
-  }
-}
-
-/* FIXED LOGO BELOW BAR */
+/* DESKTOP FIXED LOGO BELOW BAR */
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
@@ -278,16 +264,63 @@ body{
   z-index:900;
 }
 .topbar-logo{
-  width:90px;
-  height:90px;
+  width:100px;
+  height:100px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
   cursor:pointer;
 }
-@media (max-width:600px){
-  .topbar-logo{
-    width:70px;
-    height:70px;
+
+/* INLINE LOGO for mobile (inside top bar) */
+.topbar-logo-inline{
+  grid-area:logo;
+  justify-self:center;
+  display:none;
+}
+.topbar-logo-inline img{
+  height:40px;
+  width:auto;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.4));
+  cursor:pointer;
+}
+
+/* MOBILE TOPBAR LAYOUT */
+@media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto auto;
+    grid-template-areas:
+      "logo logo menu"
+      "lang lang lang"
+      "title title title";
+    align-items:center;
+    padding-left:10px;
+  }
+
+  .topbar-logo-inline{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .menu-toggle{
+    grid-area:menu;
+    justify-self:end;
+    margin-left:0;
+    margin-right:6px;
+  }
+
+  .topbar-title{
+    font-size:14px;
+    line-height:1.2;
+    margin-top:4px;
+    padding:0 12px;
+    text-align:center;
+  }
+
+  /* Hide fixed side logo on mobile */
+  .topbar-logo-link{
+    display:none;
   }
 }
 
@@ -295,21 +328,27 @@ body{
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 150px);
+  padding-top:calc(var(--bar-h) + 120px);
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
   background:var(--bg-grad);
-  background-size:200% 200%;
-  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION */
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION
+   (applied to hero, about, gallery) */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 100%; }
+}
+
+.hero,
+.section--about,
+.section--gallery{
+  background-size:200% 200%;
+  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
 .hero-inner{
@@ -370,7 +409,7 @@ canvas#snow{
   white-space:nowrap;
 }
 
-/* Hero CTA button – shiny pulse */
+/* Hero CTA button – shiny + pulse */
 .hero-cta-wrap{
   margin-top:24px;
   display:flex;
@@ -390,39 +429,42 @@ canvas#snow{
   font-size:20px;
   letter-spacing:0.08em;
   text-transform:uppercase;
-  background:linear-gradient(135deg, #ff9b2a 0%, #ffc864 45%, #ffe27a 100%);
+  background:linear-gradient(135deg, #ff9a3c 0%, #ffc86a 45%, #ffeaa0 100%);
   color:#fff;
   box-shadow:0 4px 14px rgba(0,0,0,0.4);
   cursor:pointer;
-  transition:box-shadow 0.18s ease, transform 0.18s ease;
+  transition:box-shadow 0.18s ease;
   animation:buttonPulse 1.3s ease-in-out infinite;
 }
 
-/* Shine effect */
+/* Shiny sweep */
 .hero-cta-btn::before{
   content:"";
   position:absolute;
   top:-50%;
-  left:-30%;
+  left:-40%;
   width:40%;
   height:200%;
-  transform:skewX(-25deg);
   background:linear-gradient(
     120deg,
-    rgba(255,255,255,0.0) 0%,
-    rgba(255,255,255,0.9) 45%,
-    rgba(255,255,255,0.0) 100%
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0) 100%
   );
-  opacity:0.0;
-  animation:buttonShine 2.4s infinite;
+  transform:translateX(-120%) rotate(20deg);
+  animation:buttonShine 2.6s infinite;
 }
 
 @keyframes buttonShine{
-  0%{ transform:translateX(-120%) skewX(-25deg); opacity:0; }
-  40%{ opacity:0; }
-  55%{ opacity:0.9; }
-  80%{ transform:translateX(220%) skewX(-25deg); opacity:0; }
-  100%{ opacity:0; }
+  0%{
+    transform:translateX(-140%) rotate(20deg);
+  }
+  40%{
+    transform:translateX(120%) rotate(20deg);
+  }
+  100%{
+    transform:translateX(120%) rotate(20deg);
+  }
 }
 
 /* Bigger/smaller pulse (scale) */
@@ -431,7 +473,7 @@ canvas#snow{
     transform:scale(1);
   }
   50%{
-    transform:scale(1.06);
+    transform:scale(1.08);
   }
 }
 
@@ -449,19 +491,10 @@ canvas#snow{
 }
 .hero-glass{
   width:520px;
-  max-width:85vw;
+  max-width:80vw;
   display:block;
   cursor:pointer;
-  /* no hover scale anymore */
-}
-
-/* Wiggle animation for title */
-@keyframes merrygiggle{
-  0%   { transform:translateX(0) rotate(0deg); }
-  25%  { transform:translateX(2px) rotate(1deg); }
-  50%  { transform:translateX(0) rotate(0deg); }
-  75%  { transform:translateX(-2px) rotate(-1deg); }
-  100% { transform:translateX(0) rotate(0deg); }
+  /* No hover grow anymore */
 }
 
 /* TRANSITION STRIPS */
@@ -568,13 +601,7 @@ canvas#snow{
   text-align:center;
 }
 
-/* ABOUT SECTION (now under Store) */
-.section--about{
-  background:var(--bg-grad);
-  color:#fff;
-  background-size:200% 200%;
-  animation:lavaMove 40s ease-in-out infinite alternate;
-}
+/* ABOUT SECTION */
 .section--about::before{
   content:"";
   position:absolute;
@@ -590,26 +617,79 @@ canvas#snow{
     radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
     #003cc7;
 }
+.section--about{
+  background:var(--bg-grad);
+  color:#fff;
+}
+
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
   gap:28px;
   align-items:flex-start;
 }
+
 .about-images{
   display:flex;
   flex-direction:column;
   gap:12px;
+}
+.about-image{
+  position:relative;
 }
 .about-images img{
   width:100%;
   border-radius:14px;
   object-fit:cover;
   box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  display:block;
 }
 .about-images .square{
   aspect-ratio:1/1;
 }
+
+/* Expand icon on each image */
+.about-image-expand{
+  position:absolute;
+  top:8px;
+  right:8px;
+  border:none;
+  border-radius:999px;
+  padding:4px 6px;
+  background:rgba(0,0,0,0.65);
+  color:#ffffff;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:11px;
+}
+.about-image-expand-icon{
+  font-size:14px;
+}
+.image-expand-hint{
+  display:none;
+  white-space:nowrap;
+}
+
+/* Desktop hover hint */
+@media (min-width: 768px){
+  .about-image-expand{
+    padding:4px 8px;
+  }
+  .image-expand-hint{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(-3px);
+    transition:opacity 0.15s ease, transform 0.15s ease;
+    font-size:10px;
+  }
+  .about-image-expand:hover .image-expand-hint{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -647,6 +727,79 @@ canvas#snow{
   color:#30346a;
 }
 
+/* GALLERY */
+.section--gallery{
+  background:var(--bg-grad);
+}
+.gallery-inner{
+  text-align:center;
+}
+.gallery-inner h2{
+  margin:0 0 18px;
+  font-size:22px;
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  max-width:900px;
+  margin:0 auto;
+}
+.gallery-tile{
+  aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
+}
+.gallery-tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.gallery-tile:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* Gallery "view more" control */
+.gallery-more-wrap{
+  margin-top:18px;
+}
+.gallery-more-button{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:2px solid #d6d8e8;
+  background:rgba(255,255,255,0.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 8px;
+  cursor:pointer;
+  transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.gallery-more-button:hover{
+  transform:scale(1.05);
+  background:rgba(255,255,255,0.28);
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+}
+.gallery-more-arrow{
+  width:0;
+  height:0;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:12px solid #d6d8e8;
+}
+.gallery-more-text{
+  font-size:13px;
+  color:#e5ecff;
+}
+.gallery-grid-extra{
+  display:none;
+  margin-top:16px;
+}
+
 /* BOTTOM LOGO */
 .section--bottom-logo{
   background:
@@ -660,25 +813,6 @@ canvas#snow{
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
   cursor:pointer;
-}
-.bottom-return{
-  margin-top:12px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-  color:#e5ecff;
-  font-size:13px;
-}
-.bottom-return-circle{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  border:2px solid #e5ecff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
 }
 
 /* FOOTER */
@@ -754,6 +888,7 @@ footer{
   top:3px;
   right:3px;
 }
+
 .footer-copy{
   font-size:12px;
   margin-top:6px;
@@ -772,48 +907,68 @@ footer{
 .nav-backdrop.open{
   display:flex;
 }
-
-/* Menu modal with purple edges and bluer center */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
-  border-radius:22px;
+  border-radius:18px;
   padding:22px 24px 24px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.65);
+  box-shadow:0 10px 30px rgba(0,0,0,0.55);
   color:#ffffff;
   text-align:left;
   font-size:15px;
   line-height:1.7;
   background:
-    radial-gradient(circle at 0% 0%, #9a63ff 0, transparent 55%),
-    radial-gradient(circle at 100% 0%, #9a63ff 0, transparent 55%),
-    radial-gradient(circle at 0% 100%, #8b4cff 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, #8b4cff 0, transparent 55%),
-    radial-gradient(circle at 50% 50%, #1a6dff 0, #0b49b6 45%, #062a74 80%);
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
   position:relative;
 }
-
-/* Centered "Menu" with orange underline bar */
 .nav-modal-title{
-  margin:0 0 18px;
+  margin:0 0 10px;
   font-weight:800;
   font-size:20px;
-  text-align:center;
-  position:relative;
+  text-decoration:underline;
+  text-underline-offset:4px;
 }
-.nav-modal-title::after{
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-links a{
+  position:relative;
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+}
+.nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:-7px;
-  width:130px;
-  height:3px;
-  border-radius:999px;
-  background:var(--orange-main);
+  left:0;
+  bottom:-2px;
+  width:40%;
+  height:2px;
+  background:#ffffff;
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.15s ease;
 }
-
-/* Close X */
+.nav-modal-links a:hover::after{
+  transform:scaleX(1);
+}
+.nav-modal-links a.nav-link-active{
+  color:#ffb75a;
+}
+.nav-modal-links a.nav-link-active::after{
+  width:80%;
+  height:3px;
+  transform:scaleX(1);
+  background:#ffb75a;
+}
 .nav-close{
   position:absolute;
   top:10px;
@@ -824,67 +979,6 @@ footer{
   font-size:20px;
   line-height:1;
   cursor:pointer;
-}
-
-/* Menu links layout */
-.nav-modal-links{
-  margin-top:10px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-/* Menu links: highlight boxes instead of short underline */
-.nav-modal-links a{
-  position:relative;
-  color:#ffffff;
-  text-decoration:none;
-  font-weight:600;
-  font-size:15px;
-  padding:7px 4px;
-  border-radius:10px;
-  transition:background 0.15s ease, color 0.15s ease;
-}
-.nav-modal-links a:hover{
-  background:rgba(143,183,255,0.32);
-}
-.nav-modal-links a.nav-link-active{
-  background:rgba(143,183,255,0.58);
-  color:var(--orange-light);
-}
-
-/* Menu logo in middle section */
-.nav-menu-logo{
-  display:flex;
-  justify-content:center;
-  margin:10px 0 6px;
-}
-.nav-menu-logo img{
-  width:110px;
-  height:auto;
-  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.6));
-}
-
-/* Privacy bar button inside menu */
-.nav-privacy-btn{
-  margin:4px 0 10px;
-  align-self:center;
-  padding:4px 14px;
-  border-radius:999px;
-  border:1px solid rgba(220,230,255,0.9);
-  background:rgba(9,45,117,0.7);
-  color:#e0ebff;
-  font-size:12px;
-  cursor:pointer;
-}
-
-/* Divider line before RESEARCH group */
-.nav-divider{
-  margin:8px auto 4px;
-  width:130px;
-  height:3px;
-  border-radius:999px;
-  background:#052b7a;
 }
 
 /* Generic modal (Privacy / DNS) */
@@ -1017,35 +1111,57 @@ footer{
   cursor:pointer;
 }
 
-/* Responsive welcome popup stacking */
-@media(max-width:700px){
-  .welcome-modal{
-    flex-direction:column;
-    align-items:stretch;
-  }
-  .welcome-panel-right{
-    max-width:none;
-  }
-  .welcome-close{
-    top:8px;
-    right:8px;
-  }
+/* IMAGE LIGHTBOX */
+.image-lightbox{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.8);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:3000;
+}
+.image-lightbox.open{
+  display:flex;
+}
+.image-lightbox-inner{
+  position:relative;
+  max-width:90vw;
+  max-height:90vh;
+}
+.image-lightbox-img{
+  max-width:100%;
+  max-height:100%;
+  display:block;
+  border-radius:14px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.7);
+}
+.image-lightbox-close{
+  position:absolute;
+  top:-32px;
+  right:-4px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:30px;
+  line-height:1;
+  cursor:pointer;
 }
 
 /* Responsive breakpoints */
-@media(max-width:800px){
+@media(max-width:900px){
   .hero-inner{
     flex-direction:column;
     padding-top:8px;
-    gap:32px;
+    gap:24px;
   }
   .hero-right{
     flex-direction:column-reverse;
     align-items:center;
-    gap:24px;
+    gap:20px;
   }
   .hero-headline{
-    font-size:40px;
+    font-size:42px;
     max-width:none;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
@@ -1056,8 +1172,36 @@ footer{
     margin-left:0;
     align-self:center;
   }
+}
+
+/* Move hero higher on small screens */
+@media(max-width:600px){
+  .hero{
+    padding-top:calc(var(--bar-h) + 40px);
+  }
+  .hero-inner{
+    padding-bottom:40px;
+  }
+  .hero-glass{
+    max-width:70vw;
+  }
+  .hero-headline{
+    font-size:32px;
+  }
+}
+
+/* Keep two-column about layout even on phones */
+@media(max-width:700px){
   .about-grid{
-    grid-template-columns:1fr;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);
+    gap:16px;
+  }
+}
+
+/* Tablet downward: adjust store/gallery cards a bit */
+@media(max-width:800px){
+  .gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
   .footer-row{
     flex-direction:row;
@@ -1071,20 +1215,17 @@ footer{
     flex:0 0 70vw;
   }
 }
-@media(max-width:500px){
-  .hero-glass{
-    max-width:70vw;
-  }
-  .hero-headline{
-    font-size:32px;
-  }
-}
 </style>
 </head>
 
 <body>
 
 <header class="topbar">
+  <!-- Inline logo for mobile (center of first row) -->
+  <a href="#top" class="topbar-logo-inline" aria-label="Go to top">
+    <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+  </a>
+
   <!-- Menu icon -->
   <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span>
@@ -1104,7 +1245,7 @@ footer{
       <span class="topbar-lang-label-text">Language</span>
     </span>
     <button class="topbar-lang-current-btn" id="lang-toggle" aria-haspopup="true" aria-expanded="false">
-      <span id="lang-current" class="topbar-lang-current">English</span>
+      <span id="lang-current">English</span>
       <span class="topbar-lang-caret">▾</span>
     </button>
   </div>
@@ -1134,7 +1275,7 @@ footer{
   </ul>
 </div>
 
-<!-- Logo below the bar -->
+<!-- Desktop fixed logo below the bar -->
 <a href="#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
@@ -1144,22 +1285,11 @@ footer{
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
-
     <div class="nav-modal-links">
-      <!-- Group 1 -->
-      <a href="#top" data-section="home" class="nav-link-active">HOME</a>
-      <a href="#about" data-section="about">ABOUT</a>
+      <a href="#top" data-section="top">HOME</a>
       <a href="#buy" data-section="buy">STORE</a>
-
-      <div class="nav-menu-logo">
-        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
-      </div>
-
-      <button class="nav-privacy-btn" id="nav-privacy-btn">Privacy Policy</button>
-
-      <div class="nav-divider"></div>
-
-      <!-- Group 2 – external pages -->
+      <a href="#about" data-section="about">ABOUT</a>
+      <a href="#gallery" data-section="gallery">GALLERY</a>
       <a href="research.html" data-external="true">RESEARCH</a>
       <a href="blog.html" data-external="true">BLOG</a>
       <a href="faq.html" data-external="true">FAQ</a>
@@ -1239,15 +1369,39 @@ footer{
   <!-- TRANSITION: ABOUT -->
   <div class="transition-strip">ABOUT</div>
 
-  <!-- ABOUT (now under Store) -->
+  <!-- ABOUT -->
   <section class="section section--about" id="about">
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
-          <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
-          <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young Maya nut Brosimum alicastrum trees growing in a nursery">
-          <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
+          <div class="about-image">
+            <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
+            <button class="about-image-expand" type="button">
+              <span class="about-image-expand-icon">⤢</span>
+              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            </button>
+          </div>
+          <div class="about-image">
+            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
+            <button class="about-image-expand" type="button">
+              <span class="about-image-expand-icon">⤢</span>
+              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            </button>
+          </div>
+          <div class="about-image">
+            <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young Maya nut Brosimum alicastrum trees growing in a nursery">
+            <button class="about-image-expand" type="button">
+              <span class="about-image-expand-icon">⤢</span>
+              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            </button>
+          </div>
+          <div class="about-image">
+            <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
+            <button class="about-image-expand" type="button">
+              <span class="about-image-expand-icon">⤢</span>
+              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            </button>
+          </div>
         </div>
 
         <div class="about-text-col">
@@ -1286,15 +1440,74 @@ footer{
     </div>
   </section>
 
+  <!-- TRANSITION: GALLERY -->
+  <div class="transition-strip">GALLERY</div>
+
+  <!-- GALLERY -->
+  <section class="section section--gallery" id="gallery">
+    <div class="section-inner gallery-inner">
+      <h2>Gallery</h2>
+
+      <div class="gallery-grid">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of Maya nut fruit Brosimum alicastrum on the tree">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Cluster of Maya nut fruits on Brosimum alicastrum branches">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit in tropical forest light">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on a rainforest tree trunk">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Detailed view of ripe Maya nut fruit texture">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Multiple Maya nut fruits of Brosimum alicastrum on branches">
+        </div>
+      </div>
+
+      <div class="gallery-more-wrap">
+        <div class="gallery-more-button" id="gallery-more-button">
+          <div class="gallery-more-arrow"></div>
+        </div>
+        <div class="gallery-more-text">👆 Click to View More Images 👆</div>
+      </div>
+
+      <div class="gallery-grid gallery-grid-extra" id="gallery-grid-extra">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 7">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 8">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 9">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 10">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 11">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 12">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top">
         <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
       </a>
-      <div class="bottom-return">
-        <div class="bottom-return-circle">↑</div>
-        <div>👆 Click to Return Home 👆</div>
+      <div style="margin-top:10px; font-size:13px; color:#e5ecff;">
+        👆 Click to Return Home 👆
       </div>
     </div>
   </section>
@@ -1355,6 +1568,14 @@ footer{
   </div>
 </div>
 
+<!-- Image Lightbox -->
+<div class="image-lightbox" id="image-lightbox">
+  <div class="image-lightbox-inner">
+    <button class="image-lightbox-close" id="image-lightbox-close" aria-label="Close image">&times;</button>
+    <img src="" alt="" id="image-lightbox-img" class="image-lightbox-img">
+  </div>
+</div>
+
 <script>
 // Language dropdown (custom, below bar)
 (function(){
@@ -1379,6 +1600,11 @@ footer{
   });
   if (!matched) {
     currentSpan.textContent = 'English';
+    items.forEach(item => {
+      if (item.getAttribute('data-file') === 'index.html') {
+        item.classList.add('lang-active');
+      }
+    });
   }
 
   function openMenu() {
@@ -1422,7 +1648,7 @@ footer{
   });
 })();
 
-// Canvas snowflakes in hero (bigger flakes, pause when tab not visible)
+// Canvas snowflakes in hero
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1452,7 +1678,7 @@ footer{
     return {
       x: random(0, width),
       y: initial ? random(0, height) : random(-height * 0.2, 0),
-      size: random(3, 7),
+      size: random(3, 7),           // bigger snowflakes
       speedY: random(0.03, 0.12),
       speedX: random(-0.03, 0.03),
       sway: random(0.5, 1.5),
@@ -1475,7 +1701,7 @@ footer{
     ctx.translate(flake.x, flake.y);
     ctx.rotate(flake.rotation);
     ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.1;
 
     const armLength = flake.size;
 
@@ -1488,7 +1714,7 @@ footer{
       ctx.moveTo(0, 0);
       ctx.lineTo(x, y);
 
-      const branchLen = armLength * 0.4;
+      const branchLen = armLength * 0.45;
       const sideAngle1 = angle + Math.PI / 6;
       const sideAngle2 = angle - Math.PI / 6;
 
@@ -1518,7 +1744,15 @@ footer{
 
     if (flake.y > height + flake.size * 2) {
       const replacement = createFlake(false);
-      Object.assign(flake, replacement);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
     }
 
     if (flake.x < -20) flake.x = width + 20;
@@ -1526,9 +1760,13 @@ footer{
   }
 
   let lastTime = performance.now();
-  let rafId = null;
+  let running = true;
 
   function animate(now) {
+    if (!running) {
+      requestAnimationFrame(animate);
+      return;
+    }
     const TIME_SCALE = 0.15;
     const deltaTime = (now - lastTime) * TIME_SCALE;
     lastTime = now;
@@ -1540,25 +1778,19 @@ footer{
       drawFlake(flake);
     }
 
-    rafId = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
-  initFlakes();
-  rafId = requestAnimationFrame(animate);
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-    } else {
+  // Pause animation when tab not visible
+  document.addEventListener('visibilitychange', () => {
+    running = !document.hidden;
+    if (!document.hidden) {
       lastTime = performance.now();
-      if (rafId === null) {
-        rafId = requestAnimationFrame(animate);
-      }
     }
   });
+
+  initFlakes();
+  requestAnimationFrame(animate);
 })();
 
 // Privacy / DNS Modal
@@ -1569,7 +1801,6 @@ footer{
   const closeBtn = document.getElementById('modal-close');
   const privacyLink = document.getElementById('privacy-link');
   const dnsLink = document.getElementById('dns-link');
-  const navPrivacyBtn = document.getElementById('nav-privacy-btn');
 
   function openModal(kind){
     if(kind === 'privacy'){
@@ -1595,7 +1826,6 @@ footer{
 
   if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
   if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
-  if (navPrivacyBtn) navPrivacyBtn.addEventListener('click', () => openModal('privacy'));
   if (closeBtn) closeBtn.addEventListener('click', closeModal);
   if (backdrop) {
     backdrop.addEventListener('click', (e) => {
@@ -1604,11 +1834,12 @@ footer{
   }
 })();
 
-// NAV overlay (hamburger menu)
+// NAV overlay (hamburger menu) + active underline tracking
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
   const navClose = document.getElementById('nav-close');
+  const links = document.querySelectorAll('.nav-modal-links a[data-section]');
 
   if(!toggle || !navBackdrop) return;
 
@@ -1643,6 +1874,40 @@ footer{
       closeNav();
     }
   });
+
+  // Active underline follows visible section
+  const sectionMap = {};
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    const id = href.replace('#','');
+    const sec = document.getElementById(id);
+    if (sec) sectionMap[id] = {section: sec, link};
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    let mostVisible = null;
+    let maxRatio = 0;
+
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > maxRatio) {
+        maxRatio = entry.intersectionRatio;
+        mostVisible = entry.target;
+      }
+    });
+
+    if (mostVisible) {
+      const id = mostVisible.id;
+      links.forEach(l => l.classList.remove('nav-link-active'));
+      if (sectionMap[id]) {
+        sectionMap[id].link.classList.add('nav-link-active');
+      }
+    }
+  }, {
+    threshold:[0.3, 0.5, 0.7]
+  });
+
+  Object.values(sectionMap).forEach(({section}) => observer.observe(section));
 })();
 
 // Welcome popup
@@ -1689,18 +1954,90 @@ footer{
   });
 })();
 
-// Make the fixed logo always scroll smoothly to the top section
+// Gallery "view more" toggle
 (function(){
-  const logoLink = document.querySelector('.topbar-logo-link');
-  if (!logoLink) return;
+  const btn = document.getElementById('gallery-more-button');
+  const extra = document.getElementById('gallery-grid-extra');
+  if (!btn || !extra) return;
 
-  logoLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  let open = false;
+  btn.addEventListener('click', () => {
+    open = !open;
+    extra.style.display = open ? 'grid' : 'none';
+  });
+})();
+
+// Make any "go to top" logo scroll smoothly
+(function(){
+  const logoLinks = document.querySelectorAll('a[href="#top"]');
+  logoLinks.forEach(logoLink => {
+    logoLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const topSection = document.getElementById('top');
+      if (topSection){
+        topSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+
+// ABOUT IMAGE LIGHTBOX (expand on click)
+(function(){
+  const expandButtons = document.querySelectorAll('.about-image-expand');
+  const aboutImages = document.querySelectorAll('.about-image img');
+  const lightbox = document.getElementById('image-lightbox');
+  const lightboxImg = document.getElementById('image-lightbox-img');
+  const lightboxClose = document.getElementById('image-lightbox-close');
+
+  if (!lightbox || !lightboxImg) return;
+
+  function openLightbox(src, alt){
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || '';
+    lightbox.classList.add('open');
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightboxImg.src = '';
+    lightboxImg.alt = '';
+  }
+
+  expandButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wrapper = btn.closest('.about-image');
+      if (!wrapper) return;
+      const img = wrapper.querySelector('img');
+      if (img) openLightbox(img.src, img.alt);
+    });
+  });
+
+  // Also allow clicking directly on the image to expand
+  aboutImages.forEach(img => {
+    img.addEventListener('click', () => {
+      openLightbox(img.src, img.alt);
+    });
+  });
+
+  if (lightboxClose){
+    lightboxClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+  }
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+      closeLightbox();
     }
   });
 })();
