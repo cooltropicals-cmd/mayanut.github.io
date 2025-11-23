@@ -1,205 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MayaNut — Naturally Nourishing</title>
-  <meta name="description" content="MayaNut — clean, elegant, and nourishing products made from Brosimum alicastrum." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet">
-  <style>
-    :root{--bg:#ffffff;--fg:#0f172a;--muted:#475569;--line:#e2e8f0;--chip:#f8fafc;}
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;color:var(--fg);background:var(--bg);}
-    a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
+<script>
+(function(){
+  const canvas = document.getElementById('ballLayer');
+  const ctx = canvas.getContext('2d');
+  function resize(){
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+  }
+  resize();
+  addEventListener('resize', resize);
 
-    /* Layout */
-    .site{min-height:100dvh;display:flex;flex-direction:column}
+  const cells = [];
+  const chains = [];
+  const BASE_CAP = 250;
+  const FACTORY_INTERVAL = 200; // frames before factories spawn new small cells
 
-    /* Header */
-    header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
-    .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .logo{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-weight:800}
-    .brand b{letter-spacing:.2px}
+  // Types
+  const SMALL = 'small';
+  const SPAWNER = 'spawner';
+  const FACTORY = 'factory';
 
-    .menu{display:flex;align-items:center;gap:26px}
-    .menu a{font-weight:500;color:var(--muted)}
-    .menu a:hover{color:var(--fg)}
+  function makeCell(x, y, type=SMALL){
+    let r = type===SMALL?6:type===SPAWNER?12:20;
+    return {
+      x,y,
+      vx:(Math.random()-.5)*2,
+      vy:(Math.random()-.5)*2,
+      r,
+      type,
+      orbiting:null,
+      chain:null,
+      cooldown:0
+    };
+  }
 
-    /* Hamburger (3-line menu) */
-    .hamb{display:none;gap:6px;flex-direction:column;cursor:pointer}
-    .hamb span{width:22px;height:2px;background:var(--fg);border-radius:2px}
+  // Spawn some initial small cells
+  for(let i=0;i<20;i++){
+    cells.push(makeCell(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
+  }
 
-    /* Mobile drawer */
-    .drawer{position:fixed;inset:0;display:none;background:rgba(15,23,42,.5)}
-    .drawer__panel{position:absolute;right:0;top:0;width:min(86%,360px);height:100%;background:#fff;border-left:1px solid var(--line);box-shadow:-10px 0 30px rgba(2,6,23,.08);padding:28px}
-    .drawer__links{display:grid;gap:18px;margin-top:20px}
-    .drawer__close{all:unset;position:absolute;top:14px;right:16px;cursor:pointer;font-size:18px}
-
-    /* Hero */
-    .hero{max-width:1200px;margin:0 auto;padding:64px 18px 40px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
-    .eyebrow{display:inline-block;padding:6px 10px;background:var(--chip);border:1px solid var(--line);border-radius:999px;font-size:12px;letter-spacing:.3px;color:var(--muted)}
-    .h1{font-size:clamp(34px,6vw,56px);line-height:1.05;margin:14px 0 12px;font-weight:800}
-    .sub{color:var(--muted);font-size:18px;max-width:50ch}
-    .cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 18px;border:1px solid var(--line);font-weight:600}
-    .btn--primary{background:var(--fg);color:#fff;border-color:var(--fg)}
-    .btn--ghost:hover{border-color:var(--fg)}
-    .hero__card{border:1px solid var(--line);border-radius:20px;overflow:hidden}
-    .hero__img{aspect-ratio:4/3;background:linear-gradient(135deg,#e2f3ff,#f7fbff);display:grid;place-items:center;color:#0b4a6f;font-weight:700}
-
-    /* Features */
-    .section{max-width:1200px;margin:0 auto;padding:28px 18px 64px}
-    .kicker{font-weight:700;margin-bottom:12px}
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
-    .card{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}
-    .card h3{margin:4px 0 8px}
-    .muted{color:var(--muted)}
-
-    /* Footer */
-    footer{margin-top:auto;border-top:1px solid var(--line)}
-    .foot{max-width:1200px;margin:0 auto;padding:22px 18px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:14px}
-
-    /* Responsive */
-    @media (max-width: 900px){
-      .menu{display:none}
-      .hamb{display:flex}
-      .hero{grid-template-columns:1fr;gap:26px;padding-top:40px}
-      .grid{grid-template-columns:1fr}
+  // Clicking cells: launch them away
+  canvas.addEventListener('click', e=>{
+    const mx=e.clientX, my=e.clientY;
+    for(const c of cells){
+      const d=Math.hypot(mx-c.x,my-c.y);
+      if(d<c.r+4){
+        c.vx = (c.x-mx)*0.1;
+        c.vy = (c.y-my)*0.1;
+      }
     }
-  </style>
-</head>
-<body>
-  <div class="site">
-    <header>
-      <nav class="nav" aria-label="Main">
-        <a class="brand" href="#" aria-label="MayaNut home">
-          <!-- Replace this box with your real logo image/SVG -->
-          <span class="logo" aria-hidden="true">MN</span>
-          <b>MayaNut</b>
-        </a>
-
-        <div class="menu" role="navigation">
-          <a href="#products">Products</a>
-          <a href="#story">Our Story</a>
-          <a href="#impact">Impact</a>
-          <a href="#contact">Contact</a>
-        </div>
-
-        <button class="hamb" id="hamb" aria-label="Open menu" aria-controls="mobile-drawer" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </nav>
-
-      <!-- Mobile drawer -->
-      <div class="drawer" id="mobile-drawer" aria-hidden="true">
-        <div class="drawer__panel">
-          <button class="drawer__close" id="drawer-close" aria-label="Close menu">✕</button>
-          <a class="brand" href="#" aria-label="MayaNut home">
-            <span class="logo" aria-hidden="true">MN</span>
-            <b>MayaNut</b>
-          </a>
-          <div class="drawer__links" role="navigation">
-            <a href="#products">Products</a>
-            <a href="#story">Our Story</a>
-            <a href="#impact">Impact</a>
-            <a href="#contact">Contact</a>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main>
-      <!-- HERO -->
-      <section class="hero">
-        <div>
-          <span class="eyebrow">Naturally nourishing • Brosimum alicastrum</span>
-          <h1 class="h1">Clean, elegant nutrition from the Maya nut.</h1>
-          <p class="sub">A modern take on an ancient superfood. Thoughtfully sourced, minimally processed, and crafted for everyday wellness.</p>
-          <div class="cta">
-            <a href="#products" class="btn btn--primary">Shop MayaNut</a>
-            <a href="#story" class="btn btn--ghost">Learn more</a>
-          </div>
-        </div>
-        <div class="hero__card">
-          <div class="hero__img">Your product image here</div>
-        </div>
-      </section>
-
-      <!-- FEATURES -->
-      <section class="section" id="products">
-        <div class="kicker">Why MayaNut</div>
-        <div class="grid">
-          <article class="card">
-            <h3>Balanced & gentle</h3>
-            <p class="muted">Naturally caffeine-free, with fiber and essential micronutrients for daily vitality.</p>
-          </article>
-          <article class="card">
-            <h3>Versatile</h3>
-            <p class="muted">Enjoy as flour, a roasted beverage, or wholesome snacks — easy to fit into any routine.</p>
-          </article>
-          <article class="card">
-            <h3>Thoughtful sourcing</h3>
-            <p class="muted">Responsible harvesting that supports local communities and preserves tropical forests.</p>
-          </article>
-        </div>
-      </section>
-
-      <!-- STORY -->
-      <section class="section" id="story">
-        <div class="kicker">Our Story</div>
-        <p class="muted">MayaNut celebrates a time-honored ingredient with modern craft. We partner with growers and processors who share our commitment to quality and sustainability.</p>
-      </section>
-
-      <!-- IMPACT -->
-      <section class="section" id="impact">
-        <div class="kicker">Impact</div>
-        <p class="muted">From canopy to kitchen, our choices aim to regenerate ecosystems and livelihoods. We’re building a supply chain that benefits people and the planet.</p>
-      </section>
-
-      <!-- CONTACT -->
-      <section class="section" id="contact">
-        <div class="kicker">Contact</div>
-        <p class="muted">Questions or wholesale? Reach us at <a href="mailto:hello@mayanut.example">hello@mayanut.example</a>.</p>
-      </section>
-    </main>
-
-    <footer>
-      <div class="foot">
-        <span>© <span id="year"></span> MayaNut</span>
-        <span class="muted">All rights reserved.</span>
-      </div>
-    </footer>
-  </div>
-
-  <script>
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Mobile nav behavior
-    const hamb = document.getElementById('hamb');
-    const drawer = document.getElementById('mobile-drawer');
-    const closeBtn = document.getElementById('drawer-close');
-
-    function openDrawer(){
-      drawer.style.display = 'block';
-      drawer.setAttribute('aria-hidden','false');
-      hamb.setAttribute('aria-expanded','true');
+    // Check chain ends folding
+    for(const chain of chains){
+      if(chain.length>2){
+        const first=chain[0], last=chain[chain.length-1];
+        if(Math.hypot(first.x-mx,first.y-my)<first.r+5 ||
+           Math.hypot(last.x-mx,last.y-my)<last.r+5){
+          // fold into circle
+          const cx=chain.reduce((s,b)=>s+b.x,0)/chain.length;
+          const cy=chain.reduce((s,b)=>s+b.y,0)/chain.length;
+          const radius=chain.length*4;
+          chain.forEach((b,i)=>{
+            const angle=(i/chain.length)*Math.PI*2;
+            b.x=cx+Math.cos(angle)*radius;
+            b.y=cy+Math.sin(angle)*radius;
+            b.vx=b.vy=0;
+          });
+        }
+      }
     }
-    function closeDrawer(){
-      drawer.style.display = 'none';
-      drawer.setAttribute('aria-hidden','true');
-      hamb.setAttribute('aria-expanded','false');
+  });
+
+  function update(){
+    // Move cells
+    for(const c of cells){
+      c.x+=c.vx; c.y+=c.vy;
+      if(c.x<c.r||c.x>innerWidth-c.r) c.vx*=-1;
+      if(c.y<c.r||c.y>innerHeight-c.r) c.vy*=-1;
     }
 
-    hamb.addEventListener('click', openDrawer);
-    closeBtn.addEventListener('click', closeDrawer);
-    drawer.addEventListener('click', (e)=>{ if(e.target === drawer) closeDrawer(); });
-    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeDrawer(); });
-  </script>
-</body>
-</html>
+    // Collisions
+    for(let i=0;i<cells.length;i++){
+      for(let j=i+1;j<cells.length;j++){
+        const a=cells[i], b=cells[j];
+        const d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(d<a.r+b.r){
+          // small+small -> spawner
+          if(a.type===SMALL && b.type===SMALL){
+            a.type=b.type=SPAWNER;
+            a.r=b.r=12;
+          }
+          // spawner+spawner -> factory
+          if(a.type===SPAWNER && b.type===SPAWNER){
+            a.type=b.type=FACTORY;
+            a.r=b.r=20;
+          }
+          // orbiting: small orbits big
+          if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY)) a.orbiting=b;
+          if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY)) b.orbiting=a;
+
+          // orbiters collide -> chain
+          if(a.orbiting && b.orbiting && a.orbiting===b.orbiting){
+            if(!a.chain && !b.chain){
+              const chain=[a,b];
+              a.chain=b.chain=chain;
+              chains.push(chain);
+            } else if(a.chain && !b.chain){
+              a.chain.push(b); b.chain=a.chain;
+            } else if(!a.chain && b.chain){
+              b.chain.push(a); a.chain=b.chain;
+            }
+          }
+        }
+      }
+    }
+
+    // Orbit motion
+    for(const c of cells){
+      if(c.orbiting){
+        const center=c.orbiting;
+        const angle=Math.atan2(c.y-center.y,c.x-center.x)+0.05;
+        const dist=center.r+20;
+        c.x=center.x+Math.cos(angle)*dist;
+        c.y=center.y+Math.sin(angle)*dist;
+      }
+    }
+
+    // Factory spawn small cells
+    for(const c of cells){
+      if(c.type===FACTORY){
+        c.cooldown++;
+        if(c.cooldown>FACTORY_INTERVAL && cells.length<BASE_CAP){
+          c.cooldown=0;
+          cells.push(makeCell(c.x+Math.random()*20-10,c.y+Math.random()*20-10,SMALL));
+        }
+      }
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Draw chains first
+    ctx.strokeStyle='rgba(255,255,255,0.5)';
+    for(const chain of chains){
+      ctx.beginPath();
+      ctx.moveTo(chain[0].x,chain[0].y);
+      for(const c of chain) ctx.lineTo(c.x,c.y);
+      ctx.stroke();
+    }
+    // Draw cells
+    for(const c of cells){
+      ctx.beginPath();
+      ctx.fillStyle=c.type===SMALL?'white':c.type===SPAWNER?'orange':'red';
+      ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function loop(){
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+</script>
+
