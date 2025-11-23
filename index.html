@@ -50,7 +50,7 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 
   --bar:#003cc7;
   --bar-h:72px;
-  --logo-offset:10px;
+  --logo-offset:12px;
 }
 
 /* Slightly taller bar on very small screens */
@@ -291,20 +291,33 @@ body.paused .hero{
   }
 }
 
-/* FIXED LOGO BELOW BAR – centered and slightly smaller */
+/* FIXED LOGO – DESKTOP default (original) */
 .topbar-logo-link{
   position:fixed;
-  left:50%;
-  transform:translateX(-50%);
+  left:var(--logo-offset);
   top:calc(var(--bar-h) + var(--logo-offset));
   z-index:900;
 }
 .topbar-logo{
-  width:80px;
-  height:80px;
+  width:100px;
+  height:100px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
   cursor:pointer;
+}
+
+/* On MOBILE: logo centered in the blue bar */
+@media (max-width:600px){
+  .topbar-logo-link{
+    top:calc(env(safe-area-inset-top, 0px) + 6px);
+    left:50%;
+    transform:translateX(-50%);
+    z-index:1400; /* above bar content */
+  }
+  .topbar-logo{
+    width:70px;
+    height:70px;
+  }
 }
 
 /* HERO */
@@ -1233,7 +1246,7 @@ footer{
   </ul>
 </div>
 
-<!-- Logo below the bar -->
+<!-- Logo below the bar (desktop) / in bar (mobile) -->
 <a href="#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
