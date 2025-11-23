@@ -93,7 +93,7 @@ body{
   column-gap:6px;
   padding:8px 10px;
   min-height:var(--bar-h);
-  z-index:1600;
+  z-index:1000;
   border-bottom:1px solid rgba(255,255,255,0.25);
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
@@ -112,7 +112,7 @@ body{
   cursor:pointer;
   justify-self:start;
   margin-left:8px;
-  z-index:1700;
+  z-index:1100;
 }
 .menu-toggle span{
   display:block;
@@ -143,7 +143,7 @@ body{
   padding:0 6px;
 }
 
-/* LANGUAGE SWITCHER – on the tab */
+/* LANGUAGE SWITCHER – label in bar, dropdown below bar */
 .topbar-lang{
   grid-area:lang;
   display:flex;
@@ -165,27 +165,69 @@ body{
 .topbar-lang-label-text{
   font-size:13px;
 }
-.topbar-lang select{
-  font-size:12px;
+.topbar-lang-current-btn{
+  margin-top:2px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 10px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.7);
   background:rgba(10,86,194,0.9);
   color:#fff;
-  padding:3px 8px;
+  font-size:12px;
+  cursor:pointer;
   outline:none;
 }
-.topbar-lang select option{
-  color:#000;
+.topbar-lang-current{
+  line-height:1;
+}
+.topbar-lang-caret{
+  font-size:10px;
+  transform:translateY(1px);
 }
 
-/* Narrow screens: hide Language word */
+/* Custom dropdown panel BELOW the bar */
+.lang-dropdown{
+  position:fixed;
+  top:calc(var(--bar-h) + 2px);
+  right:10px;
+  background:rgba(10,86,194,0.98);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 8px 20px rgba(0,0,0,0.4);
+  padding:6px 0;
+  z-index:1500;
+  display:none;
+  min-width:170px;
+}
+.lang-dropdown.open{
+  display:block;
+}
+.lang-dropdown ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.lang-dropdown li{
+  padding:6px 14px;
+  font-size:13px;
+  color:#ffffff;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.lang-dropdown li:hover{
+  background:rgba(255,255,255,0.16);
+}
+
+/* Narrow screens: hide "Language" word */
 @media (max-width: 420px){
   .topbar-lang-label-text{
     display:none;
   }
-  .topbar-lang select{
+  .topbar-lang-current-btn{
     font-size:11px;
-    padding:2px 6px;
+    padding:2px 8px;
   }
 }
 
@@ -229,13 +271,7 @@ body{
   height:100px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-}
-
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION – ONLY HERO */
-@keyframes lavaMove{
-  0%   { background-position: 0% 0%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 100%; }
+  cursor:pointer;
 }
 
 /* HERO */
@@ -248,8 +284,16 @@ body{
   justify-content:center;
   overflow:hidden;
   background:var(--bg-grad);
+  /* background only moves on HERO */
   background-size:200% 200%;
   animation:lavaMove 40s ease-in-out infinite alternate;
+}
+
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION (HERO ONLY) */
+@keyframes lavaMove{
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 100%; }
 }
 
 .hero-inner{
@@ -419,11 +463,11 @@ canvas#snow{
 .section--about::before{
   content:"";
   position:absolute;
-  top:-30px;           /* lowered so it intrudes less into the hero */
+  top:-30px;
   left:50%;
   transform:translateX(-50%);
   width:130%;
-  height:90px;         /* slightly shorter */
+  height:90px;
   border-radius:50% 50% 0 0;
   z-index:-1;
   background:
@@ -472,19 +516,19 @@ canvas#snow{
 }
 /* Soft lavender gradients */
 .about-card-1{
-  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
+  background:linear-gradient(135deg, #f6f1ff 0, #ffffff 55%, #ece0ff 100%);
 }
 .about-card-2{
-  background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #e7dcff 100%);
+  background:linear-gradient(135deg, #f5edff 0, #ffffff 55%, #e7dcff 100%);
 }
 .about-card-3{
-  background:linear-gradient(135deg, #f4ecff 0%, #ffffff 55%, #e3d8ff 100%);
+  background:linear-gradient(135deg, #f4ecff 0, #ffffff 55%, #e3d8ff 100%);
 }
 .about-card-4{
-  background:linear-gradient(135deg, #f3eaff 0%, #ffffff 55%, #ded2ff 100%);
+  background:linear-gradient(135deg, #f3eaff 0, #ffffff 55%, #ded2ff 100%);
 }
 .about-card-5{
-  background:linear-gradient(135deg, #f2e8ff 0%, #ffffff 55%, #d9ccff 100%);
+  background:linear-gradient(135deg, #f2e8ff 0, #ffffff 55%, #d9ccff 100%);
 }
 .about-text-card h2,
 .about-text-card h3{
@@ -943,7 +987,6 @@ footer{
   height:auto;
   margin-bottom:16px;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,0.5));
-  cursor:pointer;
 }
 
 .welcome-title{
@@ -1063,36 +1106,44 @@ footer{
   </div>
 
   <!-- Language selector (18 languages) -->
-  <div class="topbar-lang">
+  <div class="topbar-lang" id="topbar-lang">
     <span class="topbar-lang-label">
       <span class="topbar-lang-label-emoji">🌎</span>
       <span class="topbar-lang-label-text">Language</span>
     </span>
-    <select id="language-select" aria-label="Site language">
-      <option value="index.html" selected>English</option>
-      <option value="index-es.html">Español</option>
-      <option value="index-pt.html">Português</option>
-      <option value="index-fr.html">Français</option>
-      <option value="index-de.html">Deutsch</option>
-      <option value="index-it.html">Italiano</option>
-      <option value="index-ru.html">Русский</option>
-      <option value="index-zh.html">中文</option>
-      <option value="index-ja.html">日本語</option>
-      <option value="index-hi.html">हिन्दी</option>
-      <option value="index-ur.html">اردو</option>
-      <option value="index-bn.html">বাংলা</option>
-      <option value="index-id.html">Bahasa Indonesia</option>
-      <option value="index-ar.html">العربية</option>
-      <option value="index-sw.html">Kiswahili</option>
-      <option value="index-ha.html">Hausa</option>
-      <option value="index-fil.html">Filipino</option>
-      <option value="index-yo.html">Yorùbá</option>
-    </select>
+    <button class="topbar-lang-current-btn" id="lang-toggle" aria-haspopup="true" aria-expanded="false">
+      <span id="lang-current">English</span>
+      <span class="topbar-lang-caret">▾</span>
+    </button>
   </div>
 </header>
 
+<!-- Custom dropdown BELOW the bar -->
+<div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
+  <ul>
+    <li data-file="index.html">English</li>
+    <li data-file="index-es.html">Español</li>
+    <li data-file="index-pt.html">Português</li>
+    <li data-file="index-fr.html">Français</li>
+    <li data-file="index-de.html">Deutsch</li>
+    <li data-file="index-it.html">Italiano</li>
+    <li data-file="index-ru.html">Русский</li>
+    <li data-file="index-zh.html">中文</li>
+    <li data-file="index-ja.html">日本語</li>
+    <li data-file="index-hi.html">हिन्दी</li>
+    <li data-file="index-ur.html">اردو</li>
+    <li data-file="index-bn.html">বাংলা</li>
+    <li data-file="index-id.html">Bahasa Indonesia</li>
+    <li data-file="index-ar.html">العربية</li>
+    <li data-file="index-sw.html">Kiswahili</li>
+    <li data-file="index-ha.html">Hausa</li>
+    <li data-file="index-fil.html">Filipino</li>
+    <li data-file="index-yo.html">Yorùbá</li>
+  </ul>
+</div>
+
 <!-- Logo below the bar -->
-<a href="#top" class="topbar-logo-link" id="topbar-logo-link">
+<a href="#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
 
@@ -1386,7 +1437,7 @@ footer{
 
     <!-- Right rectangle: logo + orange button -->
     <div class="welcome-panel welcome-panel-right">
-      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo" id="welcome-logo">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo">
       <button class="hero-cta-btn welcome-main-btn" id="welcome-main-btn">Go to Main Page</button>
     </div>
   </div>
@@ -1406,24 +1457,68 @@ footer{
 </div>
 
 <script>
-// Language selector
+// Language dropdown (custom, below bar)
 (function(){
-  const select = document.getElementById('language-select');
-  if (!select) return;
+  const toggle = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  const currentSpan = document.getElementById('lang-current');
+  if (!toggle || !dropdown || !currentSpan) return;
+
+  const items = dropdown.querySelectorAll('[data-file]');
 
   const path = window.location.pathname;
   const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
 
-  for (const opt of select.options){
-    if (opt.value === file){
-      opt.selected = true;
-      break;
+  let matched = false;
+  items.forEach(item => {
+    const f = item.getAttribute('data-file');
+    if (f === file) {
+      currentSpan.textContent = item.textContent.trim();
+      matched = true;
+    }
+  });
+  if (!matched) {
+    currentSpan.textContent = 'English';
+  }
+
+  function openMenu() {
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMenu() {
+    if (dropdown.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
     }
   }
 
-  select.addEventListener('change', function(){
-    const target = this.value || 'index.html';
-    window.location.href = target;
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.getAttribute('data-file') || 'index.html';
+      window.location.href = target;
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
   });
 })();
 
@@ -1674,24 +1769,23 @@ footer{
   Object.values(sectionMap).forEach(({section}) => observer.observe(section));
 })();
 
-// Smooth scroll to top helper
-function smoothScrollToTop(){
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Also ensure hash is #top so internal links stay consistent
-  if (location.hash !== '#top') {
-    history.replaceState(null, '', '#top');
-  }
-}
-
 // Welcome popup
 (function(){
   const welcomeBackdrop = document.getElementById('welcome-backdrop');
   const welcomeClose = document.getElementById('welcome-close');
   const welcomeMainBtn = document.getElementById('welcome-main-btn');
-  const welcomeLogo = document.getElementById('welcome-logo');
-  const topbarLogoLink = document.getElementById('topbar-logo-link');
+  const welcomeLogo = document.querySelector('.welcome-logo');
 
   if(!welcomeBackdrop || !welcomeClose) return;
+
+  function scrollToTop(){
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
 
   function closeWelcome(){
     welcomeBackdrop.style.display = 'none';
@@ -1710,27 +1804,19 @@ function smoothScrollToTop(){
 
   welcomeClose.addEventListener('click', closeWelcome);
 
-  // "Go to Main Page" button: close + scroll to top
+  // "Go to Main Page" button closes popup AND scrolls to top
   if (welcomeMainBtn){
     welcomeMainBtn.addEventListener('click', () => {
       closeWelcome();
-      smoothScrollToTop();
+      scrollToTop();
     });
   }
 
-  // Popup logo click: close + scroll to top
+  // Popup logo also closes and scrolls to top
   if (welcomeLogo){
     welcomeLogo.addEventListener('click', () => {
       closeWelcome();
-      smoothScrollToTop();
-    });
-  }
-
-  // Small fixed logo: enforce smooth scroll to top
-  if (topbarLogoLink){
-    topbarLogoLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      smoothScrollToTop();
+      scrollToTop();
     });
   }
 
@@ -1750,6 +1836,22 @@ function smoothScrollToTop(){
   btn.addEventListener('click', () => {
     open = !open;
     extra.style.display = open ? 'grid' : 'none';
+  });
+})();
+
+// Make the fixed logo always scroll smoothly to the top section
+(function(){
+  const logoLink = document.querySelector('.topbar-logo-link');
+  if (!logoLink) return;
+
+  logoLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   });
 })();
 </script>
