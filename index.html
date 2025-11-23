@@ -131,16 +131,26 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* Title in top bar */
+/* Title in top bar – wobbling on ONE line */
 .topbar-title{
   grid-area:title;
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
-  animation:merrygiggle 6s ease-in-out infinite;
   max-width:100%;
   justify-self:center;
   padding:0 6px;
+  white-space:nowrap;
+  animation:holidayTilt 3.5s ease-in-out infinite;
+}
+
+/* Tilt animation for holiday text */
+@keyframes holidayTilt{
+  0%   { transform:rotate(0deg); }
+  25%  { transform:rotate(2deg); }
+  50%  { transform:rotate(0deg); }
+  75%  { transform:rotate(-2deg); }
+  100% { transform:rotate(0deg); }
 }
 
 /* LANGUAGE SWITCHER – label in bar, dropdown below bar */
@@ -152,6 +162,7 @@ body{
   gap:3px;
   justify-self:end;
   font-size:12px;
+  margin-right:4px; /* nudge slightly left so stack is nicely centered over dropdown */
 }
 .topbar-lang-label{
   display:flex;
@@ -191,7 +202,7 @@ body{
 .lang-dropdown{
   position:fixed;
   top:calc(var(--bar-h) + 2px);
-  right:10px; /* JS will override right/left when opened to center it */
+  right:10px;
   background:rgba(10,86,194,0.98);
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.6);
@@ -220,18 +231,7 @@ body{
   background:rgba(255,255,255,0.16);
 }
 
-/* Narrow screens: hide "Language" word */
-@media (max-width: 420px){
-  .topbar-lang-label-text{
-    display:none;
-  }
-  .topbar-lang-current-btn{
-    font-size:11px;
-    padding:2px 8px;
-  }
-}
-
-/* MOBILE TOPBAR LAYOUT */
+/* Narrow screens: adjust title + language */
 @media (max-width: 600px){
   .topbar{
     grid-template-columns:auto 1fr auto;
@@ -244,11 +244,7 @@ body{
   }
 
   .topbar-title{
-    font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 12px;
-    text-align:center;
+    font-size:3.4vw;  /* responsive so it stays on one line */
   }
 
   .menu-toggle{
@@ -256,6 +252,16 @@ body{
     top:auto;
     left:auto;
     margin-left:0;
+  }
+}
+
+@media (max-width: 420px){
+  .topbar-lang-label-text{
+    display:none;
+  }
+  .topbar-lang-current-btn{
+    font-size:11px;
+    padding:2px 8px;
   }
 }
 
@@ -284,22 +290,20 @@ body{
   justify-content:center;
   overflow:hidden;
   background:var(--bg-grad);
+  background-size:200% 200%;
+  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION
-   (applied to hero, about, research, gallery) */
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION – ONLY on hero */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 100%; }
 }
 
-.hero,
-.section--about,
-.section--research,
-.section--gallery{
-  background-size:200% 200%;
-  animation:lavaMove 40s ease-in-out infinite alternate;
+/* When tab is hidden, pause hero animation */
+body.pause-animations .hero{
+  animation-play-state:paused !important;
 }
 
 .hero-inner{
@@ -396,6 +400,10 @@ canvas#snow{
   }
 }
 
+body.pause-animations .hero-cta-btn{
+  animation-play-state:paused !important;
+}
+
 .hero-cta-btn:hover{
   box-shadow:0 7px 20px rgba(0,0,0,0.55);
 }
@@ -418,15 +426,6 @@ canvas#snow{
 .hero-image-link:hover .hero-glass{
   transform:scale(1.08);
   box-shadow:0 0 40px rgba(255,255,255,0.95);
-}
-
-/* Wiggle animation for title */
-@keyframes merrygiggle{
-  0%   { transform:translateX(0); }
-  25%  { transform:translateX(4px); }
-  50%  { transform:translateX(0); }
-  75%  { transform:translateX(-4px); }
-  100% { transform:translateX(0); }
 }
 
 /* TRANSITION STRIPS */
@@ -486,6 +485,13 @@ canvas#snow{
   color:#fff;
 }
 
+/* RESEARCH + GALLERY have static gradient (no moving animation) */
+.section--research,
+.section--gallery{
+  background:var(--bg-grad);
+}
+
+/* ABOUT content */
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
@@ -541,6 +547,8 @@ canvas#snow{
   margin-top:0;
   margin-bottom:8px;
   color:#30346a;
+  text-decoration:underline;
+  text-underline-offset:4px;
 }
 
 /* STORE SECTION */
@@ -561,6 +569,8 @@ canvas#snow{
   margin:0 0 6px;
   font-size:22px;
   color:#2b346c;
+  text-decoration:underline;
+  text-underline-offset:4px;
 }
 .store-heading p{
   margin:0;
@@ -613,7 +623,6 @@ canvas#snow{
 
 /* RESEARCH SECTION */
 .section--research{
-  background:var(--bg-grad);
   color:#ffffff;
 }
 .research-grid{
@@ -639,13 +648,19 @@ canvas#snow{
   color:#30346a;
   box-shadow:0 3px 14px rgba(0,0,0,0.25);
 }
+.research-text-card h3{
+  margin:10px 0 6px;
+  color:#252a68;
+  text-decoration:underline;
+  text-underline-offset:4px;
+}
 .research-text p{
   margin:0 0 12px;
 }
 
 /* GALLERY */
 .section--gallery{
-  background:var(--bg-grad);
+  color:#ffffff;
 }
 .gallery-inner{
   text-align:center;
@@ -653,6 +668,8 @@ canvas#snow{
 .gallery-inner h2{
   margin:0 0 12px;
   font-size:22px;
+  text-decoration:underline;
+  text-underline-offset:4px;
 }
 .gallery-inner p{
   margin:0 0 18px;
@@ -993,6 +1010,7 @@ footer{
   height:auto;
   margin-bottom:16px;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,0.5));
+  cursor:pointer;
 }
 
 .welcome-title{
@@ -1106,9 +1124,9 @@ footer{
     <span></span>
   </button>
 
-  <!-- Center title -->
+  <!-- Center title (one line, tilting) -->
   <div class="topbar-title">
-    ❄️ The MayaNut Company Wishes You a Very Merry Christmas 2025 ❄️
+    ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
   </div>
 
   <!-- Language selector (18 languages) -->
@@ -1301,18 +1319,21 @@ footer{
         </div>
         <div class="research-text">
           <div class="research-text-card">
+            <h3>Range</h3>
             <p><strong><em>Brosimum alicastrum</em></strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it also occurs in more sporadic populations as far north as Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica. In different regions, it is also known as Maya nut, breadnut, ojoche, ramón, or guiamaro.</p>
 
+            <h3>Growth</h3>
             <p>The tree can grow up to around 40 meters tall in its native range, but more typically reaches 25–35 meters. In South Florida, several observed trees do not usually exceed about 20 meters, likely in response to roughly 65 inches of average annual rainfall and local growing conditions. Seedlings do not respond well to full sun — their leaves begin to turn yellow, signaling that the UV intensity is too high. Seedlings prefer to be kept moist and partially shaded, only tolerating stronger light once they are taller than about 2–3 feet. At that point, they can also tolerate periods of drought more reliably.</p>
 
             <p>Adult trees in full sun may still perform well, but their leaves often take on a more yellow-green tint instead of a deep, healthy green. Trees can begin flowering as early as four years old, but rarely enter into consistently heavy seed production until roughly a decade of age. These traits indicate that the species is best treated as a long-term perennial investment rather than a short-rotation crop, with yield increasing as the individual tree matures.</p>
 
+            <h3>In Agriculture</h3>
             <p>One of the main reasons <em>Brosimum alicastrum</em> has not been cultivated widely in the United States is the combination of limited infrastructure, limited technical knowledge, and the long time required to reach high yields. Unlike annual crops, <em>Brosimum alicastrum</em> does not depreciate with age. In fact, the larger the tree becomes, the more it tends to produce. It does not need to be replanted and re-fertilized in the same way as many annual row crops. Instead, its extensive root system can tap into the water table below ground and anchor the tree against wind and storms.</p>
 
             <p>Growing naturally in places such as the Yucatán and other tropical regions, this species has evolved alongside intense seasonal storms, including hurricanes. That history is one reason it is so promising for Florida, where wind resistance and deep rooting are valuable traits.</p>
 
-            <p><strong>Morphology</strong><br>
-            <em>Brosimum alicastrum</em> belongs to the Moraceae family, which means its flowers are numerous, small, and aggregated into a globose, fused inflorescence. Plants are usually dioecious (separate male and female individuals), but monoecious trees also occur. The flower heads of <em>Brosimum</em> resemble miniature versions of <em>Treculia</em> inflorescences. Phylogenetic and biogeographic work suggests that the lineage originated from an African ancestor, with seeds or plant material successfully rafting and colonizing the Americas. Most other members of the tribe Dorstenieae are still found in Africa, Asia, and Australia.</p>
+            <h3>Morphology</h3>
+            <p><em>Brosimum alicastrum</em> belongs to the Moraceae family, which means its flowers are numerous, small, and aggregated into a globose, fused inflorescence. Plants are usually dioecious (separate male and female individuals), but monoecious trees also occur. The flower heads of <em>Brosimum</em> resemble miniature versions of <em>Treculia</em> inflorescences. Phylogenetic and biogeographic work suggests that the lineage originated from an African ancestor, with seeds or plant material successfully rafting and colonizing the Americas. Most other members of the tribe Dorstenieae are still found in Africa, Asia, and Australia.</p>
 
             <p>In <em>Brosimum</em>, a single seed is typically present in each fruit, whereas the ancestral form may have produced several seeds in a small, ball-shaped mass surrounded by peltate bracts. Over evolutionary time, <em>Brosimum</em> appears to have shifted toward producing one central pistillate flower that develops into the seed, with surrounding male flowers in monoecious individuals, or a single pistillate flower without surrounding male flowers in strictly female trees. Environmental stress can also influence which sex a given individual expresses over its lifetime.</p>
 
@@ -1322,8 +1343,8 @@ footer{
 
             <p>Historically, <em>Brosimum alicastrum</em> is believed to have been important not only to the Maya people, but likely to many other cultures overlapping its range. The tree may have been used by early Mesoamerican hunter-gatherers as far back as 10,000 B.C. In more recent history, however, there is very little direct evidence documenting specific recipes or uses in ancient cultures. No known texts or artwork clearly spell out how the seeds or fruit were prepared.</p>
 
-            <p><strong>Culinary Uses</strong><br>
-            Today, Maya nut is used as a fodder tree for ranchers in parts of Mexico, and the seeds can be used to make cookies, tortillas, bread, and even a coffee-like beverage — all produced from this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, often referred to as a Maya nut plantation, as this species remains widely underutilized in modern agroforestry systems.</p>
+            <h3>Culinary Uses</h3>
+            <p>Today, Maya nut is used as a fodder tree for ranchers in parts of Mexico, and the seeds can be used to make cookies, tortillas, bread, and even a coffee-like beverage — all produced from this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, often referred to as a Maya nut plantation, as this species remains widely underutilized in modern agroforestry systems.</p>
 
             <p>Another edible part of the plant is the fruit. It starts off green, then fades to orange, and ripens to a deep red. At the green stage, the pulp is hard — almost woody — with a flavor reminiscent of bitter latex. As the fruit turns orange, it becomes softer and noticeably sweeter, usually still attached firmly to the tree. Only when the fruit reaches a dark, crimson red does it soften enough to slip cleanly off the seed.</p>
 
@@ -1443,7 +1464,7 @@ footer{
 
     <!-- Right rectangle: logo + orange button -->
     <div class="welcome-panel welcome-panel-right">
-      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo" id="welcome-logo">
       <button class="hero-cta-btn welcome-main-btn" id="welcome-main-btn">Go to Main Page</button>
     </div>
   </div>
@@ -1463,7 +1484,7 @@ footer{
 </div>
 
 <script>
-// Language dropdown (custom, below bar, centered under button)
+// Language dropdown (custom, below bar)
 (function(){
   const toggle = document.getElementById('lang-toggle');
   const dropdown = document.getElementById('lang-dropdown');
@@ -1490,27 +1511,11 @@ footer{
   function openMenu() {
     dropdown.classList.add('open');
     toggle.setAttribute('aria-expanded', 'true');
-
-    // Center the dropdown under the Language button
-    const btnRect = toggle.getBoundingClientRect();
-    const ddRect = dropdown.getBoundingClientRect();
-    const center = btnRect.left + btnRect.width / 2;
-    const padding = 8;
-
-    let left = center - ddRect.width / 2;
-    if (left < padding) left = padding;
-    const maxLeft = window.innerWidth - ddRect.width - padding;
-    if (left > maxLeft) left = maxLeft;
-
-    dropdown.style.left = left + 'px';
-    dropdown.style.right = 'auto';
   }
-
   function closeMenu() {
     dropdown.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
   }
-
   function toggleMenu() {
     if (dropdown.classList.contains('open')) {
       closeMenu();
@@ -1544,7 +1549,7 @@ footer{
   });
 })();
 
-// Canvas snowflakes in hero
+// Canvas snowflakes in hero – with pause when tab hidden
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1656,8 +1661,11 @@ footer{
   }
 
   let lastTime = performance.now();
+  let running = true;
+  let frameId = null;
 
   function animate(now) {
+    if (!running) return;
     const TIME_SCALE = 0.15;
     const deltaTime = (now - lastTime) * TIME_SCALE;
     lastTime = now;
@@ -1669,11 +1677,30 @@ footer{
       drawFlake(flake);
     }
 
-    requestAnimationFrame(animate);
+    frameId = requestAnimationFrame(animate);
   }
 
   initFlakes();
-  requestAnimationFrame(animate);
+  frameId = requestAnimationFrame(animate);
+
+  // Pause/resume snow and CSS animations when tab visibility changes
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      running = false;
+      if (frameId !== null) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+      document.body.classList.add('pause-animations');
+    } else {
+      if (!running) {
+        running = true;
+        lastTime = performance.now();
+        frameId = requestAnimationFrame(animate);
+      }
+      document.body.classList.remove('pause-animations');
+    }
+  });
 })();
 
 // Privacy / DNS Modal
@@ -1796,11 +1823,22 @@ footer{
   const welcomeBackdrop = document.getElementById('welcome-backdrop');
   const welcomeClose = document.getElementById('welcome-close');
   const welcomeMainBtn = document.getElementById('welcome-main-btn');
+  const welcomeLogo = document.getElementById('welcome-logo');
 
   if(!welcomeBackdrop || !welcomeClose) return;
 
   function closeWelcome(){
     welcomeBackdrop.style.display = 'none';
+  }
+
+  function goToTop(){
+    closeWelcome();
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   // Show popup on load + auto-close after 60 seconds
@@ -1811,22 +1849,19 @@ footer{
       if (welcomeBackdrop.style.display !== 'none') {
         closeWelcome();
       }
-    }, 60000); // 60,000 ms = 60 seconds
+    }, 60000); // 60 seconds
   });
 
   welcomeClose.addEventListener('click', closeWelcome);
 
   // "Go to Main Page" button closes popup AND scrolls to top
   if (welcomeMainBtn){
-    welcomeMainBtn.addEventListener('click', () => {
-      closeWelcome();
-      const topSection = document.getElementById('top');
-      if (topSection){
-        topSection.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
+    welcomeMainBtn.addEventListener('click', goToTop);
+  }
+
+  // Clicking the logo on the right also goes to top
+  if (welcomeLogo){
+    welcomeLogo.addEventListener('click', goToTop);
   }
 
   // Click outside the rectangles closes popup
