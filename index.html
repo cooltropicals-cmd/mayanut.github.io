@@ -33,8 +33,15 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 <style>
 :root{
   --bg:#18A7FF;
-  /* Blue–purple gradient background */
+  /* Blue–purple gradient background for hero */
   --bg-grad:
+    radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
+    radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
+    #0a56c2;
+
+  /* Lower sections background – static */
+  --bg-lower:
     radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
     radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
     radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
@@ -46,12 +53,14 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
     #ffffff;
 
   --bar:#003cc7;
-  --bar-h:80px;
-  --logo-offset:12px;
+  --bar-h:78px;
+}
 
-  --orange:#ffb85c; /* slightly lighter orange */
-  --orange-deep:#ff8e26;
-  --hover-blue:rgba(140,190,255,0.35);
+/* Slightly taller bar on very small screens */
+@media (max-width: 600px){
+  :root{
+    --bar-h:90px;
+  }
 }
 
 /* GLOBAL */
@@ -88,11 +97,11 @@ body{
   grid-template-areas:"menu title lang";
   align-items:center;
   column-gap:6px;
-  padding:8px 10px;
+  padding:6px 10px;
   min-height:var(--bar-h);
   z-index:1000;
   border-bottom:1px solid rgba(255,255,255,0.25);
-  padding-top:calc(8px + env(safe-area-inset-top, 0px));
+  padding-top:calc(6px + env(safe-area-inset-top, 0px));
 }
 
 /* Hamburger menu */
@@ -108,11 +117,12 @@ body{
   padding:0;
   cursor:pointer;
   justify-self:start;
-  margin-left:8px;
+  margin-left:4px;
   z-index:1100;
 }
 .menu-toggle span{
   display:block;
+  width:100%;
   height:3px;
   border-radius:999px;
   background:#ffffff;
@@ -128,19 +138,42 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
-/* Title in top bar */
+/* Title in top bar – logo + text */
 .topbar-title{
   grid-area:title;
-  font-family:"Mountains of Christmas", cursive;
-  font-size:18px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-align:center;
-  animation:merrygiggle 6s ease-in-out infinite;
   max-width:100%;
-  justify-self:center;
   padding:0 6px;
+}
+
+.topbar-logo-inline{
+  display:block;
+  margin-bottom:2px;
+}
+.topbar-logo-inline img{
+  width:78px;
+  height:auto;
+  display:block;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+  cursor:pointer;
+}
+
+.topbar-title-text{
+  font-family:"Mountains of Christmas", cursive;
+  font-size:16px;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  animation:merrygiggle 5s ease-in-out infinite;
+}
+
+/* Tilt animation */
+@keyframes merrygiggle{
+  0%,100%{ transform:rotate(0deg); }
+  25%{ transform:rotate(-1.2deg); }
+  75%{ transform:rotate(1.2deg); }
 }
 
 /* LANGUAGE SWITCHER – label in bar, dropdown below bar */
@@ -170,7 +203,7 @@ body{
   display:inline-flex;
   align-items:center;
   gap:6px;
-  padding:3px 10px;
+  padding:4px 11px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.7);
   background:rgba(10,86,194,0.9);
@@ -178,6 +211,7 @@ body{
   font-size:12px;
   cursor:pointer;
   outline:none;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 .topbar-lang-current{
   line-height:1;
@@ -200,6 +234,7 @@ body{
   z-index:1500;
   display:none;
   min-width:190px;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 .lang-dropdown.open{
   display:block;
@@ -215,20 +250,18 @@ body{
   color:#ffffff;
   cursor:pointer;
   white-space:nowrap;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-weight:600;
-  border-radius:8px;
   transition:background 0.15s ease, color 0.15s ease;
+  border-radius:6px;
 }
 .lang-dropdown li:hover{
-  background:var(--hover-blue);
+  background:rgba(130,170,255,0.28);
 }
-.lang-dropdown li.lang-active{
-  color:var(--orange);
+.lang-dropdown li.active-lang{
+  color:#ffc66a; /* lighter orange */
   text-decoration:underline;
-  text-decoration-color:var(--orange);
-  text-decoration-thickness:3px;
-  text-underline-offset:4px;
+  text-decoration-color:#ffc66a;
+  text-underline-offset:3px;
+  background:rgba(130,170,255,0.20);
 }
 
 /* Narrow screens: hide "Language" word */
@@ -238,16 +271,12 @@ body{
   }
   .topbar-lang-current-btn{
     font-size:11px;
-    padding:2px 8px;
+    padding:3px 9px;
   }
 }
 
 /* MOBILE TOPBAR LAYOUT */
 @media (max-width: 600px){
-  :root{
-    --bar-h:110px;
-  }
-
   .topbar{
     grid-template-columns:auto 1fr auto;
     grid-template-rows:auto auto;
@@ -256,61 +285,14 @@ body{
       "title title title";
     align-items:center;
     padding-left:10px;
-    padding-bottom:6px;
   }
 
-  .topbar-title{
+  .topbar-title-text{
     font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 12px;
-    text-align:center;
   }
 
   .menu-toggle{
-    display:flex !important;
-    opacity:1 !important;
-    visibility:visible !important;
     margin-left:0;
-    position:relative;
-    top:0;
-    left:0;
-    z-index:2000;
-  }
-
-  .menu-toggle span{
-    height:4px;
-    background:#ffffff;
-  }
-}
-
-/* FIXED LOGO BELOW BAR (desktop) */
-.topbar-logo-link{
-  position:fixed;
-  left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset));
-  z-index:900;
-}
-.topbar-logo{
-  width:100px;
-  height:100px;
-  display:block;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-  cursor:pointer;
-}
-
-/* On mobile, move logo into the top tab, centered */
-@media (max-width:600px){
-  .topbar-logo-link{
-    position:fixed;
-    top:calc(env(safe-area-inset-top,0px) + 6px);
-    left:50%;
-    transform:translateX(-50%);
-    z-index:1600;
-  }
-  .topbar-logo{
-    width:72px;
-    height:auto;
   }
 }
 
@@ -318,7 +300,7 @@ body{
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 160px);
+  padding-top:calc(var(--bar-h) + 140px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -328,11 +310,28 @@ body{
   animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION – HERO ONLY */
+/* Only hero background moves */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 100%; }
+}
+
+/* When tab hidden, pause animation */
+body.anim-paused .hero{
+  animation-play-state:paused;
+}
+
+.hero-inner{
+  width:100%;
+  max-width:1100px;
+  padding:0 16px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:40px;
+  position:relative;
+  z-index:1;
 }
 
 /* Snow canvas */
@@ -344,19 +343,6 @@ canvas#snow{
   display:block;
   pointer-events:none;
   z-index:0;
-}
-
-/* HERO INNER */
-.hero-inner{
-  width:100%;
-  max-width:1100px;
-  padding:0 16px 80px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:40px;
-  position:relative;
-  z-index:1;
 }
 
 /* HERO CONTENT */
@@ -394,7 +380,7 @@ canvas#snow{
   white-space:nowrap;
 }
 
-/* Hero CTA button – with shine effect */
+/* Hero CTA button – centered + bigger + shine */
 .hero-cta-wrap{
   margin-top:24px;
   display:flex;
@@ -414,7 +400,7 @@ canvas#snow{
   font-size:20px;
   letter-spacing:0.08em;
   text-transform:uppercase;
-  background:linear-gradient(135deg, var(--orange-deep) 0%, var(--orange) 40%, #ffe27a 100%);
+  background:linear-gradient(135deg, #ff9b2a 0%, #ffc95d 45%, #ffe78a 100%);
   color:#fff;
   box-shadow:0 4px 14px rgba(0,0,0,0.4);
   cursor:pointer;
@@ -422,22 +408,22 @@ canvas#snow{
   animation:buttonPulse 1.3s ease-in-out infinite;
 }
 
+/* Shine sweep */
 .hero-cta-btn::before{
   content:"";
   position:absolute;
-  top:-50%;
-  left:-30%;
+  top:0;
+  left:-40%;
   width:40%;
-  height:200%;
-  background:linear-gradient(120deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
-  transform:translateX(-100%) skewX(-20deg);
-  animation:shine 2.5s infinite;
+  height:100%;
+  background:linear-gradient(120deg, rgba(255,255,255,0.7), rgba(255,255,255,0));
+  transform:skewX(-25deg);
+  animation:shine 3s ease-in-out infinite;
 }
-
 @keyframes shine{
-  0%   { transform:translateX(-140%) skewX(-20deg); }
-  60%  { transform:translateX(220%) skewX(-20deg); }
-  100% { transform:translateX(220%) skewX(-20deg); }
+ 0%{ left:-40%; }
+ 55%{ left:110%; }
+ 100%{ left:110%; }
 }
 
 /* Bigger/smaller pulse (scale) */
@@ -446,7 +432,7 @@ canvas#snow{
     transform:scale(1);
   }
   50%{
-    transform:scale(1.06);
+    transform:scale(1.08);
   }
 }
 
@@ -454,29 +440,19 @@ canvas#snow{
   box-shadow:0 7px 20px rgba(0,0,0,0.55);
 }
 
-/* Hero glass image */
+/* Hero glass image – bigger, no hover grow */
 .hero-image-wrap{
   flex:0 0 auto;
   margin-left:auto;
 }
 .hero-image-link{
   display:inline-block;
-  cursor:pointer;
 }
 .hero-glass{
   width:540px;
-  max-width:85vw;
+  max-width:90vw;
   display:block;
-  /* no hover scaling, just a clean image */
-}
-
-/* Wiggle animation for title */
-@keyframes merrygiggle{
-  0%   { transform:rotate(0deg); }
-  25%  { transform:rotate(1.2deg); }
-  50%  { transform:rotate(0deg); }
-  75%  { transform:rotate(-1.2deg); }
-  100% { transform:rotate(0deg); }
+  cursor:pointer;
 }
 
 /* TRANSITION STRIPS */
@@ -519,11 +495,11 @@ canvas#snow{
 .section--about::before{
   content:"";
   position:absolute;
-  top:-30px;
+  top:-10px;
   left:50%;
   transform:translateX(-50%);
   width:130%;
-  height:90px;
+  height:70px;
   border-radius:50% 50% 0 0;
   z-index:-1;
   background:
@@ -532,7 +508,7 @@ canvas#snow{
     #003cc7;
 }
 .section--about{
-  background:var(--bg-grad);
+  background:var(--bg-lower);
   color:#fff;
 }
 
@@ -572,19 +548,19 @@ canvas#snow{
 }
 /* Soft lavender gradients */
 .about-card-1{
-  background:linear-gradient(135deg, #f6f1ff 0, #ffffff 55%, #ece0ff 100%);
+  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
 }
 .about-card-2{
-  background:linear-gradient(135deg, #f5edff 0, #ffffff 55%, #e7dcff 100%);
+  background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #e7dcff 100%);
 }
 .about-card-3{
-  background:linear-gradient(135deg, #f4ecff 0, #ffffff 55%, #e3d8ff 100%);
+  background:linear-gradient(135deg, #f4ecff 0%, #ffffff 55%, #e3d8ff 100%);
 }
 .about-card-4{
-  background:linear-gradient(135deg, #f3eaff 0, #ffffff 55%, #ded2ff 100%);
+  background:linear-gradient(135deg, #f3eaff 0%, #ffffff 55%, #ded2ff 100%);
 }
 .about-card-5{
-  background:linear-gradient(135deg, #f2e8ff 0, #ffffff 55%, #d9ccff 100%);
+  background:linear-gradient(135deg, #f2e8ff 0%, #ffffff 55%, #d9ccff 100%);
 }
 .about-text-card h2,
 .about-text-card h3{
@@ -663,7 +639,7 @@ canvas#snow{
 
 /* RESEARCH SECTION */
 .section--research{
-  background:var(--bg-grad);
+  background:var(--bg-lower);
   color:#ffffff;
 }
 .research-grid{
@@ -692,17 +668,22 @@ canvas#snow{
 .research-text p{
   margin:0 0 12px;
 }
-.research-text h3{
-  margin-top:18px;
-  margin-bottom:6px;
-  text-decoration:underline;
-  text-decoration-color:#5460c5;
-  text-underline-offset:4px;
+.research-label{
+  font-weight:700;
+  text-transform:uppercase;
+  font-size:13px;
+  letter-spacing:0.08em;
+  margin:0 0 4px;
+  color:#252b63;
+}
+.research-label span{
+  border-bottom:2px solid #252b63;
+  padding-bottom:2px;
 }
 
 /* GALLERY */
 .section--gallery{
-  background:var(--bg-grad);
+  background:var(--bg-lower);
 }
 .gallery-inner{
   text-align:center;
@@ -777,7 +758,7 @@ canvas#snow{
   margin-top:16px;
 }
 
-/* BOTTOM LOGO */
+/* BOTTOM LOGO + CIRCLE ARROW */
 .section--bottom-logo{
   background:
     radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
@@ -785,38 +766,44 @@ canvas#snow{
     #003cc7;
   text-align:center;
 }
-.section--bottom-logo .section-inner{
+.bottom-logo-inner{
   display:flex;
   flex-direction:column;
   align-items:center;
+  justify-content:center;
   gap:10px;
 }
-.bottom-logo-link img{
+.section--bottom-logo img{
   width:200px;
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
   cursor:pointer;
 }
-
-/* Circle + arrow under logo */
-.bottom-home-circle{
-  width:48px;
-  height:48px;
+.bottom-circle-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.bottom-circle{
+  width:46px;
+  height:46px;
   border-radius:50%;
   border:2px solid #ffffff;
   display:flex;
   align-items:center;
   justify-content:center;
+  text-decoration:none;
+  color:#ffffff;
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+  background:rgba(255,255,255,0.08);
 }
-.bottom-home-arrow{
-  width:0;
-  height:0;
-  border-left:8px solid transparent;
-  border-right:8px solid transparent;
-  border-bottom:12px solid #ffffff;
+.bottom-circle-arrow{
+  font-size:20px;
+  line-height:1;
 }
-.bottom-home-text{
-  font-size:14px;
+.bottom-circle-text{
+  font-size:13px;
   color:#f5fbff;
 }
 
@@ -903,10 +890,7 @@ footer{
 .nav-backdrop{
   position:fixed;
   inset:0;
-  background:
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #001a66 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #6c46ff 0, #001a66 55%, transparent 80%),
-    #001044;
+  background:rgba(0,0,0,0.6);
   display:none;
   align-items:center;
   justify-content:center;
@@ -926,9 +910,9 @@ footer{
   font-size:15px;
   line-height:1.7;
   background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 50% 20%, #6e4bff 0, #18A7FF 40%, transparent 80%),
     radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #8a4cff 0, #07336f 55%, transparent 80%),
     #0a56c2;
   position:relative;
 }
@@ -942,7 +926,7 @@ footer{
 .nav-modal-links{
   display:flex;
   flex-direction:column;
-  gap:8px;
+  gap:10px;
   margin-top:8px;
 }
 .nav-modal-links a{
@@ -951,30 +935,34 @@ footer{
   text-decoration:none;
   font-weight:600;
   font-size:15px;
-  padding:8px 10px;
-  border-radius:10px;
-  display:block;
+  padding:8px 8px;
+  border-radius:8px;
   transition:background 0.15s ease, color 0.15s ease;
 }
-
-/* Hover = light blue background */
-.nav-modal-links a:hover{
-  background:var(--hover-blue);
-}
-
-/* ACTIVE MENU ITEM */
-.nav-modal-links a.nav-link-active{
-  color:var(--orange);
-}
-.nav-modal-links a.nav-link-active::after{
+.nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:10px;
-  right:10px;
-  bottom:4px;
+  left:8px;
+  bottom:3px;
+  width:80%;
   height:3px;
-  background:var(--orange);
-  border-radius:999px;
+  background:transparent;
+  transform-origin:left;
+  transform:scaleX(1);
+  transition:background 0.15s ease;
+}
+
+/* Active page: orange text + long orange underline */
+.nav-modal-links a.nav-link-active{
+  color:#ffc66a;
+}
+.nav-modal-links a.nav-link-active::after{
+  background:#ffc66a;
+}
+
+/* Hover: light blue background, no new shorter underline */
+.nav-modal-links a:hover{
+  background:rgba(120,170,255,0.27);
 }
 
 .nav-close{
@@ -1098,25 +1086,11 @@ footer{
   line-height:1.7;
 }
 
-/* Right orange button: reuse CTA style but no pulse (still shiny) */
+/* Right orange button: reuse CTA style but no pulse override; keep shine */
 .welcome-main-btn{
   margin-top:4px;
   font-size:16px;
   padding:10px 26px;
-  animation:none;
-}
-
-/* Shiny effect for welcome button */
-.welcome-main-btn::before{
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-30%;
-  width:40%;
-  height:200%;
-  background:linear-gradient(120deg, rgba(255,255,255,0.8), rgba(255,255,255,0));
-  transform:translateX(-100%) skewX(-20deg);
-  animation:shine 2.5s infinite;
 }
 
 /* X in the transparent gap on the top-right of the popup */
@@ -1198,14 +1172,6 @@ footer{
     font-size:32px;
   }
 }
-
-/* PAUSE CLASS FOR ANIMATIONS */
-body.paused .hero{
-  animation-play-state:paused;
-}
-body.paused .topbar-title{
-  animation-play-state:paused;
-}
 </style>
 </head>
 
@@ -1219,9 +1185,14 @@ body.paused .topbar-title{
     <span></span>
   </button>
 
-  <!-- Center title -->
+  <!-- Center logo + title -->
   <div class="topbar-title">
-    ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
+    <a href="#top" class="topbar-logo-inline">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+    </a>
+    <div class="topbar-title-text">
+      ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
+    </div>
   </div>
 
   <!-- Language selector (18 languages) -->
@@ -1260,11 +1231,6 @@ body.paused .topbar-title{
     <li data-file="index-yo.html">Yorùbá</li>
   </ul>
 </div>
-
-<!-- Logo below the bar (desktop) / centered in tab on mobile -->
-<a href="#top" class="topbar-logo-link">
-  <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
-</a>
 
 <!-- Full-screen NAV overlay -->
 <div class="nav-backdrop" id="nav-backdrop">
@@ -1414,21 +1380,21 @@ body.paused .topbar-title{
         </div>
         <div class="research-text">
           <div class="research-text-card">
-            <h3>Range</h3>
+            <p class="research-label"><span>Range</span></p>
             <p><strong><em>Brosimum alicastrum</em></strong> is a species of tree in the family Moraceae. This species is primarily dominant in the tropical forests of southern Mexico, but it also occurs in more sporadic populations as far north as Tamaulipas, and in western parts of Mexico and Central America, extending into northern South America, as well as parts of the Caribbean, including Cuba and Jamaica. In different regions, it is also known as Maya nut, breadnut, ojoche, ramón, or guiamaro.</p>
 
-            <h3>Growth</h3>
+            <p class="research-label"><span>Growth</span></p>
             <p>The tree can grow up to around 40 meters tall in its native range, but more typically reaches 25–35 meters. In South Florida, several observed trees do not usually exceed about 20 meters, likely in response to roughly 65 inches of average annual rainfall and local growing conditions. Seedlings do not respond well to full sun — their leaves begin to turn yellow, signaling that the UV intensity is too high. Seedlings prefer to be kept moist and partially shaded, only tolerating stronger light once they are taller than about 2–3 feet. At that point, they can also tolerate periods of drought more reliably.</p>
 
             <p>Adult trees in full sun may still perform well, but their leaves often take on a more yellow-green tint instead of a deep, healthy green. Trees can begin flowering as early as four years old, but rarely enter into consistently heavy seed production until roughly a decade of age. These traits indicate that the species is best treated as a long-term perennial investment rather than a short-rotation crop, with yield increasing as the individual tree matures.</p>
 
-            <h3>In Agriculture</h3>
+            <p class="research-label"><span>In Agriculture</span></p>
             <p>One of the main reasons <em>Brosimum alicastrum</em> has not been cultivated widely in the United States is the combination of limited infrastructure, limited technical knowledge, and the long time required to reach high yields. Unlike annual crops, <em>Brosimum alicastrum</em> does not depreciate with age. In fact, the larger the tree becomes, the more it tends to produce. It does not need to be replanted and re-fertilized in the same way as many annual row crops. Instead, its extensive root system can tap into the water table below ground and anchor the tree against wind and storms.</p>
 
             <p>Growing naturally in places such as the Yucatán and other tropical regions, this species has evolved alongside intense seasonal storms, including hurricanes. That history is one reason it is so promising for Florida, where wind resistance and deep rooting are valuable traits.</p>
 
-            <h3>Morphology</h3>
-            <p><em>Brosimum alicastrum</em> belongs to the Moraceae family, which means its flowers are numerous, small, and aggregated into a globose, fused inflorescence. Plants are usually dioecious (separate male and female individuals), but monoecious trees also occur. The flower heads of <em>Brosimum</em> resemble miniature versions of <em>Treculia</em> inflorescences. Phylogenetic and biogeographic work suggests that the lineage originated from an African ancestor, with seeds or plant material successfully rafting and colonizing the Americas. Most other members of the tribe Dorstenieae are still found in Africa, Asia, and Australia.</p>
+            <p><strong>Morphology</strong><br>
+            <em>Brosimum alicastrum</em> belongs to the Moraceae family, which means its flowers are numerous, small, and aggregated into a globose, fused inflorescence. Plants are usually dioecious (separate male and female individuals), but monoecious trees also occur. The flower heads of <em>Brosimum</em> resemble miniature versions of <em>Treculia</em> inflorescences. Phylogenetic and biogeographic work suggests that the lineage originated from an African ancestor, with seeds or plant material successfully rafting and colonizing the Americas. Most other members of the tribe Dorstenieae are still found in Africa, Asia, and Australia.</p>
 
             <p>In <em>Brosimum</em>, a single seed is typically present in each fruit, whereas the ancestral form may have produced several seeds in a small, ball-shaped mass surrounded by peltate bracts. Over evolutionary time, <em>Brosimum</em> appears to have shifted toward producing one central pistillate flower that develops into the seed, with surrounding male flowers in monoecious individuals, or a single pistillate flower without surrounding male flowers in strictly female trees. Environmental stress can also influence which sex a given individual expresses over its lifetime.</p>
 
@@ -1438,8 +1404,8 @@ body.paused .topbar-title{
 
             <p>Historically, <em>Brosimum alicastrum</em> is believed to have been important not only to the Maya people, but likely to many other cultures overlapping its range. The tree may have been used by early Mesoamerican hunter-gatherers as far back as 10,000 B.C. In more recent history, however, there is very little direct evidence documenting specific recipes or uses in ancient cultures. No known texts or artwork clearly spell out how the seeds or fruit were prepared.</p>
 
-            <h3>Culinary Uses</h3>
-            <p>Today, Maya nut is used as a fodder tree for ranchers in parts of Mexico, and the seeds can be used to make cookies, tortillas, bread, and even a coffee-like beverage — all produced from this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, often referred to as a Maya nut plantation, as this species remains widely underutilized in modern agroforestry systems.</p>
+            <p><strong>Culinary Uses</strong><br>
+            Today, Maya nut is used as a fodder tree for ranchers in parts of Mexico, and the seeds can be used to make cookies, tortillas, bread, and even a coffee-like beverage — all produced from this ancient tropical rainforest tree. The MayaNut Company is working in South Florida to establish a dedicated <em>Brosimum alicastrum</em> farm, often referred to as a Maya nut plantation, as this species remains widely underutilized in modern agroforestry systems.</p>
 
             <p>Another edible part of the plant is the fruit. It starts off green, then fades to orange, and ripens to a deep red. At the green stage, the pulp is hard — almost woody — with a flavor reminiscent of bitter latex. As the fruit turns orange, it becomes softer and noticeably sweeter, usually still attached firmly to the tree. Only when the fruit reaches a dark, crimson red does it soften enough to slip cleanly off the seed.</p>
 
@@ -1515,14 +1481,16 @@ body.paused .topbar-title{
 
   <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
-    <div class="section-inner">
-      <a href="#top" class="bottom-logo-link">
+    <div class="section-inner bottom-logo-inner">
+      <a href="#top">
         <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
       </a>
-      <div class="bottom-home-circle">
-        <div class="bottom-home-arrow"></div>
+      <div class="bottom-circle-wrapper">
+        <a href="#top" class="bottom-circle">
+          <span class="bottom-circle-arrow">↑</span>
+        </a>
+        <div class="bottom-circle-text">👆 Click to Return Home 👆</div>
       </div>
-      <div class="bottom-home-text">👆 Click to Return Home 👆</div>
     </div>
   </section>
 
@@ -1583,6 +1551,15 @@ body.paused .topbar-title{
 </div>
 
 <script>
+// Pause hero animation + snow when tab hidden
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden){
+    document.body.classList.add('anim-paused');
+  } else {
+    document.body.classList.remove('anim-paused');
+  }
+});
+
 // Language dropdown (custom, below bar)
 (function(){
   const toggle = document.getElementById('lang-toggle');
@@ -1600,15 +1577,15 @@ body.paused .topbar-title{
     const f = item.getAttribute('data-file');
     if (f === file) {
       currentSpan.textContent = item.textContent.trim();
-      item.classList.add('lang-active');
+      item.classList.add('active-lang');
       matched = true;
     }
   });
   if (!matched) {
     currentSpan.textContent = 'English';
     items.forEach(item => {
-      if (item.getAttribute('data-file') === 'index.html') {
-        item.classList.add('lang-active');
+      if (item.getAttribute('data-file') === 'index.html'){
+        item.classList.add('active-lang');
       }
     });
   }
@@ -1654,7 +1631,7 @@ body.paused .topbar-title{
   });
 })();
 
-// Canvas snowflakes in hero (pausable)
+// Canvas snowflakes in hero
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1673,7 +1650,7 @@ body.paused .topbar-title{
   resize();
   window.addEventListener("resize", resize);
 
-  const FLAKE_COUNT = 60;
+  const FLAKE_COUNT = 70;
   const flakes = [];
 
   function random(min, max) {
@@ -1684,8 +1661,8 @@ body.paused .topbar-title{
     return {
       x: random(0, width),
       y: initial ? random(0, height) : random(-height * 0.2, 0),
-      size: random(2, 5),
-      speedY: random(0.03, 0.12),
+      size: random(3, 7),            // slightly bigger flakes
+      speedY: random(0.03, 0.11),
       speedX: random(-0.03, 0.03),
       sway: random(0.5, 1.5),
       swaySpeed: random(0.0005, 0.002),
@@ -1740,34 +1717,43 @@ body.paused .topbar-title{
     ctx.restore();
   }
 
-  let lastTime = performance.now();
-  let running = true;
-
   function updateFlake(flake, deltaTime) {
     flake.x += flake.speedX * deltaTime +
       Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
     flake.y += flake.speedY * deltaTime;
+
     flake.rotation += flake.rotationSpeed * deltaTime;
 
     if (flake.y > height + flake.size * 2) {
       const replacement = createFlake(false);
-      Object.assign(flake, replacement);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
     }
 
     if (flake.x < -20) flake.x = width + 20;
     if (flake.x > width + 20) flake.x = -20;
   }
 
-  function animate(now) {
-    if (!running) {
-      requestAnimationFrame(animate);
-      return;
-    }
+  let lastTime = performance.now();
 
+  function animate(now) {
     const TIME_SCALE = 0.15;
     const deltaTime = (now - lastTime) * TIME_SCALE;
     lastTime = now;
+
+    // If tab hidden, don't update positions (keeps them frozen)
+    if (document.hidden) {
+      requestAnimationFrame(animate);
+      return;
+    }
 
     ctx.clearRect(0, 0, width, height);
 
@@ -1781,18 +1767,6 @@ body.paused .topbar-title{
 
   initFlakes();
   requestAnimationFrame(animate);
-
-  // Pause when tab is hidden
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      running = false;
-      document.body.classList.add('paused');
-    } else {
-      running = true;
-      lastTime = performance.now();
-      document.body.classList.remove('paused');
-    }
-  });
 })();
 
 // Privacy / DNS Modal
@@ -1965,25 +1939,6 @@ body.paused .topbar-title{
     open = !open;
     extra.style.display = open ? 'grid' : 'none';
   });
-})();
-
-// Make the fixed logo and bottom logo always scroll smoothly to the top section
-(function(){
-  const topLogoLink = document.querySelector('.topbar-logo-link');
-  const bottomLogoLink = document.querySelector('.bottom-logo-link');
-
-  function scrollHome(e){
-    e.preventDefault();
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
-  if (topLogoLink)  topLogoLink.addEventListener('click', scrollHome);
-  if (bottomLogoLink) bottomLogoLink.addEventListener('click', scrollHome);
 })();
 </script>
 
