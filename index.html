@@ -191,7 +191,7 @@ body{
 .lang-dropdown{
   position:fixed;
   top:calc(var(--bar-h) + 2px);
-  right:10px;
+  right:10px; /* JS will override right/left when opened to center it */
   background:rgba(10,86,194,0.98);
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.6);
@@ -284,16 +284,22 @@ body{
   justify-content:center;
   overflow:hidden;
   background:var(--bg-grad);
-  /* background only moves on HERO */
-  background-size:200% 200%;
-  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION (HERO ONLY) */
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION
+   (applied to hero, about, research, gallery) */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 100%; }
+}
+
+.hero,
+.section--about,
+.section--research,
+.section--gallery{
+  background-size:200% 200%;
+  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
 .hero-inner{
@@ -1457,7 +1463,7 @@ footer{
 </div>
 
 <script>
-// Language dropdown (custom, below bar)
+// Language dropdown (custom, below bar, centered under button)
 (function(){
   const toggle = document.getElementById('lang-toggle');
   const dropdown = document.getElementById('lang-dropdown');
@@ -1484,11 +1490,27 @@ footer{
   function openMenu() {
     dropdown.classList.add('open');
     toggle.setAttribute('aria-expanded', 'true');
+
+    // Center the dropdown under the Language button
+    const btnRect = toggle.getBoundingClientRect();
+    const ddRect = dropdown.getBoundingClientRect();
+    const center = btnRect.left + btnRect.width / 2;
+    const padding = 8;
+
+    let left = center - ddRect.width / 2;
+    if (left < padding) left = padding;
+    const maxLeft = window.innerWidth - ddRect.width - padding;
+    if (left > maxLeft) left = maxLeft;
+
+    dropdown.style.left = left + 'px';
+    dropdown.style.right = 'auto';
   }
+
   function closeMenu() {
     dropdown.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
   }
+
   function toggleMenu() {
     if (dropdown.classList.contains('open')) {
       closeMenu();
@@ -1774,18 +1796,8 @@ footer{
   const welcomeBackdrop = document.getElementById('welcome-backdrop');
   const welcomeClose = document.getElementById('welcome-close');
   const welcomeMainBtn = document.getElementById('welcome-main-btn');
-  const welcomeLogo = document.querySelector('.welcome-logo');
 
   if(!welcomeBackdrop || !welcomeClose) return;
-
-  function scrollToTop(){
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
 
   function closeWelcome(){
     welcomeBackdrop.style.display = 'none';
@@ -1808,15 +1820,12 @@ footer{
   if (welcomeMainBtn){
     welcomeMainBtn.addEventListener('click', () => {
       closeWelcome();
-      scrollToTop();
-    });
-  }
-
-  // Popup logo also closes and scrolls to top
-  if (welcomeLogo){
-    welcomeLogo.addEventListener('click', () => {
-      closeWelcome();
-      scrollToTop();
+      const topSection = document.getElementById('top');
+      if (topSection){
+        topSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
   }
 
