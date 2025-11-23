@@ -17,6 +17,7 @@
 <link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 
 <meta name="theme-color" content="#18A7FF" />
+<meta name="robots" content="index,follow" />
 
 <!-- SEO: description + keywords -->
 <meta name="description" content="Maya nut beverage and products made from Brosimum alicastrum, also known as breadnut, ojoche, ramón, guiamaro – a tropical rainforest tree. Tropical trees, agroforestry and future Maya nut beverages, powders and flours.">
@@ -48,12 +49,15 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
   --bar:#003cc7;
   --bar-h:72px;
   --logo-offset:12px;
+
+  --orange:#ffb957;   /* slightly lighter orange */
+  --orange-deep:#ff8a1c;
 }
 
 /* Slightly taller bar on very small screens */
 @media (max-width: 600px){
   :root{
-    --bar-h:86px;
+    --bar-h:90px;
   }
 }
 
@@ -111,7 +115,7 @@ body{
   padding:0;
   cursor:pointer;
   justify-self:start;
-  margin-left:8px;
+  margin-left:2px;
   z-index:1100;
 }
 .menu-toggle span{
@@ -137,20 +141,11 @@ body{
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
-  animation:titlewiggle 4.5s ease-in-out infinite;
+  animation:merrygiggle 6s ease-in-out infinite;
   max-width:100%;
   justify-self:center;
   padding:0 6px;
   white-space:nowrap;
-}
-
-/* Wiggle animation for title (tilting) */
-@keyframes titlewiggle{
-  0%   { transform:rotate(0deg); }
-  25%  { transform:rotate(-2deg); }
-  50%  { transform:rotate(0deg); }
-  75%  { transform:rotate(2deg); }
-  100% { transform:rotate(0deg); }
 }
 
 /* LANGUAGE SWITCHER – label in bar, dropdown below bar */
@@ -162,7 +157,7 @@ body{
   gap:3px;
   justify-self:end;
   font-size:12px;
-  z-index:1100;
+  margin-right:2px;
 }
 .topbar-lang-label{
   display:flex;
@@ -210,7 +205,7 @@ body{
   padding:6px 0;
   z-index:1500;
   display:none;
-  min-width:170px;
+  min-width:180px;
 }
 .lang-dropdown.open{
   display:block;
@@ -226,23 +221,15 @@ body{
   color:#ffffff;
   cursor:pointer;
   white-space:nowrap;
-  position:relative;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 .lang-dropdown li:hover{
   background:rgba(255,255,255,0.16);
 }
-.lang-dropdown li.lang-active{
-  color:#ffb75a;
-  font-weight:700;
-}
-.lang-dropdown li.lang-active::after{
-  content:"";
-  position:absolute;
-  left:14px;
-  right:14px;
-  bottom:2px;
-  height:2px;
-  background:#ffb75a;
+.lang-dropdown li.active{
+  color:var(--orange);
+  text-decoration:underline;
+  text-underline-offset:3px;
 }
 
 /* Narrow screens: hide "Language" word */
@@ -252,11 +239,59 @@ body{
   }
   .topbar-lang-current-btn{
     font-size:11px;
-    padding:2px 8px;
+    padding:2px 7px;
   }
 }
 
-/* DESKTOP FIXED LOGO BELOW BAR */
+/* INLINE LOGO IN TOP BAR (MOBILE ONLY) */
+.topbar-logo-inline{
+  display:none;
+}
+.topbar-logo-inline img{
+  height:44px;
+  width:auto;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+}
+
+/* MOBILE TOPBAR LAYOUT */
+@media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+      "menu logo lang"
+      "title title title";
+    align-items:center;
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .topbar-title{
+    font-size:14px;
+    line-height:1.2;
+    margin-top:4px;
+    padding:0 6px;
+  }
+
+  .menu-toggle{
+    position:relative;
+    margin-left:0;
+  }
+
+  .topbar-logo-inline{
+    grid-area:logo;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  /* Hide fixed logo on mobile */
+  .topbar-logo-link{
+    display:none;
+  }
+}
+
+/* FIXED LOGO BELOW BAR (DESKTOP) */
 .topbar-logo-link{
   position:fixed;
   left:var(--logo-offset);
@@ -264,91 +299,32 @@ body{
   z-index:900;
 }
 .topbar-logo{
-  width:100px;
-  height:100px;
+  width:95px;
+  height:95px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
   cursor:pointer;
-}
-
-/* INLINE LOGO for mobile (inside top bar) */
-.topbar-logo-inline{
-  grid-area:logo;
-  justify-self:center;
-  display:none;
-}
-.topbar-logo-inline img{
-  height:40px;
-  width:auto;
-  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.4));
-  cursor:pointer;
-}
-
-/* MOBILE TOPBAR LAYOUT */
-@media (max-width: 600px){
-  .topbar{
-    grid-template-columns:auto 1fr auto;
-    grid-template-rows:auto auto auto;
-    grid-template-areas:
-      "logo logo menu"
-      "lang lang lang"
-      "title title title";
-    align-items:center;
-    padding-left:10px;
-  }
-
-  .topbar-logo-inline{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  .menu-toggle{
-    grid-area:menu;
-    justify-self:end;
-    margin-left:0;
-    margin-right:6px;
-  }
-
-  .topbar-title{
-    font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 12px;
-    text-align:center;
-  }
-
-  /* Hide fixed side logo on mobile */
-  .topbar-logo-link{
-    display:none;
-  }
 }
 
 /* HERO */
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 120px);
+  padding-top:calc(var(--bar-h) + 130px);
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:hidden;
   background:var(--bg-grad);
+  background-size:200% 200%;
+  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION
-   (applied to hero, about, gallery) */
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION – only hero */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 100%; }
-}
-
-.hero,
-.section--about,
-.section--gallery{
-  background-size:200% 200%;
-  animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
 .hero-inner{
@@ -409,7 +385,7 @@ canvas#snow{
   white-space:nowrap;
 }
 
-/* Hero CTA button – shiny + pulse */
+/* Hero CTA button – centered + subtle shine outline */
 .hero-cta-wrap{
   margin-top:24px;
   display:flex;
@@ -417,7 +393,6 @@ canvas#snow{
 }
 .hero-cta-btn{
   position:relative;
-  overflow:hidden;
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -429,54 +404,26 @@ canvas#snow{
   font-size:20px;
   letter-spacing:0.08em;
   text-transform:uppercase;
-  background:linear-gradient(135deg, #ff9a3c 0%, #ffc86a 45%, #ffeaa0 100%);
+  background:linear-gradient(135deg, var(--orange-deep) 0%, var(--orange) 45%, #ffe27a 100%);
   color:#fff;
   box-shadow:0 4px 14px rgba(0,0,0,0.4);
   cursor:pointer;
-  transition:box-shadow 0.18s ease;
-  animation:buttonPulse 1.3s ease-in-out infinite;
+  transition:box-shadow 0.18s ease, transform 0.18s ease;
 }
-
-/* Shiny sweep */
 .hero-cta-btn::before{
   content:"";
   position:absolute;
-  top:-50%;
-  left:-40%;
-  width:40%;
-  height:200%;
-  background:linear-gradient(
-    120deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.7) 50%,
-    rgba(255,255,255,0) 100%
-  );
-  transform:translateX(-120%) rotate(20deg);
-  animation:buttonShine 2.6s infinite;
+  inset:-3px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,0.9);
+  opacity:0;
+  pointer-events:none;
+  animation:buttonShine 1.8s ease-in-out infinite;
 }
-
 @keyframes buttonShine{
-  0%{
-    transform:translateX(-140%) rotate(20deg);
-  }
-  40%{
-    transform:translateX(120%) rotate(20deg);
-  }
-  100%{
-    transform:translateX(120%) rotate(20deg);
-  }
+  0%,100%{ opacity:0; }
+  50%{ opacity:1; }
 }
-
-/* Bigger/smaller pulse (scale) */
-@keyframes buttonPulse{
-  0%,100%{
-    transform:scale(1);
-  }
-  50%{
-    transform:scale(1.08);
-  }
-}
-
 .hero-cta-btn:hover{
   box-shadow:0 7px 20px rgba(0,0,0,0.55);
 }
@@ -491,10 +438,18 @@ canvas#snow{
 }
 .hero-glass{
   width:520px;
-  max-width:80vw;
+  max-width:85vw;
   display:block;
   cursor:pointer;
-  /* No hover grow anymore */
+}
+
+/* Wiggle animation for title */
+@keyframes merrygiggle{
+  0%   { transform:translateX(0); }
+  25%  { transform:translateX(4px); }
+  50%  { transform:translateX(0); }
+  75%  { transform:translateX(-4px); }
+  100% { transform:translateX(0); }
 }
 
 /* TRANSITION STRIPS */
@@ -628,13 +583,12 @@ canvas#snow{
   gap:28px;
   align-items:flex-start;
 }
-
 .about-images{
   display:flex;
   flex-direction:column;
   gap:12px;
 }
-.about-image{
+.about-image-tile{
   position:relative;
 }
 .about-images img{
@@ -648,48 +602,93 @@ canvas#snow{
   aspect-ratio:1/1;
 }
 
-/* Expand icon on each image */
-.about-image-expand{
+/* Expand button overlay */
+.img-expand-btn{
   position:absolute;
   top:8px;
   right:8px;
   border:none;
   border-radius:999px;
-  padding:4px 6px;
-  background:rgba(0,0,0,0.65);
+  padding:4px 10px;
+  background:rgba(0,0,0,0.6);
   color:#ffffff;
-  cursor:pointer;
+  font-size:11px;
   display:flex;
   align-items:center;
   gap:4px;
-  font-size:11px;
-}
-.about-image-expand-icon{
-  font-size:14px;
-}
-.image-expand-hint{
-  display:none;
+  cursor:pointer;
   white-space:nowrap;
+}
+.img-expand-icon{
+  font-size:13px;
+}
+.img-expand-hint{
+  opacity:0;
+  transition:opacity 0.18s ease, transform 0.18s ease;
 }
 
 /* Desktop hover hint */
-@media (min-width: 768px){
-  .about-image-expand{
-    padding:4px 8px;
-  }
-  .image-expand-hint{
-    display:inline-block;
-    opacity:0;
-    transform:translateY(-3px);
-    transition:opacity 0.15s ease, transform 0.15s ease;
-    font-size:10px;
-  }
-  .about-image-expand:hover .image-expand-hint{
+@media(min-width: 801px){
+  .about-image-tile:hover .img-expand-hint{
     opacity:1;
-    transform:translateY(0);
+    transform:translateY(-1px);
+  }
+  .about-image-tile:hover .img-expand-btn{
+    transform:scale(1.04);
   }
 }
 
+/* Mobile: keep icon, hide hint text so it’s not cluttered */
+@media(max-width: 800px){
+  .img-expand-hint{
+    display:none;
+  }
+}
+
+/* Lightbox for expanded images */
+.img-lightbox-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2600;
+}
+.img-lightbox-backdrop.open{
+  display:flex;
+}
+.img-lightbox-content{
+  position:relative;
+  max-width:min(90vw, 650px);
+  max-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.img-lightbox-img{
+  max-width:100%;
+  max-height:100%;
+  border-radius:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.7);
+  object-fit:contain;
+}
+.img-lightbox-close{
+  position:absolute;
+  top:-18px;
+  right:-18px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.95);
+  color:#000;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* About text side */
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -720,11 +719,52 @@ canvas#snow{
 .about-card-5{
   background:linear-gradient(135deg, #f2e8ff 0%, #ffffff 55%, #d9ccff 100%);
 }
+
 .about-text-card h2,
 .about-text-card h3{
   margin-top:0;
   margin-bottom:8px;
   color:#30346a;
+}
+
+/* Make main About title underlined and likely one line */
+.about-text-card.about-card-1 h2{
+  font-size:19px;
+  text-decoration:underline;
+  text-underline-offset:4px;
+  white-space:nowrap;
+}
+
+/* STORE / ABOUT / GALLERY layout on smaller screens */
+@media(max-width:800px){
+  .hero{
+    padding-top:calc(var(--bar-h) + 40px);
+  }
+  .hero-inner{
+    flex-direction:column;
+    gap:24px;
+    padding-top:8px;
+  }
+  .hero-right{
+    flex-direction:column-reverse;
+    align-items:center;
+    gap:20px;
+  }
+  .hero-headline{
+    font-size:40px;
+    max-width:none;
+    -webkit-text-stroke:2px #0057c8;
+    text-stroke:2px #0057c8;
+    text-align:center;
+    margin-left:0;
+  }
+  .hero-image-wrap{
+    margin-left:0;
+    align-self:center;
+  }
+  .about-grid{
+    grid-template-columns:1fr;
+  }
 }
 
 /* GALLERY */
@@ -735,8 +775,12 @@ canvas#snow{
   text-align:center;
 }
 .gallery-inner h2{
-  margin:0 0 18px;
+  margin:0 0 12px;
   font-size:22px;
+}
+.gallery-inner p{
+  margin:0 0 18px;
+  font-size:15px;
 }
 .gallery-grid{
   display:grid;
@@ -760,6 +804,14 @@ canvas#snow{
 .gallery-tile:hover{
   transform:translateY(-2px) scale(1.02);
   box-shadow:0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* Hide *inner* Gallery heading text on small screens,
+   so only the bar word “GALLERY” shows there */
+@media(max-width:600px){
+  .gallery-inner h2{
+    display:none;
+  }
 }
 
 /* Gallery "view more" control */
@@ -813,6 +865,36 @@ canvas#snow{
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
   cursor:pointer;
+}
+
+/* Back-to-top circle + label */
+.back-home-wrap{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.back-home-circle{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:2px solid #ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.back-home-circle-arrow{
+  width:0;
+  height:0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:12px solid #ffffff;
+}
+.back-home-text{
+  font-size:13px;
+  color:#f5fbff;
 }
 
 /* FOOTER */
@@ -925,11 +1007,17 @@ footer{
   position:relative;
 }
 .nav-modal-title{
-  margin:0 0 10px;
+  margin:0 0 4px;
   font-weight:800;
   font-size:20px;
-  text-decoration:underline;
-  text-underline-offset:4px;
+  text-align:center;
+}
+.nav-modal-title-underline{
+  width:90px;
+  height:3px;
+  margin:5px auto 10px;
+  background:#ffffff;
+  border-radius:999px;
 }
 .nav-modal-links{
   display:flex;
@@ -950,9 +1038,9 @@ footer{
   position:absolute;
   left:0;
   bottom:-2px;
-  width:40%;
+  width:100%;
   height:2px;
-  background:#ffffff;
+  background:var(--orange);
   transform:scaleX(0);
   transform-origin:left;
   transition:transform 0.15s ease;
@@ -960,14 +1048,9 @@ footer{
 .nav-modal-links a:hover::after{
   transform:scaleX(1);
 }
-.nav-modal-links a.nav-link-active{
-  color:#ffb75a;
-}
 .nav-modal-links a.nav-link-active::after{
-  width:80%;
-  height:3px;
   transform:scaleX(1);
-  background:#ffb75a;
+  height:3px;
 }
 .nav-close{
   position:absolute;
@@ -1090,12 +1173,11 @@ footer{
   line-height:1.7;
 }
 
-/* Right orange button: reuse CTA style but no pulse */
+/* Right orange button: reuse CTA style but no extra transform */
 .welcome-main-btn{
   margin-top:4px;
   font-size:16px;
   padding:10px 26px;
-  animation:none;
 }
 
 /* X in the transparent gap on the top-right of the popup */
@@ -1111,94 +1193,22 @@ footer{
   cursor:pointer;
 }
 
-/* IMAGE LIGHTBOX */
-.image-lightbox{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.8);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:3000;
-}
-.image-lightbox.open{
-  display:flex;
-}
-.image-lightbox-inner{
-  position:relative;
-  max-width:90vw;
-  max-height:90vh;
-}
-.image-lightbox-img{
-  max-width:100%;
-  max-height:100%;
-  display:block;
-  border-radius:14px;
-  box-shadow:0 6px 24px rgba(0,0,0,0.7);
-}
-.image-lightbox-close{
-  position:absolute;
-  top:-32px;
-  right:-4px;
-  border:none;
-  background:transparent;
-  color:#ffffff;
-  font-size:30px;
-  line-height:1;
-  cursor:pointer;
-}
-
-/* Responsive breakpoints */
-@media(max-width:900px){
-  .hero-inner{
-    flex-direction:column;
-    padding-top:8px;
-    gap:24px;
-  }
-  .hero-right{
-    flex-direction:column-reverse;
-    align-items:center;
-    gap:20px;
-  }
-  .hero-headline{
-    font-size:42px;
-    max-width:none;
-    -webkit-text-stroke:2px #0057c8;
-    text-stroke:2px #0057c8;
-    text-align:center;
-    margin-left:0;
-  }
-  .hero-image-wrap{
-    margin-left:0;
-    align-self:center;
-  }
-}
-
-/* Move hero higher on small screens */
-@media(max-width:600px){
-  .hero{
-    padding-top:calc(var(--bar-h) + 40px);
-  }
-  .hero-inner{
-    padding-bottom:40px;
-  }
-  .hero-glass{
-    max-width:70vw;
-  }
-  .hero-headline{
-    font-size:32px;
-  }
-}
-
-/* Keep two-column about layout even on phones */
+/* Responsive welcome popup stacking */
 @media(max-width:700px){
-  .about-grid{
-    grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);
-    gap:16px;
+  .welcome-modal{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .welcome-panel-right{
+    max-width:none;
+  }
+  .welcome-close{
+    top:8px;
+    right:8px;
   }
 }
 
-/* Tablet downward: adjust store/gallery cards a bit */
+/* Responsive breakpoints for gallery + store */
 @media(max-width:800px){
   .gallery-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1215,23 +1225,31 @@ footer{
     flex:0 0 70vw;
   }
 }
+@media(max-width:500px){
+  .hero-glass{
+    max-width:75vw;
+  }
+  .hero-headline{
+    font-size:32px;
+  }
+}
 </style>
 </head>
 
 <body>
 
 <header class="topbar">
-  <!-- Inline logo for mobile (center of first row) -->
-  <a href="#top" class="topbar-logo-inline" aria-label="Go to top">
-    <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
-  </a>
-
   <!-- Menu icon -->
   <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span>
     <span></span>
     <span></span>
   </button>
+
+  <!-- Mobile inline logo (hidden on desktop) -->
+  <a href="#top" class="topbar-logo-inline" id="topbar-logo-inline">
+    <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+  </a>
 
   <!-- Center title -->
   <div class="topbar-title">
@@ -1275,7 +1293,7 @@ footer{
   </ul>
 </div>
 
-<!-- Desktop fixed logo below the bar -->
+<!-- Fixed logo below the bar (desktop only) -->
 <a href="#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
@@ -1285,6 +1303,7 @@ footer{
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
+    <div class="nav-modal-title-underline"></div>
     <div class="nav-modal-links">
       <a href="#top" data-section="top">HOME</a>
       <a href="#buy" data-section="buy">STORE</a>
@@ -1374,32 +1393,35 @@ footer{
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
-          <div class="about-image">
+          <div class="about-image-tile">
             <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
-            <button class="about-image-expand" type="button">
-              <span class="about-image-expand-icon">⤢</span>
-              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" aria-label="Expand image">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-image">
+
+          <div class="about-image-tile">
             <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
-            <button class="about-image-expand" type="button">
-              <span class="about-image-expand-icon">⤢</span>
-              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="Expand image">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-image">
+
+          <div class="about-image-tile">
             <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young Maya nut Brosimum alicastrum trees growing in a nursery">
-            <button class="about-image-expand" type="button">
-              <span class="about-image-expand-icon">⤢</span>
-              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-nursery.jpg" aria-label="Expand image">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-image">
+
+          <div class="about-image-tile">
             <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
-            <button class="about-image-expand" type="button">
-              <span class="about-image-expand-icon">⤢</span>
-              <span class="image-expand-hint">👆 Click to Expand 👆</span>
+            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-moraceae.jpg" aria-label="Expand image">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
         </div>
@@ -1447,6 +1469,7 @@ footer{
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
       <h2>Gallery</h2>
+      <p>Images from our trees, fruit, and future products — coming soon.</p>
 
       <div class="gallery-grid">
         <div class="gallery-tile">
@@ -1503,11 +1526,15 @@ footer{
   <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
-      <a href="#top">
+      <a href="#top" id="bottom-logo-link">
         <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
       </a>
-      <div style="margin-top:10px; font-size:13px; color:#e5ecff;">
-        👆 Click to Return Home 👆
+
+      <div class="back-home-wrap">
+        <div class="back-home-circle" id="back-home-circle">
+          <div class="back-home-circle-arrow"></div>
+        </div>
+        <div class="back-home-text">👆 Click to Return Home 👆</div>
       </div>
     </div>
   </section>
@@ -1568,11 +1595,11 @@ footer{
   </div>
 </div>
 
-<!-- Image Lightbox -->
-<div class="image-lightbox" id="image-lightbox">
-  <div class="image-lightbox-inner">
-    <button class="image-lightbox-close" id="image-lightbox-close" aria-label="Close image">&times;</button>
-    <img src="" alt="" id="image-lightbox-img" class="image-lightbox-img">
+<!-- Lightbox for expanded About images -->
+<div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
+  <div class="img-lightbox-content">
+    <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
+    <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
   </div>
 </div>
 
@@ -1594,7 +1621,7 @@ footer{
     const f = item.getAttribute('data-file');
     if (f === file) {
       currentSpan.textContent = item.textContent.trim();
-      item.classList.add('lang-active');
+      item.classList.add('active');
       matched = true;
     }
   });
@@ -1602,7 +1629,7 @@ footer{
     currentSpan.textContent = 'English';
     items.forEach(item => {
       if (item.getAttribute('data-file') === 'index.html') {
-        item.classList.add('lang-active');
+        item.classList.add('active');
       }
     });
   }
@@ -1648,7 +1675,7 @@ footer{
   });
 })();
 
-// Canvas snowflakes in hero
+// Canvas snowflakes in hero, with pause when tab not visible
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
@@ -1667,7 +1694,7 @@ footer{
   resize();
   window.addEventListener("resize", resize);
 
-  const FLAKE_COUNT = 70;
+  const FLAKE_COUNT = 60;
   const flakes = [];
 
   function random(min, max) {
@@ -1678,7 +1705,7 @@ footer{
     return {
       x: random(0, width),
       y: initial ? random(0, height) : random(-height * 0.2, 0),
-      size: random(3, 7),           // bigger snowflakes
+      size: random(2, 5),
       speedY: random(0.03, 0.12),
       speedX: random(-0.03, 0.03),
       sway: random(0.5, 1.5),
@@ -1701,7 +1728,7 @@ footer{
     ctx.translate(flake.x, flake.y);
     ctx.rotate(flake.rotation);
     ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.lineWidth = 1.1;
+    ctx.lineWidth = 1;
 
     const armLength = flake.size;
 
@@ -1714,7 +1741,7 @@ footer{
       ctx.moveTo(0, 0);
       ctx.lineTo(x, y);
 
-      const branchLen = armLength * 0.45;
+      const branchLen = armLength * 0.4;
       const sideAngle1 = angle + Math.PI / 6;
       const sideAngle2 = angle - Math.PI / 6;
 
@@ -1763,10 +1790,8 @@ footer{
   let running = true;
 
   function animate(now) {
-    if (!running) {
-      requestAnimationFrame(animate);
-      return;
-    }
+    if (!running) return;
+
     const TIME_SCALE = 0.15;
     const deltaTime = (now - lastTime) * TIME_SCALE;
     lastTime = now;
@@ -1781,11 +1806,13 @@ footer{
     requestAnimationFrame(animate);
   }
 
-  // Pause animation when tab not visible
   document.addEventListener('visibilitychange', () => {
-    running = !document.hidden;
-    if (!document.hidden) {
+    if (document.visibilityState === 'visible') {
+      running = true;
       lastTime = performance.now();
+      requestAnimationFrame(animate);
+    } else {
+      running = false;
     }
   });
 
@@ -1875,7 +1902,7 @@ footer{
     }
   });
 
-  // Active underline follows visible section
+  // Active underline follows visible section (for in-page anchors)
   const sectionMap = {};
   links.forEach(link => {
     const href = link.getAttribute('href');
@@ -1967,76 +1994,80 @@ footer{
   });
 })();
 
-// Make any "go to top" logo scroll smoothly
+// Make the fixed logo, mobile header logo, and bottom circle scroll smoothly to the top section
 (function(){
-  const logoLinks = document.querySelectorAll('a[href="#top"]');
-  logoLinks.forEach(logoLink => {
-    logoLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      const topSection = document.getElementById('top');
-      if (topSection){
-        topSection.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-  });
+  const topSection = document.getElementById('top');
+  function scrollHome(e){
+    if (e) e.preventDefault();
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  const logoLink = document.querySelector('.topbar-logo-link');
+  if (logoLink){
+    logoLink.addEventListener('click', scrollHome);
+  }
+
+  const topbarLogoInline = document.getElementById('topbar-logo-inline');
+  if (topbarLogoInline){
+    topbarLogoInline.addEventListener('click', scrollHome);
+  }
+
+  const bottomLogoLink = document.getElementById('bottom-logo-link');
+  if (bottomLogoLink){
+    bottomLogoLink.addEventListener('click', scrollHome);
+  }
+
+  const backCircle = document.getElementById('back-home-circle');
+  if (backCircle){
+    backCircle.addEventListener('click', scrollHome);
+  }
 })();
 
-// ABOUT IMAGE LIGHTBOX (expand on click)
+// About image lightbox expand
 (function(){
-  const expandButtons = document.querySelectorAll('.about-image-expand');
-  const aboutImages = document.querySelectorAll('.about-image img');
-  const lightbox = document.getElementById('image-lightbox');
-  const lightboxImg = document.getElementById('image-lightbox-img');
-  const lightboxClose = document.getElementById('image-lightbox-close');
-
-  if (!lightbox || !lightboxImg) return;
+  const buttons = document.querySelectorAll('.img-expand-btn');
+  const backdrop = document.getElementById('img-lightbox-backdrop');
+  const imgEl = document.getElementById('img-lightbox-img');
+  const closeBtn = document.getElementById('img-lightbox-close');
+  if (!backdrop || !imgEl || !closeBtn) return;
 
   function openLightbox(src, alt){
-    lightboxImg.src = src;
-    lightboxImg.alt = alt || '';
-    lightbox.classList.add('open');
+    imgEl.src = src;
+    imgEl.alt = alt || '';
+    backdrop.classList.add('open');
   }
 
   function closeLightbox(){
-    lightbox.classList.remove('open');
-    lightboxImg.src = '';
-    lightboxImg.alt = '';
+    backdrop.classList.remove('open');
+    imgEl.src = '';
+    imgEl.alt = '';
   }
 
-  expandButtons.forEach(btn => {
+  buttons.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const wrapper = btn.closest('.about-image');
-      if (!wrapper) return;
-      const img = wrapper.querySelector('img');
-      if (img) openLightbox(img.src, img.alt);
+      const src = btn.getAttribute('data-img-src');
+      const img = btn.closest('.about-image-tile')?.querySelector('img');
+      const alt = img ? img.alt : '';
+      if (src){
+        openLightbox(src, alt);
+      }
     });
   });
 
-  // Also allow clicking directly on the image to expand
-  aboutImages.forEach(img => {
-    img.addEventListener('click', () => {
-      openLightbox(img.src, img.alt);
-    });
-  });
-
-  if (lightboxClose){
-    lightboxClose.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeLightbox();
-    });
-  }
-
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
+  closeBtn.addEventListener('click', closeLightbox);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop){
       closeLightbox();
     }
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')){
       closeLightbox();
     }
   });
