@@ -955,10 +955,9 @@ footer{
   font-size:15px;
   line-height:1.7;
   background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
-    #0a56c2;
+    radial-gradient(circle at 0% 0%, #aa00fe 0, #0c6fda 45%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #aa00fe 0, #083f94 45%, transparent 80%),
+    radial-gradient(circle at 50% 50%, #49d5ff 0, #18A7FF 40%, #07336f 85%);
   position:relative;
 }
 .nav-modal-title{
@@ -974,39 +973,75 @@ footer{
   background:#ffffff;
   border-radius:999px;
 }
+
+/* Top & bottom link groups */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:6px;
   margin-top:8px;
 }
+.nav-modal-links-top{
+  margin-bottom:10px;
+}
+.nav-modal-links-bottom{
+  margin-top:10px;
+}
+
+/* Center logo between scroll + click sections */
+.nav-modal-center-logo{
+  display:flex;
+  justify-content:center;
+  margin-top:4px;
+}
+.nav-modal-center-logo img{
+  width:80px;
+  height:auto;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.55));
+}
+
+/* Divider line under logo */
+.nav-modal-divider{
+  width:100%;
+  height:3px;
+  border-radius:999px;
+  margin:10px 0 0;
+  background:linear-gradient(90deg, #ffffff 0%, #ffd27a 50%, #ffffff 100%);
+  opacity:0.85;
+}
+
 .nav-modal-links a{
   position:relative;
   color:#ffffff;
   text-decoration:none;
   font-weight:600;
   font-size:15px;
-  padding:6px 0;
+  padding:7px 10px;
+  border-radius:10px;
+  transition:background 0.15s ease;
 }
 .nav-modal-links a::after{
   content:"";
   position:absolute;
   left:0;
-  bottom:-2px;
+  bottom:-3px;
   width:100%;
-  height:2px;
+  height:0;
   background:var(--orange);
-  transform:scaleX(0);
   transform-origin:left;
-  transition:transform 0.15s ease;
-}
-.nav-modal-links a:hover::after{
   transform:scaleX(1);
 }
+
+/* Hover: background lights up lighter blue */
+.nav-modal-links a:hover{
+  background:rgba(24,167,255,0.22);
+}
+
+/* Active: long orange underline only for active link */
 .nav-modal-links a.nav-link-active::after{
-  transform:scaleX(1);
   height:3px;
 }
+
 .nav-close{
   position:absolute;
   top:10px;
@@ -1256,10 +1291,22 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-title-underline"></div>
-    <div class="nav-modal-links">
+
+    <!-- Top links: scrollable sections -->
+    <div class="nav-modal-links nav-modal-links-top">
       <a href="#top" data-section="top">HOME</a>
       <a href="#buy" data-section="buy">STORE</a>
       <a href="#about" data-section="about">ABOUT</a>
+    </div>
+
+    <!-- Center logo separator -->
+    <div class="nav-modal-center-logo">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+    </div>
+    <div class="nav-modal-divider"></div>
+
+    <!-- Bottom links: click to new pages -->
+    <div class="nav-modal-links nav-modal-links-bottom">
       <a href="gallery.html" data-external="true">GALLERY</a>
       <a href="research.html" data-external="true">RESEARCH</a>
       <a href="blog.html" data-external="true">BLOG</a>
