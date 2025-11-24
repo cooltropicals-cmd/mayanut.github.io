@@ -6,476 +6,159 @@
 <title>MayaNut</title>
 <style>
   :root{
-    --ink:#eaf2ff; --ink-dim:#c6d0ea;
-    --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
-    --accent:#8fdcff; --accent2:#c79bff;
+    --ink:#eef3ff;
+    --panel:rgba(12,16,34,.55); --line:rgba(255,255,255,.12);
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
-    /* Gold */
-    --gold1:#fff2a6; --gold2:#ffd76e; --gold3:#ffb960;
-    /* Clearer water */
-    --waterC1:rgba(190,235,255,.55);
-    --waterC2:rgba(155,215,255,.38);
-    --waterC3:rgba(120,195,255,.28);
+    --gold1:#fff0b5;
+    --gold2:#ffd46b;
+    --gold3:#f3ac3a;
   }
 
-  html,body{height:100%}
-  body{
-    margin:0;color:var(--ink);
+  html,body{
+    height:100%; margin:0; color:var(--ink);
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
     display:flex; flex-direction:column; min-height:100%;
-    /* Tropical dusk base */
-    background:
-      radial-gradient(1000px 600px at 15% -10%, rgba(255,176,113,.25), transparent 60%),
-      radial-gradient(1100px 680px at 85% 0%, rgba(255,128,197,.20), transparent 65%),
-      radial-gradient(900px 500px at 50% 120%, rgba(101,178,255,.18), transparent 60%),
-      linear-gradient(180deg, #09122a 0%, #132154 40%, #1a2a6b 100%);
+    background: linear-gradient(180deg, #0b1a0f 0%, #143821 40%, #0f2f1d 100%);
     overflow-x:hidden;
   }
 
-  .top-glow{
-    position:fixed; inset:0 0 auto 0; height:42vh; pointer-events:none; z-index:-1;
-    background:
-      radial-gradient(60% 60% at 50% 0%, rgba(255,206,120,.28), transparent 60%),
-      radial-gradient(45% 45% at 75% 5%, rgba(255,160,227,.22), transparent 60%),
-      radial-gradient(55% 60% at 25% 8%, rgba(126,230,255,.22), transparent 60%);
-    filter: blur(18px) saturate(115%);
+  /* Animated blurred green background layers */
+  .bg-blobs, .bg-blobs-2, .bg-blobs-3{
+    position:fixed; inset:-20% -20% -20% -20%;
+    z-index:-1; pointer-events:none; filter: blur(26px) saturate(115%);
+  }
+  .bg-blobs{
+    background:radial-gradient(35% 40% at 20% 25%, rgba(110,190,120,.35), transparent 60%),
+               radial-gradient(30% 35% at 75% 20%, rgba(165,230,170,.28), transparent 65%),
+               radial-gradient(28% 30% at 50% 60%, rgba(90,150,110,.32), transparent 60%);
+    animation: drift1 48s ease-in-out infinite;
+  }
+  .bg-blobs-2{
+    background:radial-gradient(32% 36% at 18% 70%, rgba(70,150,95,.30), transparent 60%),
+               radial-gradient(30% 34% at 75% 70%, rgba(125,200,140,.28), transparent 60%),
+               radial-gradient(22% 26% at 50% 40%, rgba(160,220,160,.25), transparent 60%);
+    animation: drift2 56s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+  .bg-blobs-3{
+    background:radial-gradient(22% 26% at 35% 10%, rgba(185,255,185,.20), transparent 60%),
+               radial-gradient(28% 30% at 68% 50%, rgba(90,160,105,.22), transparent 60%);
+    animation: drift3 62s ease-in-out infinite;
+    opacity:.9;
   }
 
+  @keyframes drift1 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-18px,16px,0)}100%{transform:translate3d(0,0,0)}}
+  @keyframes drift2 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(22px,-14px,0)}100%{transform:translate3d(0,0,0)}}
+  @keyframes drift3 {0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-10px,10px,0)}100%{transform:translate3d(0,0,0)}}
+
   /* Top bar */
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
-  .brand{
-    font-weight:900; letter-spacing:.3px; display:flex; align-items:flex-end; gap:6px; user-select:none;
-    background:linear-gradient(180deg,var(--gold1),var(--gold2) 45%,var(--gold3) 100%);
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    text-shadow:0 6px 18px rgba(0,0,0,.28);
-    font-size: 20px;
-  }
-  .brand small{
-    font-size:12px; line-height:1; margin-left:2px;
-    background:linear-gradient(180deg,var(--gold1),var(--gold2),var(--gold3));
-    -webkit-background-clip:text; background-clip:text; color:transparent;
-    text-shadow:0 6px 18px rgba(0,0,0,.28);
-  }
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .brandLogo{display:block;height:28px;width:auto}
 
   .nav{display:flex;gap:18px;align-items:center}
   .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
   .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
-  /* Stage */
-  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
-
-  /* Transparent SVG “image” logo above the text box */
-  .heroLogo{ width:min(560px,80vw); margin:6px auto 14px; display:block; }
+  .heroLogo{display:block;width:min(560px,80vw);margin:6px auto 12px}
 
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
   .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
-  .chatbar input::placeholder{color:#bfe7ff}
+  .chatbar input::placeholder{color:#cfe8ff}
   .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
 
-  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
   .msg{text-align:left;margin:6px 0;color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
-  /* Sections */
-  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.50);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(4px)}
   .section h3{margin:0 0 8px;color:#fff}
   .section p{margin:8px 0 0;color:#cfe9ff}
 
-  /* Footer + IG */
-  footer{
-    width:100%;color:#c9d3ef;border-top:1px solid var(--line);
-    background:rgba(10,14,34,.55);backdrop-filter:blur(6px);
-    display:flex; align-items:center; justify-content:center; gap:12px;
-    font-size:13px; padding:12px 8px; position:relative;
-  }
-  .ig-link{
-    position:absolute; right:14px; top:50%; transform:translateY(-50%);
-    display:inline-flex; align-items:center; justify-content:center;
-    width:22px; height:22px; border-radius:6px;
-  }
-  .ig-link svg{transition:transform .2s ease, filter .2s ease; filter:drop-shadow(0 0 0 rgba(255,255,255,0))}
-  .ig-link:hover svg{transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;color:#eaf2ff;text-decoration:none;transition:transform .2s ease,background .2s ease,border-color .2s ease}
+  .card:hover{transform:translateY(-3px);background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18)}
 
-  /* FX canvas: background */
-  #fxLayer{position:fixed; inset:0; z-index:0; pointer-events:none}
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px;position:relative}
+  .ig-link{position:absolute;right:72px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px}
+  .ig-link svg{filter:drop-shadow(0 0 0 rgba(255,255,255,0));transition:transform .2s ease,filter .2s ease}
+  .ig-link:hover svg{transform:scale(1.08);filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 </style>
 </head>
 <body>
 
-<div class="top-glow"></div>
+<div class="bg-blobs"></div>
+<div class="bg-blobs-2"></div>
+<div class="bg-blobs-3"></div>
+
+<!-- Unified gold logo with TM close to "t" -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="mn-gold" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="var(--gold1)"/>
+      <stop offset="50%" stop-color="var(--gold2)"/>
+      <stop offset="100%" stop-color="var(--gold3)"/>
+    </linearGradient>
+    <filter id="mn-shadow" x="-20%" y="-40%" width="140%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.35)"/>
+    </filter>
+    <symbol id="MayaNutLogo" viewBox="0 0 1200 260" preserveAspectRatio="xMinYMid meet">
+      <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="180"
+            fill="url(#mn-gold)" filter="url(#mn-shadow)">MayaNut</text>
+      <!-- TM positioned tight and slightly bigger -->
+      <text x="1040" y="98" font-family="Poppins, Inter, system-ui, sans-serif"
+            font-weight="900" font-size="50"
+            fill="url(#mn-gold)" filter="url(#mn-shadow)">™</text>
+    </symbol>
+  </defs>
+</svg>
 
 <header class="topbar" role="banner">
-  <div class="brand">MayaNut<small>™</small></div>
-  <nav class="nav" aria-label="Primary">
+  <svg class="brandLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
+  <nav class="nav">
     <a href="#home" id="navHome">MayaNut</a>
-    <a href="#buy"  id="navBuy">Buy</a>
+    <a href="#buy" id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
     <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
   </nav>
 </header>
 
-<!-- Background FX -->
-<canvas id="fxLayer"></canvas>
-
 <main id="home" class="stage">
   <div class="panel">
-    <!-- Transparent “image-like” SVG logo (faded gold, no black markings) -->
-    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
-      <defs>
-        <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%"  stop-color="#fff2a6"/>
-          <stop offset="50%" stop-color="#ffd76e"/>
-          <stop offset="100%" stop-color="#ffb960"/>
-        </linearGradient>
-        <filter id="glow" x="-20%" y="-40%" width="140%" height="180%">
-          <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="rgba(0,0,0,.35)"/>
-        </filter>
-      </defs>
-      <g fill="url(#goldGrad)" filter="url(#glow)">
-        <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif" font-weight="900" font-size="180">MayaNut</text>
-        <text x="1000" y="95" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="44">™</text>
-      </g>
-    </svg>
-
-    <div class="chatbar" role="search">
-      <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
-    </div>
-    <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
+    <svg class="heroLogo" viewBox="0 0 1200 260"><use href="#MayaNutLogo"></use></svg>
+    <div class="chatbar"><input id="chatInput" placeholder="Ask about MayaNut™ or our products" /></div>
+    <div class="log" id="chatLog"></div>
   </div>
 </main>
 
-<section id="buy" class="section" aria-labelledby="buyTitle">
-  <h3 id="buyTitle">Buy</h3>
+<section id="buy" class="section"><h3>Buy</h3>
   <p>Search Through Our Wonderful Products — real items coming soon.</p>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px">
-    <a href="#home" style="text-decoration:none;">
-      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
-        Product A (placeholder)
-      </div>
-    </a>
-    <a href="#home" style="text-decoration:none;">
-      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
-        Product B (placeholder)
-      </div>
-    </a>
-    <a href="#home" style="text-decoration:none;">
-      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
-        Product C (placeholder)
-      </div>
-    </a>
+  <div class="cards">
+    <a class="card" href="#home">Flour</a>
+    <a class="card" href="#home">Drinks</a>
+    <a class="card" href="#home">Snacks</a>
   </div>
 </section>
 
-<section id="about" class="section" aria-labelledby="aboutTitle">
-  <h3 id="aboutTitle">About</h3>
-  <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
-    <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
-    farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
-  <p><strong>August Kokus is the current CEO of MayaNut™.</strong></p>
+<section id="about" class="section"><h3>About</h3>
+  <p>MayaNut LLC is dedicated to cultivating the MayaNut tree, <em>Brosimum alicastrum</em>, in South Florida. <strong>August Kokus</strong> is the founder and current CEO of MayaNut™.</p>
 </section>
 
 <footer>
-  <span>© 2025 MayaNut LLC. All rights reserved.</span>
-  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
-    <!-- simple white Instagram glyph -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
-      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/>
-    </svg>
+  © 2025 MayaNut LLC. All rights reserved.
+  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
   </a>
 </footer>
 
-<!-- FX -->
-<canvas id="fxLayer"></canvas>
-
 <script>
-/* smooth nav */
-document.getElementById('navHome').addEventListener('click', e=>{e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'});});
-document.getElementById('navBuy').addEventListener('click',  e=>{e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'});});
-document.getElementById('navAbout').addEventListener('click',e=>{e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'});});
-
-/* mini chat */
-const input=document.getElementById('chatInput'), logBox=document.getElementById('chatLog');
-function say(role, text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
-input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const t=input.value.trim(); if(!t) return; say('You',t); input.value=''; const low=t.toLowerCase(); if(low.includes('buy')){ document.getElementById('buy').scrollIntoView({behavior:'smooth'}); say('MayaNut','Opening Buy'); } else if(low.includes('about')){ document.getElementById('about').scrollIntoView({behavior:'smooth'}); say('MayaNut','Opening About'); } else { say('MayaNut','What else should we add?'); }}});
-
-/* ===== Ambient dust → merge → raindrops → pooled water (clearer), with drop–drop merge, surface ripples, slow rise, and flow around boxes ===== */
-(function(){
-  const canvas=document.getElementById('fxLayer');
-  const ctx=canvas.getContext('2d');
-
-  let W=innerWidth, H=innerHeight, DPR=Math.min(2, devicePixelRatio||1);
-  function resize(){
-    W=innerWidth; H=innerHeight; DPR=Math.min(2, devicePixelRatio||1);
-    canvas.style.width=W+'px'; canvas.style.height=H+'px';
-    canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-  resize(); addEventListener('resize', resize);
-
-  // Particles
-  const DUST_MAX=300;
-  const DROP_MAX=120;
-  const dust=[], drops=[], ripples=[];
-
-  // Water
-  let waterHeight = H*0.04;      // shallow start
-  const TIME_RISE = 0.0006;      // very slow ambient rise
-  const DROP_RISE = 0.18;        // rise per drop (tuned)
-  let t=0;
-
-  // Dust maker
-  function newDust(x,y,mass=1){
-    const r = 0.8 + Math.min(5, mass)*0.42;
-    const vy = - (0.28 + Math.random()*0.3) * (1/(1+mass*0.12));
-    const vx = (Math.random()*0.5-0.25);
-    return {type:'dust', x,y,vx,vy, mass, r};
-  }
-
-  // Drop maker
-  function newDrop(x,y,mass){
-    const r = Math.min(10, 2 + mass*0.6);
-    return {type:'drop', x,y, vx:(Math.random()*0.6-0.3), vy:0.35+Math.random()*0.45, r};
-  }
-
-  // Seed dust
-  function seedDust(){
-    const start = Math.min(DUST_MAX, 240);
-    for(let i=0;i<start;i++){
-      const y = H - waterHeight - Math.random()*H*0.35;
-      const x = Math.random()*W;
-      dust.push(newDust(x,y,1));
-    }
-  }
-  seedDust();
-
-  // Merge dusty specks in top half
-  function tryMergeDust(a,b){
-    const dx=b.x-a.x, dy=b.y-a.y, R=(a.r+b.r)+6;
-    if (a.y<H*0.5 && b.y<H*0.5 && dx*dx+dy*dy<=R*R){
-      // absorb b into a
-      const total = a.mass + b.mass;
-      a.x = (a.x*a.mass + b.x*b.mass)/total;
-      a.y = (a.y*a.mass + b.y*b.mass)/total;
-      a.mass = total;
-      a.r = 0.8 + Math.min(5, a.mass)*0.42;
-      a.vy -= 0.02;
-      b._dead=true;
-      if (a.mass>=5){
-        drops.push(newDrop(a.x,a.y,a.mass));
-        a._dead=true;
-      }
-    }
-  }
-
-  // Simple spatial grid for drop–drop merging
-  function buildGrid(items, cell=28){
-    const g=new Map();
-    for(let i=0;i<items.length;i++){
-      const p=items[i]; if(!p || p._dead) continue;
-      const gx=Math.floor(p.x/cell), gy=Math.floor(p.y/cell);
-      const key=gx+','+gy; if(!g.has(key)) g.set(key,[]);
-      g.get(key).push(i);
-    }
-    return {g,cell};
-  }
-  function forNeighbors(grid, i, cb){
-    const {g,cell}=grid; const p=drops[i]; if(!p) return;
-    const gx=Math.floor(p.x/cell), gy=Math.floor(p.y/cell);
-    for(let xx=gx-1; xx<=gx+1; xx++){
-      for(let yy=gy-1; yy<=gy+1; yy++){
-        const key=xx+','+yy; const arr=g.get(key); if(!arr) continue;
-        for(const j of arr){ if(j!==i) cb(j); }
-      }
-    }
-  }
-
-  // Obstacles = only content boxes; NOT the hero logo (so water can flood between its letters visually)
-  function obstacles(){
-    const rects=[];
-    const ids=['home','buy','about'];
-    const topbar=document.querySelector('.topbar'); if(topbar){ const r=topbar.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:10}); }
-    const chat=document.getElementById('chatInput'); if(chat){ const r=chat.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:12}); }
-    const log=document.getElementById('chatLog'); if(log){ const r=log.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:12}); }
-    ids.forEach(id=>{ const el=document.getElementById(id); if(!el) return; const r=el.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:16}); });
-    return rects;
-  }
-  function roundRectPath(ctx,r){
-    const rr = Math.min(r.rad, Math.min(r.w,r.h)/2);
-    ctx.beginPath();
-    ctx.moveTo(r.x+rr, r.y);
-    ctx.lineTo(r.x+r.w-rr, r.y);
-    ctx.quadraticCurveTo(r.x+r.w, r.y, r.x+r.w, r.y+rr);
-    ctx.lineTo(r.x+r.w, r.y+r.h-rr);
-    ctx.quadraticCurveTo(r.x+r.w, r.y+r.h, r.x+r.w-rr, r.y+r.h);
-    ctx.lineTo(r.x+rr, r.y+r.h);
-    ctx.quadraticCurveTo(r.x, r.y+r.h, r.x, r.y+r.h-rr);
-    ctx.lineTo(r.x, r.y+rr);
-    ctx.quadraticCurveTo(r.x, r.y, r.x+rr, r.y);
-    ctx.closePath();
-  }
-
-  // Click ripples on surface
-  document.addEventListener('click', (e)=>{
-    const x=e.clientX, y=e.clientY;
-    const surfaceY = H - waterHeight;
-    if (y >= surfaceY-8){ ripples.push({x, r:6, a:1}); }
-  });
-
-  function step(){
-    t += 0.016;
-
-    // ambient slow rise
-    waterHeight += TIME_RISE * H; // scale by H so it’s consistent
-    if (waterHeight > H*0.96) waterHeight = H*0.96; // leave a sliver
-
-    const surfaceY = H - waterHeight;
-
-    // update dust
-    for (let i=dust.length-1;i>=0;i--){
-      const p=dust[i];
-      if (p._dead){ dust.splice(i,1); continue; }
-      p.x += p.vx + Math.sin((p.y+t)*0.02)*0.02;
-      p.y += p.vy;
-      if (p.x<-16) p.x=W+16; else if (p.x>W+16) p.x=-16;
-      if (p.y < -24){
-        // recycle from near the bottom (above current water)
-        p.x = Math.random()*W;
-        p.y = surfaceY + Math.random()*H*0.35;
-        p.mass=1; p.r=1.2; p.vy=-(0.28+Math.random()*0.3);
-      }
-    }
-
-    // dust merge (sampled checks)
-    for (let i=0;i<dust.length;i+=3){
-      const a=dust[i]; if(!a || a._dead) continue;
-      for (let j=i+1;j<Math.min(i+7, dust.length);j++){
-        const b=dust[j]; if (!b || b._dead) continue;
-        tryMergeDust(a,b);
-      }
-    }
-    // remove dead dust
-    for (let i=dust.length-1;i>=0;i--) if (dust[i]._dead) dust.splice(i,1);
-
-    // drops motion
-    for (const d of drops){
-      d.vy += 0.016; // gravity
-      d.x += d.vx;
-      d.y += d.vy;
-    }
-
-    // drop–drop merging via grid
-    const grid = buildGrid(drops, 28);
-    for (let i=0;i<drops.length;i++){
-      const a=drops[i]; if(!a || a._dead) continue;
-      forNeighbors(grid, i, (j)=>{
-        const b=drops[j]; if(!b || b._dead) return;
-        const dx=b.x-a.x, dy=b.y-a.y, R=a.r+b.r;
-        if (dx*dx+dy*dy <= R*R){
-          // merge b into a; conserve "area"
-          const areaA=Math.PI*a.r*a.r, areaB=Math.PI*b.r*b.r;
-          const area=areaA+areaB;
-          a.x = (a.x*areaA + b.x*areaB)/area;
-          a.y = (a.y*areaA + b.y*areaB)/area;
-          a.vx = (a.vx*areaA + b.vx*areaB)/area;
-          a.vy = (a.vy*areaA + b.vy*areaB)/area;
-          a.r = Math.sqrt(area/Math.PI);
-          b._dead=true;
-        }
-      });
-    }
-    for (let i=drops.length-1;i>=0;i--) if (drops[i]._dead) drops.splice(i,1);
-
-    // surface collide + splash
-    for (let i=drops.length-1;i>=0;i--){
-      const d=drops[i];
-      const surface = surfaceY + Math.sin((d.x*0.01 + t*1.5))*2 + Math.sin((d.x*0.035)+t*0.9)*1.0;
-      if (d.y + d.r >= surface){
-        ripples.push({x:d.x, r:6, a:1});
-        waterHeight = Math.min(H*0.96, waterHeight + DROP_RISE);
-        drops.splice(i,1);
-      } else if (d.x<-24 || d.x>W+24){ drops.splice(i,1); }
-    }
-
-    // spawn dust if below target
-    if (dust.length < DUST_MAX){
-      const y = surfaceY + Math.random()*H*0.35;
-      dust.push(newDust(Math.random()*W, y, 1));
-    }
-
-    // ripple evolution
-    for (let i=ripples.length-1;i>=0;i--){
-      ripples[i].r += 2.2;
-      ripples[i].a -= 0.02;
-      if (ripples[i].a<=0) ripples.splice(i,1);
-    }
-
-    // limit drops
-    if (drops.length > DROP_MAX) drops.splice(0, drops.length - DROP_MAX);
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-
-    const surfaceY = H - waterHeight;
-
-    // dust (denser near bottom)
-    for (const p of dust){
-      const fade = Math.max(0, Math.min(1, (p.y - (surfaceY-160)) / 240));
-      const alpha = 0.28 + (1-fade)*0.35;
-      ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
-    }
-
-    // drops (light cyan)
-    for (const d of drops){
-      const grad = ctx.createRadialGradient(d.x, d.y-d.r*0.5, d.r*0.25, d.x, d.y, d.r*1.1);
-      grad.addColorStop(0, 'rgba(210,245,255,0.95)');
-      grad.addColorStop(1, 'rgba(150,215,255,0.70)');
-      ctx.fillStyle=grad;
-      ctx.beginPath(); ctx.ellipse(d.x, d.y, d.r, d.r*1.12, 0, 0, Math.PI*2); ctx.fill();
-      // tiny highlight
-      ctx.fillStyle='rgba(255,255,255,0.45)';
-      ctx.beginPath(); ctx.arc(d.x-d.r*0.35, d.y-d.r*0.55, Math.max(0.8, d.r*0.25), 0, Math.PI*2); ctx.fill();
-    }
-
-    // pooled clear water
-    // fill
-    const g = ctx.createLinearGradient(0, surfaceY, 0, H);
-    g.addColorStop(0.00, 'var(--waterC1)');
-    g.addColorStop(0.60, 'var(--waterC2)');
-    g.addColorStop(1.00, 'var(--waterC3)');
-    ctx.fillStyle=g;
-    ctx.fillRect(0, surfaceY, W, H-surfaceY);
-
-    // wave line across
-    ctx.beginPath();
-    for (let x=0;x<=W;x+=5){
-      const y = surfaceY + Math.sin((x*0.01) + t*1.5)*2 + Math.sin((x*0.035)+t*0.9)*1.0;
-      if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle='rgba(255,255,255,0.42)';
-    ctx.lineWidth=1.4;
-    ctx.stroke();
-
-    // ripple rings on surface
-    for (const r of ripples){
-      const y = surfaceY + Math.sin((r.x*0.01) + t*1.5)*2 + Math.sin((r.x*0.035)+t*0.9)*1.0;
-      ctx.strokeStyle = `rgba(255,255,255,${(0.5*r.a).toFixed(3)})`;
-      ctx.lineWidth=1;
-      ctx.beginPath(); ctx.ellipse(r.x, y, r.r, r.r*0.55, 0, 0, Math.PI*2); ctx.stroke();
-    }
-
-    // carve content boxes out of the water so it flows around them
-    ctx.globalCompositeOperation='destination-out';
-    const obs = obstacles();
-    for (const r of obs){ roundRectPath(ctx, r); ctx.fillStyle='rgba(0,0,0,1)'; ctx.fill(); }
-    ctx.globalCompositeOperation='source-over';
-  }
-
-  function loop(){ step(); draw(); requestAnimationFrame(loop); }
-  loop();
-})();
+const input=document.getElementById('chatInput');
+const logBox=document.getElementById('chatLog');
+function say(role,text){const el=document.createElement('div');el.className='msg';el.innerHTML=`<strong>${role}:</strong> ${text}`;logBox.appendChild(el);logBox.scrollTop=logBox.scrollHeight;}
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){const t=input.value.trim();if(!t)return;say('You',t);input.value='';say('MayaNut',"I'm here to help with questions about MayaNut™ and our products!");}});
+['navHome','navBuy','navAbout'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('click',e=>{e.preventDefault();document.getElementById(el.textContent.toLowerCase()).scrollIntoView({behavior:'smooth'});} );});
 </script>
 </body>
 </html>
