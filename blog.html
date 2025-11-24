@@ -10,57 +10,104 @@
     --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
     --accent:#8fdcff; --accent2:#c79bff;
     --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
+    /* Gold */
+    --gold1:#fff2a6; --gold2:#ffd76e; --gold3:#ffb960;
+    /* Clearer water */
+    --waterC1:rgba(190,235,255,.55);
+    --waterC2:rgba(155,215,255,.38);
+    --waterC3:rgba(120,195,255,.28);
   }
+
   html,body{height:100%}
   body{
     margin:0;color:var(--ink);
-    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
-    display:flex;flex-direction:column;min-height:100%;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    /* Tropical dusk base */
     background:
-      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
-      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
-      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
-      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
+      radial-gradient(1000px 600px at 15% -10%, rgba(255,176,113,.25), transparent 60%),
+      radial-gradient(1100px 680px at 85% 0%, rgba(255,128,197,.20), transparent 65%),
+      radial-gradient(900px 500px at 50% 120%, rgba(101,178,255,.18), transparent 60%),
+      linear-gradient(180deg, #09122a 0%, #132154 40%, #1a2a6b 100%);
     overflow-x:hidden;
   }
 
-  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
-  .brand{font-weight:800;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
-  .brand small{font-size:11px;opacity:.95;vertical-align:top}
-  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
+  .top-glow{
+    position:fixed; inset:0 0 auto 0; height:42vh; pointer-events:none; z-index:-1;
+    background:
+      radial-gradient(60% 60% at 50% 0%, rgba(255,206,120,.28), transparent 60%),
+      radial-gradient(45% 45% at 75% 5%, rgba(255,160,227,.22), transparent 60%),
+      radial-gradient(55% 60% at 25% 8%, rgba(126,230,255,.22), transparent 60%);
+    filter: blur(18px) saturate(115%);
+  }
+
+  /* Top bar */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px) saturate(140%)}
+  .brand{
+    font-weight:900; letter-spacing:.3px; display:flex; align-items:flex-end; gap:6px; user-select:none;
+    background:linear-gradient(180deg,var(--gold1),var(--gold2) 45%,var(--gold3) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 6px 18px rgba(0,0,0,.28);
+    font-size: 20px;
+  }
+  .brand small{
+    font-size:12px; line-height:1; margin-left:2px;
+    background:linear-gradient(180deg,var(--gold1),var(--gold2),var(--gold3));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 6px 18px rgba(0,0,0,.28);
+  }
+
   .nav{display:flex;gap:18px;align-items:center}
-  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
-  .nav a:hover{border:1px solid var(--line);background:rgba(255,255,255,.06)}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;border:1px solid transparent}
+  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
-  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
-    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
-
-  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
+  /* Stage */
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:96px;padding-bottom:80px}
   .panel{width:min(900px,92vw);text-align:center}
-  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;color:#fff;margin:6px 0 14px}
-  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+  /* Transparent SVG “image” logo above the text box */
+  .heroLogo{ width:min(560px,80vw); margin:6px auto 14px; display:block; }
+
   .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
   .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .chatbar input::placeholder{color:#bfe7ff}
+  .chatbar input:focus{border-color:rgba(143,220,255,.75);box-shadow:0 0 0 3px rgba(143,220,255,.25)}
+
   .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
   .msg{text-align:left;margin:6px 0;color:#eaf2ff}
   .msg strong{color:#cfe1ff}
 
+  /* Sections */
   .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
   .section h3{margin:0 0 8px;color:#fff}
   .section p{margin:8px 0 0;color:#cfe9ff}
 
-  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
+  /* Footer + IG */
+  footer{
+    width:100%;color:#c9d3ef;border-top:1px solid var(--line);
+    background:rgba(10,14,34,.55);backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    font-size:13px; padding:12px 8px; position:relative;
+  }
+  .ig-link{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:6px;
+  }
+  .ig-link svg{transition:transform .2s ease, filter .2s ease; filter:drop-shadow(0 0 0 rgba(255,255,255,0))}
+  .ig-link:hover svg{transform:scale(1.08); filter:drop-shadow(0 0 8px rgba(255,255,255,.65))}
 
-  /* Canvas: clicks are on document; keep canvas non-interactive */
-  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
+  /* FX canvas: background */
+  #fxLayer{position:fixed; inset:0; z-index:0; pointer-events:none}
 </style>
 </head>
 <body>
 
-<header class="topbar">
+<div class="top-glow"></div>
+
+<header class="topbar" role="banner">
   <div class="brand">MayaNut<small>™</small></div>
-  <div class="brandInfo">Balls: <b id="ballCount">1</b>/500</div>
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     <a href="#home" id="navHome">MayaNut</a>
     <a href="#buy"  id="navBuy">Buy</a>
     <a href="#about" id="navAbout">About</a>
@@ -68,529 +115,365 @@
   </nav>
 </header>
 
-<div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
+<!-- Background FX -->
+<canvas id="fxLayer"></canvas>
 
 <main id="home" class="stage">
   <div class="panel">
-    <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
-    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want (try /spawn 6 factory)" aria-label="Type what you want and press Enter" /></div>
-    <div class="log" id="chatLog" aria-live="polite"></div>
+    <!-- Transparent “image-like” SVG logo (faded gold, no black markings) -->
+    <svg class="heroLogo" viewBox="0 0 1200 260" aria-label="MayaNut logo">
+      <defs>
+        <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%"  stop-color="#fff2a6"/>
+          <stop offset="50%" stop-color="#ffd76e"/>
+          <stop offset="100%" stop-color="#ffb960"/>
+        </linearGradient>
+        <filter id="glow" x="-20%" y="-40%" width="140%" height="180%">
+          <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="rgba(0,0,0,.35)"/>
+        </filter>
+      </defs>
+      <g fill="url(#goldGrad)" filter="url(#glow)">
+        <text x="40" y="180" font-family="Poppins, Inter, system-ui, sans-serif" font-weight="900" font-size="180">MayaNut</text>
+        <text x="1000" y="95" font-family="Inter, system-ui, sans-serif" font-weight="800" font-size="44">™</text>
+      </g>
+    </svg>
+
+    <div class="chatbar" role="search">
+      <input id="chatInput" placeholder="Type What You Want" aria-label="Type what you want and press Enter" />
+    </div>
+    <div class="log" id="chatLog" aria-live="polite" aria-label="Conversation"></div>
   </div>
 </main>
 
-<section id="buy" class="section">
-  <h3>Buy</h3>
+<section id="buy" class="section" aria-labelledby="buyTitle">
+  <h3 id="buyTitle">Buy</h3>
   <p>Search Through Our Wonderful Products — real items coming soon.</p>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px">
+    <a href="#home" style="text-decoration:none;">
+      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
+        Product A (placeholder)
+      </div>
+    </a>
+    <a href="#home" style="text-decoration:none;">
+      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
+        Product B (placeholder)
+      </div>
+    </a>
+    <a href="#home" style="text-decoration:none;">
+      <div style="border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;background:rgba(255,255,255,.04);color:#eaf2ff;">
+        Product C (placeholder)
+      </div>
+    </a>
+  </div>
 </section>
 
-<section id="about" class="section">
-  <h3>About</h3>
+<section id="about" class="section" aria-labelledby="aboutTitle">
+  <h3 id="aboutTitle">About</h3>
   <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
     <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
     farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
-  <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
+  <p><strong>August Kokus is the current CEO of MayaNut™.</strong></p>
 </section>
 
-<footer>© 2025 MayaNut LLC. All rights reserved.</footer>
+<footer>
+  <span>© 2025 MayaNut LLC. All rights reserved.</span>
+  <a class="ig-link" href="https://instagram.com/mayanut.co" target="_blank" rel="noopener" aria-label="MayaNut on Instagram">
+    <!-- simple white Instagram glyph -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white" aria-hidden="true">
+      <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zM18 6.2a1 1 0 1 1-1 1 1 0 0 1 1-1z"/>
+    </svg>
+  </a>
+</footer>
 
-<canvas id="ballLayer"></canvas>
+<!-- FX -->
+<canvas id="fxLayer"></canvas>
 
 <script>
-/* ===== Chat + Commands + Space pause ===== */
-const input = document.getElementById('chatInput');
-const logBox = document.getElementById('chatLog');
-const pausedBadge = document.getElementById('pausedBadge');
-let GAME_PAUSED = false;
+/* smooth nav */
+document.getElementById('navHome').addEventListener('click', e=>{e.preventDefault(); document.getElementById('home').scrollIntoView({behavior:'smooth'});});
+document.getElementById('navBuy').addEventListener('click',  e=>{e.preventDefault(); document.getElementById('buy').scrollIntoView({behavior:'smooth'});});
+document.getElementById('navAbout').addEventListener('click',e=>{e.preventDefault(); document.getElementById('about').scrollIntoView({behavior:'smooth'});});
 
-function say(role, text){
-  const el=document.createElement('div'); el.className='msg';
-  el.innerHTML=`<strong>${role}:</strong> ${text}`;
-  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
-}
-function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display = GAME_PAUSED ? '' : 'none'; }
-function parseIntStrict(s, def){ const n=parseInt(s,10); return Number.isFinite(n)&&n>0?n:def; }
+/* mini chat */
+const input=document.getElementById('chatInput'), logBox=document.getElementById('chatLog');
+function say(role, text){ const el=document.createElement('div'); el.className='msg'; el.innerHTML=`<strong>${role}:</strong> ${text}`; logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight; }
+input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const t=input.value.trim(); if(!t) return; say('You',t); input.value=''; const low=t.toLowerCase(); if(low.includes('buy')){ document.getElementById('buy').scrollIntoView({behavior:'smooth'}); say('MayaNut','Opening Buy'); } else if(low.includes('about')){ document.getElementById('about').scrollIntoView({behavior:'smooth'}); say('MayaNut','Opening About'); } else { say('MayaNut','What else should we add?'); }}});
 
-input.addEventListener('keydown', e=>{
-  if(e.key==='Enter'){
-    const raw=input.value.trim(); if(!raw) return; say('You', raw); input.value='';
-    if (raw.startsWith('/')) { handleCommand(raw.slice(1)); return; }
-    const low=raw.toLowerCase();
-    if (low==='pause'){ setPaused(true); say('MayaNut','Paused. Type /resume or press Space.'); return; }
-    if (['resume','unpause','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
-    if (low.includes('buy')||low.includes('product')){ say('MayaNut','Head to the Buy section (placeholders for now).'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
-    if (low.includes('about')||low.includes('company')){ say('MayaNut','Scroll to About for more on MayaNut.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
-    say('MayaNut',"Tell me what you want and I'll point you in the right direction.");
-  }
-});
-
-document.addEventListener('keydown', (e)=>{
-  if(e.code==='Space'){
-    const ae=document.activeElement;
-    if (ae && (ae===input || ae.tagName==='INPUT' || ae.tagName==='TEXTAREA')) return;
-    e.preventDefault();
-    setPaused(!GAME_PAUSED);
-  }
-});
-
-function handleCommand(cmd){
-  const parts = cmd.trim().split(/\s+/);
-  const name = parts[0]?.toLowerCase();
-  if (name==='pause'){ setPaused(true); say('MayaNut','Paused.'); return; }
-  if (['resume','unpause','continue'].includes(name)){ setPaused(false); say('MayaNut','Resumed.'); return; }
-  if (name==='spawn'){
-    const n = parseIntStrict(parts[1], 1);
-    const t = (parts[2]||'small').toLowerCase();
-    const ok = window.GameSpawn(n, t);
-    say('MayaNut', ok ? `Spawned ${ok} ${t}.` : 'Nothing spawned (at cap).');
-    return;
-  }
-  if (name==='fill'){ const ok=window.GameFill(); say('MayaNut', `Filled with ${ok} small.`); return; }
-  if (name==='clear'){ const c=window.GameClear(); say('MayaNut', `Cleared ${c} balls.`); return; }
-  if (name==='red'){ const ok=window.GameSpawn(10,'red'); say('MayaNut', `Spawned ${ok} red.`); return; }
-  say('MayaNut', 'Commands: /spawn N [small|spawner|factory|triad|red], /fill, /clear, /pause, /resume');
-}
-
-/* ===== Game Engine (TRIADs form + TRIAD↔TRIAD bonding N/S) ===== */
+/* ===== Ambient dust → merge → raindrops → pooled water (clearer), with drop–drop merge, surface ripples, slow rise, and flow around boxes ===== */
 (function(){
-  const canvas=document.getElementById('ballLayer');
+  const canvas=document.getElementById('fxLayer');
   const ctx=canvas.getContext('2d');
-  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+
+  let W=innerWidth, H=innerHeight, DPR=Math.min(2, devicePixelRatio||1);
+  function resize(){
+    W=innerWidth; H=innerHeight; DPR=Math.min(2, devicePixelRatio||1);
+    canvas.style.width=W+'px'; canvas.style.height=H+'px';
+    canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
   resize(); addEventListener('resize', resize);
 
-  // Types
-  const SMALL='small', SPAWNER='spawner', FACTORY='factory', TRIAD='triad', RED='red';
+  // Particles
+  const DUST_MAX=300;
+  const DROP_MAX=120;
+  const dust=[], drops=[], ripples=[];
 
-  // Caps
-  const MAX_BALLS=500;
-  const RED_MAX=50;
+  // Water
+  let waterHeight = H*0.04;      // shallow start
+  const TIME_RISE = 0.0006;      // very slow ambient rise
+  const DROP_RISE = 0.18;        // rise per drop (tuned)
+  let t=0;
 
-  // Sizes
-  const R_SMALL=3;       // tiny white dot
-  const R_SPAWNER=16;    // medium w/ ring
-  const R_FACTORY=26;    // biggest solid
-  const R_TRIAD=28;      // triad main (slightly larger for visual)
-  const R_RED=8;
-
-  // Params
-  const FACTORY_INTERVAL=200;   // factory spawn rate (littles)
-  const TRIAD_INTERVAL=260;     // triad also drips littles, a bit slower
-  const ORBIT_RADIUS_PAD=18;
-  const ANGLE_TOL=0.38;         // ~22° gate for N/S bonds
-  const LINK_STIFF=0.10;        // spring stiffness for links
-  const LINK_DAMP=0.85;         // damping for linked nodes
-  const STRING_SPACING_F = R_FACTORY*2.05;
-  const STRING_SPACING_T = R_TRIAD*2.05;
-  const RING_CLOSE_DIST_F = R_FACTORY*1.8;
-  const RING_CLOSE_DIST_T = R_TRIAD*1.8;
-
-  // State
-  const balls=[];         // dynamic parts (including TRIAD as a single body)
-  const links=[];         // springs between FACTORY/ TRIAD nodes (N/S only)
-  const fChains=new Map(); // chainId -> array of nodes (FACTORY or TRIAD)
-  let nextChainId=1;
-
-  let score=0; const scoreEl=document.getElementById('score');
-  const countEl=document.getElementById('ballCount');
-  const aliveCount=()=>balls.filter(b=>!b._dead).length;
-  const redCount=()=>balls.reduce((n,b)=>n+(!b._dead && b.type===RED?1:0),0);
-  function updateCount(){ countEl.textContent=aliveCount(); }
-  function addScore(n){ score+=n; scoreEl.textContent=score; }
-
-  function makeBall(x,y,type=SMALL, vx=(Math.random()-.5)*2, vy=(Math.random()-.5)*2){
-    let r = R_SMALL;
-    if (type===SPAWNER) r=R_SPAWNER;
-    else if (type===FACTORY) r=R_FACTORY;
-    else if (type===TRIAD) r=R_TRIAD;
-    else if (type===RED) r=R_RED;
-
-    const base = {x,y,vx,vy,r,type,_dead:false,
-                  orbit:null, cooldown:0, squashT:0, squashAxis:'x'};
-    // Node-only metadata
-    if (type===FACTORY || type===TRIAD){
-      base.slots = {top:null,bottom:null};
-      base.chainId = null; base.isRing=false;
-      if (type===TRIAD){
-        // visual sub-parts offsets (relative)
-        base.middleOffset = {x: r*0.75, y: 0}; // where the "medium" sits on shell
-        base.innerDot = true;                  // draw little core dot
-      }
-    }
-    return base;
-  }
-  function addBall(b){
-    if (aliveCount()>=MAX_BALLS) return false;
-    if (b.type===RED && redCount()>=RED_MAX) return false;
-    balls.push(b); return true;
+  // Dust maker
+  function newDust(x,y,mass=1){
+    const r = 0.8 + Math.min(5, mass)*0.42;
+    const vy = - (0.28 + Math.random()*0.3) * (1/(1+mass*0.12));
+    const vx = (Math.random()*0.5-0.25);
+    return {type:'dust', x,y,vx,vy, mass, r};
   }
 
-  // Seed: a factory and some smalls to see fusion
-  addBall(makeBall(innerWidth*0.46, innerHeight*0.42, FACTORY, 0.8, 0.6));
-  for(let i=0;i<14;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
-
-  // UI rects to bounce off
-  function rects(){
-    const els=[document.getElementById('heroTitle'), document.getElementById('chatInput'),
-               document.getElementById('buy'), document.getElementById('about'), document.querySelector('.topbar')].filter(Boolean);
-    return els.map(el=>{ const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height}; });
-  }
-  function collideRect(b,R){
-    const nx=Math.max(R.x, Math.min(b.x, R.x+R.w));
-    const ny=Math.max(R.y, Math.min(b.y, R.y+R.h));
-    const dx=b.x-nx, dy=b.y-ny;
-    if(dx*dx+dy*dy > b.r*b.r) return;
-    const cx=R.x+R.w/2, cy=R.y+R.h/2;
-    const ox=(R.w/2+b.r)-Math.abs(b.x-cx);
-    const oy=(R.h/2+b.r)-Math.abs(b.y-cy);
-    if(ox<oy){ b.vx*=-1; b.x+=(b.vx>0?1:-1)*Math.max(1,ox*0.6); b.squashT=10; b.squashAxis='x'; }
-    else     { b.vy*=-1; b.y+=(b.vy>0?1:-1)*Math.max(1,oy*0.6); b.squashT=10; b.squashAxis='y'; }
+  // Drop maker
+  function newDrop(x,y,mass){
+    const r = Math.min(10, 2 + mass*0.6);
+    return {type:'drop', x,y, vx:(Math.random()*0.6-0.3), vy:0.35+Math.random()*0.45, r};
   }
 
-  function bounceWalls(b){
-    if(b.x-b.r<0){ b.x=b.r; b.vx=Math.abs(b.vx); b.squashT=10; b.squashAxis='x'; }
-    if(b.x+b.r>innerWidth){ b.x=innerWidth-b.r; b.vx=-Math.abs(b.vx); b.squashT=10; b.squashAxis='x'; }
-    if(b.y-b.r<0){ b.y=b.r; b.vy=Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
-    if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
-  }
-
-  // Helpers for node links
-  const nearAngle=(ang, target, tol=ANGLE_TOL)=>{
-    let d = Math.abs(((ang - target + Math.PI) % (2*Math.PI)) - Math.PI);
-    return d <= tol;
-  };
-  function anchor(node, slot){
-    if(slot==='top')    return {x:node.x, y:node.y - node.r};
-    if(slot==='bottom') return {x:node.x, y:node.y + node.r};
-    return {x:node.x,y:node.y};
-  }
-
-  function ensureChainFor(n){
-    if (n.chainId!=null) return n.chainId;
-    const id=nextChainId++; n.chainId=id; fChains.set(id,[n]); return id;
-  }
-  function mergeChains(idA, idB){
-    if (idA===idB) return idA;
-    const A=fChains.get(idA)||[], B=fChains.get(idB)||[];
-    const merged=[...A,...B]; const newId=nextChainId++;
-    for(const n of merged){ n.chainId=newId; }
-    fChains.delete(idA); fChains.delete(idB); fChains.set(newId, merged);
-    return newId;
-  }
-  function appendToChain(anchorN, newN, at='bottom'){
-    const id=ensureChainFor(anchorN);
-    const arr=fChains.get(id);
-    if (at==='bottom') arr.push(newN); else arr.unshift(newN);
-    newN.chainId=id;
-  }
-
-  function addLink(a,b,slotA,slotB,dist){
-    links.push({a,b,slotA,slotB,dist});
-    if (a.slots) a.slots[slotA]=b;
-    if (b.slots) b.slots[slotB]=a;
-  }
-  function snapLinks(){
-    for(const L of links){
-      const {a,b,slotA,slotB,dist}=L;
-      if(a._dead||b._dead) continue;
-      const A=anchor(a,slotA), B=anchor(b,slotB);
-      const dx=B.x-A.x, dy=B.y-A.y;
-      const d=Math.hypot(dx,dy)||0.0001, nx=dx/d, ny=dy/d;
-      const err=d - dist;
-      const push=err*LINK_STIFF;
-      a.x += nx*push; a.y += ny*push; a.vx *= LINK_DAMP; a.vy *= LINK_DAMP;
-      b.x -= nx*push; b.y -= ny*push; b.vx *= LINK_DAMP; b.vy *= LINK_DAMP;
+  // Seed dust
+  function seedDust(){
+    const start = Math.min(DUST_MAX, 240);
+    for(let i=0;i<start;i++){
+      const y = H - waterHeight - Math.random()*H*0.35;
+      const x = Math.random()*W;
+      dust.push(newDust(x,y,1));
     }
   }
+  seedDust();
 
-  function tryCloseRings(){
-    for (const [id, arr] of [...fChains]){
-      if (arr.length<4) continue;
-      const first=arr[0], last=arr[arr.length-1];
-      if (!first || !last || first._dead || last._dead) continue;
-      const dx=last.x-first.x, dy=last.y-first.y;
-      // choose ring threshold by node type
-      const thresh = (first.type===TRIAD || last.type===TRIAD) ? RING_CLOSE_DIST_T : RING_CLOSE_DIST_F;
-      if (Math.hypot(dx,dy) <= thresh){
-        const cx = arr.reduce((s,n)=>s+n.x,0)/arr.length;
-        const cy = arr.reduce((s,n)=>s+n.y,0)/arr.length;
-        const spacing = (arr.some(n=>n.type===TRIAD)?STRING_SPACING_T:STRING_SPACING_F);
-        const radius = Math.max(R_FACTORY*1.5, (arr.length*spacing)/(2*Math.PI));
-        for(let i=0;i<arr.length;i++){
-          const ang = (i/arr.length)*Math.PI*2;
-          const n = arr[i];
-          n.x = cx + Math.cos(ang)*radius;
-          n.y = cy + Math.sin(ang)*radius;
-          n.vx = n.vy = 0;
-          n.isRing = true;
-        }
+  // Merge dusty specks in top half
+  function tryMergeDust(a,b){
+    const dx=b.x-a.x, dy=b.y-a.y, R=(a.r+b.r)+6;
+    if (a.y<H*0.5 && b.y<H*0.5 && dx*dx+dy*dy<=R*R){
+      // absorb b into a
+      const total = a.mass + b.mass;
+      a.x = (a.x*a.mass + b.x*b.mass)/total;
+      a.y = (a.y*a.mass + b.y*b.mass)/total;
+      a.mass = total;
+      a.r = 0.8 + Math.min(5, a.mass)*0.42;
+      a.vy -= 0.02;
+      b._dead=true;
+      if (a.mass>=5){
+        drops.push(newDrop(a.x,a.y,a.mass));
+        a._dead=true;
       }
     }
   }
 
-  // TRIAD formation: Factory + Spawner overlapping, with a Small inside Factory
-  function maybeFormTriad(a,b){
-    let F=null, M=null; // F=Factory, M=Spawner
-    if (a.type===FACTORY && b.type===SPAWNER) { F=a; M=b; }
-    else if (b.type===FACTORY && a.type===SPAWNER) { F=b; M=a; }
-    else return false;
-
-    // look for a little that is inside the Factory's disk
-    let innerIndex=-1;
-    for(let i=0;i<balls.length;i++){
-      const s=balls[i]; if(s._dead || s.type!==SMALL) continue;
-      if (Math.hypot(s.x-F.x, s.y-F.y) <= F.r - R_SMALL*0.5){ innerIndex=i; break; }
+  // Simple spatial grid for drop–drop merging
+  function buildGrid(items, cell=28){
+    const g=new Map();
+    for(let i=0;i<items.length;i++){
+      const p=items[i]; if(!p || p._dead) continue;
+      const gx=Math.floor(p.x/cell), gy=Math.floor(p.y/cell);
+      const key=gx+','+gy; if(!g.has(key)) g.set(key,[]);
+      g.get(key).push(i);
     }
-    if (innerIndex<0) return false;
-
-    // Replace Factory+Spawner+Small with one TRIAD at Factory position
-    const S=balls[innerIndex];
-    F._dead=true; M._dead=true; S._dead=true;
-
-    const T=makeBall(F.x, F.y, TRIAD, (F.vx+M.vx)/2, (F.vy+M.vy)/2);
-    // inherit modest momentum, keep slots free for N/S bonds
-    addBall(T);
-    return true;
+    return {g,cell};
   }
-
-  // Collisions & behaviors
-  function handlePair(a,b){
-    if(a._dead||b._dead) return;
-    const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy);
-    if(d>a.r+b.r) return;
-
-    // Small + Small -> Spawner
-    if(a.type===SMALL && b.type===SMALL){
-      if(aliveCount()>=MAX_BALLS) return;
-      a._dead=b._dead=true;
-      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
-      return;
-    }
-
-    // Spawner + Spawner -> Factory
-    if(a.type===SPAWNER && b.type===SPAWNER){
-      if(aliveCount()>=MAX_BALLS) return;
-      a._dead=b._dead=true;
-      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
-      return;
-    }
-
-    // Try to form a TRIAD first (Factory+Spawner with Small inside)
-    if (maybeFormTriad(a,b)) return;
-
-    // Orbit capture: smalls near factory/spawner/triad
-    if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY||b.type===TRIAD)) a.orbit=b;
-    if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY||a.type===TRIAD)) b.orbit=a;
-
-    // Node–Node bonds (FACTORY or TRIAD) — only N/S linking to avoid clumps
-    const AisNode = (a.type===FACTORY||a.type===TRIAD);
-    const BisNode = (b.type===FACTORY||b.type===TRIAD);
-    if (AisNode && BisNode){
-      const ang = Math.atan2(dy,dx);
-      const spacing = (a.type===TRIAD||b.type===TRIAD) ? STRING_SPACING_T : STRING_SPACING_F;
-
-      // b below a => a.bottom ↔ b.top
-      if (nearAngle(ang, Math.PI/2) && !a.slots.bottom && !b.slots.top){
-        addLink(a,b,'bottom','top',spacing);
-        const idA=ensureChainFor(a), idB=ensureChainFor(b);
-        const id=(idA===idB)?idA:mergeChains(idA,idB);
-        const arr=fChains.get(id);
-        if (arr.indexOf(a)>-1 && arr.indexOf(b)===-1){ arr.splice(arr.indexOf(a)+1,0,b); b.chainId=id; }
-        return;
-      }
-      // b above a => a.top ↔ b.bottom
-      if (nearAngle(ang, -Math.PI/2) && !a.slots.top && !b.slots.bottom){
-        addLink(a,b,'top','bottom',spacing);
-        const idA=ensureChainFor(a), idB=ensureChainFor(b);
-        const id=(idA===idB)?idA:mergeChains(idA,idB);
-        const arr=fChains.get(id);
-        if (arr.indexOf(a)>-1 && arr.indexOf(b)===-1){ arr.splice(Math.max(0,arr.indexOf(a)),0,b); b.chainId=id; }
-        return;
+  function forNeighbors(grid, i, cb){
+    const {g,cell}=grid; const p=drops[i]; if(!p) return;
+    const gx=Math.floor(p.x/cell), gy=Math.floor(p.y/cell);
+    for(let xx=gx-1; xx<=gx+1; xx++){
+      for(let yy=gy-1; yy<=gy+1; yy++){
+        const key=xx+','+yy; const arr=g.get(key); if(!arr) continue;
+        for(const j of arr){ if(j!==i) cb(j); }
       }
     }
-
-    // Reds (simple)
-    if(a.type===RED || b.type===RED){
-      const r = a.type===RED?a:b, o = a.type===RED?b:a;
-      if(o.type===SMALL){ o._dead=true; } else { r.vx*=-0.9; r.vy*=-0.9; }
-      r.squashT=10; r.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
-      return;
-    }
-
-    // Default elastic-ish bounce + squash
-    const nx=dx/(d||1), ny=dy/(d||1);
-    const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
-    a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
-    a.squashT=b.squashT=10; a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
   }
 
-  // Clicks: launch the ball you hit
-  document.addEventListener('click', e=>{
-    if (e.target.closest('a,button,input,textarea,[contenteditable]')) return;
+  // Obstacles = only content boxes; NOT the hero logo (so water can flood between its letters visually)
+  function obstacles(){
+    const rects=[];
+    const ids=['home','buy','about'];
+    const topbar=document.querySelector('.topbar'); if(topbar){ const r=topbar.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:10}); }
+    const chat=document.getElementById('chatInput'); if(chat){ const r=chat.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:12}); }
+    const log=document.getElementById('chatLog'); if(log){ const r=log.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:12}); }
+    ids.forEach(id=>{ const el=document.getElementById(id); if(!el) return; const r=el.getBoundingClientRect(); rects.push({x:r.left,y:r.top,w:r.width,h:r.height,rad:16}); });
+    return rects;
+  }
+  function roundRectPath(ctx,r){
+    const rr = Math.min(r.rad, Math.min(r.w,r.h)/2);
+    ctx.beginPath();
+    ctx.moveTo(r.x+rr, r.y);
+    ctx.lineTo(r.x+r.w-rr, r.y);
+    ctx.quadraticCurveTo(r.x+r.w, r.y, r.x+r.w, r.y+rr);
+    ctx.lineTo(r.x+r.w, r.y+r.h-rr);
+    ctx.quadraticCurveTo(r.x+r.w, r.y+r.h, r.x+r.w-rr, r.y+r.h);
+    ctx.lineTo(r.x+rr, r.y+r.h);
+    ctx.quadraticCurveTo(r.x, r.y+r.h, r.x, r.y+r.h-rr);
+    ctx.lineTo(r.x, r.y+rr);
+    ctx.quadraticCurveTo(r.x, r.y, r.x+rr, r.y);
+    ctx.closePath();
+  }
+
+  // Click ripples on surface
+  document.addEventListener('click', (e)=>{
     const x=e.clientX, y=e.clientY;
-    let hit=false;
-    for(const b of balls){
-      if(Math.hypot(b.x-x,b.y-y) < b.r+6){
-        hit=true; const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
-        const kick=5.2; b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
-        b.squashT=10; b.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
-        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; }
-      }
-    }
-    addScore(hit?1:-1);
+    const surfaceY = H - waterHeight;
+    if (y >= surfaceY-8){ ripples.push({x, r:6, a:1}); }
   });
 
-  // Public spawners for chat
-  window.GameSpawn = function(n=1, type='small'){
-    const t = type==='factory'?FACTORY : type==='spawner'?SPAWNER : type==='triad'?TRIAD : type==='red'?RED : SMALL;
-    let added=0;
-    for(let i=0;i<n;i++){
-      const atCap = aliveCount()>=MAX_BALLS || (t===RED && redCount()>=RED_MAX);
-      if(atCap) break;
-      const x=innerWidth*0.5 + (Math.random()*120-60);
-      const y=innerHeight*0.45 + (Math.random()*120-60);
-      if(addBall(makeBall(x,y,t))) added++;
-    }
-    updateCount();
-    return added;
-  };
-  window.GameFill = function(){
-    let added=0;
-    while(aliveCount()<MAX_BALLS){
-      if(!addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL))) break;
-      added++;
-    }
-    updateCount(); return added;
-  };
-  window.GameClear = function(){
-    const c=aliveCount(); balls.length=0; links.length=0; fChains.clear(); updateCount(); return c;
-  };
+  function step(){
+    t += 0.016;
 
-  function update(){
-    if (GAME_PAUSED) return;
-    const rs = rects();
+    // ambient slow rise
+    waterHeight += TIME_RISE * H; // scale by H so it’s consistent
+    if (waterHeight > H*0.96) waterHeight = H*0.96; // leave a sliver
 
-    for(const b of balls){
-      if(b._dead) continue;
+    const surfaceY = H - waterHeight;
 
-      // orbiting motion for captured smalls — clamp to shell to avoid getting “inside”
-      if(b.type===SMALL && b.orbit){
-        const c=b.orbit;
-        let ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;
-        const desired = c.r + ORBIT_RADIUS_PAD;
-        b.x=c.x+Math.cos(ang)*desired;
-        b.y=c.y+Math.sin(ang)*desired;
-        b.vx*=0.92; b.vy*=0.92;
-      }else{
-        b.x+=b.vx; b.y+=b.vy;
+    // update dust
+    for (let i=dust.length-1;i>=0;i--){
+      const p=dust[i];
+      if (p._dead){ dust.splice(i,1); continue; }
+      p.x += p.vx + Math.sin((p.y+t)*0.02)*0.02;
+      p.y += p.vy;
+      if (p.x<-16) p.x=W+16; else if (p.x>W+16) p.x=-16;
+      if (p.y < -24){
+        // recycle from near the bottom (above current water)
+        p.x = Math.random()*W;
+        p.y = surfaceY + Math.random()*H*0.35;
+        p.mass=1; p.r=1.2; p.vy=-(0.28+Math.random()*0.3);
       }
+    }
 
-      bounceWalls(b);
-      for(const R of rs) collideRect(b,R);
+    // dust merge (sampled checks)
+    for (let i=0;i<dust.length;i+=3){
+      const a=dust[i]; if(!a || a._dead) continue;
+      for (let j=i+1;j<Math.min(i+7, dust.length);j++){
+        const b=dust[j]; if (!b || b._dead) continue;
+        tryMergeDust(a,b);
+      }
+    }
+    // remove dead dust
+    for (let i=dust.length-1;i>=0;i--) if (dust[i]._dead) dust.splice(i,1);
 
-      // spawning
-      if(b.type===FACTORY){
-        b.cooldown++;
-        if(b.cooldown>FACTORY_INTERVAL && aliveCount()<MAX_BALLS){
-          b.cooldown=0;
-          addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
+    // drops motion
+    for (const d of drops){
+      d.vy += 0.016; // gravity
+      d.x += d.vx;
+      d.y += d.vy;
+    }
+
+    // drop–drop merging via grid
+    const grid = buildGrid(drops, 28);
+    for (let i=0;i<drops.length;i++){
+      const a=drops[i]; if(!a || a._dead) continue;
+      forNeighbors(grid, i, (j)=>{
+        const b=drops[j]; if(!b || b._dead) return;
+        const dx=b.x-a.x, dy=b.y-a.y, R=a.r+b.r;
+        if (dx*dx+dy*dy <= R*R){
+          // merge b into a; conserve "area"
+          const areaA=Math.PI*a.r*a.r, areaB=Math.PI*b.r*b.r;
+          const area=areaA+areaB;
+          a.x = (a.x*areaA + b.x*areaB)/area;
+          a.y = (a.y*areaA + b.y*areaB)/area;
+          a.vx = (a.vx*areaA + b.vx*areaB)/area;
+          a.vy = (a.vy*areaA + b.vy*areaB)/area;
+          a.r = Math.sqrt(area/Math.PI);
+          b._dead=true;
         }
-      }
-      if(b.type===TRIAD){
-        b.cooldown++;
-        if(b.cooldown>TRIAD_INTERVAL && aliveCount()<MAX_BALLS){
-          b.cooldown=0;
-          addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
-        }
-      }
+      });
+    }
+    for (let i=drops.length-1;i>=0;i--) if (drops[i]._dead) drops.splice(i,1);
 
-      if (b.squashT>0) b.squashT--;
+    // surface collide + splash
+    for (let i=drops.length-1;i>=0;i--){
+      const d=drops[i];
+      const surface = surfaceY + Math.sin((d.x*0.01 + t*1.5))*2 + Math.sin((d.x*0.035)+t*0.9)*1.0;
+      if (d.y + d.r >= surface){
+        ripples.push({x:d.x, r:6, a:1});
+        waterHeight = Math.min(H*0.96, waterHeight + DROP_RISE);
+        drops.splice(i,1);
+      } else if (d.x<-24 || d.x>W+24){ drops.splice(i,1); }
     }
 
-    // collisions
-    for(let i=0;i<balls.length;i++){
-      for(let j=i+1;j<balls.length;j++){
-        handlePair(balls[i], balls[j]);
-      }
+    // spawn dust if below target
+    if (dust.length < DUST_MAX){
+      const y = surfaceY + Math.random()*H*0.35;
+      dust.push(newDust(Math.random()*W, y, 1));
     }
 
-    // keep node strings tidy and try forming rings
-    snapLinks();
-    tryCloseRings();
+    // ripple evolution
+    for (let i=ripples.length-1;i>=0;i--){
+      ripples[i].r += 2.2;
+      ripples[i].a -= 0.02;
+      if (ripples[i].a<=0) ripples.splice(i,1);
+    }
 
-    // cleanup
-    for(let i=balls.length-1;i>=0;i--) if(balls[i]._dead) balls.splice(i,1);
-
-    updateCount();
+    // limit drops
+    if (drops.length > DROP_MAX) drops.splice(0, drops.length - DROP_MAX);
   }
 
   function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0,0,W,H);
 
-    // Draw node links first
-    ctx.strokeStyle='rgba(255,255,255,0.55)'; ctx.lineWidth=2;
-    for(const L of links){
-      const {a,b,slotA,slotB}=L;
-      if(a._dead||b._dead) continue;
-      const A=anchor(a,slotA), B=anchor(b,slotB);
-      ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
+    const surfaceY = H - waterHeight;
+
+    // dust (denser near bottom)
+    for (const p of dust){
+      const fade = Math.max(0, Math.min(1, (p.y - (surfaceY-160)) / 240));
+      const alpha = 0.28 + (1-fade)*0.35;
+      ctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(3)})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
     }
 
-    // Balls with squash/stretch + TRIAD internals
-    for(const b of balls){
-      let sx=1, sy=1;
-      if (b.squashT>0){
-        const t=b.squashT/10, amt=0.35*Math.sin(t*Math.PI);
-        if(b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
-      }
-      ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
-
-      if(b.type===SMALL){
-        ctx.fillStyle='#ffffff';
-        ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
-
-      } else if(b.type===SPAWNER){
-        ctx.fillStyle='#ffffff';
-        ctx.beginPath(); ctx.arc(0,0,R_SPAWNER-2,0,Math.PI*2); ctx.fill();
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,255,255,0.9)';
-        ctx.beginPath(); ctx.arc(0,0,R_SPAWNER,0,Math.PI*2); ctx.stroke();
-
-      } else if(b.type===FACTORY){
-        ctx.fillStyle='rgba(255,255,255,0.95)';
-        ctx.beginPath(); ctx.arc(0,0,R_FACTORY,0,Math.PI*2); ctx.fill();
-        // show available N/S “ports”
-        ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
-        if(!b.slots.top){    ctx.beginPath(); ctx.moveTo(0,-R_FACTORY); ctx.lineTo(0,-R_FACTORY-6); ctx.stroke(); }
-        if(!b.slots.bottom){ ctx.beginPath(); ctx.moveTo(0,R_FACTORY);  ctx.lineTo(0,R_FACTORY+6); ctx.stroke(); }
-
-      } else if(b.type===TRIAD){
-        // big body
-        ctx.fillStyle='rgba(255,255,255,0.95)';
-        ctx.beginPath(); ctx.arc(0,0,R_TRIAD,0,Math.PI*2); ctx.fill();
-        // medium “ring” sitting to the side
-        const off=b.middleOffset;
-        ctx.fillStyle='#ffffff';
-        ctx.beginPath(); ctx.arc(off.x,off.y,R_SPAWNER-3,0,Math.PI*2); ctx.fill();
-        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,255,255,0.9)';
-        ctx.beginPath(); ctx.arc(off.x,off.y,R_SPAWNER-1,0,Math.PI*2); ctx.stroke();
-        // inner small core
-        if (b.innerDot){
-          ctx.fillStyle='#ffffff';
-          ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
-        }
-        // N/S port hints
-        ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
-        if(!b.slots.top){    ctx.beginPath(); ctx.moveTo(0,-R_TRIAD); ctx.lineTo(0,-R_TRIAD-6); ctx.stroke(); }
-        if(!b.slots.bottom){ ctx.beginPath(); ctx.moveTo(0,R_TRIAD);  ctx.lineTo(0,R_TRIAD+6); ctx.stroke(); }
-
-      } else if(b.type===RED){
-        ctx.fillStyle='#ff4d4d';
-        ctx.beginPath(); ctx.arc(0,0,R_RED,0,Math.PI*2); ctx.fill();
-      }
-
-      ctx.restore();
+    // drops (light cyan)
+    for (const d of drops){
+      const grad = ctx.createRadialGradient(d.x, d.y-d.r*0.5, d.r*0.25, d.x, d.y, d.r*1.1);
+      grad.addColorStop(0, 'rgba(210,245,255,0.95)');
+      grad.addColorStop(1, 'rgba(150,215,255,0.70)');
+      ctx.fillStyle=grad;
+      ctx.beginPath(); ctx.ellipse(d.x, d.y, d.r, d.r*1.12, 0, 0, Math.PI*2); ctx.fill();
+      // tiny highlight
+      ctx.fillStyle='rgba(255,255,255,0.45)';
+      ctx.beginPath(); ctx.arc(d.x-d.r*0.35, d.y-d.r*0.55, Math.max(0.8, d.r*0.25), 0, Math.PI*2); ctx.fill();
     }
+
+    // pooled clear water
+    // fill
+    const g = ctx.createLinearGradient(0, surfaceY, 0, H);
+    g.addColorStop(0.00, 'var(--waterC1)');
+    g.addColorStop(0.60, 'var(--waterC2)');
+    g.addColorStop(1.00, 'var(--waterC3)');
+    ctx.fillStyle=g;
+    ctx.fillRect(0, surfaceY, W, H-surfaceY);
+
+    // wave line across
+    ctx.beginPath();
+    for (let x=0;x<=W;x+=5){
+      const y = surfaceY + Math.sin((x*0.01) + t*1.5)*2 + Math.sin((x*0.035)+t*0.9)*1.0;
+      if (x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle='rgba(255,255,255,0.42)';
+    ctx.lineWidth=1.4;
+    ctx.stroke();
+
+    // ripple rings on surface
+    for (const r of ripples){
+      const y = surfaceY + Math.sin((r.x*0.01) + t*1.5)*2 + Math.sin((r.x*0.035)+t*0.9)*1.0;
+      ctx.strokeStyle = `rgba(255,255,255,${(0.5*r.a).toFixed(3)})`;
+      ctx.lineWidth=1;
+      ctx.beginPath(); ctx.ellipse(r.x, y, r.r, r.r*0.55, 0, 0, Math.PI*2); ctx.stroke();
+    }
+
+    // carve content boxes out of the water so it flows around them
+    ctx.globalCompositeOperation='destination-out';
+    const obs = obstacles();
+    for (const r of obs){ roundRectPath(ctx, r); ctx.fillStyle='rgba(0,0,0,1)'; ctx.fill(); }
+    ctx.globalCompositeOperation='source-over';
   }
 
-  function loop(){ update(); draw(); requestAnimationFrame(loop); }
+  function loop(){ step(); draw(); requestAnimationFrame(loop); }
   loop();
 })();
 </script>
