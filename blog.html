@@ -3,1271 +3,596 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The MayaNut Company – Blog</title>
-
-<!-- Christmas font -->
-<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
-
-<!-- Base + headline fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
-<link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
-
-<meta name="theme-color" content="#003cc7" />
-
-<meta name="description" content="The MayaNut Company Blog – stories and updates about maya nut (Brosimum alicastrum), our plantation in South Florida, and the future of maya nut beverages and products." />
-
+<title>MayaNut</title>
 <style>
-:root{
-  --bg:#003cc7;
-  --bg-grad:
-    radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    #003cc7;
-
-  --bar:#003cc7;
-  --bar-h:72px;
-  --logo-offset:12px;
-}
-
-/* Slightly taller bar on very small screens */
-@media (max-width: 600px){
   :root{
-    --bar-h:82px;
+    --ink:#eaf2ff; --ink-dim:#c6d0ea;
+    --panel:rgba(12,16,34,.50); --line:rgba(255,255,255,.12);
+    --accent:#8fdcff; --accent2:#c79bff;
+    --inputBG:rgba(255,255,255,.08); --inputLine:rgba(255,255,255,.22);
   }
-}
-
-*,
-*::before,
-*::after{
-  box-sizing:border-box;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-  scroll-behavior:smooth;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color:#fff;
-}
-
-body{
-  background:var(--bg-grad);
-  background-attachment:fixed;
-}
-
-/* TOP BAR */
-.topbar{
-  position:fixed;
-  top:0; left:0; right:0;
-  background:var(--bar);
-  color:#fff;
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  grid-template-areas:"menu title lang";
-  align-items:center;
-  column-gap:6px;
-  padding:8px 10px;
-  min-height:var(--bar-h);
-  z-index:1000;
-  border-bottom:1px solid rgba(255,255,255,0.25);
-  padding-top:calc(8px + env(safe-area-inset-top, 0px));
-}
-
-/* Hamburger */
-.menu-toggle{
-  grid-area:menu;
-  width:32px;
-  height:26px;
-  border:none;
-  background:transparent;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  padding:0;
-  cursor:pointer;
-  justify-self:start;
-  margin-left:8px;
-  z-index:1100;
-}
-.menu-toggle span{
-  display:block;
-  height:3px;
-  border-radius:999px;
-  background:#ffffff;
-  transition:transform 0.2s ease, opacity 0.2s ease;
-}
-.menu-toggle.open span:nth-child(1){
-  transform:translateY(11px) rotate(45deg);
-}
-.menu-toggle.open span:nth-child(2){
-  opacity:0;
-}
-.menu-toggle.open span:nth-child(3){
-  transform:translateY(-11px) rotate(-45deg);
-}
-
-/* Title */
-.topbar-title{
-  grid-area:title;
-  font-family:"Mountains of Christmas", cursive;
-  font-size:18px;
-  text-align:center;
-  animation:merrygiggle 6s ease-in-out infinite;
-  max-width:100%;
-  justify-self:center;
-  padding:0 6px;
-}
-
-/* Language selector */
-.topbar-lang{
-  grid-area:lang;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:3px;
-  justify-self:end;
-  font-size:12px;
-}
-.topbar-lang-label{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-.topbar-lang-label-emoji{
-  font-size:20px;
-  line-height:1;
-}
-.topbar-lang-label-text{
-  font-size:13px;
-}
-.topbar-lang select{
-  font-size:12px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.7);
-  background:rgba(10,86,194,0.9);
-  color:#fff;
-  padding:3px 8px;
-  outline:none;
-}
-.topbar-lang select option{
-  color:#000;
-}
-
-/* Narrow screens */
-@media (max-width: 420px){
-  .topbar-lang-label-text{
-    display:none;
-  }
-  .topbar-lang select{
-    font-size:11px;
-    padding:2px 6px;
-  }
-}
-
-@media (max-width: 600px){
-  .topbar{
-    grid-template-columns:auto 1fr auto;
-    grid-template-rows:auto auto;
-    grid-template-areas:
-      "menu .   lang"
-      "title title title";
-    align-items:center;
-    padding-left:10px;
+  html,body{height:100%}
+  body{
+    margin:0;color:var(--ink);
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    display:flex;flex-direction:column;min-height:100%;
+    background:
+      radial-gradient(1000px 600px at 15% -10%, rgba(115,94,225,.35), transparent 60%),
+      radial-gradient(1100px 700px at 85% 0%, rgba(168,78,255,.28), transparent 65%),
+      radial-gradient(900px 500px at 50% 120%, rgba(34,124,255,.22), transparent 60%),
+      linear-gradient(180deg, #081229 0%, #101a46 40%, #182263 100%);
+    overflow-x:hidden;
   }
 
-  .topbar-title{
-    font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 12px;
-    text-align:center;
-  }
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+  .brand{font-weight:800;color:#fff;display:flex;align-items:center;gap:6px;user-select:none}
+  .brand small{font-size:11px;opacity:.95;vertical-align:top}
+  .brandInfo{position:absolute; top:42px; left:14px; font-size:12px; color:#dfe7ff; opacity:.9}
+  .nav{display:flex;gap:18px;align-items:center}
+  .nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px}
+  .nav a:hover{border:1px solid var(--line);background:rgba(255,255,255,.06)}
 
-  .menu-toggle{
-    margin-left:0;
-  }
-}
+  .score{position:fixed; top:58px; right:12px; z-index:31; background:rgba(8,12,30,.7);
+    border:1px solid var(--line); border-radius:12px; padding:6px 10px; font-size:13px;}
 
-/* Logo */
-.topbar-logo-link{
-  position:fixed;
-  left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset));
-  z-index:900;
-}
-.topbar-logo{
-  width:100px;
-  height:100px;
-  display:block;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-}
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;padding-top:88px;padding-bottom:80px}
+  .panel{width:min(900px,92vw);text-align:center}
+  .title{font-weight:900;font-size:clamp(44px,6vw,68px);line-height:1.05;color:#fff;margin:6px 0 14px}
+  .title .glow{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .chatbar{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 auto;width:min(760px,92vw)}
+  .chatbar input{flex:1;height:42px;padding:10px 12px;font-size:15px;color:#e9eeff;background:var(--inputBG);border:1px solid var(--inputLine);border-radius:12px;outline:none}
+  .log{width:min(760px,92vw);margin:12px auto 0;background:rgba(8,12,30,.6);border:1px solid var(--line);border-radius:14px;padding:12px;max-height:42vh;overflow:auto}
+  .msg{text-align:left;margin:6px 0;color:#eaf2ff}
+  .msg strong{color:#cfe1ff}
 
-/* Wiggle */
-@keyframes merrygiggle{
-  0%   { transform:translateX(0); }
-  25%  { transform:translateX(4px); }
-  50%  { transform:translateX(0); }
-  75%  { transform:translateX(-4px); }
-  100% { transform:translateX(0); }
-}
+  .section{width:min(980px,94vw);margin:24px auto 0;background:rgba(8,12,30,.55);border:1px solid var(--line);border-radius:16px;padding:18px}
+  .section h3{margin:0 0 8px;color:#fff}
+  .section p{margin:8px 0 0;color:#cfe9ff}
 
-/* NAV OVERLAY */
-.nav-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1400;
-}
-.nav-backdrop.open{
-  display:flex;
-}
-.nav-modal{
-  max-width:420px;
-  width:min(90vw, 420px);
-  border-radius:18px;
-  padding:22px 24px 24px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.55);
-  color:#ffffff;
-  text-align:left;
-  font-size:15px;
-  line-height:1.7;
-  background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
-    #003cc7;
-  position:relative;
-}
-.nav-modal-title{
-  margin:0 0 10px;
-  font-weight:700;
-  font-size:18px;
-  text-decoration:underline;
-}
-.nav-modal-links{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:8px;
-}
-.nav-modal-links a{
-  color:#ffffff;
-  text-decoration:none;
-  font-weight:600;
-  font-size:15px;
-  padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,0.25);
-}
-.nav-modal-links a:last-child{
-  border-bottom:none;
-}
-.nav-modal-links a:hover{
-  text-decoration:underline;
-}
-.nav-close{
-  position:absolute;
-  top:10px;
-  right:12px;
-  border:none;
-  background:transparent;
-  color:#ffffff;
-  font-size:20px;
-  line-height:1;
-  cursor:pointer;
-}
+  footer{width:100%;color:#c9d3ef;border-top:1px solid var(--line);background:rgba(10,14,34,.55);text-align:center;font-size:13px;padding:12px 8px}
 
-/* HERO section similar to main page */
-.hero{
-  position:relative;
-  min-height:100vh;
-  padding-top:calc(var(--bar-h) + 150px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  background:var(--bg-grad);
-}
-.hero-inner{
-  width:100%;
-  max-width:1100px;
-  padding:0 16px 80px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:40px;
-  position:relative;
-  z-index:1;
-}
-.hero-right{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:40px;
-  width:100%;
-}
-.hero-headline{
-  flex:1;
-  max-width:520px;
-  margin-left:8px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:64px;
-  line-height:1.05;
-  font-weight:400;
-  color:#ffffff;
-  -webkit-text-stroke:3px #0057c8;
-  text-stroke:3px #0057c8;
-  text-shadow:
-    0 3px 0 #0057c8,
-    0 6px 12px rgba(0,0,0,0.4);
-}
-.hero-headline span{
-  display:block;
-}
-.hero-headline .headline-tag{
-  font-size:26px;
-  text-decoration:underline;
-  text-decoration-color:#003cc7;
-  text-underline-offset:4px;
-}
-.hero-subcopy{
-  margin-top:14px;
-  font-size:15px;
-  max-width:420px;
-  color:#e2ecff;
-}
-.hero-image-wrap{
-  flex:0 0 auto;
-  margin-left:auto;
-}
-.hero-image-link{
-  display:inline-block;
-}
-.hero-glass{
-  width:420px;
-  max-width:80vw;
-  display:block;
-  cursor:pointer;
-  transition:transform 0.22s ease, box-shadow 0.22s ease;
-}
-.hero-image-link:hover .hero-glass{
-  transform:scale(1.08);
-  box-shadow:0 0 40px rgba(255,255,255,0.95);
-}
-
-/* Snow canvas */
-canvas#snow{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  display:block;
-  pointer-events:none;
-  z-index:0;
-}
-
-/* Transition strips */
-.transition-strip{
-  background:linear-gradient(
-    90deg,
-    #7bc4ff 0%,
-    #0e4fb8 24%,
-    #aa00fe 50%,
-    #0e4fb8 76%,
-    #7bc4ff 100%
-  );
-  color:#f5fbff;
-  text-align:center;
-  padding:14px 16px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  letter-spacing:0.06em;
-  font-size:15px;
-  position:relative;
-  z-index:1;
-  text-shadow:0 1px 2px rgba(0,0,0,0.45);
-  border-top:1px solid rgba(255,255,255,0.4);
-  border-bottom:1px solid rgba(0,0,0,0.45);
-  box-shadow:0 3px 8px rgba(0,0,0,0.45);
-}
-
-/* Sections */
-.section{
-  padding:70px 16px 80px;
-  position:relative;
-  z-index:1;
-  overflow:hidden;
-}
-.section-inner{
-  max-width:1100px;
-  margin:0 auto;
-}
-
-/* About the blog */
-.section--about{
-  background:var(--bg-grad);
-}
-.about-text-card{
-  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #e3d8ff 100%);
-  border-radius:18px;
-  padding:22px 22px 24px;
-  box-shadow:0 3px 14px rgba(0,0,0,0.25);
-  color:#30346a;
-  font-size:15px;
-  line-height:1.8;
-}
-.section-title{
-  margin:0 0 14px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:26px;
-  color:#ffffff;
-  text-shadow:0 3px 10px rgba(0,0,0,0.45);
-}
-
-/* Featured post */
-.section--featured{
-  background:var(--bg-grad);
-}
-.featured-card{
-  display:grid;
-  grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-  gap:22px;
-  background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #ded2ff 100%);
-  border-radius:18px;
-  padding:20px 22px 22px;
-  box-shadow:0 3px 14px rgba(0,0,0,0.25);
-  color:#2f3665;
-}
-.featured-tag{
-  display:inline-block;
-  padding:2px 8px;
-  border-radius:999px;
-  background:#003cc7;
-  color:#ffffff;
-  font-size:11px;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  margin-bottom:6px;
-}
-.featured-title{
-  margin:0 0 8px;
-  font-size:20px;
-  font-weight:700;
-}
-.featured-meta{
-  margin:0 0 10px;
-  font-size:12px;
-  color:#5b6492;
-}
-.featured-body p{
-  margin:0 0 10px;
-  font-size:14px;
-  line-height:1.8;
-}
-.featured-side{
-  font-size:13px;
-  color:#4a5285;
-  line-height:1.7;
-}
-
-/* Post grid */
-.section--posts{
-  background:var(--bg-grad);
-}
-.post-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
-}
-.post-card{
-  background:linear-gradient(135deg, #f5ecff 0%, #ffffff 45%, #e7dcff 100%);
-  border-radius:18px;
-  padding:14px 15px 18px;
-  box-shadow:0 3px 12px rgba(0,0,0,0.22);
-  color:#303567;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.post-tag{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:0.08em;
-  color:#5b6492;
-}
-.post-title{
-  margin:0;
-  font-size:15px;
-  font-weight:700;
-}
-.post-meta{
-  font-size:11px;
-  color:#6c7292;
-}
-.post-excerpt{
-  font-size:13px;
-  line-height:1.65;
-}
-
-/* Bottom logo section */
-.section--bottom-logo{
-  background:var(--bg-grad);
-  text-align:center;
-}
-.section--bottom-logo img{
-  width:200px;
-  height:auto;
-  filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
-  cursor:pointer;
-}
-
-/* FOOTER */
-footer{
-  background:var(--bg-grad);
-  color:#d5e3ff;
-  padding:18px 16px 28px;
-  font-size:13px;
-}
-.footer-inner{
-  max-width:1100px;
-  margin:0 auto;
-}
-.footer-line{
-  border:none;
-  border-top:1px solid rgba(255,255,255,0.25);
-  margin:0 0 10px;
-}
-.footer-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  flex-wrap:wrap;
-}
-.footer-links{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-}
-.footer-links a{
-  color:#d5e3ff;
-  text-decoration:none;
-  border-bottom:1px dashed rgba(213,227,255,0.6);
-  cursor:pointer;
-}
-.footer-instagram a{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:32px;
-  height:32px;
-  border-radius:9px;
-  border:2px solid #ffffff;
-  position:relative;
-  text-decoration:none;
-}
-.footer-instagram span{
-  display:none;
-}
-.footer-instagram a::before{
-  content:"";
-  position:absolute;
-  width:16px;
-  height:16px;
-  border:2px solid #ffffff;
-  border-radius:4px;
-  top:7px;
-  left:6px;
-}
-.footer-instagram a::after{
-  content:"";
-  position:absolute;
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:#ffffff;
-  top:3px;
-  right:3px;
-}
-.footer-copy{
-  font-size:12px;
-  margin-top:6px;
-}
-
-/* Modal (Privacy / DNS) */
-.modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:2000;
-}
-.modal{
-  background:#ffffff;
-  color:#123055;
-  max-width:420px;
-  width:90%;
-  border-radius:14px;
-  padding:18px 18px 16px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.35);
-  font-size:14px;
-}
-.modal h3{
-  margin:0 0 8px;
-  font-size:16px;
-}
-.modal p{
-  margin:0 0 6px;
-  line-height:1.6;
-}
-.modal-close{
-  margin-top:10px;
-  display:inline-flex;
-  padding:4px 10px;
-  border-radius:999px;
-  border:none;
-  background:#003cc7;
-  color:#fff;
-  font-size:13px;
-  cursor:pointer;
-}
-
-/* Logo tooltip */
-.logo-tooltip{
-  position:fixed;
-  padding:6px 10px;
-  border-radius:999px;
-  background:#ffffff;
-  color:#123055;
-  font-size:12px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.35);
-  z-index:3000;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 0.15s ease;
-}
-
-/* Responsive */
-@media(max-width:800px){
-  .hero-inner{
-    flex-direction:column;
-    padding-top:8px;
-    gap:32px;
-  }
-  .hero-right{
-    flex-direction:column-reverse;
-    align-items:center;
-    gap:24px;
-  }
-  .hero-headline{
-    font-size:40px;
-    max-width:none;
-    -webkit-text-stroke:2px #0057c8;
-    text-stroke:2px #0057c8;
-    text-align:center;
-    margin-left:0;
-  }
-  .hero-image-wrap{
-    margin-left:0;
-    align-self:center;
-  }
-  .featured-card{
-    grid-template-columns:1fr;
-  }
-  .post-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-}
-@media(max-width:500px){
-  .hero-glass{
-    max-width:70vw;
-  }
-  .hero-headline{
-    font-size:32px;
-  }
-  .post-grid{
-    grid-template-columns:1fr;
-  }
-}
+  /* Canvas: clicks are on document; keep canvas non-interactive */
+  #ballLayer{position:fixed;inset:0;z-index:9999;pointer-events:none}
 </style>
 </head>
-
 <body>
 
 <header class="topbar">
-  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
-
-  <div class="topbar-title">
-    ❄️ The MayaNut Company – Blog ❄️
-  </div>
-
-  <div class="topbar-lang">
-    <span class="topbar-lang-label">
-      <span class="topbar-lang-label-emoji">🌎</span>
-      <span class="topbar-lang-label-text">Language</span>
-    </span>
-    <select id="language-select" aria-label="Site language">
-      <option value="index.html" selected>English</option>
-      <option value="index-es.html">Español</option>
-      <option value="index-pt.html">Português</option>
-      <option value="index-fr.html">Français</option>
-      <option value="index-ru.html">Русский</option>
-      <option value="index-zh.html">中文</option>
-      <option value="index-hi.html">हिन्दी</option>
-    </select>
-  </div>
+  <div class="brand">MayaNut<small>™</small></div>
+  <div class="brandInfo">Balls: <b id="ballCount">1</b>/500</div>
+  <nav class="nav">
+    <a href="#home" id="navHome">MayaNut</a>
+    <a href="#buy"  id="navBuy">Buy</a>
+    <a href="#about" id="navAbout">About</a>
+    <a href="https://instagram.com/mayanut.co" target="_blank" rel="noopener">Instagram</a>
+  </nav>
 </header>
 
-<a href="index.html#top" class="topbar-logo-link">
-  <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
-</a>
+<div id="scoreHUD" class="score">Score: <b id="score">0</b> <span id="pausedBadge" style="display:none;">· Paused</span></div>
 
-<!-- NAV OVERLAY -->
-<div class="nav-backdrop" id="nav-backdrop">
-  <div class="nav-modal">
-    <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Menu</h2>
-    <div class="nav-modal-links">
-      <a href="index.html#buy" data-close-nav="true">STORE</a>
-      <a href="index.html#about" data-close-nav="true">ABOUT</a>
-      <a href="index.html#research" data-close-nav="true">RESEARCH</a>
-      <a href="index.html#gallery" data-close-nav="true">GALLERY</a>
-      <a href="faq.html" data-close-nav="true">FAQ</a>
-      <a href="blog.html" data-close-nav="true">BLOG</a>
-    </div>
+<main id="home" class="stage">
+  <div class="panel">
+    <h1 id="heroTitle" class="title"><span class="glow">MayaNut</span><small>™</small></h1>
+    <div class="chatbar"><input id="chatInput" placeholder="Type What You Want (try /spawn 6 factory)" aria-label="Type what you want and press Enter" /></div>
+    <div class="log" id="chatLog" aria-live="polite"></div>
   </div>
-</div>
-
-<main id="top">
-  <!-- HERO -->
-  <section class="hero">
-    <canvas id="snow"></canvas>
-    <div class="hero-inner">
-      <div class="hero-right">
-        <div>
-          <div class="hero-headline">
-            <span>MayaNut</span>
-            <span>Journal</span>
-            <span class="headline-tag">Stories from the plantation</span>
-          </div>
-          <div class="hero-subcopy">
-            Field notes, research highlights, and behind-the-scenes updates from our early years growing
-            <em>Brosimum alicastrum</em> in South Florida.
-          </div>
-        </div>
-
-        <div class="hero-image-wrap">
-          <a href="#featured" class="hero-image-link">
-            <img src="rach20.png" alt="Chilled Maya nut beverage glass illustration" class="hero-glass">
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT THE BLOG -->
-  <div class="transition-strip">ABOUT THE BLOG</div>
-  <section class="section section--about">
-    <div class="section-inner">
-      <h2 class="section-title">Why a MayaNut Blog?</h2>
-      <div class="about-text-card">
-        <p>The MayaNut Company Blog exists to document the journey of establishing one of Florida’s first dedicated
-        <em>Brosimum alicastrum</em> plantations. These early years are full of questions: Which seedlings grow best?
-        How does the canopy develop in our climate? What can we learn from historical and modern uses of maya nut?</p>
-
-        <p>Rather than wait until everything is finished, we want to share our progress as it happens — from germinating
-        seeds and planting the first rows to exploring how future beverages and foods might look, taste, and feel.</p>
-
-        <p>Many entries will be short field notes, observations, or ideas in development. Over time, this journal will
-        become a record of how an underutilized tropical tree could slowly evolve into a new agricultural crop and
-        cultural tradition in the United States.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURED POST -->
-  <div class="transition-strip" id="featured">FEATURED ENTRY</div>
-  <section class="section section--featured">
-    <div class="section-inner">
-      <div class="featured-card">
-        <div class="featured-main">
-          <div class="featured-tag">FIELD NOTE</div>
-          <h3 class="featured-title">Planting the First Rows of Brosimum alicastrum in South Florida</h3>
-          <p class="featured-meta">By August Kokus · Early Plantation Entry · 2025</p>
-          <div class="featured-body">
-            <p>There is a unique feeling that comes with planting the first trees of a new crop. The soil, the spacing,
-            the tools — they are all familiar. What’s unfamiliar is the long timeline. A <em>Brosimum alicastrum</em>
-            seedling planted today may one day tower over the field, producing seeds for people who haven’t even heard
-            of maya nut yet.</p>
-
-            <p>We are starting modestly, with carefully spaced rows designed to let the canopy knit together over time
-            while still leaving room for light and understory crops. Each planting hole is a quiet vote of confidence in
-            the species and in the idea that an overlooked tree can find a new home in American agriculture.</p>
-
-            <p>Nothing is guaranteed, of course. Weather, pests, and the many variables of long-term horticulture are
-            always present. But step one is simple: plant a tree, water it, protect it, and learn everything we can as
-            it grows.</p>
-          </div>
-        </div>
-        <div class="featured-side">
-          <p><strong>Key details from this entry:</strong></p>
-          <ul>
-            <li>First rows of maya nut trees are being established in South Florida’s subtropical climate.</li>
-            <li>Spacing is chosen to balance canopy formation with light for possible companion crops.</li>
-            <li>The goal is not just yield, but long-term adaptation and learning from each tree.</li>
-          </ul>
-          <p>Future entries will follow up on survival rates, pruning experiments, shade patterns, and the first
-          small harvests once trees begin to produce seeds.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- MORE POSTS -->
-  <div class="transition-strip">MORE POSTS</div>
-  <section class="section section--posts">
-    <div class="section-inner">
-      <div class="post-grid">
-        <article class="post-card">
-          <div class="post-tag">Research</div>
-          <h3 class="post-title">What We’re Learning from Historical Mentions of Brosimum alicastrum</h3>
-          <div class="post-meta">Background reading · In progress</div>
-          <p class="post-excerpt">
-            Old botanical descriptions, archaeological hints, and scattered references to “ramón” and “breadnut”
-            help paint a fuzzy picture of how this tree may have been used in the past. We are organizing these
-            fragments into a clearer timeline.
-          </p>
-        </article>
-
-        <article class="post-card">
-          <div class="post-tag">Design</div>
-          <h3 class="post-title">Imagining the First Maya Nut Beverage on Store Shelves</h3>
-          <div class="post-meta">Concept art · Early look</div>
-          <p class="post-excerpt">
-            Before the first bottle exists, we are exploring visual ideas: glassware, color, foam, condensation,
-            and how to capture the feeling of a tropical, comforting, future-friendly drink.
-          </p>
-        </article>
-
-        <article class="post-card">
-          <div class="post-tag">Field Note</div>
-          <h3 class="post-title">Watching the Leaves Thicken and the Bark Change with Age</h3>
-          <div class="post-meta">Observation · Plantation log</div>
-          <p class="post-excerpt">
-            As seedlings turn into young trees, the canopy, bark texture, and branching patterns all change.
-            Noticing these details now will inform pruning decisions and long-term spacing experiments later.
-          </p>
-        </article>
-
-        <article class="post-card">
-          <div class="post-tag">Future</div>
-          <h3 class="post-title">Could Maya Nut Become a New Agroforestry Staple?</h3>
-          <div class="post-meta">Speculation · Long view</div>
-          <p class="post-excerpt">
-            If carefully introduced into existing farming systems, maya nut might provide shade, fodder, and
-            a new source of seeds for beverages and flour. This entry explores what that future could look like.
-          </p>
-        </article>
-
-        <article class="post-card">
-          <div class="post-tag">Behind the Scenes</div>
-          <h3 class="post-title">Mapping Out the First Plantation Layout</h3>
-          <div class="post-meta">Planning · Layout maps</div>
-          <p class="post-excerpt">
-            Grid spacing, wind direction, access paths, and irrigation lines all shape how the plantation feels
-            on the ground. Even the most basic map is a promise that trees will follow.
-          </p>
-        </article>
-
-        <article class="post-card">
-          <div class="post-tag">Update</div>
-          <h3 class="post-title">What’s Next for The MayaNut Company?</h3>
-          <div class="post-meta">Roadmap · Coming soon</div>
-          <p class="post-excerpt">
-            In upcoming posts we will share more detailed timelines, early data from growth trials, and
-            how we are preparing for the first test batches of a chilled maya nut beverage.
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOTTOM LOGO -->
-  <section class="section section--bottom-logo">
-    <div class="section-inner">
-      <a href="index.html#top">
-        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo – back to home">
-      </a>
-    </div>
-  </section>
 </main>
 
-<footer>
-  <div class="footer-inner">
-    <hr class="footer-line" />
-    <div class="footer-row">
-      <div class="footer-links">
-        <a id="privacy-link">Privacy Policy</a>
-        <a id="dns-link">Do Not Sell My Info</a>
-      </div>
-      <div class="footer-instagram">
-        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company on Instagram">
-          <span>IG</span>
-        </a>
-      </div>
-    </div>
-    <div class="footer-copy">
-      © 2025 The MayaNut Company, Inc. All Rights Reserved.
-    </div>
-  </div>
-</footer>
+<section id="buy" class="section">
+  <h3>Buy</h3>
+  <p>Search Through Our Wonderful Products — real items coming soon.</p>
+</section>
 
-<!-- Privacy / DNS Modal -->
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <h3 id="modal-title">Privacy Policy</h3>
-    <div id="modal-body">
-      <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-      <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-      <p>We do not sell your personal information. Some translations from English into other languages may contain errors.</p>
-    </div>
-    <button class="modal-close" id="modal-close">Close</button>
-  </div>
-</div>
+<section id="about" class="section">
+  <h3>About</h3>
+  <p><strong>MayaNut</strong> is a South Florida company promoting the cultivation and appreciation of
+    <em>Brosimum alicastrum</em>—the Maya Nut (Breadnut). We champion sustainable agroforestry and regenerative
+    farming that restores soils, supports biodiversity, and produces resilient, nutritious foods.</p>
+  <p><strong>MayaNut was Founded on April 24, 2008.</strong></p>
+</section>
+
+<footer>© 2025 MayaNut LLC. All rights reserved.</footer>
+
+<canvas id="ballLayer"></canvas>
 
 <script>
-// Language selector -> home pages in each language
+/* ===== Chat + Commands + Space pause ===== */
+const input = document.getElementById('chatInput');
+const logBox = document.getElementById('chatLog');
+const pausedBadge = document.getElementById('pausedBadge');
+let GAME_PAUSED = false;
+
+function say(role, text){
+  const el=document.createElement('div'); el.className='msg';
+  el.innerHTML=`<strong>${role}:</strong> ${text}`;
+  logBox.appendChild(el); logBox.scrollTop=logBox.scrollHeight;
+}
+function setPaused(v){ GAME_PAUSED=!!v; pausedBadge.style.display = GAME_PAUSED ? '' : 'none'; }
+function parseIntStrict(s, def){ const n=parseInt(s,10); return Number.isFinite(n)&&n>0?n:def; }
+
+input.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const raw=input.value.trim(); if(!raw) return; say('You', raw); input.value='';
+    if (raw.startsWith('/')) { handleCommand(raw.slice(1)); return; }
+    const low=raw.toLowerCase();
+    if (low==='pause'){ setPaused(true); say('MayaNut','Paused. Type /resume or press Space.'); return; }
+    if (['resume','unpause','continue'].includes(low)){ setPaused(false); say('MayaNut','Resumed.'); return; }
+    if (low.includes('buy')||low.includes('product')){ say('MayaNut','Head to the Buy section (placeholders for now).'); document.getElementById('buy').scrollIntoView({behavior:'smooth'}); return; }
+    if (low.includes('about')||low.includes('company')){ say('MayaNut','Scroll to About for more on MayaNut.'); document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
+    say('MayaNut',"Tell me what you want and I'll point you in the right direction.");
+  }
+});
+
+document.addEventListener('keydown', (e)=>{
+  if(e.code==='Space'){
+    const ae=document.activeElement;
+    if (ae && (ae===input || ae.tagName==='INPUT' || ae.tagName==='TEXTAREA')) return;
+    e.preventDefault();
+    setPaused(!GAME_PAUSED);
+  }
+});
+
+function handleCommand(cmd){
+  const parts = cmd.trim().split(/\s+/);
+  const name = parts[0]?.toLowerCase();
+  if (name==='pause'){ setPaused(true); say('MayaNut','Paused.'); return; }
+  if (['resume','unpause','continue'].includes(name)){ setPaused(false); say('MayaNut','Resumed.'); return; }
+  if (name==='spawn'){
+    const n = parseIntStrict(parts[1], 1);
+    const t = (parts[2]||'small').toLowerCase();
+    const ok = window.GameSpawn(n, t);
+    say('MayaNut', ok ? `Spawned ${ok} ${t}.` : 'Nothing spawned (at cap).');
+    return;
+  }
+  if (name==='fill'){ const ok=window.GameFill(); say('MayaNut', `Filled with ${ok} small.`); return; }
+  if (name==='clear'){ const c=window.GameClear(); say('MayaNut', `Cleared ${c} balls.`); return; }
+  if (name==='red'){ const ok=window.GameSpawn(10,'red'); say('MayaNut', `Spawned ${ok} red.`); return; }
+  say('MayaNut', 'Commands: /spawn N [small|spawner|factory|triad|red], /fill, /clear, /pause, /resume');
+}
+
+/* ===== Game Engine (TRIADs form + TRIAD↔TRIAD bonding N/S) ===== */
 (function(){
-  const select = document.getElementById('language-select');
-  if (!select) return;
+  const canvas=document.getElementById('ballLayer');
+  const ctx=canvas.getContext('2d');
+  function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+  resize(); addEventListener('resize', resize);
 
-  select.addEventListener('change', function(){
-    const target = this.value || 'index.html';
-    window.location.href = target;
-  });
-})();
+  // Types
+  const SMALL='small', SPAWNER='spawner', FACTORY='factory', TRIAD='triad', RED='red';
 
-// Snow in hero
-(function () {
-  const canvas = document.getElementById("snow");
-  if (!canvas) return;
-  const hero = canvas.parentElement;
-  const ctx = canvas.getContext("2d");
+  // Caps
+  const MAX_BALLS=500;
+  const RED_MAX=50;
 
-  let width = hero.clientWidth;
-  let height = hero.clientHeight;
+  // Sizes
+  const R_SMALL=3;       // tiny white dot
+  const R_SPAWNER=16;    // medium w/ ring
+  const R_FACTORY=26;    // biggest solid
+  const R_TRIAD=28;      // triad main (slightly larger for visual)
+  const R_RED=8;
 
-  function resize() {
-    width = hero.clientWidth;
-    height = hero.clientHeight;
-    canvas.width = width;
-    canvas.height = height;
+  // Params
+  const FACTORY_INTERVAL=200;   // factory spawn rate (littles)
+  const TRIAD_INTERVAL=260;     // triad also drips littles, a bit slower
+  const ORBIT_RADIUS_PAD=18;
+  const ANGLE_TOL=0.38;         // ~22° gate for N/S bonds
+  const LINK_STIFF=0.10;        // spring stiffness for links
+  const LINK_DAMP=0.85;         // damping for linked nodes
+  const STRING_SPACING_F = R_FACTORY*2.05;
+  const STRING_SPACING_T = R_TRIAD*2.05;
+  const RING_CLOSE_DIST_F = R_FACTORY*1.8;
+  const RING_CLOSE_DIST_T = R_TRIAD*1.8;
+
+  // State
+  const balls=[];         // dynamic parts (including TRIAD as a single body)
+  const links=[];         // springs between FACTORY/ TRIAD nodes (N/S only)
+  const fChains=new Map(); // chainId -> array of nodes (FACTORY or TRIAD)
+  let nextChainId=1;
+
+  let score=0; const scoreEl=document.getElementById('score');
+  const countEl=document.getElementById('ballCount');
+  const aliveCount=()=>balls.filter(b=>!b._dead).length;
+  const redCount=()=>balls.reduce((n,b)=>n+(!b._dead && b.type===RED?1:0),0);
+  function updateCount(){ countEl.textContent=aliveCount(); }
+  function addScore(n){ score+=n; scoreEl.textContent=score; }
+
+  function makeBall(x,y,type=SMALL, vx=(Math.random()-.5)*2, vy=(Math.random()-.5)*2){
+    let r = R_SMALL;
+    if (type===SPAWNER) r=R_SPAWNER;
+    else if (type===FACTORY) r=R_FACTORY;
+    else if (type===TRIAD) r=R_TRIAD;
+    else if (type===RED) r=R_RED;
+
+    const base = {x,y,vx,vy,r,type,_dead:false,
+                  orbit:null, cooldown:0, squashT:0, squashAxis:'x'};
+    // Node-only metadata
+    if (type===FACTORY || type===TRIAD){
+      base.slots = {top:null,bottom:null};
+      base.chainId = null; base.isRing=false;
+      if (type===TRIAD){
+        // visual sub-parts offsets (relative)
+        base.middleOffset = {x: r*0.75, y: 0}; // where the "medium" sits on shell
+        base.innerDot = true;                  // draw little core dot
+      }
+    }
+    return base;
   }
-  resize();
-  window.addEventListener("resize", resize);
-
-  const FLAKE_COUNT = 60;
-  const flakes = [];
-
-  function random(min, max) {
-    return Math.random() * (max - min) + min;
+  function addBall(b){
+    if (aliveCount()>=MAX_BALLS) return false;
+    if (b.type===RED && redCount()>=RED_MAX) return false;
+    balls.push(b); return true;
   }
 
-  function createFlake(initial = false) {
-    return {
-      x: random(0, width),
-      y: initial ? random(0, height) : random(-height * 0.2, 0),
-      size: random(2, 5),
-      speedY: random(0.03, 0.12),
-      speedX: random(-0.03, 0.03),
-      sway: random(0.5, 1.5),
-      swaySpeed: random(0.0005, 0.002),
-      swayOffset: Math.random() * Math.PI * 2,
-      rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: random(-0.003, 0.003)
-    };
+  // Seed: a factory and some smalls to see fusion
+  addBall(makeBall(innerWidth*0.46, innerHeight*0.42, FACTORY, 0.8, 0.6));
+  for(let i=0;i<14;i++) addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL));
+
+  // UI rects to bounce off
+  function rects(){
+    const els=[document.getElementById('heroTitle'), document.getElementById('chatInput'),
+               document.getElementById('buy'), document.getElementById('about'), document.querySelector('.topbar')].filter(Boolean);
+    return els.map(el=>{ const r=el.getBoundingClientRect(); return {x:r.left,y:r.top,w:r.width,h:r.height}; });
+  }
+  function collideRect(b,R){
+    const nx=Math.max(R.x, Math.min(b.x, R.x+R.w));
+    const ny=Math.max(R.y, Math.min(b.y, R.y+R.h));
+    const dx=b.x-nx, dy=b.y-ny;
+    if(dx*dx+dy*dy > b.r*b.r) return;
+    const cx=R.x+R.w/2, cy=R.y+R.h/2;
+    const ox=(R.w/2+b.r)-Math.abs(b.x-cx);
+    const oy=(R.h/2+b.r)-Math.abs(b.y-cy);
+    if(ox<oy){ b.vx*=-1; b.x+=(b.vx>0?1:-1)*Math.max(1,ox*0.6); b.squashT=10; b.squashAxis='x'; }
+    else     { b.vy*=-1; b.y+=(b.vy>0?1:-1)*Math.max(1,oy*0.6); b.squashT=10; b.squashAxis='y'; }
   }
 
-  function initFlakes() {
-    flakes.length = 0;
-    for (let i = 0; i < FLAKE_COUNT; i++) {
-      flakes.push(createFlake(true));
+  function bounceWalls(b){
+    if(b.x-b.r<0){ b.x=b.r; b.vx=Math.abs(b.vx); b.squashT=10; b.squashAxis='x'; }
+    if(b.x+b.r>innerWidth){ b.x=innerWidth-b.r; b.vx=-Math.abs(b.vx); b.squashT=10; b.squashAxis='x'; }
+    if(b.y-b.r<0){ b.y=b.r; b.vy=Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
+    if(b.y+b.r>innerHeight){ b.y=innerHeight-b.r; b.vy=-Math.abs(b.vy); b.squashT=10; b.squashAxis='y'; }
+  }
+
+  // Helpers for node links
+  const nearAngle=(ang, target, tol=ANGLE_TOL)=>{
+    let d = Math.abs(((ang - target + Math.PI) % (2*Math.PI)) - Math.PI);
+    return d <= tol;
+  };
+  function anchor(node, slot){
+    if(slot==='top')    return {x:node.x, y:node.y - node.r};
+    if(slot==='bottom') return {x:node.x, y:node.y + node.r};
+    return {x:node.x,y:node.y};
+  }
+
+  function ensureChainFor(n){
+    if (n.chainId!=null) return n.chainId;
+    const id=nextChainId++; n.chainId=id; fChains.set(id,[n]); return id;
+  }
+  function mergeChains(idA, idB){
+    if (idA===idB) return idA;
+    const A=fChains.get(idA)||[], B=fChains.get(idB)||[];
+    const merged=[...A,...B]; const newId=nextChainId++;
+    for(const n of merged){ n.chainId=newId; }
+    fChains.delete(idA); fChains.delete(idB); fChains.set(newId, merged);
+    return newId;
+  }
+  function appendToChain(anchorN, newN, at='bottom'){
+    const id=ensureChainFor(anchorN);
+    const arr=fChains.get(id);
+    if (at==='bottom') arr.push(newN); else arr.unshift(newN);
+    newN.chainId=id;
+  }
+
+  function addLink(a,b,slotA,slotB,dist){
+    links.push({a,b,slotA,slotB,dist});
+    if (a.slots) a.slots[slotA]=b;
+    if (b.slots) b.slots[slotB]=a;
+  }
+  function snapLinks(){
+    for(const L of links){
+      const {a,b,slotA,slotB,dist}=L;
+      if(a._dead||b._dead) continue;
+      const A=anchor(a,slotA), B=anchor(b,slotB);
+      const dx=B.x-A.x, dy=B.y-A.y;
+      const d=Math.hypot(dx,dy)||0.0001, nx=dx/d, ny=dy/d;
+      const err=d - dist;
+      const push=err*LINK_STIFF;
+      a.x += nx*push; a.y += ny*push; a.vx *= LINK_DAMP; a.vy *= LINK_DAMP;
+      b.x -= nx*push; b.y -= ny*push; b.vx *= LINK_DAMP; b.vy *= LINK_DAMP;
     }
   }
 
-  function drawFlake(flake) {
-    ctx.save();
-    ctx.translate(flake.x, flake.y);
-    ctx.rotate(flake.rotation);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.lineWidth = 1;
-
-    const armLength = flake.size;
-
-    ctx.beginPath();
-    for (let i = 0; i < 6; i++) {
-      const angle = (Math.PI * 2 / 6) * i;
-      const x = Math.cos(angle) * armLength;
-      const y = Math.sin(angle) * armLength;
-
-      ctx.moveTo(0, 0);
-      ctx.lineTo(x, y);
-
-      const branchLen = armLength * 0.4;
-      const sideAngle1 = angle + Math.PI / 6;
-      const sideAngle2 = angle - Math.PI / 6;
-
-      ctx.moveTo(x * 0.4, y * 0.4);
-      ctx.lineTo(
-        x * 0.4 + Math.cos(sideAngle1) * branchLen,
-        y * 0.4 + Math.sin(sideAngle1) * branchLen
-      );
-
-      ctx.moveTo(x * 0.4, y * 0.4);
-      ctx.lineTo(
-        x * 0.4 + Math.cos(sideAngle2) * branchLen,
-        y * 0.4 + Math.sin(sideAngle2) * branchLen
-      );
-    }
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  function updateFlake(flake, deltaTime) {
-    flake.x += flake.speedX * deltaTime +
-      Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
-
-    flake.y += flake.speedY * deltaTime;
-
-    flake.rotation += flake.rotationSpeed * deltaTime;
-
-    if (flake.y > height + flake.size * 2) {
-      const replacement = createFlake(false);
-      flake.x = replacement.x;
-      flake.y = replacement.y;
-      flake.speedY = replacement.speedY;
-      flake.speedX = replacement.speedX;
-      flake.sway = replacement.sway;
-      flake.swaySpeed = replacement.swaySpeed;
-      flake.swayOffset = replacement.swayOffset;
-      flake.rotation = replacement.rotation;
-      flake.rotationSpeed = replacement.rotationSpeed;
-    }
-
-    if (flake.x < -20) flake.x = width + 20;
-    if (flake.x > width + 20) flake.x = -20;
-  }
-
-  let lastTime = performance.now();
-
-  function animate(now) {
-    const TIME_SCALE = 0.15;
-    const deltaTime = (now - lastTime) * TIME_SCALE;
-    lastTime = now;
-
-    ctx.clearRect(0, 0, width, height);
-
-    for (const flake of flakes) {
-      updateFlake(flake, deltaTime);
-      drawFlake(flake);
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  initFlakes();
-  requestAnimationFrame(animate);
-})();
-
-// NAV overlay
-(function(){
-  const toggle = document.getElementById('menu-toggle');
-  const navBackdrop = document.getElementById('nav-backdrop');
-  const navClose = document.getElementById('nav-close');
-
-  if(!toggle || !navBackdrop) return;
-
-  function openNav(){
-    navBackdrop.classList.add('open');
-    toggle.classList.add('open');
-  }
-  function closeNav(){
-    navBackdrop.classList.remove('open');
-    toggle.classList.remove('open');
-  }
-
-  toggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if(navBackdrop.classList.contains('open')){
-      closeNav();
-    }else{
-      openNav();
-    }
-  });
-
-  if (navClose){
-    navClose.addEventListener('click', (e) => {
-      e.stopPropagation();
-      closeNav();
-    });
-  }
-
-  navBackdrop.addEventListener('click', (e) => {
-    if(e.target === navBackdrop){
-      closeNav();
-    }
-  });
-
-  navBackdrop.querySelectorAll('[data-close-nav="true"]').forEach(link => {
-    link.addEventListener('click', () => closeNav());
-  });
-})();
-
-// Privacy / DNS Modal
-(function(){
-  const backdrop = document.getElementById('modal-backdrop');
-  const titleEl = document.getElementById('modal-title');
-  const bodyEl  = document.getElementById('modal-body');
-  const closeBtn = document.getElementById('modal-close');
-  const privacyLink = document.getElementById('privacy-link');
-  const dnsLink = document.getElementById('dns-link');
-
-  function openModal(kind){
-    if(kind === 'privacy'){
-      titleEl.textContent = 'Privacy Policy';
-      bodyEl.innerHTML = `
-        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-        <p>We do not sell your personal information. Some translations from English into other languages may contain errors.</p>
-      `;
-    }else{
-      titleEl.textContent = 'Do Not Sell My Info';
-      bodyEl.innerHTML = `
-        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
-        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
-      `;
-    }
-    backdrop.style.display = 'flex';
-  }
-
-  function closeModal(){
-    backdrop.style.display = 'none';
-  }
-
-  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
-  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (backdrop){
-    backdrop.addEventListener('click', (e) => {
-      if(e.target === backdrop) closeModal();
-    });
-  }
-})();
-
-// Logo tooltip
-(function(){
-  const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
-  if (!logos.length) return;
-
-  const tooltip = document.createElement('div');
-  tooltip.className = 'logo-tooltip';
-  tooltip.textContent = '';
-  document.body.appendChild(tooltip);
-
-  let tooltipVisible = false;
-  let lastLogo = null;
-
-  function atTop(){
-    return window.location.pathname.endsWith('index.html') && window.scrollY <= 0;
-  }
-
-  function getMessage(){
-    if (atTop()){
-      return 'Welcome to mayanut.com – Home of The MayaNut Company';
-    }
-    return '👆 Click to Return Home 👆';
-  }
-
-  function positionTooltip(rect){
-    tooltip.style.top = '0px';
-    tooltip.style.left = '0px';
-
-    const width = tooltip.offsetWidth || 220;
-    const top = rect.top + rect.height + 8;
-    const centerX = rect.left + rect.width / 2;
-
-    let left = centerX - width / 2;
-    const margin = 8;
-    const maxLeft = window.innerWidth - width - margin;
-
-    if (left < margin) left = margin;
-    if (left > maxLeft) left = maxLeft;
-
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
-  }
-
-  function showTooltipFor(el){
-    const rect = el.getBoundingClientRect();
-    tooltip.textContent = getMessage();
-    tooltip.style.opacity = '1';
-    positionTooltip(rect);
-    tooltipVisible = true;
-    lastLogo = el;
-  }
-
-  function hideTooltip(){
-    tooltip.style.opacity = '0';
-    tooltipVisible = false;
-    lastLogo = null;
-  }
-
-  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-
-  if (!isCoarse){
-    logos.forEach(link => {
-      link.addEventListener('mouseenter', () => showTooltipFor(link));
-      link.addEventListener('mouseleave', () => hideTooltip());
-    });
-  } else {
-    logos.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        if (!tooltipVisible || lastLogo !== link){
-          e.preventDefault();
-          showTooltipFor(link);
-          return;
+  function tryCloseRings(){
+    for (const [id, arr] of [...fChains]){
+      if (arr.length<4) continue;
+      const first=arr[0], last=arr[arr.length-1];
+      if (!first || !last || first._dead || last._dead) continue;
+      const dx=last.x-first.x, dy=last.y-first.y;
+      // choose ring threshold by node type
+      const thresh = (first.type===TRIAD || last.type===TRIAD) ? RING_CLOSE_DIST_T : RING_CLOSE_DIST_F;
+      if (Math.hypot(dx,dy) <= thresh){
+        const cx = arr.reduce((s,n)=>s+n.x,0)/arr.length;
+        const cy = arr.reduce((s,n)=>s+n.y,0)/arr.length;
+        const spacing = (arr.some(n=>n.type===TRIAD)?STRING_SPACING_T:STRING_SPACING_F);
+        const radius = Math.max(R_FACTORY*1.5, (arr.length*spacing)/(2*Math.PI));
+        for(let i=0;i<arr.length;i++){
+          const ang = (i/arr.length)*Math.PI*2;
+          const n = arr[i];
+          n.x = cx + Math.cos(ang)*radius;
+          n.y = cy + Math.sin(ang)*radius;
+          n.vx = n.vy = 0;
+          n.isRing = true;
         }
-
-        e.preventDefault();
-        hideTooltip();
-        window.location.href = 'index.html#top';
-      });
-    });
-
-    document.addEventListener('click', () => {
-      if (tooltipVisible) hideTooltip();
-    });
+      }
+    }
   }
 
-  window.addEventListener('scroll', () => {
-    if (tooltipVisible && lastLogo){
-      positionTooltip(lastLogo.getBoundingClientRect());
+  // TRIAD formation: Factory + Spawner overlapping, with a Small inside Factory
+  function maybeFormTriad(a,b){
+    let F=null, M=null; // F=Factory, M=Spawner
+    if (a.type===FACTORY && b.type===SPAWNER) { F=a; M=b; }
+    else if (b.type===FACTORY && a.type===SPAWNER) { F=b; M=a; }
+    else return false;
+
+    // look for a little that is inside the Factory's disk
+    let innerIndex=-1;
+    for(let i=0;i<balls.length;i++){
+      const s=balls[i]; if(s._dead || s.type!==SMALL) continue;
+      if (Math.hypot(s.x-F.x, s.y-F.y) <= F.r - R_SMALL*0.5){ innerIndex=i; break; }
     }
+    if (innerIndex<0) return false;
+
+    // Replace Factory+Spawner+Small with one TRIAD at Factory position
+    const S=balls[innerIndex];
+    F._dead=true; M._dead=true; S._dead=true;
+
+    const T=makeBall(F.x, F.y, TRIAD, (F.vx+M.vx)/2, (F.vy+M.vy)/2);
+    // inherit modest momentum, keep slots free for N/S bonds
+    addBall(T);
+    return true;
+  }
+
+  // Collisions & behaviors
+  function handlePair(a,b){
+    if(a._dead||b._dead) return;
+    const dx=b.x-a.x, dy=b.y-a.y, d=Math.hypot(dx,dy);
+    if(d>a.r+b.r) return;
+
+    // Small + Small -> Spawner
+    if(a.type===SMALL && b.type===SMALL){
+      if(aliveCount()>=MAX_BALLS) return;
+      a._dead=b._dead=true;
+      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,SPAWNER,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
+      return;
+    }
+
+    // Spawner + Spawner -> Factory
+    if(a.type===SPAWNER && b.type===SPAWNER){
+      if(aliveCount()>=MAX_BALLS) return;
+      a._dead=b._dead=true;
+      addBall(makeBall((a.x+b.x)/2,(a.y+b.y)/2,FACTORY,(a.vx+b.vx)/2,(a.vy+b.vy)/2));
+      return;
+    }
+
+    // Try to form a TRIAD first (Factory+Spawner with Small inside)
+    if (maybeFormTriad(a,b)) return;
+
+    // Orbit capture: smalls near factory/spawner/triad
+    if(a.type===SMALL && (b.type===SPAWNER||b.type===FACTORY||b.type===TRIAD)) a.orbit=b;
+    if(b.type===SMALL && (a.type===SPAWNER||a.type===FACTORY||a.type===TRIAD)) b.orbit=a;
+
+    // Node–Node bonds (FACTORY or TRIAD) — only N/S linking to avoid clumps
+    const AisNode = (a.type===FACTORY||a.type===TRIAD);
+    const BisNode = (b.type===FACTORY||b.type===TRIAD);
+    if (AisNode && BisNode){
+      const ang = Math.atan2(dy,dx);
+      const spacing = (a.type===TRIAD||b.type===TRIAD) ? STRING_SPACING_T : STRING_SPACING_F;
+
+      // b below a => a.bottom ↔ b.top
+      if (nearAngle(ang, Math.PI/2) && !a.slots.bottom && !b.slots.top){
+        addLink(a,b,'bottom','top',spacing);
+        const idA=ensureChainFor(a), idB=ensureChainFor(b);
+        const id=(idA===idB)?idA:mergeChains(idA,idB);
+        const arr=fChains.get(id);
+        if (arr.indexOf(a)>-1 && arr.indexOf(b)===-1){ arr.splice(arr.indexOf(a)+1,0,b); b.chainId=id; }
+        return;
+      }
+      // b above a => a.top ↔ b.bottom
+      if (nearAngle(ang, -Math.PI/2) && !a.slots.top && !b.slots.bottom){
+        addLink(a,b,'top','bottom',spacing);
+        const idA=ensureChainFor(a), idB=ensureChainFor(b);
+        const id=(idA===idB)?idA:mergeChains(idA,idB);
+        const arr=fChains.get(id);
+        if (arr.indexOf(a)>-1 && arr.indexOf(b)===-1){ arr.splice(Math.max(0,arr.indexOf(a)),0,b); b.chainId=id; }
+        return;
+      }
+    }
+
+    // Reds (simple)
+    if(a.type===RED || b.type===RED){
+      const r = a.type===RED?a:b, o = a.type===RED?b:a;
+      if(o.type===SMALL){ o._dead=true; } else { r.vx*=-0.9; r.vy*=-0.9; }
+      r.squashT=10; r.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
+      return;
+    }
+
+    // Default elastic-ish bounce + squash
+    const nx=dx/(d||1), ny=dy/(d||1);
+    const p=(a.vx*nx+a.vy*ny - b.vx*nx - b.vy*ny);
+    a.vx -= p*nx; a.vy -= p*ny; b.vx += p*nx; b.vy += p*ny;
+    a.squashT=b.squashT=10; a.squashAxis = Math.abs(nx)>Math.abs(ny)?'x':'y'; b.squashAxis=a.squashAxis;
+  }
+
+  // Clicks: launch the ball you hit
+  document.addEventListener('click', e=>{
+    if (e.target.closest('a,button,input,textarea,[contenteditable]')) return;
+    const x=e.clientX, y=e.clientY;
+    let hit=false;
+    for(const b of balls){
+      if(Math.hypot(b.x-x,b.y-y) < b.r+6){
+        hit=true; const dx=b.x-x, dy=b.y-y, L=Math.hypot(dx,dy)||1;
+        const kick=5.2; b.vx=(dx/L)*kick; b.vy=(dy/L)*kick;
+        b.squashT=10; b.squashAxis = Math.abs(dx)>Math.abs(dy)?'x':'y';
+        if (GAME_PAUSED){ b.x+=b.vx; b.y+=b.vy; }
+      }
+    }
+    addScore(hit?1:-1);
   });
+
+  // Public spawners for chat
+  window.GameSpawn = function(n=1, type='small'){
+    const t = type==='factory'?FACTORY : type==='spawner'?SPAWNER : type==='triad'?TRIAD : type==='red'?RED : SMALL;
+    let added=0;
+    for(let i=0;i<n;i++){
+      const atCap = aliveCount()>=MAX_BALLS || (t===RED && redCount()>=RED_MAX);
+      if(atCap) break;
+      const x=innerWidth*0.5 + (Math.random()*120-60);
+      const y=innerHeight*0.45 + (Math.random()*120-60);
+      if(addBall(makeBall(x,y,t))) added++;
+    }
+    updateCount();
+    return added;
+  };
+  window.GameFill = function(){
+    let added=0;
+    while(aliveCount()<MAX_BALLS){
+      if(!addBall(makeBall(Math.random()*innerWidth, Math.random()*innerHeight, SMALL))) break;
+      added++;
+    }
+    updateCount(); return added;
+  };
+  window.GameClear = function(){
+    const c=aliveCount(); balls.length=0; links.length=0; fChains.clear(); updateCount(); return c;
+  };
+
+  function update(){
+    if (GAME_PAUSED) return;
+    const rs = rects();
+
+    for(const b of balls){
+      if(b._dead) continue;
+
+      // orbiting motion for captured smalls — clamp to shell to avoid getting “inside”
+      if(b.type===SMALL && b.orbit){
+        const c=b.orbit;
+        let ang=Math.atan2(b.y-c.y,b.x-c.x)+0.05;
+        const desired = c.r + ORBIT_RADIUS_PAD;
+        b.x=c.x+Math.cos(ang)*desired;
+        b.y=c.y+Math.sin(ang)*desired;
+        b.vx*=0.92; b.vy*=0.92;
+      }else{
+        b.x+=b.vx; b.y+=b.vy;
+      }
+
+      bounceWalls(b);
+      for(const R of rs) collideRect(b,R);
+
+      // spawning
+      if(b.type===FACTORY){
+        b.cooldown++;
+        if(b.cooldown>FACTORY_INTERVAL && aliveCount()<MAX_BALLS){
+          b.cooldown=0;
+          addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
+        }
+      }
+      if(b.type===TRIAD){
+        b.cooldown++;
+        if(b.cooldown>TRIAD_INTERVAL && aliveCount()<MAX_BALLS){
+          b.cooldown=0;
+          addBall(makeBall(b.x+(Math.random()*20-10), b.y+(Math.random()*20-10), SMALL));
+        }
+      }
+
+      if (b.squashT>0) b.squashT--;
+    }
+
+    // collisions
+    for(let i=0;i<balls.length;i++){
+      for(let j=i+1;j<balls.length;j++){
+        handlePair(balls[i], balls[j]);
+      }
+    }
+
+    // keep node strings tidy and try forming rings
+    snapLinks();
+    tryCloseRings();
+
+    // cleanup
+    for(let i=balls.length-1;i>=0;i--) if(balls[i]._dead) balls.splice(i,1);
+
+    updateCount();
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // Draw node links first
+    ctx.strokeStyle='rgba(255,255,255,0.55)'; ctx.lineWidth=2;
+    for(const L of links){
+      const {a,b,slotA,slotB}=L;
+      if(a._dead||b._dead) continue;
+      const A=anchor(a,slotA), B=anchor(b,slotB);
+      ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.stroke();
+    }
+
+    // Balls with squash/stretch + TRIAD internals
+    for(const b of balls){
+      let sx=1, sy=1;
+      if (b.squashT>0){
+        const t=b.squashT/10, amt=0.35*Math.sin(t*Math.PI);
+        if(b.squashAxis==='x'){ sx=1+amt; sy=1-amt; } else { sy=1+amt; sx=1-amt; }
+      }
+      ctx.save(); ctx.translate(b.x,b.y); ctx.scale(sx,sy);
+
+      if(b.type===SMALL){
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
+
+      } else if(b.type===SPAWNER){
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(0,0,R_SPAWNER-2,0,Math.PI*2); ctx.fill();
+        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,255,255,0.9)';
+        ctx.beginPath(); ctx.arc(0,0,R_SPAWNER,0,Math.PI*2); ctx.stroke();
+
+      } else if(b.type===FACTORY){
+        ctx.fillStyle='rgba(255,255,255,0.95)';
+        ctx.beginPath(); ctx.arc(0,0,R_FACTORY,0,Math.PI*2); ctx.fill();
+        // show available N/S “ports”
+        ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
+        if(!b.slots.top){    ctx.beginPath(); ctx.moveTo(0,-R_FACTORY); ctx.lineTo(0,-R_FACTORY-6); ctx.stroke(); }
+        if(!b.slots.bottom){ ctx.beginPath(); ctx.moveTo(0,R_FACTORY);  ctx.lineTo(0,R_FACTORY+6); ctx.stroke(); }
+
+      } else if(b.type===TRIAD){
+        // big body
+        ctx.fillStyle='rgba(255,255,255,0.95)';
+        ctx.beginPath(); ctx.arc(0,0,R_TRIAD,0,Math.PI*2); ctx.fill();
+        // medium “ring” sitting to the side
+        const off=b.middleOffset;
+        ctx.fillStyle='#ffffff';
+        ctx.beginPath(); ctx.arc(off.x,off.y,R_SPAWNER-3,0,Math.PI*2); ctx.fill();
+        ctx.lineWidth=2; ctx.strokeStyle='rgba(255,255,255,0.9)';
+        ctx.beginPath(); ctx.arc(off.x,off.y,R_SPAWNER-1,0,Math.PI*2); ctx.stroke();
+        // inner small core
+        if (b.innerDot){
+          ctx.fillStyle='#ffffff';
+          ctx.beginPath(); ctx.arc(0,0,R_SMALL,0,Math.PI*2); ctx.fill();
+        }
+        // N/S port hints
+        ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1;
+        if(!b.slots.top){    ctx.beginPath(); ctx.moveTo(0,-R_TRIAD); ctx.lineTo(0,-R_TRIAD-6); ctx.stroke(); }
+        if(!b.slots.bottom){ ctx.beginPath(); ctx.moveTo(0,R_TRIAD);  ctx.lineTo(0,R_TRIAD+6); ctx.stroke(); }
+
+      } else if(b.type===RED){
+        ctx.fillStyle='#ff4d4d';
+        ctx.beginPath(); ctx.arc(0,0,R_RED,0,Math.PI*2); ctx.fill();
+      }
+
+      ctx.restore();
+    }
+  }
+
+  function loop(){ update(); draw(); requestAnimationFrame(loop); }
+  loop();
 })();
 </script>
-
 </body>
 </html>
