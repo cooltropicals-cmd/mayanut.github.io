@@ -342,18 +342,24 @@ body{
   color:#ffffff;
   filter:drop-shadow(0 0 3px rgba(255,255,255,0.7));
   animation-name:snowFall;
-  animation-timing-function:linear;
   animation-iteration-count:infinite;
 }
+/* more natural snow: vertical fall + sway + optional rotation */
 @keyframes snowFall{
   0%{
-    transform:translate3d(0, -10vh, 0);
+    transform:translate3d(0, -10vh, 0) rotate(0deg);
+  }
+  25%{
+    transform:translate3d(calc(var(--drift1, 15px) * 0.5), 25vh, 0) rotate(var(--rotMid, 90deg));
   }
   50%{
-    transform:translate3d(var(--drift1, 15px), 50vh, 0);
+    transform:translate3d(var(--drift1, 15px), 50vh, 0) rotate(calc(var(--rotMid, 90deg) * 2));
+  }
+  75%{
+    transform:translate3d(calc(var(--drift2, -15px) * 0.5), 80vh, 0) rotate(calc(var(--rotEnd, 360deg) * 0.75));
   }
   100%{
-    transform:translate3d(var(--drift2, -15px), 110vh, 0);
+    transform:translate3d(var(--drift2, -15px), 110vh, 0) rotate(var(--rotEnd, 360deg));
   }
 }
 
@@ -375,7 +381,7 @@ body{
 }
 .hero-headline span{
   display:block;
-  white-space:nowrap; /* keep each line on a single physical line */
+  white-space:nowrap;
 }
 .hero-headline .headline-coming{
   text-decoration:underline;
@@ -1659,7 +1665,7 @@ FOREVER LOVED
   }
 })();
 
-// NAV overlay + Ricky easter egg (refined drag physics)
+// NAV overlay + Ricky easter egg (updated drag/click behavior)
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
@@ -1683,18 +1689,6 @@ FOREVER LOVED
     logoEaster.style.top = '0px';
     logoEaster.style.transition = '';
     rickyMsg.style.opacity = 0;
-  }
-
-  function scrollHomeAndClose(){
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    navBackdrop.classList.remove('open');
-    toggle.classList.remove('open');
-    resetEasterEgg();
   }
 
   function openNav(){
@@ -1731,12 +1725,26 @@ FOREVER LOVED
     }
   });
 
-  // Refined drag / click behavior for Easter egg
+  // Refined drag / click behavior:
+  // - Drag: logo follows mouse and stays where dropped, text appears, shows Ricky image.
+  // - Click: toggle between home logo and ricky.jpeg, and toggle text visibility.
   (function(){
     let dragActive = false;
     let startX = 0, startY = 0;
     let startLeft = 0, startTop = 0;
     const dragThreshold = 8;
+
+    function toggleRicky(){
+      if (!isRicky){
+        logoEaster.src = rickySrc;
+        isRicky = true;
+        rickyMsg.style.opacity = 1;
+      } else {
+        logoEaster.src = homeSrc;
+        isRicky = false;
+        rickyMsg.style.opacity = 0;
+      }
+    }
 
     function onMouseDown(e){
       if (e.button !== 0) return;
@@ -1753,10 +1761,12 @@ FOREVER LOVED
         const dx = ev.clientX - startX;
         const dy = ev.clientY - startY;
         const distSq = dx*dx + dy*dy;
+
         if (!dragActive && distSq > dragThreshold*dragThreshold){
           dragActive = true;
           logoEaster.style.position = 'relative';
           logoEaster.style.transition = 'none';
+          // Switch to Ricky + show message when we start dragging
           if (!isRicky){
             logoEaster.src = rickySrc;
             isRicky = true;
@@ -1764,6 +1774,7 @@ FOREVER LOVED
           rickyMsg.style.opacity = 1;
         }
         if (!dragActive) return;
+
         logoEaster.style.left = (startLeft + dx) + 'px';
         logoEaster.style.top  = (startTop + dy) + 'px';
       }
@@ -1777,14 +1788,10 @@ FOREVER LOVED
         const distSq = dx*dx + dy*dy;
 
         if (!dragActive && distSq <= dragThreshold*dragThreshold){
-          // Gentle click: go home
-          scrollHomeAndClose();
-        } else if (dragActive){
-          // After a drag, smoothly ease the logo back toward its starting position
-          logoEaster.style.transition = 'left 0.4s ease, top 0.4s ease';
-          logoEaster.style.left = '0px';
-          logoEaster.style.top = '0px';
-        }
+          // Treat as click: toggle between main logo and Ricky image
+          toggleRicky();
+        } 
+        // if dragActive, we just leave the logo where it was dropped
         dragActive = false;
       }
 
@@ -1910,7 +1917,7 @@ FOREVER LOVED
   });
 })();
 
-// Hero snowflakes on main hero only
+// Hero snowflakes on main hero only (with varied spin / sway)
 (function(){
   const hero = document.querySelector('.hero');
   if (!hero) return;
@@ -1932,6 +1939,27 @@ FOREVER LOVED
     const delay = Math.random()*-duration;
     const drift = (Math.random()*30 + 10) * (Math.random() < 0.5 ? -1 : 1);
 
+    // Some flakes rotate, some barely rotate, some not at all
+    const rotationMode = Math.random(); // 0–1
+    let rotMid = '0deg';
+    let rotEnd = '0deg';
+
+    if (rotationMode < 0.4){
+      // gentle slow spin
+      const base = (90 + Math.random()*90) * (Math.random() < 0.5 ? -1 : 1);
+      rotMid = base + 'deg';
+      rotEnd = (base * 3) + 'deg';
+    } else if (rotationMode < 0.8){
+      // faster spin
+      const base = (180 + Math.random()*180) * (Math.random() < 0.5 ? -1 : 1);
+      rotMid = base + 'deg';
+      rotEnd = (base * 2) + 'deg';
+    } else {
+      // no rotation – just drifting like soft flakes
+      rotMid = '0deg';
+      rotEnd = '0deg';
+    }
+
     flake.style.fontSize = size + 'px';
     flake.style.left = left + '%';
     flake.style.animationDuration = duration + 's';
@@ -1939,6 +1967,15 @@ FOREVER LOVED
     flake.style.opacity = (0.55 + Math.random()*0.35).toFixed(2);
     flake.style.setProperty('--drift1', drift + 'px');
     flake.style.setProperty('--drift2', (-drift) + 'px');
+    flake.style.setProperty('--rotMid', rotMid);
+    flake.style.setProperty('--rotEnd', rotEnd);
+
+    // Slight variation in easing so they feel less mechanical
+    if (Math.random() < 0.5){
+      flake.style.animationTimingFunction = 'ease-in-out';
+    } else {
+      flake.style.animationTimingFunction = 'linear';
+    }
 
     snowLayer.appendChild(flake);
   }
