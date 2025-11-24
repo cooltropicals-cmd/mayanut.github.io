@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The MayaNut Company – FAQ</title>
+<title>MayaNut FAQ – The MayaNut Company</title>
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
@@ -16,31 +16,33 @@
 <link rel="icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 <link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
 
-<meta name="theme-color" content="#003cc7" />
+<meta name="theme-color" content="#0000df" />
+<meta name="robots" content="index,follow" />
 
-<meta name="description" content="Frequently asked questions about The MayaNut Company, maya nut (Brosimum alicastrum), and our future beverages and products." />
+<meta name="description" content="Frequently asked questions about maya nut, Brosimum alicastrum, The MayaNut Company, and future MayaNut beverages, powders, and flours.">
+<meta name="keywords" content="maya nut FAQ, Brosimum alicastrum questions, MayaNut Company, maya nut beverage, breadnut, ojoche, ramón, guaimaro">
 
 <style>
 :root{
-  --bg:#003cc7;
-  --bg-grad:
-    radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    #003cc7;
+  --blue-deep:#0000df;
+  --blue-mid:#0060ff;
+  --blue-soft:#1e5dff;
 
-  --bar:#003cc7;
+  /* brighter / richer oranges (same as index) */
+  --orange:#ff8f1f;
+  --orange-light:#ffc94a;
+
   --bar-h:72px;
-  --logo-offset:12px;
 }
 
 /* Slightly taller bar on very small screens */
 @media (max-width: 600px){
   :root{
-    --bar-h:82px;
+    --bar-h:90px;
   }
 }
 
+/* GLOBAL */
 *,
 *::before,
 *::after{
@@ -55,8 +57,13 @@ html,body{
   color:#fff;
 }
 
+/* Overall background */
 body{
-  background:var(--bg-grad);
+  background:
+    radial-gradient(circle at 15% 10%, #ffb347 0, rgba(255,179,71,0.0) 45%),
+    radial-gradient(circle at 85% 85%, #ff8f1f 0, rgba(255,143,31,0.0) 55%),
+    radial-gradient(circle at 50% 0%, #2d6bff 0, rgba(45,107,255,0.0) 55%),
+    radial-gradient(circle at 0% 100%, #0000df 0, #000028 80%);
   background-attachment:fixed;
 }
 
@@ -64,56 +71,57 @@ body{
 .topbar{
   position:fixed;
   top:0; left:0; right:0;
-  background:var(--bar);
+  background:
+    radial-gradient(circle at 0% 0%, #4a8dff 0, transparent 70%),
+    linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 45%, var(--blue-deep) 100%);
   color:#fff;
   display:grid;
   grid-template-columns:auto 1fr auto;
-  grid-template-areas:"menu title lang";
+  grid-template-areas:"menu logo-lang lang";
   align-items:center;
   column-gap:6px;
   padding:8px 10px;
   min-height:var(--bar-h);
   z-index:1000;
-  border-bottom:1px solid rgba(255,255,255,0.25);
+  border-bottom:1px solid rgba(255,255,255,0.35);
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
 /* Hamburger */
 .menu-toggle{
   grid-area:menu;
-  width:32px;
-  height:26px;
+  width:40px;
+  height:30px;
   border:none;
   background:transparent;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:0;
   cursor:pointer;
   justify-self:start;
-  margin-left:8px;
+  margin-left:2px;
   z-index:1100;
 }
 .menu-toggle span{
   display:block;
-  height:3px;
+  height:4px;
   border-radius:999px;
   background:#ffffff;
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
-  transform:translateY(11px) rotate(45deg);
+  transform:translateY(10px) rotate(45deg);
 }
 .menu-toggle.open span:nth-child(2){
   opacity:0;
 }
 .menu-toggle.open span:nth-child(3){
-  transform:translateY(-11px) rotate(-45deg);
+  transform:translateY(-10px) rotate(-45deg);
 }
 
-/* Title */
+/* Title in top bar (Christmas text) */
 .topbar-title{
-  grid-area:title;
+  grid-area:logo-lang;
   font-family:"Mountains of Christmas", cursive;
   font-size:18px;
   text-align:center;
@@ -121,9 +129,10 @@ body{
   max-width:100%;
   justify-self:center;
   padding:0 6px;
+  white-space:nowrap;
 }
 
-/* Language selector */
+/* LANGUAGE SWITCHER */
 .topbar-lang{
   grid-area:lang;
   display:flex;
@@ -132,6 +141,7 @@ body{
   gap:3px;
   justify-self:end;
   font-size:12px;
+  margin-right:4px;
 }
 .topbar-lang-label{
   display:flex;
@@ -139,34 +149,95 @@ body{
   gap:4px;
 }
 .topbar-lang-label-emoji{
-  font-size:20px;
+  font-size:18px;
   line-height:1;
 }
 .topbar-lang-label-text{
   font-size:13px;
 }
-.topbar-lang select{
-  font-size:12px;
+.topbar-lang-current-btn{
+  margin-top:2px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 10px;
   border-radius:999px;
-  border:1px solid rgba(255,255,255,0.7);
-  background:rgba(10,86,194,0.9);
+  border:1px solid rgba(255,255,255,0.8);
+  background:rgba(0,0,0,0.18);
   color:#fff;
-  padding:3px 8px;
+  font-size:12px;
+  cursor:pointer;
   outline:none;
 }
-.topbar-lang select option{
-  color:#000;
+.topbar-lang-current{
+  line-height:1;
+}
+.topbar-lang-caret{
+  font-size:10px;
+  transform:translateY(1px);
 }
 
-/* Narrow screens */
+/* Language dropdown (same as index) */
+.lang-dropdown{
+  position:fixed;
+  top:calc(var(--bar-h) + 2px);
+  right:10px;
+  background:rgba(0,0,0,0.92);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 8px 20px rgba(0,0,0,0.6);
+  padding:6px 0;
+  z-index:1500;
+  display:none;
+  min-width:180px;
+}
+.lang-dropdown.open{
+  display:block;
+}
+.lang-dropdown ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.lang-dropdown li{
+  padding:6px 14px;
+  font-size:13px;
+  color:#ffffff;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.lang-dropdown li:hover{
+  background:rgba(255,255,255,0.16);
+}
+.lang-dropdown li.active{
+  color:var(--orange);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+/* Small screens: keep “Language” text visible */
 @media (max-width: 420px){
   .topbar-lang-label-text{
-    display:none;
-  }
-  .topbar-lang select{
+    display:inline;
     font-size:11px;
-    padding:2px 6px;
   }
+  .topbar-lang-current-btn{
+    font-size:11px;
+    padding:2px 7px;
+  }
+}
+
+/* MOBILE TOPBAR – same as index:
+   row 1: [ menu | logo | language ]
+   row 2: christmas text centered
+*/
+.topbar-logo-inline{
+  display:none;
+}
+.topbar-logo-inline img{
+  height:46px;
+  width:auto;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
 }
 
 @media (max-width: 600px){
@@ -174,174 +245,285 @@ body{
     grid-template-columns:auto 1fr auto;
     grid-template-rows:auto auto;
     grid-template-areas:
-      "menu .   lang"
+      "menu centerlogo lang"
       "title title title";
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .topbar-logo-inline{
+    grid-area:centerlogo;
+    display:flex;
+    justify-content:center;
     align-items:center;
-    padding-left:10px;
   }
 
   .topbar-title{
     font-size:14px;
     line-height:1.2;
-    margin-top:4px;
-    padding:0 12px;
+    margin-top:2px;
+    padding:0 4px;
     text-align:center;
-  }
-
-  .menu-toggle{
-    margin-left:0;
+    white-space:normal;
   }
 }
 
-/* Logo */
+/* Fixed logo (desktop only) */
 .topbar-logo-link{
   position:fixed;
-  left:var(--logo-offset);
-  top:calc(var(--bar-h) + var(--logo-offset));
+  left:12px;
+  top:calc(var(--bar-h) + 12px);
   z-index:900;
 }
 .topbar-logo{
-  width:100px;
-  height:100px;
+  width:95px;
+  height:95px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-}
-
-/* Wiggle */
-@keyframes merrygiggle{
-  0%   { transform:translateX(0); }
-  25%  { transform:translateX(4px); }
-  50%  { transform:translateX(0); }
-  75%  { transform:translateX(-4px); }
-  100% { transform:translateX(0); }
-}
-
-/* NAV OVERLAY */
-.nav-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:1400;
-}
-.nav-backdrop.open{
-  display:flex;
-}
-.nav-modal{
-  max-width:420px;
-  width:min(90vw, 420px);
-  border-radius:18px;
-  padding:22px 24px 24px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.55);
-  color:#ffffff;
-  text-align:left;
-  font-size:15px;
-  line-height:1.7;
-  background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
-    #003cc7;
-  position:relative;
-}
-.nav-modal-title{
-  margin:0 0 10px;
-  font-weight:700;
-  font-size:18px;
-  text-decoration:underline;
-}
-.nav-modal-links{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:8px;
-}
-.nav-modal-links a{
-  color:#ffffff;
-  text-decoration:none;
-  font-weight:600;
-  font-size:15px;
-  padding:6px 0;
-  border-bottom:1px solid rgba(255,255,255,0.25);
-}
-.nav-modal-links a:last-child{
-  border-bottom:none;
-}
-.nav-modal-links a:hover{
-  text-decoration:underline;
-}
-.nav-close{
-  position:absolute;
-  top:10px;
-  right:12px;
-  border:none;
-  background:transparent;
-  color:#ffffff;
-  font-size:20px;
-  line-height:1;
   cursor:pointer;
 }
-
-/* MAIN LAYOUT */
-main{
-  padding-top:calc(var(--bar-h) + 150px);
+@media (max-width:600px){
+  .topbar-logo-link{
+    display:none;
+  }
 }
 
-.section{
+/* HERO / PAGE HEADER FOR FAQ */
+.faq-hero{
+  position:relative;
+  min-height:60vh;
+  padding-top:calc(var(--bar-h) + 80px);
+  padding-bottom:60px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 20% 15%, #ffd27e 0, rgba(255,210,126,0) 50%),
+    radial-gradient(circle at 80% 85%, #ff8f1f 0, rgba(255,143,31,0) 55%),
+    radial-gradient(circle at 50% 0%, #3974ff 0, rgba(57,116,255,0) 55%),
+    radial-gradient(circle at 0% 100%, #0000df 0, #000028 80%);
+  background-size:200% 200%;
+  animation:lavaMove 40s ease-in-out infinite alternate;
+}
+@keyframes lavaMove{
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 100%; }
+}
+.faq-hero-inner{
+  width:100%;
   max-width:1000px;
-  margin:0 auto 80px;
   padding:0 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
 }
-
-.section-header{
-  text-align:center;
-  margin-bottom:32px;
+.faq-hero-text{
+  max-width:580px;
 }
-.section-header h1{
-  margin:0 0 10px;
+.faq-hero-kicker{
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:32px;
-  text-shadow:0 3px 10px rgba(0,0,0,0.45);
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  font-size:13px;
+  color:#ffeeb5;
+  margin-bottom:8px;
 }
-.section-header p{
-  margin:0;
+.faq-hero-title{
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:50px;
+  line-height:1.08;
+  margin:0 0 12px;
+  color:#ffffff;
+  -webkit-text-stroke:3px #0040c8;
+  text-stroke:3px #0040c8;
+  text-shadow:
+    0 3px 0 #0040c8,
+    0 6px 12px rgba(0,0,0,0.6);
+}
+.faq-hero-subtitle{
+  margin:0 0 14px;
+  font-size:16px;
+  max-width:520px;
+}
+.faq-hero-breadcrumb{
+  font-size:13px;
+  opacity:0.9;
+}
+.faq-hero-breadcrumb a{
+  color:#ffeeb5;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.faq-hero-badge{
+  flex:0 0 auto;
+  min-width:220px;
+  max-width:260px;
+  border-radius:22px;
+  padding:18px 18px 20px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,0.32) 0, transparent 60%),
+    linear-gradient(145deg, rgba(0,0,0,0.75) 0%, rgba(3,15,58,0.95) 60%, rgba(0,0,0,0.9) 100%);
+  box-shadow:0 10px 28px rgba(0,0,0,0.7);
+  text-align:left;
+}
+.faq-hero-badge-title{
+  font-weight:700;
   font-size:15px;
-  color:#e0ebff;
+  margin:0 0 8px;
+}
+.faq-hero-badge-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  font-size:13px;
+  line-height:1.7;
+}
+.faq-hero-badge-list li::before{
+  content:"✦ ";
+  color:#ffc94a;
 }
 
-/* FAQ ACCORDION */
+@media (max-width:800px){
+  .faq-hero{
+    padding-top:calc(var(--bar-h) + 60px);
+    padding-bottom:40px;
+  }
+  .faq-hero-inner{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;
+  }
+  .faq-hero-title{
+    font-size:38px;
+    -webkit-text-stroke:2px #0040c8;
+    text-stroke:2px #0040c8;
+  }
+  .faq-hero-badge{
+    align-self:stretch;
+  }
+}
+
+/* MAIN FAQ SECTION */
+.section{
+  padding:40px 16px 70px;
+  position:relative;
+  z-index:1;
+}
+.section-inner{
+  max-width:1000px;
+  margin:0 auto;
+}
+
+/* Card background like about cards */
+.faq-wrapper{
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(0,1.1fr);
+  gap:26px;
+  align-items:flex-start;
+}
+@media (max-width:900px){
+  .faq-wrapper{
+    grid-template-columns:1fr;
+  }
+}
+
 .faq-list{
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:14px;
 }
 .faq-item{
-  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #e3d8ff 100%);
-  border-radius:18px;
-  padding:16px 18px;
+  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
+  border-radius:16px;
+  padding:16px 18px 14px;
   box-shadow:0 3px 14px rgba(0,0,0,0.25);
-  color:#2f3665;
+  color:#333a78;
+  cursor:pointer;
 }
-.faq-question{
+.faq-item-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+.faq-q{
   margin:0;
   font-weight:700;
   font-size:15px;
 }
-.faq-answer{
+.faq-toggle{
+  font-weight:900;
+  font-size:18px;
+  line-height:1;
+  color:#ff8f1f;
+}
+.faq-a{
   margin-top:8px;
   font-size:14px;
   line-height:1.7;
+  display:none;
+}
+.faq-item.open .faq-a{
+  display:block;
+}
+.faq-item.open .faq-toggle{
+  transform:rotate(90deg);
 }
 
-/* FOOTER */
+.faq-note{
+  font-size:13px;
+  color:#e1e5ff;
+  margin-top:8px;
+  opacity:0.9;
+}
+
+/* Side panel */
+.faq-side-card{
+  background:linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.95) 70%);
+  border-radius:18px;
+  padding:18px 18px 16px;
+  color:#f9fbff;
+  box-shadow:0 8px 24px rgba(0,0,0,0.65);
+  font-size:14px;
+}
+.faq-side-card h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+.faq-side-card p{
+  margin:0 0 8px;
+}
+.faq-side-card a{
+  color:#ffc94a;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+/* BOTTOM LOGO */
+.section--bottom-logo{
+  background:
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);
+  text-align:center;
+}
+.section--bottom-logo img{
+  width:200px;
+  height:auto;
+  filter:drop-shadow(0 3px 12px rgba(0,0,0,0.45));
+  cursor:pointer;
+}
+
+/* FOOTER (same as index) */
 footer{
-  background:var(--bg-grad);
+  background:
+    radial-gradient(circle at 100% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(180deg, var(--blue-deep) 0%, #00001a 100%);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
-  border-top:1px solid rgba(255,255,255,0.25);
 }
 .footer-inner{
   max-width:1100px;
@@ -349,7 +531,7 @@ footer{
 }
 .footer-line{
   border:none;
-  border-top:1px solid rgba(255,255,255,0.25);
+  border-top:1px solid rgba(255,255,255,0.35);
   margin:0 0 10px;
 }
 .footer-row{
@@ -409,20 +591,132 @@ footer{
   margin-top:6px;
 }
 
-/* Bottom logo */
-.section--bottom-logo{
-  background:var(--bg-grad);
-  text-align:center;
-  padding:40px 16px 20px;
+/* NAV OVERLAY + RICKY EASTER EGG (same logic as index) */
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1400;
 }
-.section--bottom-logo img{
-  width:200px;
+.nav-backdrop.open{
+  display:flex;
+}
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, var(--orange-light) 0, transparent 60%),
+    linear-gradient(135deg, var(--blue-deep) 0%, #00001a 100%);
+  position:relative;
+}
+.nav-modal-title{
+  margin:0 0 4px;
+  font-weight:800;
+  font-size:20px;
+  text-align:center;
+}
+.nav-modal-title-underline{
+  width:90px;
+  height:3px;
+  margin:5px auto 10px;
+  background:#ffffff;
+  border-radius:999px;
+}
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-section-top,
+.nav-modal-section-bottom{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.nav-modal-links a{
+  position:relative;
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+}
+.nav-modal-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-2px;
+  width:100%;
+  height:2px;
+  background:var(--orange);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.15s ease;
+}
+.nav-modal-links a:hover::after{
+  transform:scaleX(1);
+}
+.nav-modal-links a.nav-link-active::after{
+  transform:scaleX(1);
+  height:3px;
+}
+.nav-modal-links a.nav-link-active{
+  color:var(--orange-light);
+}
+.nav-logo-easter-wrapper{
+  display:flex;
+  justify-content:center;
+  margin:10px 0 14px;
+  position:relative;
+}
+#nav-logo-easter{
+  width:120px;
   height:auto;
-  filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
+  cursor:pointer;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.7));
+  user-select:none;
+  position:relative;
+}
+#nav-ricky-message{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:11px;
+  line-height:1.4;
+  color:#ffffff;
+  opacity:0;
+  pointer-events:none;
+  white-space:pre-line;
+  transition:opacity 0.3s ease;
+}
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
   cursor:pointer;
 }
 
-/* Modal (Privacy / DNS) */
+/* Privacy modal */
 .modal-backdrop{
   position:fixed;
   inset:0;
@@ -456,31 +750,127 @@ footer{
   padding:4px 10px;
   border-radius:999px;
   border:none;
-  background:#003cc7;
+  background:var(--blue-deep);
   color:#fff;
   font-size:13px;
   cursor:pointer;
 }
 
-/* Logo tooltip */
-.logo-tooltip{
+/* Chat assistant launcher */
+.chat-launcher{
   position:fixed;
-  padding:6px 10px;
-  border-radius:999px;
-  background:#ffffff;
-  color:#123055;
-  font-size:12px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.35);
-  z-index:3000;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 0.15s ease;
+  right:16px;
+  bottom:16px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 20%, #fdfdfd 0, #bbbbc4 45%, #63656f 100%);
+  box-shadow:0 3px 12px rgba(0,0,0,0.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:1800;
+}
+.chat-launcher span{
+  color:#1f253d;
+  font-weight:800;
+  font-size:22px;
+  line-height:1;
+}
+.chat-launcher:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Responsive tweaks */
-@media (max-width: 700px){
-  main{
-    padding-top:calc(var(--bar-h) + 130px);
+/* Chat assistant panel */
+.chat-panel{
+  position:fixed;
+  right:16px;
+  bottom:74px;
+  width:280px;
+  max-width:80vw;
+  border-radius:16px;
+  background:rgba(4,10,40,0.95);
+  color:#eaf0ff;
+  box-shadow:0 8px 24px rgba(0,0,0,0.8);
+  padding:10px 10px 12px;
+  font-size:13px;
+  display:none;
+  z-index:1800;
+}
+.chat-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+.chat-panel-title{
+  font-weight:700;
+  font-size:13px;
+}
+.chat-panel-close{
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  cursor:pointer;
+  font-size:16px;
+  line-height:1;
+}
+.chat-panel-body{
+  border-radius:10px;
+  background:rgba(5,12,50,0.9);
+  border:1px solid rgba(255,255,255,0.18);
+  padding:8px 8px 6px;
+  max-height:210px;
+  overflow-y:auto;
+}
+.chat-msg{
+  margin-bottom:6px;
+}
+.chat-msg strong{
+  font-weight:700;
+}
+.chat-panel-input-row{
+  margin-top:6px;
+  display:flex;
+  gap:4px;
+}
+.chat-panel-input{
+  flex:1;
+  border-radius:999px;
+  border:none;
+  padding:6px 8px;
+  font-size:13px;
+  outline:none;
+}
+.chat-panel-send{
+  border-radius:999px;
+  border:none;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+  color:#ffffff;
+}
+
+/* Title wiggle */
+@keyframes merrygiggle{
+  0%   { transform:translateX(0); }
+  25%  { transform:translateX(4px); }
+  50%  { transform:translateX(0); }
+  75%  { transform:translateX(-4px); }
+  100% { transform:translateX(0); }
+}
+
+/* Responsive tweak for footer row */
+@media(max-width:800px){
+  .footer-row{
+    flex-direction:row;
+    justify-content:space-between;
   }
 }
 </style>
@@ -489,122 +879,308 @@ footer{
 <body>
 
 <header class="topbar">
+  <!-- Menu icon -->
   <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
 
+  <!-- Mobile inline logo (centered on mobile) -->
+  <a href="index.html#top" class="topbar-logo-inline" id="topbar-logo-inline">
+    <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+  </a>
+
   <div class="topbar-title">
-    ❄️ The MayaNut Company – Frequently Asked Questions ❄️
+    ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
   </div>
 
-  <div class="topbar-lang">
+  <!-- Language selector (right) -->
+  <div class="topbar-lang" id="topbar-lang">
     <span class="topbar-lang-label">
       <span class="topbar-lang-label-emoji">🌎</span>
       <span class="topbar-lang-label-text">Language</span>
     </span>
-    <select id="language-select" aria-label="Site language">
-      <option value="index.html" selected>English</option>
-      <option value="index-es.html">Español</option>
-      <option value="index-pt.html">Português</option>
-      <option value="index-fr.html">Français</option>
-      <option value="index-ru.html">Русский</option>
-      <option value="index-zh.html">中文</option>
-      <option value="index-hi.html">हिन्दी</option>
-    </select>
+    <button class="topbar-lang-current-btn" id="lang-toggle" aria-haspopup="true" aria-expanded="false">
+      <span id="lang-current">English</span>
+      <span class="topbar-lang-caret">▾</span>
+    </button>
   </div>
 </header>
 
+<!-- Language dropdown -->
+<div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
+  <ul>
+    <li data-file="index.html">English</li>
+    <li data-file="index-es.html">Español</li>
+    <li data-file="index-pt.html">Português</li>
+    <li data-file="index-fr.html">Français</li>
+    <li data-file="index-de.html">Deutsch</li>
+    <li data-file="index-it.html">Italiano</li>
+    <li data-file="index-ru.html">Русский</li>
+    <li data-file="index-zh.html">中文</li>
+    <li data-file="index-ja.html">日本語</li>
+    <li data-file="index-hi.html">हिन्दी</li>
+    <li data-file="index-ur.html">اردو</li>
+    <li data-file="index-bn.html">বাংলা</li>
+    <li data-file="index-id.html">Bahasa Indonesia</li>
+    <li data-file="index-ar.html">العربية</li>
+    <li data-file="index-sw.html">Kiswahili</li>
+    <li data-file="index-ha.html">Hausa</li>
+    <li data-file="index-fil.html">Filipino</li>
+    <li data-file="index-yo.html">Yorùbá</li>
+  </ul>
+</div>
+
+<!-- Fixed logo (desktop) -->
 <a href="index.html#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
 
-<!-- NAV OVERLAY -->
+<!-- NAV OVERLAY WITH RICKY EASTER EGG -->
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
+    <div class="nav-modal-title-underline"></div>
+
     <div class="nav-modal-links">
-      <a href="index.html#buy" data-close-nav="true">STORE</a>
-      <a href="index.html#about" data-close-nav="true">ABOUT</a>
-      <a href="index.html#research" data-close-nav="true">RESEARCH</a>
-      <a href="index.html#gallery" data-close-nav="true">GALLERY</a>
-      <a href="faq.html" data-close-nav="true">FAQ</a>
-      <a href="blog.html" data-close-nav="true">BLOG</a>
+      <div class="nav-modal-section-top">
+        <a href="index.html#top" data-section="top">HOME</a>
+        <a href="index.html#buy" data-section="buy">STORE</a>
+        <a href="index.html#about" data-section="about">ABOUT</a>
+      </div>
+
+      <div class="nav-logo-easter-wrapper">
+        <img src="mayanut-the-maya-nut-company-logo.png"
+             alt="The MayaNut Company logo"
+             id="nav-logo-easter">
+        <div id="nav-ricky-message">
+💙🧡💙
+THE MAYANUT COMPANY
+DEDICATES THIS WEBSITE
+TO RICKY
+FOREVER LOVED
+💙🧡💙
+        </div>
+      </div>
+
+      <div class="nav-modal-section-bottom">
+        <a href="research.html" data-external="true">RESEARCH</a>
+        <a href="blog.html" data-external="true">BLOG</a>
+        <a href="faq.html" data-external="true" class="nav-link-active">FAQ</a>
+        <a href="contact.html" data-external="true">CONTACT</a>
+      </div>
     </div>
   </div>
 </div>
 
-<main id="top">
+<main>
+
+  <!-- FAQ HERO / HEADER -->
+  <section class="faq-hero" id="top">
+    <div class="faq-hero-inner">
+      <div class="faq-hero-text">
+        <div class="faq-hero-kicker">MAYANUT • BROSIMUM ALICASTRUM</div>
+        <h1 class="faq-hero-title">Frequently Asked Questions</h1>
+        <p class="faq-hero-subtitle">
+          Answers about maya nut, Brosimum alicastrum, and The MayaNut Company — from where we’re growing trees
+          to when you might be able to try a MayaNut beverage.
+        </p>
+        <div class="faq-hero-breadcrumb">
+          <a href="index.html#top">← Back to Home</a>
+        </div>
+      </div>
+
+      <aside class="faq-hero-badge">
+        <div class="faq-hero-badge-title">Quick Highlights</div>
+        <ul class="faq-hero-badge-list">
+          <li>maya nut is the seed of <em>Brosimum alicastrum</em>.</li>
+          <li>We’re developing plantations in warm parts of Florida.</li>
+          <li>MayaNut™ beverages and products are still in development.</li>
+          <li>Research details live on the dedicated Research page.</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- MAIN FAQ CONTENT -->
   <section class="section">
-    <div class="section-header">
-      <h1>Frequently Asked Questions</h1>
-      <p>Answers about maya nut, Brosimum alicastrum, and The MayaNut Company.</p>
-    </div>
+    <div class="section-inner faq-wrapper">
 
-    <div class="faq-list">
-      <div class="faq-item">
-        <h2 class="faq-question">What is maya nut?</h2>
-        <div class="faq-answer">
-          Maya nut is a common name for the tree species <em>Brosimum alicastrum</em>, a tropical rainforest tree in the mulberry family (Moraceae). Its seeds can be dried, roasted, and milled into a nutritious ingredient that can be used in beverages, baked goods, and more.
+      <div class="faq-list" id="faq-list">
+        <!-- Q1 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">What is maya nut?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            maya nut is the common name for the roasted seed of the tropical tree
+            <em>Brosimum alicastrum</em>. People in its native range have used the seeds for
+            centuries as a food and drink. When roasted and ground, maya nut can be brewed
+            into a rich, naturally caffeine-free beverage or milled into a flour that can be
+            used in baking and other recipes.
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">Is maya nut the same as breadnut, ojoche, or ramón?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            Yes — many regional names point to the same species. In different areas,
+            <em>Brosimum alicastrum</em> may be called maya nut, breadnut, ojoche, ramón, or
+            guaimaro. These names usually refer to the same tree and its edible seeds,
+            with local traditions shaping how it’s harvested and prepared.
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">Where is The MayaNut Company growing trees?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            The MayaNut Company is focusing on warm, frost-sensitive parts of Florida —
+            especially subtropical South Florida. Our goal is to establish dedicated
+            maya nut plantations that can serve as the foundation for future beverages,
+            powders, and flours.
+            <br><br>
+            Early work suggests that areas at or below roughly 27°N latitude in Florida
+            (just south of Stuart) are especially promising, though long-term trials are
+            needed to learn exactly how far north <em>Brosimum alicastrum</em> can thrive.
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">When will I be able to buy a MayaNut beverage?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            Our online store is not open yet. The products you see on the Store section
+            of the home page are placeholders that preview the kinds of beverages and
+            powders we hope to offer once our trees are established.
+            <br><br>
+            Developing a new crop and supply chain takes time, patience, and a lot of
+            testing. Our goal is to move carefully and create products that are both
+            delicious and sustainable before offering them for sale.
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">Can I visit the plantation or try samples now?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            At this early stage we are not open for public visits or tastings. The current
+            focus is on establishing healthy trees, monitoring how they respond to local
+            conditions, and planning for future production.
+            <br><br>
+            As we make progress, updates will be shared on this website and (eventually)
+            through our social channels. We appreciate your interest and patience while
+            everything grows — literally.
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">Is maya nut nutritious?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            Scientific studies from its native range have reported that maya nut can contain
+            meaningful amounts of fiber and other nutrients, and it has been used
+            traditionally in a variety of foods and drinks.
+            <br><br>
+            Because nutrition research is technical and often updated, we recommend visiting
+            our dedicated Research page for more detailed information and links to
+            scientific sources.
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">Where can I read scientific research about <em>Brosimum alicastrum</em>?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            For papers, scientific details, and technical background on maya nut /
+            <em>Brosimum alicastrum</em>, please see our Research page. You can reach it
+            from the main menu or by visiting <strong>research.html</strong> on this site.
+          </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">Does The MayaNut Company grow other crops?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            Our primary focus is on maya nut and understanding how <em>Brosimum alicastrum</em>
+            can be grown and appreciated in Florida. Over time, related agroforestry
+            plantings or companion species may be explored, but the heart of the project
+            will always be the maya nut tree.
+          </div>
+        </div>
+
+        <!-- Q9 -->
+        <div class="faq-item">
+          <div class="faq-item-header">
+            <h2 class="faq-q">How can I contact The MayaNut Company?</h2>
+            <div class="faq-toggle">›</div>
+          </div>
+          <div class="faq-a">
+            If you have questions, ideas, or are simply curious about what we are building,
+            you can visit the Contact page on this site (<strong>contact.html</strong>) and
+            use the information provided there to reach out.
+          </div>
+        </div>
+
+        <div class="faq-note">
+          Note: Some details may evolve as our trees grow and our research expands. This FAQ
+          is meant as a friendly overview, not a final, unchanging document.
         </div>
       </div>
 
-      <div class="faq-item">
-        <h2 class="faq-question">Where does maya nut naturally grow?</h2>
-        <div class="faq-answer">
-          <em>Brosimum alicastrum</em> is native to tropical regions of Mesoamerica and the Caribbean. It is especially common in parts of southern Mexico and Central America and can also be found in some areas of northern South America and islands such as Cuba and Jamaica.
-        </div>
-      </div>
+      <aside class="faq-side-card">
+        <h3>About The MayaNut Company</h3>
+        <p>
+          The MayaNut Company was founded in 2025 with a simple but ambitious idea:
+          develop maya nut (<em>Brosimum alicastrum</em>) as a meaningful new crop in Florida
+          and share its possibilities with the world.
+        </p>
+        <p>
+          On the home page, you can see a preview of future MayaNut™ beverages and products.
+          In the About section, you’ll learn more about our founder, August Kokus, and why
+          this particular tree has captured so much attention.
+        </p>
+        <p>
+          For deeper scientific details, please visit the
+          <a href="research.html">Research page</a>.
+        </p>
+      </aside>
 
-      <div class="faq-item">
-        <h2 class="faq-question">Where is The MayaNut Company located?</h2>
-        <div class="faq-answer">
-          The MayaNut Company is based in South Florida, where the subtropical climate is well suited for growing <em>Brosimum alicastrum</em>. A dedicated plantation is being developed as the foundation for future maya nut beverages and related products.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <h2 class="faq-question">When will your maya nut beverage be available?</h2>
-        <div class="faq-answer">
-          Our goal is to begin offering a chilled maya nut beverage by around 2028, once enough trees have matured and we can reliably harvest and process seeds at scale. Until then, we are focused on planting, research, and product development.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <h2 class="faq-question">Are your product images final?</h2>
-        <div class="faq-answer">
-          Not yet. Most images displayed on our website are placeholders or concept designs that show the direction we hope to take with future products. As our plantation grows and recipes are finalized, we will update the images to match the real packaging and beverages.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <h2 class="faq-question">Is maya nut safe for people with nut allergies?</h2>
-        <div class="faq-answer">
-          Although the common name includes the word “nut,” maya nut is botanically different from tree nuts such as almonds or walnuts. However, anyone with food allergies should always consult a medical professional before trying new foods or beverages. Once our products are ready, we will clearly label ingredients and any known allergen information.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <h2 class="faq-question">How can I stay updated on your progress?</h2>
-        <div class="faq-answer">
-          The best way is to check back at mayanut.com for updates and future announcements. You can also follow The MayaNut Company on Instagram at <strong>@themayanutcompany</strong> for occasional photos from the field and development updates.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <h2 class="faq-question">Do you sell seeds or trees?</h2>
-        <div class="faq-answer">
-          At this time, we do not sell maya nut seeds or trees directly to the public. Our current focus is on establishing a healthy plantation for research and product development. In the future, if this changes, details will be posted on our website.
-        </div>
-      </div>
     </div>
   </section>
 
-  <section class="section--bottom-logo">
-    <a href="index.html#top">
-      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo – back to home">
-    </a>
+  <!-- BOTTOM LOGO SECTION -->
+  <section class="section section--bottom-logo">
+    <div class="section-inner">
+      <a href="index.html#top" id="bottom-logo-link">
+        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+      </a>
+    </div>
   </section>
+
 </main>
 
 <footer>
@@ -634,36 +1210,168 @@ footer{
     <div id="modal-body">
       <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
       <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-      <p>We do not sell your personal information. Some translations from English into other languages may contain errors.</p>
+      <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
     </div>
     <button class="modal-close" id="modal-close">Close</button>
   </div>
 </div>
 
-<script>
-// Language selector: send back to corresponding index pages
-(function(){
-  const select = document.getElementById('language-select');
-  if (!select) return;
+<!-- Chat assistant launcher + panel -->
+<div class="chat-launcher" id="chat-launcher" aria-label="Open MayaNut chat assistant">
+  <span>?</span>
+</div>
 
-  select.addEventListener('change', function(){
-    const target = this.value || 'index.html';
-    window.location.href = target;
+<div class="chat-panel" id="chat-panel" aria-label="MayaNut chat assistant">
+  <div class="chat-panel-header">
+    <div class="chat-panel-title">MayaNut™ Assistant</div>
+    <button class="chat-panel-close" id="chat-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="chat-panel-body" id="chat-log">
+    <div class="chat-msg">
+      <strong>Bot:</strong> Hi! I’m a tiny FAQ helper. Ask me about maya nut, Brosimum alicastrum, or this website.
+    </div>
+  </div>
+  <div class="chat-panel-input-row">
+    <input type="text" id="chat-input" class="chat-panel-input" placeholder="Ask a short question…" />
+    <button class="chat-panel-send" id="chat-send">Ask</button>
+  </div>
+</div>
+
+<script>
+// Language dropdown (same behaviour as home page)
+(function(){
+  const toggle = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  const currentSpan = document.getElementById('lang-current');
+  if (!toggle || !dropdown || !currentSpan) return;
+
+  const items = dropdown.querySelectorAll('[data-file]');
+
+  const path = window.location.pathname;
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+
+  let matched = false;
+  items.forEach(item => {
+    const f = item.getAttribute('data-file');
+    if (f === file) {
+      currentSpan.textContent = item.textContent.trim();
+      item.classList.add('active');
+      matched = true;
+    }
+  });
+  if (!matched) {
+    currentSpan.textContent = 'English';
+    items.forEach(item => {
+      if (item.getAttribute('data-file') === 'index.html') {
+        item.classList.add('active');
+      }
+    });
+  }
+
+  function openMenu() {
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMenu() {
+    if (dropdown.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.getAttribute('data-file') || 'index.html';
+      window.location.href = target;
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
   });
 })();
 
-// NAV overlay
+// Privacy / DNS Modal
+(function(){
+  const backdrop = document.getElementById('modal-backdrop');
+  const titleEl = document.getElementById('modal-title');
+  const bodyEl  = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('modal-close');
+  const privacyLink = document.getElementById('privacy-link');
+  const dnsLink = document.getElementById('dns-link');
+
+  function openModal(kind){
+    if(kind === 'privacy'){
+      titleEl.textContent = 'Privacy Policy';
+      bodyEl.innerHTML = `
+        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+        <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
+      `;
+    }else{
+      titleEl.textContent = 'Do Not Sell My Info';
+      bodyEl.innerHTML = `
+        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
+        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+      `;
+    }
+    backdrop.style.display = 'flex';
+  }
+
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
+})();
+
+// NAV overlay + Ricky easter egg (drag to reveal text, click to toggle image)
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
   const navClose = document.getElementById('nav-close');
+  const logoEaster = document.getElementById('nav-logo-easter');
+  const rickyMsg = document.getElementById('nav-ricky-message');
 
-  if(!toggle || !navBackdrop) return;
+  if(!toggle || !navBackdrop || !logoEaster || !rickyMsg) return;
+
+  const homeSrc = "mayanut-the-maya-nut-company-logo.png";
+  const rickySrc = "ricky.jpeg"; // must exist
+  let isRicky = false;
+
+  const wrapper = logoEaster.parentElement;
+  wrapper.style.position = 'relative';
 
   function openNav(){
     navBackdrop.classList.add('open');
     toggle.classList.add('open');
   }
+
   function closeNav(){
     navBackdrop.classList.remove('open');
     toggle.classList.remove('open');
@@ -691,142 +1399,274 @@ footer{
     }
   });
 
-  navBackdrop.querySelectorAll('[data-close-nav="true"]').forEach(link => {
-    link.addEventListener('click', () => closeNav());
+  (function(){
+    let dragActive = false;
+    let startX = 0, startY = 0;
+    let startLeft = 0, startTop = 0;
+    const dragThreshold = 8;
+
+    function onMouseDown(e){
+      if (e.button !== 0) return;
+      e.preventDefault();
+      const rect = logoEaster.getBoundingClientRect();
+      const parentRect = wrapper.getBoundingClientRect();
+      startLeft = rect.left - parentRect.left;
+      startTop = rect.top - parentRect.top;
+      startX = e.clientX;
+      startY = e.clientY;
+      dragActive = false;
+
+      function onMove(ev){
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        const distSq = dx*dx + dy*dy;
+        if (!dragActive && distSq > dragThreshold*dragThreshold){
+          dragActive = true;
+          logoEaster.style.position = 'relative';
+          logoEaster.style.transition = 'none';
+        }
+        if (!dragActive) return;
+        logoEaster.style.left = (startLeft + dx) + 'px';
+        logoEaster.style.top  = (startTop + dy) + 'px';
+      }
+
+      function onUp(ev){
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        const distSq = dx*dx + dy*dy;
+
+        if (dragActive){
+          // After a drag, leave logo where dropped and show dedication text
+          rickyMsg.style.opacity = 1;
+        } else if (distSq <= dragThreshold*dragThreshold){
+          // Click: toggle between logo and ricky.jpeg
+          if (!isRicky){
+            logoEaster.src = rickySrc;
+            isRicky = true;
+          } else {
+            logoEaster.src = homeSrc;
+            isRicky = false;
+          }
+        }
+        dragActive = false;
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    }
+
+    logoEaster.addEventListener('mousedown', onMouseDown);
+  })();
+})();
+
+// Smooth scroll / navigation for logo links
+(function(){
+  const bottomLogoLink = document.getElementById('bottom-logo-link');
+  if (bottomLogoLink){
+    bottomLogoLink.addEventListener('click', (e) => {
+      // On FAQ, clicking bottom logo just jumps to top of this page
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+})();
+
+// FAQ accordion behaviour
+(function(){
+  const items = document.querySelectorAll('.faq-item');
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
   });
 })();
 
-// Privacy / DNS Modal
+// Chat assistant logic
 (function(){
-  const backdrop = document.getElementById('modal-backdrop');
-  const titleEl = document.getElementById('modal-title');
-  const bodyEl  = document.getElementById('modal-body');
-  const closeBtn = document.getElementById('modal-close');
-  const privacyLink = document.getElementById('privacy-link');
-  const dnsLink = document.getElementById('dns-link');
+  const launcher = document.getElementById('chat-launcher');
+  const panel = document.getElementById('chat-panel');
+  const closeBtn = document.getElementById('chat-close');
+  const logEl = document.getElementById('chat-log');
+  const inputEl = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
 
-  function openModal(kind){
-    if(kind === 'privacy'){
-      titleEl.textContent = 'Privacy Policy';
-      bodyEl.innerHTML = `
-        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-        <p>We do not sell your personal information. Some translations from English into other languages may contain errors.</p>
-      `;
-    }else{
-      titleEl.textContent = 'Do Not Sell My Info';
-      bodyEl.innerHTML = `
-        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
-        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
-      `;
+  if (!launcher || !panel || !logEl || !inputEl || !sendBtn) return;
+
+  function openPanel(){
+    panel.style.display = 'block';
+  }
+  function closePanel(){
+    panel.style.display = 'none';
+  }
+
+  launcher.addEventListener('click', () => {
+    if (panel.style.display === 'block'){
+      closePanel();
+    } else {
+      openPanel();
+      inputEl.focus();
     }
-    backdrop.style.display = 'flex';
+  });
+  closeBtn.addEventListener('click', closePanel);
+
+  function appendMsg(role, text){
+    const div = document.createElement('div');
+    div.className = 'chat-msg';
+    const strong = document.createElement('strong');
+    strong.textContent = role + ':';
+    div.appendChild(strong);
+    div.appendChild(document.createTextNode(' ' + text));
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
   }
 
-  function closeModal(){
-    backdrop.style.display = 'none';
-  }
+  const greetWords = ['hi','hello','hey','hola','hallo','yo'];
+  const thanksWords = ['thank','thanks','thank you','ty'];
 
-  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
-  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (backdrop){
-    backdrop.addEventListener('click', (e) => {
-      if(e.target === backdrop) closeModal();
-    });
-  }
-})();
-
-// Logo tooltip (desktop + mobile)
-(function(){
-  const logos = document.querySelectorAll('.topbar-logo-link, .section--bottom-logo a');
-  if (!logos.length) return;
-
-  const tooltip = document.createElement('div');
-  tooltip.className = 'logo-tooltip';
-  tooltip.textContent = '';
-  document.body.appendChild(tooltip);
-
-  let tooltipVisible = false;
-  let lastLogo = null;
-
-  function atTop(){
-    return window.location.pathname.endsWith('index.html') && window.scrollY <= 0;
-  }
-
-  function getMessage(){
-    if (atTop()){
-      return 'Welcome to mayanut.com – Home of The MayaNut Company';
+  const topicGroups = [
+    {
+      match: (t) =>
+        t.includes('what is') &&
+        (t.replace(/\s+/g,'').includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      answers: [
+        'maya nut is the roasted seed of the tropical tree Brosimum alicastrum. It can be used to make a rich, naturally caffeine-free drink or a versatile flour.',
+        'When you ask “What is MayaNut?”, it’s the seed of Brosimum alicastrum – a tropical tree whose seeds can be roasted, ground, and turned into drinks and foods.'
+      ]
+    },
+    {
+      match: (t) => {
+        const noSpace = t.replace(/\s+/g,'');
+        return noSpace.includes('mayanut') || t.includes('maya nut');
+      },
+      answers: [
+        'maya nut is the seed of the Brosimum alicastrum tree. It’s been used for centuries in its native range as a food and drink.',
+        'People use the name “maya nut” for the seed of Brosimum alicastrum. Roasted maya nut can be brewed as a drink or milled into flour.'
+      ]
+    },
+    {
+      match: (t) => t.includes('brosimum') || t.includes('alicastrum') || t.includes('b alicastrum'),
+      answers: [
+        'Brosimum alicastrum is the scientific name for the maya nut tree. It belongs to the Moraceae family, like mulberries and figs.',
+        'When you see Brosimum alicastrum, that’s the Latin name for the tropical tree whose seed we call maya nut.'
+      ]
+    },
+    {
+      match: (t) => t.includes('ojoche') || t.includes('ramon') || t.includes('ramón') || t.includes('breadnut'),
+      answers: [
+        'Ojoche, ramón, and breadnut are different common names for the same species, Brosimum alicastrum, in different regions.',
+        'Yes, names like ojoche and ramón usually refer to the maya nut tree or its seeds, depending on local tradition.'
+      ]
+    },
+    {
+      match: (t) =>
+        (t.includes('scientific') || t.includes('science') || t.includes('study') || t.includes('studies') ||
+         t.includes('research') || t.includes('paper') || t.includes('nutrition') || t.includes('nutritional') ||
+         t.includes('composition') || t.includes('protein')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum') || t.includes('alicastrum')),
+      answers: [
+        'If you’re looking for scientific information on Brosimum alicastrum (maya nut), please visit our Research page: use the “RESEARCH” link in the menu or go directly to research.html.',
+        'For more technical and scientific details about maya nut, including research papers on Brosimum alicastrum, please check our Research page (research.html).'
+      ]
+    },
+    {
+      match: (t) => (t.includes('where') || t.includes('grow') || t.includes('growing')) &&
+        (t.includes('florida') || t.includes('tree') || t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      answers: [
+        'The MayaNut Company is focusing on warm parts of Florida, especially South Florida below about 27°N, where Brosimum alicastrum can handle winters more easily.',
+        'Our early trials are in subtropical South Florida. Over time we hope to learn exactly how far north the maya nut tree can be grown in Florida.'
+      ]
+    },
+    {
+      match: (t) => (t.includes('store') || t.includes('buy') || t.includes('purchase') || t.includes('product')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('beverage') || t.includes('drink')),
+      answers: [
+        'The online store isn’t open yet. On the main page, the Store section shows placeholder MayaNut products while our plantation grows.',
+        'MayaNut beverages are still in development. For now you can scroll through the Store preview on the home page to see what we’re planning.'
+      ]
+    },
+    {
+      match: (t) =>
+        (t.includes('about') || t.includes('who are you') || t.includes('tell me about')) &&
+        (t.includes('company') || t.includes('mayanut company')),
+      answers: [
+        'The MayaNut Company was founded in 2025 by August Kokus in South Florida. Our mission is to grow Brosimum alicastrum trees and create future MayaNut beverages, powders, and flours.',
+        'We are The MayaNut Company, developing one of Florida’s first plantations of Brosimum alicastrum trees so people can enjoy maya nut drinks and foods.'
+      ]
     }
-    return '👆 Click to Return Home 👆';
+  ];
+
+  function pickRandom(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  function positionTooltip(rect){
-    tooltip.style.top = '0px';
-    tooltip.style.left = '0px';
+  function handleUserMessage(){
+    const raw = inputEl.value.trim();
+    if (!raw) return;
+    inputEl.value = '';
+    appendMsg('You', raw);
 
-    const width = tooltip.offsetWidth || 220;
-    const top = rect.top + rect.height + 8;
-    const centerX = rect.left + rect.width / 2;
+    const lower = raw.toLowerCase();
 
-    let left = centerX - width / 2;
-    const margin = 8;
-    const maxLeft = window.innerWidth - width - margin;
+    if (lower.includes('how are you') || lower.includes('how\'s your day') || lower.includes('hows your day')){
+      appendMsg('Bot', pickRandom([
+        'I’m a tiny maya nut bot, doing great among the Brosimum alicastrum trees! How can I help you today?',
+        'My day is going well in this little digital plantation. Ask me something about maya nut or The MayaNut Company!'
+      ]));
+      return;
+    }
 
-    if (left < margin) left = margin;
-    if (left > maxLeft) left = maxLeft;
+    if (greetWords.some(g => lower.includes(g))){
+      appendMsg('Bot', pickRandom([
+        'Hi! Ask me something about maya nut or Brosimum alicastrum.',
+        'Hello! I can answer short questions about MayaNut and this website.'
+      ]));
+      return;
+    }
 
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
+    if (thanksWords.some(t => lower.includes(t))){
+      appendMsg('Bot', pickRandom([
+        'You’re very welcome!',
+        'Glad to help!',
+        'Thank you for visiting The MayaNut Company site.'
+      ]));
+      return;
+    }
+
+    for (const group of topicGroups){
+      if (group.match(lower)){
+        appendMsg('Bot', pickRandom(group.answers));
+        return;
+      }
+    }
+
+    const onTopic =
+      lower.replace(/\s+/g,'').includes('mayanut') ||
+      lower.includes('maya nut') ||
+      lower.includes('brosimum') ||
+      lower.includes('alicastrum') ||
+      lower.includes('ojoche') ||
+      lower.includes('ramon') ||
+      lower.includes('ramón');
+
+    if (onTopic){
+      appendMsg('Bot', pickRandom([
+        'I can chat about the maya nut tree, how it’s used as a drink or flour, and what The MayaNut Company is planning.',
+        'maya nut is the seed of Brosimum alicastrum. If you want, ask about where it grows, how it’s used, or our future products.'
+      ]));
+      return;
+    }
+
+    appendMsg('Bot',
+      'I’m a very small helper bot. I only answer questions about maya nut, Brosimum alicastrum, ojoche/ramón, or this website. Try asking about those topics!');
   }
 
-  function showTooltipFor(el){
-    const rect = el.getBoundingClientRect();
-    tooltip.textContent = getMessage();
-    tooltip.style.opacity = '1';
-    positionTooltip(rect);
-    tooltipVisible = true;
-    lastLogo = el;
-  }
-
-  function hideTooltip(){
-    tooltip.style.opacity = '0';
-    tooltipVisible = false;
-    lastLogo = null;
-  }
-
-  const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-
-  if (!isCoarse){
-    logos.forEach(link => {
-      link.addEventListener('mouseenter', () => showTooltipFor(link));
-      link.addEventListener('mouseleave', () => hideTooltip());
-    });
-  } else {
-    logos.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        if (!tooltipVisible || lastLogo !== link){
-          e.preventDefault();
-          showTooltipFor(link);
-          return;
-        }
-
-        e.preventDefault();
-        hideTooltip();
-        window.location.href = 'index.html#top';
-      });
-    });
-
-    document.addEventListener('click', () => {
-      if (tooltipVisible) hideTooltip();
-    });
-  }
-
-  window.addEventListener('scroll', () => {
-    if (tooltipVisible && lastLogo){
-      positionTooltip(lastLogo.getBoundingClientRect());
+  sendBtn.addEventListener('click', handleUserMessage);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      handleUserMessage();
     }
   });
 })();
