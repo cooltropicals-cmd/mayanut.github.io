@@ -31,6 +31,19 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 مايا نَت, مايانَت, جوز المايا, شجرة استوائية, Brosimum alicastrum
 ">
 
+<!-- Open Graph (social sharing) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="The MayaNut Company – Maya nut beverage coming soon">
+<meta property="og:description" content="Maya nut beverage and products made from Brosimum alicastrum, a tropical rainforest tree also known as breadnut, ojoche, ramón, and guiamaro.">
+<meta property="og:url" content="https://mayanut.com">
+<meta property="og:image" content="https://mayanut.com/mayanut-the-maya-nut-company-logo.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The MayaNut Company – Maya nut beverage coming soon">
+<meta name="twitter:description" content="Maya nut beverage and products made from Brosimum alicastrum – a future superfood from tropical rainforest trees.">
+<meta name="twitter:image" content="https://mayanut.com/mayanut-the-maya-nut-company-logo.png">
+
 <style>
 :root{
   --bg:#18A7FF;
@@ -105,34 +118,35 @@ body{
 /* Hamburger menu */
 .menu-toggle{
   grid-area:menu;
+  width:32px;
+  height:30px;
   border:none;
-  background:rgba(0,0,0,0.18);
+  background:transparent;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:6px 8px;
+  padding:0;
   cursor:pointer;
   justify-self:start;
-  margin-left:4px;
+  margin-left:2px;
   z-index:1100;
-  border-radius:999px;
 }
 .menu-toggle span{
   display:block;
-  width:18px;
   height:3px;
   border-radius:999px;
   background:#ffffff;
+  margin:2px 0; /* a little extra breathing room */
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
-  transform:translateY(6px) rotate(45deg);
+  transform:translateY(11px) rotate(45deg);
 }
 .menu-toggle.open span:nth-child(2){
   opacity:0;
 }
 .menu-toggle.open span:nth-child(3){
-  transform:translateY(-6px) rotate(-45deg);
+  transform:translateY(-11px) rotate(-45deg);
 }
 
 /* Title in top bar */
@@ -280,8 +294,9 @@ body{
 
   .topbar-logo-inline{
     grid-area:logo;
-    display:block;
-    justify-self:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
   }
 
   /* Hide fixed logo on mobile */
@@ -338,8 +353,8 @@ body{
   z-index:1;
 }
 
-/* Snow canvases (hero + about) */
-.snow-canvas{
+/* Snow canvas */
+canvas#snow{
   position:absolute;
   inset:0;
   width:100%;
@@ -543,7 +558,6 @@ body{
   font-size:14px;
   margin-bottom:10px;
   overflow:hidden;
-  cursor:pointer;
 }
 .store-item-photo{
   width:100%;
@@ -554,63 +568,6 @@ body{
   font-size:14px;
   color:#40437a;
   text-align:center;
-}
-
-/* STORE MODAL for first image */
-.store-modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:2200;
-}
-.store-modal-backdrop.open{
-  display:flex;
-}
-.store-modal{
-  position:relative;
-  background:#ffffff;
-  color:#123055;
-  max-width:720px;
-  width:90%;
-  border-radius:16px;
-  padding:18px 20px 18px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.6);
-  display:flex;
-  flex-wrap:wrap;
-  gap:16px;
-}
-.store-modal-image-wrap{
-  flex:0 0 240px;
-  max-width:100%;
-}
-.store-modal-image-wrap img{
-  width:100%;
-  border-radius:14px;
-  object-fit:cover;
-  box-shadow:0 3px 12px rgba(0,0,0,0.35);
-}
-.store-modal-text{
-  flex:1;
-  min-width:200px;
-  font-size:14px;
-  line-height:1.7;
-}
-.store-modal-text h3{
-  margin-top:0;
-  margin-bottom:8px;
-}
-.store-modal-close{
-  position:absolute;
-  top:8px;
-  right:10px;
-  border:none;
-  background:transparent;
-  color:#444;
-  font-size:22px;
-  cursor:pointer;
 }
 
 /* ABOUT SECTION */
@@ -632,15 +589,6 @@ body{
 .section--about{
   background:var(--bg-grad);
   color:#fff;
-}
-
-/* About snow canvas */
-.section--about .snow-canvas{
-  z-index:0;
-}
-.section--about .section-inner{
-  position:relative;
-  z-index:1;
 }
 
 .about-grid{
@@ -668,31 +616,28 @@ body{
   aspect-ratio:1/1;
 }
 
-/* Expand button overlay – icon only, expands left on hover (desktop) */
+/* Expand button overlay */
 .img-expand-btn{
   position:absolute;
   top:8px;
   right:8px;
   border:none;
   border-radius:999px;
-  padding:4px 8px;
+  padding:4px 10px;
   background:rgba(0,0,0,0.6);
   color:#ffffff;
   font-size:11px;
   display:flex;
-  flex-direction:row-reverse; /* icon on right, text grows to left */
   align-items:center;
   gap:4px;
   cursor:pointer;
   white-space:nowrap;
-  overflow:hidden;
 }
 .img-expand-icon{
   font-size:13px;
 }
 .img-expand-hint{
   opacity:0;
-  transform:translateX(4px);
   transition:opacity 0.18s ease, transform 0.18s ease;
 }
 
@@ -700,15 +645,14 @@ body{
 @media(min-width: 801px){
   .about-image-tile:hover .img-expand-hint{
     opacity:1;
-    transform:translateX(0);
+    transform:translateY(-1px);
   }
   .about-image-tile:hover .img-expand-btn{
-    padding-left:12px;
     transform:scale(1.04);
   }
 }
 
-/* Mobile: keep icon-only */
+/* Mobile: keep icon, hide hint text so it’s not cluttered */
 @media(max-width: 800px){
   .img-expand-hint{
     display:none;
@@ -795,17 +739,17 @@ body{
   margin-top:0;
   margin-bottom:8px;
   color:#30346a;
-  text-decoration:underline;
-  text-underline-offset:4px;
 }
 
-/* Make main About title likely one line */
+/* Make main About title underlined */
 .about-text-card.about-card-1 h2{
   font-size:19px;
+  text-decoration:underline;
+  text-underline-offset:4px;
   white-space:nowrap;
 }
 
-/* STORE / ABOUT layout on smaller screens */
+/* STORE / ABOUT / GALLERY layout on smaller screens */
 @media(max-width:800px){
   .hero{
     padding-top:calc(var(--bar-h) + 40px);
@@ -837,6 +781,90 @@ body{
   }
 }
 
+/* GALLERY */
+.section--gallery{
+  background:var(--bg-grad);
+}
+.gallery-inner{
+  text-align:center;
+}
+.gallery-inner h2{
+  margin:0 0 12px;
+  font-size:22px;
+}
+.gallery-inner p{
+  margin:0 0 18px;
+  font-size:15px;
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  max-width:900px;
+  margin:0 auto;
+}
+.gallery-tile{
+  aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
+}
+.gallery-tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.gallery-tile:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* Hide inner Gallery heading text on small screens */
+@media(max-width:600px){
+  .gallery-inner h2{
+    display:none;
+  }
+}
+
+/* Gallery "view more" control */
+.gallery-more-wrap{
+  margin-top:18px;
+}
+.gallery-more-button{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:2px solid #d6d8e8;
+  background:rgba(255,255,255,0.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 8px;
+  cursor:pointer;
+  transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.gallery-more-button:hover{
+  transform:scale(1.05);
+  background:rgba(255,255,255,0.28);
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+}
+.gallery-more-arrow{
+  width:0;
+  height:0;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:12px solid #d6d8e8;
+}
+.gallery-more-text{
+  font-size:13px;
+  color:#e5ecff;
+}
+.gallery-grid-extra{
+  display:none;
+  margin-top:16px;
+}
+
 /* BOTTOM LOGO */
 .section--bottom-logo{
   background:
@@ -850,6 +878,36 @@ body{
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
   cursor:pointer;
+}
+
+/* Back-to-top circle + label */
+.back-home-wrap{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.back-home-circle{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:2px solid #ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.back-home-circle-arrow{
+  width:0;
+  height:0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:12px solid #ffffff;
+}
+.back-home-text{
+  font-size:13px;
+  color:#f5fbff;
 }
 
 /* FOOTER */
@@ -955,93 +1013,91 @@ footer{
   font-size:15px;
   line-height:1.7;
   background:
-    radial-gradient(circle at 0% 0%, #aa00fe 0, #0c6fda 45%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #aa00fe 0, #083f94 45%, transparent 80%),
-    radial-gradient(circle at 50% 50%, #49d5ff 0, #18A7FF 40%, #07336f 85%);
+    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    #0a56c2;
   position:relative;
 }
 .nav-modal-title{
-  margin:0 0 4px;
+  margin:0 0 8px;
   font-weight:800;
   font-size:20px;
   text-align:center;
 }
-.nav-modal-title-underline{
-  width:90px;
-  height:3px;
-  margin:5px auto 10px;
-  background:#ffffff;
-  border-radius:999px;
+
+/* Easter-egg logo wrapper in nav modal */
+.nav-logo-easter-wrapper{
+  margin:6px auto 10px;
+  width:120px;
+  height:80px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.nav-logo-easter{
+  width:100px;
+  height:auto;
+  cursor:pointer;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+  z-index:2;
+}
+.nav-logo-ricky-message{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:9px;
+  line-height:1.4;
+  text-align:center;
+  color:rgba(255,255,255,0.5);
+  opacity:0;
+  pointer-events:none;
+  z-index:1;
+  white-space:nowrap;
+}
+.nav-logo-ricky-message.show{
+  opacity:1;
 }
 
-/* Top & bottom link groups */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:10px;
   margin-top:8px;
 }
-.nav-modal-links-top{
-  margin-bottom:10px;
-}
-.nav-modal-links-bottom{
-  margin-top:10px;
-}
-
-/* Center logo between scroll + click sections */
-.nav-modal-center-logo{
-  display:flex;
-  justify-content:center;
-  margin-top:4px;
-}
-.nav-modal-center-logo img{
-  width:80px;
-  height:auto;
-  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.55));
-}
-
-/* Divider line under logo */
-.nav-modal-divider{
-  width:100%;
-  height:3px;
-  border-radius:999px;
-  margin:10px 0 0;
-  background:linear-gradient(90deg, #ffffff 0%, #ffd27a 50%, #ffffff 100%);
-  opacity:0.85;
-}
-
 .nav-modal-links a{
   position:relative;
   color:#ffffff;
   text-decoration:none;
   font-weight:600;
   font-size:15px;
-  padding:7px 10px;
-  border-radius:10px;
-  transition:background 0.15s ease;
+  padding:6px 10px;
+  border-radius:8px;
 }
+/* Short underline only when active */
 .nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:0;
-  bottom:-3px;
-  width:100%;
-  height:0;
+  left:10px;
+  bottom:-2px;
+  width:40%;
+  height:2px;
   background:var(--orange);
-  transform-origin:left;
-  transform:scaleX(1);
+  opacity:0;
 }
-
-/* Hover: background lights up lighter blue */
-.nav-modal-links a:hover{
-  background:rgba(24,167,255,0.22);
+.nav-modal-links a.nav-link-active{
+  color:var(--orange);
 }
-
-/* Active: long orange underline only for active link */
 .nav-modal-links a.nav-link-active::after{
-  height:3px;
+  opacity:1;
 }
-
+.nav-modal-links a:hover{
+  background:rgba(255,255,255,0.14);
+}
 .nav-close{
   position:absolute;
   top:10px;
@@ -1198,8 +1254,11 @@ footer{
   }
 }
 
-/* Responsive breakpoints for store */
+/* Responsive breakpoints for gallery + store */
 @media(max-width:800px){
+  .gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
   .footer-row{
     flex-direction:row;
     justify-content:space-between;
@@ -1290,24 +1349,28 @@ footer{
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
-    <div class="nav-modal-title-underline"></div>
 
-    <!-- Top links: scrollable sections -->
-    <div class="nav-modal-links nav-modal-links-top">
+    <!-- Easter-egg logo in menu -->
+    <div class="nav-logo-easter-wrapper">
+      <div class="nav-logo-ricky-message" id="nav-ricky-message">
+        <div>THIS WEBSITE AND COMPANY</div>
+        <div>IS DEDICATED TO RICKY</div>
+        <div>🩵 FOREVER LOVED 🩵</div>
+      </div>
+      <img
+        src="mayanut-the-maya-nut-company-logo.png"
+        alt="The MayaNut Company logo"
+        class="nav-logo-easter"
+        id="nav-logo-easter"
+        draggable="false"
+      >
+    </div>
+
+    <div class="nav-modal-links">
       <a href="#top" data-section="top">HOME</a>
       <a href="#buy" data-section="buy">STORE</a>
       <a href="#about" data-section="about">ABOUT</a>
-    </div>
-
-    <!-- Center logo separator -->
-    <div class="nav-modal-center-logo">
-      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
-    </div>
-    <div class="nav-modal-divider"></div>
-
-    <!-- Bottom links: click to new pages -->
-    <div class="nav-modal-links nav-modal-links-bottom">
-      <a href="gallery.html" data-external="true">GALLERY</a>
+      <a href="#gallery" data-section="gallery">GALLERY</a>
       <a href="research.html" data-external="true">RESEARCH</a>
       <a href="blog.html" data-external="true">BLOG</a>
       <a href="faq.html" data-external="true">FAQ</a>
@@ -1320,7 +1383,7 @@ footer{
 
   <!-- HERO -->
   <section class="hero" id="top">
-    <canvas id="snow" class="snow-canvas"></canvas>
+    <canvas id="snow"></canvas>
 
     <div class="hero-inner">
       <div class="hero-right">
@@ -1351,14 +1414,14 @@ footer{
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>Maya nut Store</h2>
-        <p>Store Products Coming For Sale Soon!</p>
+        <h2>Maya nut Store — Coming Soon</h2>
+        <p>Scroll to preview future beverages, powder, and flour products. These are placeholder items while the first Maya nut plantation grows.</p>
       </div>
 
       <div class="store-scroller-wrapper">
         <div class="store-scroller">
           <div class="store-item">
-            <div class="store-item-image" id="store-main-image">
+            <div class="store-item-image">
               <img src="rach20.png" alt="Chilled Maya nut beverage glass" class="store-item-photo">
             </div>
             <div class="store-item-label">Chilled Maya nut Beverage</div>
@@ -1384,26 +1447,11 @@ footer{
     </div>
   </section>
 
-  <!-- Store image modal -->
-  <div class="store-modal-backdrop" id="store-modal-backdrop">
-    <div class="store-modal">
-      <button class="store-modal-close" id="store-modal-close" aria-label="Close product popup">&times;</button>
-      <div class="store-modal-image-wrap">
-        <img src="rach20.png" alt="Chilled Maya nut beverage glass" id="store-modal-img">
-      </div>
-      <div class="store-modal-text">
-        <h3>The MayaNut Company's Signature Beverage</h3>
-        <p>The MayaNut Company's Signature Beverage Coming Soon to a Store Near You!</p>
-      </div>
-    </div>
-  </div>
-
   <!-- TRANSITION: ABOUT -->
   <div class="transition-strip">ABOUT</div>
 
   <!-- ABOUT -->
   <section class="section section--about" id="about">
-    <canvas id="snow-about" class="snow-canvas"></canvas>
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
@@ -1475,12 +1523,80 @@ footer{
     </div>
   </section>
 
+  <!-- TRANSITION: GALLERY -->
+  <div class="transition-strip">GALLERY</div>
+
+  <!-- GALLERY -->
+  <section class="section section--gallery" id="gallery">
+    <div class="section-inner gallery-inner">
+      <h2>Gallery</h2>
+      <p>Images from our trees, fruit, and future products — coming soon.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of Maya nut fruit Brosimum alicastrum on the tree">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Cluster of Maya nut fruits on Brosimum alicastrum branches">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit in tropical forest light">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on a rainforest tree trunk">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Detailed view of ripe Maya nut fruit texture">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Multiple Maya nut fruits of Brosimum alicastrum on branches">
+        </div>
+      </div>
+
+      <div class="gallery-more-wrap">
+        <div class="gallery-more-button" id="gallery-more-button">
+          <div class="gallery-more-arrow"></div>
+        </div>
+        <div class="gallery-more-text">👆 Click to View More Images 👆</div>
+      </div>
+
+      <div class="gallery-grid gallery-grid-extra" id="gallery-grid-extra">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 7">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 8">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 9">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 10">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 11">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 12">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top" id="bottom-logo-link">
         <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
       </a>
+
+      <div class="back-home-wrap">
+        <div class="back-home-circle" id="back-home-circle">
+          <div class="back-home-circle-arrow"></div>
+        </div>
+        <div class="back-home-text">👆 Click to Return Home 👆</div>
+      </div>
     </div>
   </section>
 
@@ -1547,6 +1663,44 @@ footer{
     <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
   </div>
 </div>
+
+<!-- JSON-LD: Organization + Product -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://mayanut.com/#org",
+      "name": "The MayaNut Company, Inc.",
+      "url": "https://mayanut.com",
+      "logo": "https://mayanut.com/mayanut-the-maya-nut-company-logo.png",
+      "description": "The MayaNut Company is developing Brosimum alicastrum (Maya nut) as a new agricultural crop in the United States, starting with plantations in South Florida.",
+      "sameAs": [
+        "https://instagram.com/themayanutcompany"
+      ]
+    },
+    {
+      "@type": "Product",
+      "@id": "https://mayanut.com/#product-maya-nut-beverage",
+      "name": "Maya nut beverage",
+      "brand": {
+        "@type": "Brand",
+        "name": "The MayaNut Company"
+      },
+      "description": "A chilled, caffeine-free Maya nut beverage inspired by Brosimum alicastrum, a tropical rainforest tree species historically used across Mesoamerica.",
+      "image": "https://mayanut.com/rach20.png",
+      "url": "https://mayanut.com",
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/PreOrder",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    }
+  ]
+}
+</script>
 
 <script>
 // Language dropdown (custom, below bar)
@@ -1620,147 +1774,149 @@ footer{
   });
 })();
 
-// Snowflakes on all .snow-canvas elements (hero + about)
+// Canvas snowflakes in hero, with pause when tab not visible
 (function () {
-  const canvases = document.querySelectorAll('.snow-canvas');
-  if (!canvases.length) return;
+  const canvas = document.getElementById("snow");
+  if (!canvas) return;
+  const hero = canvas.parentElement;
+  const ctx = canvas.getContext("2d");
 
-  canvases.forEach(canvas => {
-    const parent = canvas.parentElement;
-    if (!parent) return;
-    const ctx = canvas.getContext("2d");
+  let width = hero.clientWidth;
+  let height = hero.clientHeight;
 
-    let width = parent.clientWidth;
-    let height = parent.clientHeight;
+  function resize() {
+    width = hero.clientWidth;
+    height = hero.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  resize();
+  window.addEventListener("resize", resize);
 
-    function resize() {
-      width = parent.clientWidth;
-      height = parent.clientHeight;
-      canvas.width = width;
-      canvas.height = height;
+  const FLAKE_COUNT = 60;
+  const flakes = [];
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createFlake(initial = false) {
+    return {
+      x: random(0, width),
+      y: initial ? random(0, height) : random(-height * 0.2, 0),
+      size: random(2, 5),
+      speedY: random(0.03, 0.12),
+      speedX: random(-0.03, 0.03),
+      sway: random(0.5, 1.5),
+      swaySpeed: random(0.0005, 0.002),
+      swayOffset: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: random(-0.003, 0.003)
+    };
+  }
+
+  function initFlakes() {
+    flakes.length = 0;
+    for (let i = 0; i < FLAKE_COUNT; i++) {
+      flakes.push(createFlake(true));
     }
-    resize();
-    window.addEventListener("resize", resize);
+  }
 
-    const FLAKE_COUNT = 60;
-    const flakes = [];
+  function drawFlake(flake) {
+    ctx.save();
+    ctx.translate(flake.x, flake.y);
+    ctx.rotate(flake.rotation);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.lineWidth = 1;
 
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
+    const armLength = flake.size;
+
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 / 6) * i;
+      const x = Math.cos(angle) * armLength;
+      const y = Math.sin(angle) * armLength;
+
+      ctx.moveTo(0, 0);
+      ctx.lineTo(x, y);
+
+      const branchLen = armLength * 0.4;
+      const sideAngle1 = angle + Math.PI / 6;
+      const sideAngle2 = angle - Math.PI / 6;
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle1) * branchLen,
+        y * 0.4 + Math.sin(sideAngle1) * branchLen
+      );
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle2) * branchLen,
+        y * 0.4 + Math.sin(sideAngle2) * branchLen
+      );
     }
+    ctx.stroke();
+    ctx.restore();
+  }
 
-    function createFlake(initial = false) {
-      return {
-        x: random(0, width),
-        y: initial ? random(0, height) : random(-height * 0.2, 0),
-        size: random(2, 5),
-        speedY: random(0.03, 0.12),
-        speedX: random(-0.03, 0.03),
-        sway: random(0.5, 1.5),
-        swaySpeed: random(0.0005, 0.002),
-        swayOffset: Math.random() * Math.PI * 2,
-        rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: random(-0.003, 0.003)
-      };
-    }
+  function updateFlake(flake, deltaTime) {
+    flake.x += flake.speedX * deltaTime +
+      Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
-    function initFlakes() {
-      flakes.length = 0;
-      for (let i = 0; i < FLAKE_COUNT; i++) {
-        flakes.push(createFlake(true));
-      }
-    }
+    flake.y += flake.speedY * deltaTime;
 
-    function drawFlake(flake) {
-      ctx.save();
-      ctx.translate(flake.x, flake.y);
-      ctx.rotate(flake.rotation);
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-      ctx.lineWidth = 1;
+    flake.rotation += flake.rotationSpeed * deltaTime;
 
-      const armLength = flake.size;
-
-      ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI * 2 / 6) * i;
-        const x = Math.cos(angle) * armLength;
-        const y = Math.sin(angle) * armLength;
-
-        ctx.moveTo(0, 0);
-        ctx.lineTo(x, y);
-
-        const branchLen = armLength * 0.4;
-        const sideAngle1 = angle + Math.PI / 6;
-        const sideAngle2 = angle - Math.PI / 6;
-
-        ctx.moveTo(x * 0.4, y * 0.4);
-        ctx.lineTo(
-          x * 0.4 + Math.cos(sideAngle1) * branchLen,
-          y * 0.4 + Math.sin(sideAngle1) * branchLen
-        );
-
-        ctx.moveTo(x * 0.4, y * 0.4);
-        ctx.lineTo(
-          x * 0.4 + Math.cos(sideAngle2) * branchLen,
-          y * 0.4 + Math.sin(sideAngle2) * branchLen
-        );
-      }
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    function updateFlake(flake, deltaTime) {
-      flake.x += flake.speedX * deltaTime +
-        Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
-
-      flake.y += flake.speedY * deltaTime;
-
-      flake.rotation += flake.rotationSpeed * deltaTime;
-
-      if (flake.y > height + flake.size * 2) {
-        const replacement = createFlake(false);
-        flake.x = replacement.x;
-        flake.y = replacement.y;
-        flake.speedY = replacement.speedY;
-        flake.speedX = replacement.speedX;
-        flake.sway = replacement.sway;
-        flake.swaySpeed = replacement.swaySpeed;
-        flake.swayOffset = replacement.swayOffset;
-        flake.rotation = replacement.rotation;
-        flake.rotationSpeed = replacement.rotationSpeed;
-      }
-
-      if (flake.x < -20) flake.x = width + 20;
-      if (flake.x > width + 20) flake.x = -20;
+    if (flake.y > height + flake.size * 2) {
+      const replacement = createFlake(false);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
     }
 
-    let lastTime = performance.now();
+    if (flake.x < -20) flake.x = width + 20;
+    if (flake.x > width + 20) flake.x = -20;
+  }
 
-    function animate(now) {
-      const TIME_SCALE = 0.15;
-      const deltaTime = (now - lastTime) * TIME_SCALE;
-      lastTime = now;
+  let lastTime = performance.now();
+  let running = true;
 
-      // If tab is hidden, clear and skip heavy updates
-      if (document.visibilityState !== 'visible') {
-        ctx.clearRect(0, 0, width, height);
-        requestAnimationFrame(animate);
-        return;
-      }
+  function animate(now) {
+    if (!running) return;
 
-      ctx.clearRect(0, 0, width, height);
+    const TIME_SCALE = 0.15;
+    const deltaTime = (now - lastTime) * TIME_SCALE;
+    lastTime = now;
 
-      for (const flake of flakes) {
-        updateFlake(flake, deltaTime);
-        drawFlake(flake);
-      }
+    ctx.clearRect(0, 0, width, height);
 
-      requestAnimationFrame(animate);
+    for (const flake of flakes) {
+      updateFlake(flake, deltaTime);
+      drawFlake(flake);
     }
 
-    initFlakes();
     requestAnimationFrame(animate);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      running = true;
+      lastTime = performance.now();
+      requestAnimationFrame(animate);
+    } else {
+      running = false;
+    }
   });
+
+  initFlakes();
+  requestAnimationFrame(animate);
 })();
 
 // Privacy / DNS Modal
@@ -1804,12 +1960,14 @@ footer{
   }
 })();
 
-// NAV overlay (hamburger menu) + active underline tracking
+// NAV overlay (hamburger menu) + active underline tracking + easter egg logo
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
   const navClose = document.getElementById('nav-close');
-  const links = document.querySelectorAll('.nav-modal-links a[data-section]');
+  const links = document.querySelectorAll('.nav-modal-links a');
+  const navLogo = document.getElementById('nav-logo-easter');
+  const rickyMessage = document.getElementById('nav-ricky-message');
 
   if(!toggle || !navBackdrop) return;
 
@@ -1828,6 +1986,7 @@ footer{
     if(navBackdrop.classList.contains('open')){
       closeNav();
     }else{
+      closeNav(); // ensure state reset
       openNav();
     }
   });
@@ -1845,9 +2004,21 @@ footer{
     }
   });
 
-  // Active underline follows visible section (for in-page anchors)
-  const sectionMap = {};
+  // File-based active state (for external pages like research.html)
+  const currentPath = window.location.pathname;
+  const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+
   links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#')) return;
+    if (href === currentFile) {
+      link.classList.add('nav-link-active');
+    }
+  });
+
+  // Active underline follows visible section (for in-page anchors on index.html)
+  const sectionMap = {};
+  document.querySelectorAll('.nav-modal-links a[data-section]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href || !href.startsWith('#')) return;
     const id = href.replace('#','');
@@ -1868,7 +2039,8 @@ footer{
 
     if (mostVisible) {
       const id = mostVisible.id;
-      links.forEach(l => l.classList.remove('nav-link-active'));
+      // clear only for hash-links
+      document.querySelectorAll('.nav-modal-links a[data-section]').forEach(l => l.classList.remove('nav-link-active'));
       if (sectionMap[id]) {
         sectionMap[id].link.classList.add('nav-link-active');
       }
@@ -1878,6 +2050,79 @@ footer{
   });
 
   Object.values(sectionMap).forEach(({section}) => observer.observe(section));
+
+  // Helper to scroll home
+  function scrollHomeFromMenu() {
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Easter egg: drag logo vs click
+  if (navLogo) {
+    let dragStart = null;
+    let dragged = false;
+
+    function getPoint(e){
+      if (e.touches && e.touches.length){
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    function pointerMove(e){
+      if (!dragStart) return;
+      const p = getPoint(e);
+      const dx = p.x - dragStart.x;
+      const dy = p.y - dragStart.y;
+      if (Math.hypot(dx, dy) > 18){
+        dragged = true;
+      }
+    }
+
+    function pointerUp(e){
+      if (!dragStart) return;
+      const wasDragged = dragged;
+      dragStart = null;
+      dragged = false;
+
+      document.removeEventListener('mousemove', pointerMove);
+      document.removeEventListener('mouseup', pointerUp);
+      document.removeEventListener('touchmove', pointerMove);
+      document.removeEventListener('touchend', pointerUp);
+
+      if (!wasDragged){
+        // Simple click: go home
+        closeNav();
+        scrollHomeFromMenu();
+      } else {
+        // Drag release: show Ricky dedication text
+        if (rickyMessage){
+          rickyMessage.classList.add('show');
+        }
+      }
+    }
+
+    navLogo.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      const p = getPoint(e);
+      dragStart = p;
+      dragged = false;
+      document.addEventListener('mousemove', pointerMove);
+      document.addEventListener('mouseup', pointerUp);
+    });
+
+    navLogo.addEventListener('touchstart', (e) => {
+      const p = getPoint(e);
+      dragStart = p;
+      dragged = false;
+      document.addEventListener('touchmove', pointerMove);
+      document.addEventListener('touchend', pointerUp);
+    });
+  }
 })();
 
 // Welcome popup
@@ -1924,7 +2169,20 @@ footer{
   });
 })();
 
-// Make the fixed logo, mobile header logo, and bottom logo scroll smoothly to the top section
+// Gallery "view more" toggle
+(function(){
+  const btn = document.getElementById('gallery-more-button');
+  const extra = document.getElementById('gallery-grid-extra');
+  if (!btn || !extra) return;
+
+  let open = false;
+  btn.addEventListener('click', () => {
+    open = !open;
+    extra.style.display = open ? 'grid' : 'none';
+  });
+})();
+
+// Make the fixed logo, mobile header logo, and bottom circle scroll smoothly to the top section
 (function(){
   const topSection = document.getElementById('top');
   function scrollHome(e){
@@ -1949,6 +2207,11 @@ footer{
   const bottomLogoLink = document.getElementById('bottom-logo-link');
   if (bottomLogoLink){
     bottomLogoLink.addEventListener('click', scrollHome);
+  }
+
+  const backCircle = document.getElementById('back-home-circle');
+  if (backCircle){
+    backCircle.addEventListener('click', scrollHome);
   }
 })();
 
@@ -1994,34 +2257,6 @@ footer{
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && backdrop.classList.contains('open')){
       closeLightbox();
-    }
-  });
-})();
-
-// Store first image popup
-(function(){
-  const trigger = document.getElementById('store-main-image');
-  const backdrop = document.getElementById('store-modal-backdrop');
-  const closeBtn = document.getElementById('store-modal-close');
-  if (!trigger || !backdrop || !closeBtn) return;
-
-  function openModal(){
-    backdrop.classList.add('open');
-  }
-  function closeModal(){
-    backdrop.classList.remove('open');
-  }
-
-  trigger.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-
-  backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop) closeModal();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && backdrop.classList.contains('open')){
-      closeModal();
     }
   });
 })();
