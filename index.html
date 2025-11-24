@@ -64,13 +64,13 @@ html,body{
   color:#fff;
 }
 
-/* 🔆 GLOBAL BACKGROUND: sunrise + chilly turquoise */
+/* Overall background: vivid orange + vivid blue (non-moving) */
 body{
   background:
-    radial-gradient(circle at 5% 0%, #ffd84a 0, transparent 50%),    /* pineapple yellow */
-    radial-gradient(circle at 95% 85%, #ff8a1c 0, transparent 55%),  /* bright tangerine */
-    radial-gradient(circle at 50% 10%, #54d8ff 0, transparent 60%),  /* icy turquoise glow */
-    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%); /* deep lapis base */
+    radial-gradient(circle at 10% 10%, var(--orange) 0, transparent 45%),
+    radial-gradient(circle at 90% 80%, var(--orange-light) 0, transparent 50%),
+    radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
+    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
   background-attachment:fixed;
 }
 
@@ -79,7 +79,7 @@ body{
   position:fixed;
   top:0; left:0; right:0;
   background:
-    radial-gradient(circle at 0% 0%, #ffd84a 0, transparent 70%),
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
     linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 45%, var(--blue-deep) 100%);
   color:#fff;
   display:grid;
@@ -223,10 +223,11 @@ body{
   text-underline-offset:3px;
 }
 
-/* Small screens: hide "Language" text if needed */
+/* Small screens: keep “Language” text visible */
 @media (max-width: 420px){
   .topbar-lang-label-text{
-    display:none;
+    display:inline;
+    font-size:11px;
   }
   .topbar-lang-current-btn{
     font-size:11px;
@@ -234,7 +235,7 @@ body{
   }
 }
 
-/* MOBILE TOPBAR: inline logo */
+/* MOBILE TOPBAR: inline logo centered, language right, menu left */
 .topbar-logo-inline{
   display:none;
 }
@@ -287,7 +288,7 @@ body{
   }
 }
 
-/* 🔆 HERO: moving sunrise + chilly air */
+/* HERO – animated vivid orange + vivid blue, with snow layer */
 .hero{
   position:relative;
   min-height:100vh;
@@ -297,10 +298,10 @@ body{
   justify-content:center;
   overflow:hidden;
   background:
-    radial-gradient(circle at 12% 0%, #ffe66b 0, transparent 55%),   /* bright sunrise yellow */
-    radial-gradient(circle at 88% 80%, #ff8a1c 0, transparent 55%),  /* tangerine */
-    radial-gradient(circle at 50% 30%, #4fd7ff 0, transparent 60%),  /* icy turquoise glow */
-    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%); /* deep blue base */
+    radial-gradient(circle at 15% 15%, var(--orange) 0, transparent 50%),
+    radial-gradient(circle at 85% 80%, var(--orange-light) 0, transparent 55%),
+    radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
+    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
   background-size:200% 200%;
   animation:lavaMove 40s ease-in-out infinite alternate;
 }
@@ -309,31 +310,6 @@ body{
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 100%; }
 }
-
-/* ❄ Snowflakes only in hero */
-.hero-snowflake{
-  position:absolute;
-  top:-10vh;
-  color:#ffffff;
-  opacity:0.9;
-  font-size:12px;
-  pointer-events:none;
-  animation:snowFall linear infinite;
-}
-@keyframes snowFall{
-  0%{
-    transform:translateY(-10vh);
-    opacity:0;
-  }
-  10%{
-    opacity:0.9;
-  }
-  100%{
-    transform:translateY(110vh);
-    opacity:0;
-  }
-}
-
 .hero-inner{
   width:100%;
   max-width:1100px;
@@ -342,7 +318,7 @@ body{
   align-items:center;
   justify-content:center;
   position:relative;
-  z-index:1;
+  z-index:3; /* above snow */
 }
 .hero-right{
   width:100%;
@@ -350,6 +326,35 @@ body{
   align-items:center;
   justify-content:space-between;
   gap:40px;
+}
+
+/* Snow layer (hero only) */
+.hero-snow{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:2;
+}
+.snowflake{
+  position:absolute;
+  top:-10vh;
+  color:#ffffff;
+  filter:drop-shadow(0 0 3px rgba(255,255,255,0.7));
+  animation-name:snowFall;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+@keyframes snowFall{
+  0%{
+    transform:translate3d(0, -10vh, 0);
+  }
+  50%{
+    transform:translate3d(var(--drift1, 15px), 50vh, 0);
+  }
+  100%{
+    transform:translate3d(var(--drift2, -15px), 110vh, 0);
+  }
 }
 
 /* Headline */
@@ -446,7 +451,7 @@ body{
   cursor:pointer;
 }
 
-/* TRANSITION STRIP – keep vivid blue */
+/* TRANSITION STRIP */
 .transition-strip{
   background:linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-deep) 100%);
   color:#f5fbff;
@@ -475,12 +480,12 @@ body{
   margin:0 auto;
 }
 
-/* STORE SECTION (kept mostly light for contrast) */
+/* STORE SECTION */
 .section--buy{
   background:
-    radial-gradient(circle at 0% 100%, #ffe66b 0, transparent 60%),
-    radial-gradient(circle at 100% 0%, #ffb347 0, transparent 60%),
-    linear-gradient(180deg,#ffffff 0%,#f3f6ff 100%);
+    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 60%),
+    radial-gradient(circle at 100% 0%, var(--orange-light) 0, transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#f3f3ff 100%);
   color:#083b7c;
   padding:40px 16px 60px;
 }
@@ -546,16 +551,15 @@ body{
   text-align:center;
 }
 
-/* 🔆 ABOUT SECTION: chilly turquoise + sunrise + deep blue */
+/* ABOUT SECTION */
 .section--about{
   background:
-    radial-gradient(circle at 0% 100%, #ffb347 0, transparent 60%),  /* warm orange near bottom-left */
-    radial-gradient(circle at 100% 0%, #ffe66b 0, transparent 60%),  /* pineapple sunrise at top-right */
-    radial-gradient(circle at 50% 40%, #56ddff 0, transparent 75%),  /* icy turquoise mist */
-    linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);      /* deep blue night below */
+    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 55%),
+    radial-gradient(circle at 85% 0%, var(--orange-light) 0, transparent 60%),
+    radial-gradient(circle at 50% 50%, var(--blue-mid) 0, transparent 80%),
+    linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);
   color:#ffffff;
 }
-
 .about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
@@ -710,11 +714,10 @@ body{
   white-space:nowrap;
 }
 
-/* 🔆 BOTTOM LOGO SECTION: deep blue + sunrise glow */
+/* BOTTOM LOGO */
 .section--bottom-logo{
   background:
-    radial-gradient(circle at 15% 0%, #ffe66b 0, transparent 60%),
-    radial-gradient(circle at 85% 100%, #ff9a2b 0, transparent 60%),
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
     linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);
   text-align:center;
 }
@@ -725,11 +728,10 @@ body{
   cursor:pointer;
 }
 
-/* FOOTER: calm night with warm corners */
+/* FOOTER */
 footer{
   background:
-    radial-gradient(circle at 0% 0%, #ffb347 0, transparent 70%),
-    radial-gradient(circle at 100% 100%, #ffe66b 0, transparent 70%),
+    radial-gradient(circle at 100% 0%, #3a7cff 0, transparent 70%),
     linear-gradient(180deg, var(--blue-deep) 0%, #00001a 100%);
   color:#d5e3ff;
   padding:18px 16px 28px;
@@ -912,6 +914,7 @@ footer{
   opacity:0;
   pointer-events:none;
   white-space:pre-line;
+  transition:opacity 0.3s ease;
 }
 .nav-close{
   position:absolute;
@@ -923,15 +926,6 @@ footer{
   font-size:20px;
   line-height:1;
   cursor:pointer;
-}
-
-/* Title wiggle */
-@keyframes merrygiggle{
-  0%   { transform:translateX(0); }
-  25%  { transform:translateX(4px); }
-  50%  { transform:translateX(0); }
-  75%  { transform:translateX(-4px); }
-  100% { transform:translateX(0); }
 }
 
 /* Privacy modal + welcome popup */
@@ -1058,7 +1052,7 @@ footer{
   }
 }
 
-/* Chat assistant launcher (bottom-right) */
+/* Chat assistant launcher (lower-right now) */
 .chat-launcher{
   position:fixed;
   right:16px;
@@ -1085,7 +1079,7 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Chat assistant panel (bottom-right) */
+/* Chat assistant panel – anchored to bottom-right */
 .chat-panel{
   position:fixed;
   right:16px;
@@ -1159,6 +1153,15 @@ footer{
   color:#ffffff;
 }
 
+/* Title wiggle */
+@keyframes merrygiggle{
+  0%   { transform:translateX(0); }
+  25%  { transform:translateX(4px); }
+  50%  { transform:translateX(0); }
+  75%  { transform:translateX(-4px); }
+  100% { transform:translateX(0); }
+}
+
 /* Responsive tweaks */
 @media(max-width:800px){
   .hero{
@@ -1220,7 +1223,7 @@ footer{
     <span></span><span></span><span></span>
   </button>
 
-  <!-- Mobile inline logo -->
+  <!-- Mobile inline logo (centered on mobile) -->
   <a href="#top" class="topbar-logo-inline" id="topbar-logo-inline">
     <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
   </a>
@@ -1229,7 +1232,7 @@ footer{
     ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
   </div>
 
-  <!-- Language selector -->
+  <!-- Language selector (right) -->
   <div class="topbar-lang" id="topbar-lang">
     <span class="topbar-lang-label">
       <span class="topbar-lang-label-emoji">🌎</span>
@@ -1317,7 +1320,7 @@ FOREVER LOVED
       <div class="hero-right">
         <div>
           <div class="hero-headline">
-            <span>Maya nut</span>
+            <span>MayaNut™</span>
             <span>Beverage</span>
             <span class="headline-coming">Coming Soon!</span>
           </div>
@@ -1655,7 +1658,7 @@ FOREVER LOVED
   }
 })();
 
-// NAV overlay + Ricky easter egg
+// NAV overlay + Ricky easter egg (refined drag physics)
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
@@ -1677,6 +1680,7 @@ FOREVER LOVED
     logoEaster.src = homeSrc;
     logoEaster.style.left = '0px';
     logoEaster.style.top = '0px';
+    logoEaster.style.transition = '';
     rickyMsg.style.opacity = 0;
   }
 
@@ -1695,7 +1699,7 @@ FOREVER LOVED
   function openNav(){
     navBackdrop.classList.add('open');
     toggle.classList.add('open');
-    resetEasterEgg(); // each open starts fresh
+    resetEasterEgg();
   }
 
   function closeNav(){
@@ -1726,51 +1730,61 @@ FOREVER LOVED
     }
   });
 
-  // Drag vs click behavior for Easter egg
+  // Refined drag / click behavior for Easter egg
   (function(){
-    let isDragging = false;
+    let dragActive = false;
     let startX = 0, startY = 0;
     let startLeft = 0, startTop = 0;
+    const dragThreshold = 8;
 
     function onMouseDown(e){
+      if (e.button !== 0) return;
       e.preventDefault();
-      isDragging = false;
       const rect = logoEaster.getBoundingClientRect();
       const parentRect = wrapper.getBoundingClientRect();
       startLeft = rect.left - parentRect.left;
       startTop = rect.top - parentRect.top;
       startX = e.clientX;
       startY = e.clientY;
+      dragActive = false;
 
       function onMove(ev){
         const dx = ev.clientX - startX;
         const dy = ev.clientY - startY;
         const distSq = dx*dx + dy*dy;
-        if (distSq > 9){
-          isDragging = true;
-          logoEaster.style.left = (startLeft + dx) + 'px';
-          logoEaster.style.top  = (startTop + dy) + 'px';
-          rickyMsg.style.opacity = 1;
+        if (!dragActive && distSq > dragThreshold*dragThreshold){
+          dragActive = true;
+          logoEaster.style.position = 'relative';
+          logoEaster.style.transition = 'none';
           if (!isRicky){
             logoEaster.src = rickySrc;
             isRicky = true;
           }
+          rickyMsg.style.opacity = 1;
         }
+        if (!dragActive) return;
+        logoEaster.style.left = (startLeft + dx) + 'px';
+        logoEaster.style.top  = (startTop + dy) + 'px';
       }
 
       function onUp(ev){
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
 
-        const dxUp = ev.clientX - startX;
-        const dyUp = ev.clientY - startY;
-        const distSqUp = dxUp*dxUp + dyUp*dyUp;
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        const distSq = dx*dx + dy*dy;
 
-        if (!isDragging && distSqUp <= 9){
-          // treat as click
+        if (!dragActive && distSq <= dragThreshold*dragThreshold){
+          // Gentle click: go home
           scrollHomeAndClose();
+        } else if (dragActive){
+          // After a drag, smoothly ease the logo back toward its starting position
+          logoEaster.style.transition = 'left 0.4s ease, top 0.4s ease';
+          logoEaster.style.left = '0px';
+          logoEaster.style.top = '0px';
         }
-        // if dragged, we already switched to Ricky + message; no extra action
+        dragActive = false;
       }
 
       document.addEventListener('mousemove', onMove);
@@ -1778,13 +1792,6 @@ FOREVER LOVED
     }
 
     logoEaster.addEventListener('mousedown', onMouseDown);
-
-    // If user clicks on Ricky after dragging, send home & reset
-    logoEaster.addEventListener('click', (e) => {
-      if (isRicky){
-        scrollHomeAndClose();
-      }
-    });
   })();
 })();
 
@@ -1902,31 +1909,41 @@ FOREVER LOVED
   });
 })();
 
-// ❄ Snowflakes only on HERO
+// Hero snowflakes on main hero only
 (function(){
   const hero = document.querySelector('.hero');
   if (!hero) return;
 
-  const FLAKES = 40;
-  for (let i = 0; i < FLAKES; i++){
-    const flake = document.createElement('span');
-    flake.className = 'hero-snowflake';
-    flake.textContent = '✽';
-    flake.style.left = (Math.random() * 100) + '%';
+  const snowLayer = document.createElement('div');
+  snowLayer.className = 'hero-snow';
+  hero.appendChild(snowLayer);
 
-    const duration = 10 + Math.random() * 12;  // 10–22s
-    const delay = Math.random() * -duration;   // spread starts
-    const size = 0.7 + Math.random() * 1.4;    // vary size
+  const SNOW_COUNT = 60;
+  const symbols = ['❄','✻','✼'];
 
-    flake.style.fontSize = (10 * size) + 'px';
+  for (let i = 0; i < SNOW_COUNT; i++){
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    const size = 8 + Math.random()*16;
+    const left = Math.random()*100;
+    const duration = 14 + Math.random()*10;
+    const delay = Math.random()*-duration;
+    const drift = (Math.random()*30 + 10) * (Math.random() < 0.5 ? -1 : 1);
+
+    flake.style.fontSize = size + 'px';
+    flake.style.left = left + '%';
     flake.style.animationDuration = duration + 's';
     flake.style.animationDelay = delay + 's';
+    flake.style.opacity = (0.55 + Math.random()*0.35).toFixed(2);
+    flake.style.setProperty('--drift1', drift + 'px');
+    flake.style.setProperty('--drift2', (-drift) + 'px');
 
-    hero.appendChild(flake);
+    snowLayer.appendChild(flake);
   }
 })();
 
-// Chat assistant logic (bottom-right, MayaNut-focused)
+// Chat assistant logic (bottom-right)
 (function(){
   const launcher = document.getElementById('chat-launcher');
   const panel = document.getElementById('chat-panel');
@@ -1967,104 +1984,83 @@ FOREVER LOVED
 
   const greetWords = ['hi','hello','hey','hola','hallo','yo'];
   const thanksWords = ['thank','thanks','thank you','ty'];
-  const moodPhrases = [
-    'how are you',
-    "how's your day",
-    'hows your day',
-    'how are u',
-    'how are ya',
-    'how is your day',
-    'how was your day'
-  ];
-  const scienceWords = [
-    'research','study','studies','scientific','science',
-    'nutrient','nutritional','nutrition','composition',
-    'analysis','analyses','paper','papers','journal','publication'
-  ];
-
-  function onMayaTopic(t){
-    const compact = t.replace(/\s+/g,'');
-    return (
-      compact.includes('mayanut') ||
-      t.includes('maya nut') ||
-      t.includes('brosimum') ||
-      t.includes('alicastrum') ||
-      t.includes('ojoche') ||
-      t.includes('ramon') ||
-      t.includes('ramón')
-    );
-  }
 
   const topicGroups = [
     {
-      // “What is MayaNut / maya nut / mayanut?” etc.
-      match: (t) => {
-        const compact = t.replace(/\s+/g,'');
-        return compact.includes('whatismayanut') ||
-               (compact.includes('mayanut') && (t.includes('what is') || t.includes('what\'s')));
-      },
+      // "What is MayaNut?" style
+      match: (t) =>
+        t.includes('what is') &&
+        (t.replace(/\s+/g,'').includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
       answers: [
-        'Maya nut is the roasted seed of the tropical tree Brosimum alicastrum. It can be brewed into a rich, naturally caffeine-free drink or ground into flour.',
-        'When people say “Maya nut,” they usually mean the seed of Brosimum alicastrum — a tropical rainforest tree whose seeds can be roasted for beverages or food.'
+        'Maya nut is the roasted seed of the tropical tree Brosimum alicastrum. It can be used to make a rich, naturally caffeine-free drink or a versatile flour.',
+        'When you ask “What is MayaNut?”, it’s the seed of Brosimum alicastrum – a tropical tree whose seeds can be roasted, ground, and turned into drinks and foods.'
       ]
     },
     {
-      // General Maya nut mentions
+      // General MayaNut / Maya nut variations
       match: (t) => {
         const noSpace = t.replace(/\s+/g,'');
         return noSpace.includes('mayanut') || t.includes('maya nut');
       },
       answers: [
-        'Maya nut comes from Brosimum alicastrum, a tropical tree in the mulberry/fig family. The roasted seeds can be used for drinks and foods.',
-        'The Maya nut seed can be dried, roasted, and turned into things like hot or iced beverages, flours, and baking blends.'
+        'Maya nut is the seed of the Brosimum alicastrum tree. It’s been used for centuries in its native range as a food and drink.',
+        'People use the name “Maya nut” for the seed of Brosimum alicastrum. Roasted Maya nut can be brewed as a drink or milled into flour.'
       ]
     },
     {
-      // Brosimum alicastrum / scientific name
+      // Brosimum alicastrum / B. alicastrum
       match: (t) => t.includes('brosimum') || t.includes('alicastrum') || t.includes('b alicastrum'),
       answers: [
-        'Brosimum alicastrum is the scientific name for the Maya nut tree. It belongs to the Moraceae family, related to mulberries and figs.',
-        'When you see Brosimum alicastrum, that’s the Latin name for the tree that produces Maya nut — the seed we’re building our future beverages around.'
+        'Brosimum alicastrum is the scientific name for the Maya nut tree. It belongs to the Moraceae family, like mulberries and figs.',
+        'When you see Brosimum alicastrum, that’s the Latin name for the tropical tree whose seed we call Maya nut.'
       ]
     },
     {
-      // ojoche / ramón / breadnut
+      // Ojoche / ramón / breadnut
       match: (t) => t.includes('ojoche') || t.includes('ramon') || t.includes('ramón') || t.includes('breadnut'),
       answers: [
-        'Ojoche and ramón are local names for the same species, Brosimum alicastrum. Breadnut is another English name for its seeds.',
-        'Yes, ojoche, ramón and breadnut usually refer to Brosimum alicastrum or its seeds, depending on the region.'
+        'Ojoche, ramón, and breadnut are different common names for the same species, Brosimum alicastrum, in different regions.',
+        'Yes, names like ojoche and ramón usually refer to the Maya nut tree or its seeds, depending on local tradition.'
+      ]
+    },
+    {
+      // Scientific / research-style questions
+      match: (t) =>
+        (t.includes('scientific') || t.includes('science') || t.includes('study') || t.includes('studies') ||
+         t.includes('research') || t.includes('paper') || t.includes('nutrition') || t.includes('nutritional') ||
+         t.includes('composition') || t.includes('protein')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum') || t.includes('alicastrum')),
+      answers: [
+        'If you’re looking for scientific information on Brosimum alicastrum (Maya nut), please visit our Research page: use the “RESEARCH” link in the menu or go directly to research.html.',
+        'For more technical and scientific details about Maya nut, including research papers on Brosimum alicastrum, please check our Research page (research.html).'
       ]
     },
     {
       // Where it grows / Florida
-      match: (t) => (t.includes('where') || t.includes('grow') || t.includes('florida')) &&
-                     (t.includes('tree') || t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      match: (t) => (t.includes('where') || t.includes('grow') || t.includes('growing')) &&
+        (t.includes('florida') || t.includes('tree') || t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
       answers: [
-        'We’re focusing on warm, subtropical parts of Florida, especially South Florida below about 27°N, where Brosimum alicastrum can handle winters more comfortably.',
-        'Our early trials are in South Florida. Over time, we hope to learn exactly how far north the Maya nut tree can be grown successfully in the state.'
+        'The MayaNut Company is focusing on warm parts of Florida, especially South Florida below about 27°N, where Brosimum alicastrum can handle winters more easily.',
+        'Our early trials are in subtropical South Florida. Over time we hope to learn exactly how far north the Maya nut tree can be grown in Florida.'
       ]
     },
     {
-      // Store / buying / products / beverage
+      // Store / buy / products
       match: (t) => (t.includes('store') || t.includes('buy') || t.includes('purchase') || t.includes('product')) &&
-                     (t.includes('mayanut') || t.includes('maya nut') || t.includes('beverage') || t.includes('drink')),
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('beverage') || t.includes('drink')),
       answers: [
-        'The store isn’t open just yet. In the main page’s Store section, you’ll see placeholder MayaNut™ products while our trees grow.',
-        'MayaNut™ beverages are still in development. For now, scroll through the Store preview to see what we’re planning to offer.'
+        'The online store isn’t open yet. On the main page, the Store section shows placeholder MayaNut™ products while our plantation grows.',
+        'MayaNut™ beverages are still in development. For now you can scroll through the Store preview to see what we’re planning.'
       ]
     },
     {
-      // About the company / who are you
+      // About the company
       match: (t) =>
-        t.includes('about the mayanut company') ||
-        (t.includes('about this company') || t.includes('about your company')) ||
-        (t.includes('who are you') && t.includes('company')) ||
-        t.includes('what is the mayanut company') ||
-        t.includes('tell me about the mayanut company'),
+        (t.includes('about') || t.includes('who are you') || t.includes('tell me about')) &&
+        (t.includes('company') || t.includes('mayanut company')),
       answers: [
-        'The MayaNut Company was founded in 2025 by August Kokus, a South Floridian botanist and plant explorer. Our goal is to establish Brosimum alicastrum (Maya nut) as a new agricultural crop in the U.S. and build future beverages, powders, and flours around it.',
-        'We’re The MayaNut Company, a small, passionate project working to grow dedicated Maya nut plantations in Florida. From those trees, we plan to create MayaNut™ beverages and products for people to enjoy for decades to come.',
-        'Think of The MayaNut Company as a long-term agroforestry dream: planting Brosimum alicastrum now, so that in the coming years people in Florida and beyond can taste this underused tropical superfood.'
+        'The MayaNut Company was founded in 2025 by August Kokus in South Florida. Our mission is to grow Brosimum alicastrum trees and create future MayaNut™ beverages, powders, and flours.',
+        'We are The MayaNut Company, developing one of Florida’s first plantations of Brosimum alicastrum trees so people can enjoy MayaNut™ drinks and foods.'
       ]
     }
   ];
@@ -2081,20 +2077,20 @@ FOREVER LOVED
 
     const lower = raw.toLowerCase();
 
+    // "How are you" / "How's your day"
+    if (lower.includes('how are you') || lower.includes('how\'s your day') || lower.includes('hows your day')){
+      appendMsg('Bot', pickRandom([
+        'I’m a tiny Maya nut bot, doing great among the Brosimum alicastrum trees! How can I help you today?',
+        'My day is going well in this little digital plantation. Ask me something about Maya nut or The MayaNut Company!'
+      ]));
+      return;
+    }
+
     // greetings
     if (greetWords.some(g => lower.includes(g))){
       appendMsg('Bot', pickRandom([
         'Hi! Ask me something about Maya nut or Brosimum alicastrum.',
         'Hello! I can answer short questions about MayaNut™ and this website.'
-      ]));
-      return;
-    }
-
-    // mood / how's your day
-    if (moodPhrases.some(p => lower.includes(p))){
-      appendMsg('Bot', pickRandom([
-        'I’m just a little web bot, but my day is great whenever we’re talking about Maya nut!',
-        'Doing wonderfully — I get to chat about Brosimum alicastrum all day. How can I help you learn more about it?'
       ]));
       return;
     }
@@ -2109,17 +2105,7 @@ FOREVER LOVED
       return;
     }
 
-    const mayaTopic = onMayaTopic(lower);
-
-    // Scientific / research-style questions about Maya nut
-    if (mayaTopic && scienceWords.some(w => lower.includes(w))){
-      appendMsg('Bot',
-        'Love the scientific questions! For a deeper, research-style look at Brosimum alicastrum, please visit our Research page: research.html'
-      );
-      return;
-    }
-
-    // Topic groups (what is MayaNut, company info, where it grows, store, etc.)
+    // On-topic groups
     for (const group of topicGroups){
       if (group.match(lower)){
         appendMsg('Bot', pickRandom(group.answers));
@@ -2127,19 +2113,27 @@ FOREVER LOVED
       }
     }
 
-    // Generic on-topic if they mention Maya nut / Brosimum but didn’t match a specific group
-    if (mayaTopic){
+    // Generic on-topic if they mention maya nut / brosimum / ojoche / ramon but didn’t match any specific group
+    const onTopic =
+      lower.replace(/\s+/g,'').includes('mayanut') ||
+      lower.includes('maya nut') ||
+      lower.includes('brosimum') ||
+      lower.includes('alicastrum') ||
+      lower.includes('ojoche') ||
+      lower.includes('ramon') ||
+      lower.includes('ramón');
+
+    if (onTopic){
       appendMsg('Bot', pickRandom([
         'I can chat about the Maya nut tree, how it’s used as a drink or flour, and what The MayaNut Company is planning.',
-        'Maya nut is the seed of Brosimum alicastrum. If you want, ask about where it grows, how it’s used, or our future MayaNut™ products.'
+        'Maya nut is the seed of Brosimum alicastrum. If you want, ask about where it grows, how it’s used, or our future products.'
       ]));
       return;
     }
 
     // Off-topic fallback
     appendMsg('Bot',
-      'I’m a very small helper bot. I only answer questions about Maya nut, Brosimum alicastrum, ojoche/ramón, or The MayaNut Company and this website. Try asking about those topics!'
-    );
+      'I’m a very small helper bot. I only answer questions about Maya nut, Brosimum alicastrum, ojoche/ramón, or this website. Try asking about those topics!');
   }
 
   sendBtn.addEventListener('click', handleUserMessage);
