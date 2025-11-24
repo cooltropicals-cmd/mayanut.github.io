@@ -102,11 +102,11 @@ body{
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
-/* Hamburger menu */
+/* Hamburger menu – back to smaller bars so mobile can see them */
 .menu-toggle{
   grid-area:menu;
-  width:32px;
-  height:30px; /* slightly taller = more spacing */
+  width:28px;
+  height:26px;
   border:none;
   background:transparent;
   display:flex;
@@ -126,13 +126,13 @@ body{
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
-  transform:translateY(11px) rotate(45deg);
+  transform:translateY(9px) rotate(45deg);
 }
 .menu-toggle.open span:nth-child(2){
   opacity:0;
 }
 .menu-toggle.open span:nth-child(3){
-  transform:translateY(-11px) rotate(-45deg);
+  transform:translateY(-9px) rotate(-45deg);
 }
 
 /* Title in top bar */
@@ -737,8 +737,8 @@ body{
 }
 .img-lightbox-close{
   position:absolute;
-  top:-18px;
-  right:-18px;
+  top:10px;
+  right:10px;
   width:32px;
   height:32px;
   border-radius:50%;
@@ -933,6 +933,13 @@ footer{
 .nav-backdrop.open{
   display:flex;
 }
+
+/* Moving purple/blue gradient background in menu */
+@keyframes navLava{
+  0%   { background-position:0% 0%; }
+  50%  { background-position:100% 50%; }
+  100% { background-position:0% 100%; }
+}
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -945,21 +952,23 @@ footer{
   line-height:1.7;
   background:
     radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #8a4dff 0, #4b28c0 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #8a4dff 0, #3a1f96 55%, transparent 80%),
     #0a56c2;
+  background-size:200% 200%;
+  animation:navLava 28s ease-in-out infinite alternate;
   position:relative;
 }
 .nav-modal-title{
   margin:0 0 4px;
   font-weight:800;
   font-size:20px;
-  text-align:center;
+  text-align:left;   /* left aligned title */
 }
 .nav-modal-title-underline{
   width:90px;
   height:3px;
-  margin:5px auto 10px;
+  margin:5px 0 10px;  /* left aligned underline */
   background:#ffffff;
   border-radius:999px;
 }
@@ -999,7 +1008,7 @@ footer{
   transition:transform 0.15s ease;
 }
 .nav-modal-links a:hover{
-  background:rgba(255,255,255,0.16);
+  background:rgba(255,255,255,0.16); /* lighter blue style hover */
 }
 .nav-modal-links a:hover::after{
   transform:scaleX(1);
@@ -1184,11 +1193,11 @@ footer{
   padding:10px 26px;
 }
 
-/* X in the transparent gap on the top-right of the popup */
+/* X in the top-right of the popup (no more off-screen negative position) */
 .welcome-close{
   position:absolute;
-  top:-18px;
-  right:-18px;
+  top:8px;
+  right:8px;
   border:none;
   background:transparent;
   color:#ffffff;
@@ -1205,10 +1214,6 @@ footer{
   }
   .welcome-panel-right{
     max-width:none;
-  }
-  .welcome-close{
-    top:8px;
-    right:8px;
   }
 }
 
@@ -1270,6 +1275,30 @@ footer{
   </div>
 </header>
 
+<!-- Custom language dropdown BELOW the bar -->
+<div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
+  <ul>
+    <li data-file="index.html">English</li>
+    <li data-file="index-es.html">Español</li>
+    <li data-file="index-pt.html">Português</li>
+    <li data-file="index-fr.html">Français</li>
+    <li data-file="index-de.html">Deutsch</li>
+    <li data-file="index-it.html">Italiano</li>
+    <li data-file="index-ru.html">Русский</li>
+    <li data-file="index-zh.html">中文</li>
+    <li data-file="index-ja.html">日本語</li>
+    <li data-file="index-hi.html">हिन्दी</li>
+    <li data-file="index-ur.html">اردو</li>
+    <li data-file="index-bn.html">বাংলা</li>
+    <li data-file="index-id.html">Bahasa Indonesia</li>
+    <li data-file="index-ar.html">العربية</li>
+    <li data-file="index-sw.html">Kiswahili</li>
+    <li data-file="index-ha.html">Hausa</li>
+    <li data-file="index-fil.html">Filipino</li>
+    <li data-file="index-yo.html">Yorùbá</li>
+  </ul>
+</div>
+
 <!-- Global snow canvas -->
 <canvas id="snow"></canvas>
 
@@ -1293,7 +1322,7 @@ footer{
       <a href="#about" data-section="about">ABOUT</a>
     </div>
 
-    <!-- DRAGGABLE LOGO / RICKY EASTER EGG -->
+    <!-- DRAGGABLE LOGO / RICKY EASTER EGG (sits in the middle) -->
     <div class="nav-modal-logo-wrap">
       <img
         src="mayanut-the-maya-nut-company-logo.png"
@@ -1494,7 +1523,7 @@ footer{
 <!-- Welcome popup -->
 <div class="welcome-backdrop" id="welcome-backdrop">
   <div class="welcome-modal">
-    <!-- X in transparent gap -->
+    <!-- X in corner -->
     <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
 
     <!-- Left rectangle: welcome text -->
