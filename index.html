@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The MayaNut Company – Maya nut Beverage</title>
+<title>The MayaNut Company</title>
 
 <!-- Christmas font -->
 <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
@@ -22,7 +22,13 @@
 <!-- SEO: description + keywords -->
 <meta name="description" content="Maya nut beverage and products made from Brosimum alicastrum, also known as breadnut, ojoche, ramón, guiamaro – a tropical rainforest tree. Tropical trees, agroforestry and future Maya nut beverages, powders and flours.">
 <meta name="keywords" content="
-Maya nut, maya nut, mayanut, MayaNut, Brosimum alicastrum, breadnut, bread nut, ojoche, ramón, guiamaro, tropical trees, tropical tree, rainforest tree, agroforestry
+Maya nut, maya nut, mayanut, MayaNut, Brosimum alicastrum, breadnut, bread nut, ojoche, ramón, guiamaro, tropical trees, tropical tree, rainforest tree, agroforestry,
+玛雅坚果, 面包果, 热带树木, 热带雨林树, Brosimum alicastrum,
+माया नट, मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़, Brosimum alicastrum,
+Майя-нут, маянут, хлебное дерево, тропические деревья, Brosimum alicastrum,
+nuez maya, ramón, ojoche, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
+noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
+مايا نَت, مايانَت, جوز المايا, شجرة استوائية, Brosimum alicastrum
 ">
 
 <style>
@@ -44,7 +50,7 @@ Maya nut, maya nut, mayanut, MayaNut, Brosimum alicastrum, breadnut, bread nut, 
   --bar-h:72px;
   --logo-offset:12px;
 
-  --orange:#ffb957;
+  --orange:#ffb957;   /* slightly lighter orange */
   --orange-deep:#ff8a1c;
 }
 
@@ -99,45 +105,34 @@ body{
 /* Hamburger menu */
 .menu-toggle{
   grid-area:menu;
-  width:32px;
-  height:26px;
   border:none;
-  background:transparent;
+  background:rgba(0,0,0,0.18);
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  padding:0;
+  padding:6px 8px;
   cursor:pointer;
   justify-self:start;
-  margin-left:2px;
+  margin-left:4px;
   z-index:1100;
+  border-radius:999px;
 }
 .menu-toggle span{
   display:block;
+  width:18px;
   height:3px;
   border-radius:999px;
   background:#ffffff;
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
-  transform:translateY(11px) rotate(45deg);
+  transform:translateY(6px) rotate(45deg);
 }
 .menu-toggle.open span:nth-child(2){
   opacity:0;
 }
 .menu-toggle.open span:nth-child(3){
-  transform:translateY(-11px) rotate(-45deg);
-}
-
-/* Make menu icon extra visible on mobile */
-@media (max-width:600px){
-  .menu-toggle{
-    background:rgba(0,0,0,0.25);
-    border-radius:999px;
-    padding:4px 6px;
-    width:40px;
-    height:28px;
-  }
+  transform:translateY(-6px) rotate(-45deg);
 }
 
 /* Title in top bar */
@@ -285,7 +280,7 @@ body{
 
   .topbar-logo-inline{
     grid-area:logo;
-    display:inline-block;
+    display:block;
     justify-self:center;
   }
 
@@ -324,6 +319,7 @@ body{
   animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION – only hero */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
@@ -342,7 +338,7 @@ body{
   z-index:1;
 }
 
-/* Snow canvas (shared class for multiple sections) */
+/* Snow canvases (hero + about) */
 .snow-canvas{
   position:absolute;
   inset:0;
@@ -377,7 +373,6 @@ body{
   text-shadow:
     0 3px 0 #0057c8,
     0 6px 12px rgba(0,0,0,0.4);
-  text-align:left;
 }
 .hero-headline span{
   display:block;
@@ -389,7 +384,7 @@ body{
   white-space:nowrap;
 }
 
-/* Hero CTA button – shine on outline */
+/* Hero CTA button – centered + subtle shine outline */
 .hero-cta-wrap{
   margin-top:24px;
   display:flex;
@@ -561,6 +556,63 @@ body{
   text-align:center;
 }
 
+/* STORE MODAL for first image */
+.store-modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2200;
+}
+.store-modal-backdrop.open{
+  display:flex;
+}
+.store-modal{
+  position:relative;
+  background:#ffffff;
+  color:#123055;
+  max-width:720px;
+  width:90%;
+  border-radius:16px;
+  padding:18px 20px 18px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.6);
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.store-modal-image-wrap{
+  flex:0 0 240px;
+  max-width:100%;
+}
+.store-modal-image-wrap img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 3px 12px rgba(0,0,0,0.35);
+}
+.store-modal-text{
+  flex:1;
+  min-width:200px;
+  font-size:14px;
+  line-height:1.7;
+}
+.store-modal-text h3{
+  margin-top:0;
+  margin-bottom:8px;
+}
+.store-modal-close{
+  position:absolute;
+  top:8px;
+  right:10px;
+  border:none;
+  background:transparent;
+  color:#444;
+  font-size:22px;
+  cursor:pointer;
+}
+
 /* ABOUT SECTION */
 .section--about::before{
   content:"";
@@ -582,86 +634,81 @@ body{
   color:#fff;
 }
 
-/* Snow canvas for about */
+/* About snow canvas */
 .section--about .snow-canvas{
   z-index:0;
 }
-
-/* About layout: rows (image + text), zig-zag */
-.about-rows{
+.section--about .section-inner{
   position:relative;
   z-index:1;
-  display:flex;
-  flex-direction:column;
-  gap:28px;
 }
 
-.about-row{
+.about-grid{
   display:grid;
   grid-template-columns:minmax(0,320px) minmax(0,1fr);
-  gap:24px;
+  gap:28px;
   align-items:flex-start;
 }
-.about-row--reverse{
-  grid-template-columns:minmax(0,1fr) minmax(0,320px);
+.about-images{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
-
-/* Image tiles */
 .about-image-tile{
   position:relative;
 }
-.about-image-tile img{
+.about-images img{
   width:100%;
   border-radius:14px;
   object-fit:cover;
   box-shadow:0 2px 10px rgba(0,0,0,0.25);
   display:block;
 }
-.about-image-tile .square{
+.about-images .square{
   aspect-ratio:1/1;
 }
 
-/* Expand button overlay – icon first, text slides out on hover */
+/* Expand button overlay – icon only, expands left on hover (desktop) */
 .img-expand-btn{
   position:absolute;
   top:8px;
   right:8px;
   border:none;
   border-radius:999px;
-  padding:6px;
-  background:rgba(0,0,0,0.65);
+  padding:4px 8px;
+  background:rgba(0,0,0,0.6);
   color:#ffffff;
   font-size:11px;
   display:flex;
+  flex-direction:row-reverse; /* icon on right, text grows to left */
   align-items:center;
-  gap:6px;
+  gap:4px;
   cursor:pointer;
   white-space:nowrap;
   overflow:hidden;
-  transition:padding-right 0.18s ease, background 0.18s ease;
 }
 .img-expand-icon{
   font-size:13px;
 }
 .img-expand-hint{
   opacity:0;
-  transform:translateX(6px);
+  transform:translateX(4px);
   transition:opacity 0.18s ease, transform 0.18s ease;
 }
 
-/* Desktop hover: bar grows left with text */
+/* Desktop hover hint */
 @media(min-width: 801px){
-  .about-image-tile:hover .img-expand-btn{
-    padding-right:14px;
-    background:rgba(0,0,0,0.8);
-  }
   .about-image-tile:hover .img-expand-hint{
     opacity:1;
     transform:translateX(0);
   }
+  .about-image-tile:hover .img-expand-btn{
+    padding-left:12px;
+    transform:scale(1.04);
+  }
 }
 
-/* Mobile: keep only icon (no text) */
+/* Mobile: keep icon-only */
 @media(max-width: 800px){
   .img-expand-hint{
     display:none;
@@ -711,7 +758,7 @@ body{
   box-shadow:0 2px 8px rgba(0,0,0,0.6);
 }
 
-/* About text cards */
+/* About text side */
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -725,7 +772,6 @@ body{
   color:#3b3f7a;
   font-size:15px;
   line-height:1.7;
-  text-align:left;
 }
 /* Soft lavender gradients */
 .about-card-1{
@@ -753,12 +799,13 @@ body{
   text-underline-offset:4px;
 }
 
+/* Make main About title likely one line */
 .about-text-card.about-card-1 h2{
   font-size:19px;
   white-space:nowrap;
 }
 
-/* MOBILE ABOUT: zig-zag-ish pattern */
+/* STORE / ABOUT layout on smaller screens */
 @media(max-width:800px){
   .hero{
     padding-top:calc(var(--bar-h) + 40px);
@@ -778,55 +825,15 @@ body{
     max-width:none;
     -webkit-text-stroke:2px #0057c8;
     text-stroke:2px #0057c8;
-    margin-left:0;
     text-align:center;
+    margin-left:0;
   }
   .hero-image-wrap{
     margin-left:0;
     align-self:center;
   }
-
-  .about-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:auto auto;
-    gap:10px;
-  }
-  /* First row: image in top-left, text forms backwards L */
-  .about-row:nth-child(1) > .about-image-tile{
-    grid-column:1/2;
-    grid-row:1/3;
-  }
-  .about-row:nth-child(1) > .about-text-col{
-    grid-column:2/3;
-    grid-row:1/3;
-  }
-  /* Second row: image in top-right */
-  .about-row:nth-child(2) > .about-image-tile{
-    grid-column:2/3;
-    grid-row:1/3;
-  }
-  .about-row:nth-child(2) > .about-text-col{
-    grid-column:1/2;
-    grid-row:1/3;
-  }
-  /* Third row: image left again */
-  .about-row:nth-child(3) > .about-image-tile{
-    grid-column:1/2;
-    grid-row:1/3;
-  }
-  .about-row:nth-child(3) > .about-text-col{
-    grid-column:2/3;
-    grid-row:1/3;
-  }
-  /* Fourth row: image right again */
-  .about-row:nth-child(4) > .about-image-tile{
-    grid-column:2/3;
-    grid-row:1/3;
-  }
-  .about-row:nth-child(4) > .about-text-col{
-    grid-column:1/2;
-    grid-row:1/3;
+  .about-grid{
+    grid-template-columns:1fr;
   }
 }
 
@@ -1031,7 +1038,6 @@ footer{
   padding:18px 18px 16px;
   box-shadow:0 6px 20px rgba(0,0,0,0.35);
   font-size:14px;
-  text-align:left;
 }
 .modal h3{
   margin:0 0 8px;
@@ -1122,7 +1128,7 @@ footer{
   line-height:1.7;
 }
 
-/* Right orange button: reuse CTA style */
+/* Right orange button: reuse CTA style but no extra transform */
 .welcome-main-btn{
   margin-top:4px;
   font-size:16px;
@@ -1157,7 +1163,7 @@ footer{
   }
 }
 
-/* Responsive bits */
+/* Responsive breakpoints for store */
 @media(max-width:800px){
   .footer-row{
     flex-direction:row;
@@ -1202,7 +1208,7 @@ footer{
     ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
   </div>
 
-  <!-- Language selector -->
+  <!-- Language selector (18 languages) -->
   <div class="topbar-lang" id="topbar-lang">
     <span class="topbar-lang-label">
       <span class="topbar-lang-label-emoji">🌎</span>
@@ -1251,14 +1257,14 @@ footer{
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-title-underline"></div>
     <div class="nav-modal-links">
-      <a href="#top" data-section="top">Home</a>
-      <a href="#buy" data-section="buy">Store</a>
-      <a href="#about" data-section="about">About</a>
-      <a href="research.html" data-external="true">Research</a>
-      <a href="gallery.html" data-external="true">Gallery</a>
-      <a href="blog.html" data-external="true">Blog</a>
+      <a href="#top" data-section="top">HOME</a>
+      <a href="#buy" data-section="buy">STORE</a>
+      <a href="#about" data-section="about">ABOUT</a>
+      <a href="gallery.html" data-external="true">GALLERY</a>
+      <a href="research.html" data-external="true">RESEARCH</a>
+      <a href="blog.html" data-external="true">BLOG</a>
       <a href="faq.html" data-external="true">FAQ</a>
-      <a href="contact.html" data-external="true">Contact</a>
+      <a href="contact.html" data-external="true">CONTACT</a>
     </div>
   </div>
 </div>
@@ -1267,7 +1273,7 @@ footer{
 
   <!-- HERO -->
   <section class="hero" id="top">
-    <canvas id="snow-hero" class="snow-canvas"></canvas>
+    <canvas id="snow" class="snow-canvas"></canvas>
 
     <div class="hero-inner">
       <div class="hero-right">
@@ -1298,15 +1304,14 @@ footer{
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>Store Products Coming For Sale Soon!</h2>
-        <p>Scroll to preview future beverages, powder, and flour products while our first trees grow.</p>
+        <h2>Maya nut Store</h2>
+        <p>Store Products Coming For Sale Soon!</p>
       </div>
 
       <div class="store-scroller-wrapper">
         <div class="store-scroller">
-          <!-- Featured product (clickable for popup) -->
           <div class="store-item">
-            <div class="store-item-image" id="store-featured-image">
+            <div class="store-item-image" id="store-main-image">
               <img src="rach20.png" alt="Chilled Maya nut beverage glass" class="store-item-photo">
             </div>
             <div class="store-item-label">Chilled Maya nut Beverage</div>
@@ -1332,17 +1337,29 @@ footer{
     </div>
   </section>
 
+  <!-- Store image modal -->
+  <div class="store-modal-backdrop" id="store-modal-backdrop">
+    <div class="store-modal">
+      <button class="store-modal-close" id="store-modal-close" aria-label="Close product popup">&times;</button>
+      <div class="store-modal-image-wrap">
+        <img src="rach20.png" alt="Chilled Maya nut beverage glass" id="store-modal-img">
+      </div>
+      <div class="store-modal-text">
+        <h3>The MayaNut Company's Signature Beverage</h3>
+        <p>The MayaNut Company's Signature Beverage Coming Soon to a Store Near You!</p>
+      </div>
+    </div>
+  </div>
+
   <!-- TRANSITION: ABOUT -->
   <div class="transition-strip">ABOUT</div>
 
   <!-- ABOUT -->
   <section class="section section--about" id="about">
     <canvas id="snow-about" class="snow-canvas"></canvas>
-
     <div class="section-inner">
-      <div class="about-rows">
-        <!-- Row 1 -->
-        <div class="about-row">
+      <div class="about-grid">
+        <div class="about-images">
           <div class="about-image-tile">
             <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
             <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" aria-label="Expand image">
@@ -1350,16 +1367,7 @@ footer{
               <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-text-col">
-            <div class="about-text-card about-card-1">
-              <h2>About The MayaNut Company</h2>
-              <p><strong>Welcome to mayanut.com, Home of The MayaNut Company.</strong> We were founded in 2025 by August Kokus, a South Floridian botanist and plant explorer, whose mission is to establish and develop the Maya nut plant, <em>Brosimum alicastrum</em>, as a new agricultural crop in the United States.</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Row 2 -->
-        <div class="about-row about-row--reverse">
           <div class="about-image-tile">
             <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
             <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="Expand image">
@@ -1367,19 +1375,7 @@ footer{
               <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-text-col">
-            <div class="about-text-card about-card-2">
-              <h3>August Kokus</h3>
-              <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. He wanted an immortal grasp upon the world in the form of something that people would truly want — something that can adapt to an ever-changing world.</p>
-              <p>What if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
-              <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up — literally — was a challenge worth accepting.</p>
-              <p>By 2030, August expects to have at least one functional farm, at least one acre in size, for the world to start enjoying.</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Row 3 -->
-        <div class="about-row">
           <div class="about-image-tile">
             <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young Maya nut Brosimum alicastrum trees growing in a nursery">
             <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-nursery.jpg" aria-label="Expand image">
@@ -1387,17 +1383,7 @@ footer{
               <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-text-col">
-            <div class="about-text-card about-card-3">
-              <h3>Where We’re Growing</h3>
-              <p>South Florida’s subtropical climate makes it especially well suited for this species, which is why a dedicated Maya nut plantation is being developed as the foundation for future Maya nut beverages, powders, and more.</p>
-              <p>It is currently unknown how far north in Florida <em>Brosimum alicastrum</em> can grow and be successful, but any place in Florida at or below 27°N (just south of Stuart, Florida) is confirmed to be able to survive winters with ease. Trees could probably survive up to about 28°N as well, but long-term trials are still needed.</p>
-            </div>
-          </div>
-        </div>
 
-        <!-- Row 4 -->
-        <div class="about-row about-row--reverse">
           <div class="about-image-tile">
             <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
             <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-moraceae.jpg" aria-label="Expand image">
@@ -1405,19 +1391,39 @@ footer{
               <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
-          <div class="about-text-col">
-            <div class="about-text-card about-card-4">
-              <h3>Our Mission</h3>
-              <p>What we hope to achieve is a lasting effect down through the coming centuries — a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as Maya nut, breadnut, ojoche, ramón, or guiamaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
-            </div>
-
-            <div class="about-text-card about-card-5">
-              <h3>Our Fascination</h3>
-              <p>From their wicked, entangled roots that grip ever tighter upon the Earth, there grows an agricultural miracle. We are fascinated by <em>Brosimum alicastrum</em> because this is a resource that no one has truly valued in America yet. People have used this tree for millennia in its native range, but by growing it in Florida, we give everyone a chance to try this delicious superfood. Developing something that people love is not easy — but it is the perfect challenge for The MayaNut Company to accomplish.</p>
-            </div>
-          </div>
         </div>
 
+        <div class="about-text-col">
+          <div class="about-text-card about-card-1">
+            <h2>About The MayaNut Company</h2>
+            <p><strong>Welcome to mayanut.com, Home of The MayaNut Company.</strong> We were founded in 2025 by August Kokus, a South Floridian botanist and plant explorer, whose mission is to establish and develop the Maya nut plant, <em>Brosimum alicastrum</em>, as a new agricultural crop in the United States.</p>
+          </div>
+
+          <div class="about-text-card about-card-2">
+            <h3>August Kokus</h3>
+            <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. He wanted an immortal grasp upon the world in the form of something that people would truly want — something that can adapt to an ever-changing world.</p>
+            <p>What if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
+            <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up — literally — was a challenge worth accepting.</p>
+            <p>By 2030, August expects to have at least one functional farm, at least one acre in size, for the world to start enjoying.</p>
+          </div>
+
+          <div class="about-text-card about-card-3">
+            <h3>Where We’re Growing</h3>
+            <p>South Florida’s subtropical climate makes it especially well suited for this species, which is why a dedicated Maya nut plantation is being developed as the foundation for future Maya nut beverages, powders, and more.</p>
+            <p>It is currently unknown how far north in Florida <em>Brosimum alicastrum</em> can grow and be successful, but any place in Florida at or below 27°N (just south of Stuart, Florida) is confirmed to be able to survive winters with ease. Trees could probably survive up to about 28°N as well, but long-term trials are still needed.</p>
+          </div>
+
+          <div class="about-text-card about-card-4">
+            <h3>Our Mission</h3>
+            <p>What we hope to achieve is a lasting effect down through the coming centuries — a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as Maya nut, breadnut, ojoche, ramón, or guiamaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
+          </div>
+
+          <div class="about-text-card about-card-5">
+            <h3>Our Fascination</h3>
+            <p>From their wicked, entangled roots that grip ever tighter upon the Earth, there grows an agricultural miracle. We are fascinated by <em>Brosimum alicastrum</em> because this is a resource that no one has truly valued in America yet. People have used this tree for millennia in its native range, but by growing it in Florida, we give everyone a chance to try this delicious superfood. Developing something that people love is not easy — but it is the perfect challenge for The MayaNut Company to accomplish.</p>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
@@ -1487,23 +1493,6 @@ footer{
   </div>
 </div>
 
-<!-- Product popup for featured beverage -->
-<div class="modal-backdrop" id="product-modal-backdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title">
-    <h3 id="product-modal-title">Signature Beverage</h3>
-    <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:flex-start;">
-      <div style="flex:0 0 200px; max-width:100%;">
-        <img src="rach20.png" alt="The MayaNut Company beverage glass" style="width:100%; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.25);">
-      </div>
-      <div style="flex:1; min-width:180px; font-size:14px; color:#123055;">
-        <p><strong>The MayaNut Company's Signature Beverage Coming Soon to a Store Near You!</strong></p>
-        <p>This chilled Maya nut drink is crafted from the tropical rainforest tree <em>Brosimum alicastrum</em>, also known as Maya nut or breadnut. Our goal is to bring this ancient flavor into modern stores for everyone to enjoy.</p>
-      </div>
-    </div>
-    <button class="modal-close" id="product-modal-close">Close</button>
-  </div>
-</div>
-
 <!-- Lightbox for expanded About images -->
 <div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
   <div class="img-lightbox-content">
@@ -1528,7 +1517,7 @@ footer{
   let matched = false;
   items.forEach(item => {
     const f = item.getAttribute('data-file');
-    if (f === file || (file === '' && f === 'index.html')) {
+    if (f === file) {
       currentSpan.textContent = item.textContent.trim();
       item.classList.add('active');
       matched = true;
@@ -1584,12 +1573,14 @@ footer{
   });
 })();
 
-// Snow animation for multiple sections (hero + about), pause when tab inactive
+// Snowflakes on all .snow-canvas elements (hero + about)
 (function () {
-  function initSnow(canvasId, flakeCount){
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
+  const canvases = document.querySelectorAll('.snow-canvas');
+  if (!canvases.length) return;
+
+  canvases.forEach(canvas => {
     const parent = canvas.parentElement;
+    if (!parent) return;
     const ctx = canvas.getContext("2d");
 
     let width = parent.clientWidth;
@@ -1604,6 +1595,7 @@ footer{
     resize();
     window.addEventListener("resize", resize);
 
+    const FLAKE_COUNT = 60;
     const flakes = [];
 
     function random(min, max) {
@@ -1627,7 +1619,7 @@ footer{
 
     function initFlakes() {
       flakes.length = 0;
-      for (let i = 0; i < flakeCount; i++) {
+      for (let i = 0; i < FLAKE_COUNT; i++) {
         flakes.push(createFlake(true));
       }
     }
@@ -1696,14 +1688,18 @@ footer{
     }
 
     let lastTime = performance.now();
-    let running = true;
 
     function animate(now) {
-      if (!running) return;
-
       const TIME_SCALE = 0.15;
       const deltaTime = (now - lastTime) * TIME_SCALE;
       lastTime = now;
+
+      // If tab is hidden, clear and skip heavy updates
+      if (document.visibilityState !== 'visible') {
+        ctx.clearRect(0, 0, width, height);
+        requestAnimationFrame(animate);
+        return;
+      }
 
       ctx.clearRect(0, 0, width, height);
 
@@ -1715,22 +1711,9 @@ footer{
       requestAnimationFrame(animate);
     }
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        running = true;
-        lastTime = performance.now();
-        requestAnimationFrame(animate);
-      } else {
-        running = false;
-      }
-    });
-
     initFlakes();
     requestAnimationFrame(animate);
-  }
-
-  initSnow("snow-hero", 60);
-  initSnow("snow-about", 50);
+  });
 })();
 
 // Privacy / DNS Modal
@@ -1870,11 +1853,12 @@ footer{
       if (welcomeBackdrop.style.display !== 'none') {
         closeWelcome();
       }
-    }, 60000); // 60 seconds
+    }, 60000); // 60,000 ms = 60 seconds
   });
 
   welcomeClose.addEventListener('click', closeWelcome);
 
+  // "Go to Main Page" button closes popup AND scrolls to top
   if (welcomeMainBtn){
     welcomeMainBtn.addEventListener('click', () => {
       closeWelcome();
@@ -1887,14 +1871,13 @@ footer{
     });
   }
 
+  // Click outside the rectangles closes popup
   welcomeBackdrop.addEventListener('click', (e) => {
     if(e.target === welcomeBackdrop) closeWelcome();
   });
 })();
 
-// Gallery "view more" toggle – (kept generic, but no gallery section on main now)
-
-/* Scroll logo to top (desktop + mobile + bottom) */
+// Make the fixed logo, mobile header logo, and bottom logo scroll smoothly to the top section
 (function(){
   const topSection = document.getElementById('top');
   function scrollHome(e){
@@ -1968,30 +1951,30 @@ footer{
   });
 })();
 
-// Featured store image popup
+// Store first image popup
 (function(){
-  const trigger = document.getElementById('store-featured-image');
-  const backdrop = document.getElementById('product-modal-backdrop');
-  const closeBtn = document.getElementById('product-modal-close');
+  const trigger = document.getElementById('store-main-image');
+  const backdrop = document.getElementById('store-modal-backdrop');
+  const closeBtn = document.getElementById('store-modal-close');
   if (!trigger || !backdrop || !closeBtn) return;
 
-  function openProductModal(){
-    backdrop.style.display = 'flex';
+  function openModal(){
+    backdrop.classList.add('open');
   }
-  function closeProductModal(){
-    backdrop.style.display = 'none';
+  function closeModal(){
+    backdrop.classList.remove('open');
   }
 
-  trigger.addEventListener('click', openProductModal);
-  closeBtn.addEventListener('click', closeProductModal);
+  trigger.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+
   backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop){
-      closeProductModal();
-    }
+    if (e.target === backdrop) closeModal();
   });
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && backdrop.style.display === 'flex'){
-      closeProductModal();
+    if (e.key === 'Escape' && backdrop.classList.contains('open')){
+      closeModal();
     }
   });
 })();
