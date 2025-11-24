@@ -135,6 +135,17 @@ body{
   transform:translateY(-11px) rotate(-45deg);
 }
 
+/* Smaller bars on mobile to ensure visibility */
+@media (max-width: 600px){
+  .menu-toggle{
+    width:26px;
+    height:22px;
+  }
+  .menu-toggle span{
+    height:2px;
+  }
+}
+
 /* Title in top bar */
 .topbar-title{
   grid-area:title;
@@ -705,7 +716,7 @@ canvas#snow{
   font-size:15px;
   line-height:1.7;
 }
-/* Soft lavender gradients */
+/* Soft lavender / orange gradients */
 .about-card-1{
   background:linear-gradient(135deg, #fef6e9 0%, #ffffff 55%, #f4e6ff 100%);
 }
@@ -1235,6 +1246,127 @@ footer{
     font-size:32px;
   }
 }
+
+/* === FLOATING FAQ CHAT WIDGET === */
+.help-chat{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:3000;
+  font-size:14px;
+  color:#ffffff;
+}
+.help-chat-toggle{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:none;
+  background:radial-gradient(circle at 30% 20%, #f5f5f5 0, #c7c7c7 45%, #7a7a7a 100%);
+  color:#ffffff;
+  font-size:24px;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.45);
+  cursor:pointer;
+}
+.help-chat-toggle:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.55);
+}
+
+.help-chat-window{
+  position:absolute;
+  right:0;
+  bottom:56px;
+  width:280px;
+  max-height:350px;
+  background:rgba(6,24,70,0.97);
+  border-radius:16px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.6);
+  border:1px solid rgba(255,255,255,0.35);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+.help-chat-window.open{
+  display:flex;
+}
+.help-chat-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 10px;
+  background:linear-gradient(135deg,#18A7FF 0%, #ffb957 70%);
+  font-size:13px;
+  font-weight:600;
+}
+.help-chat-header span{
+  margin-right:6px;
+}
+.help-chat-close{
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:18px;
+  cursor:pointer;
+  line-height:1;
+}
+
+.help-chat-messages{
+  padding:8px 10px;
+  flex:1;
+  overflow-y:auto;
+  font-size:13px;
+}
+.help-chat-message{
+  margin-bottom:6px;
+  padding:6px 8px;
+  border-radius:10px;
+  max-width:95%;
+}
+.help-chat-message-bot{
+  background:rgba(255,255,255,0.12);
+  align-self:flex-start;
+}
+.help-chat-message-user{
+  background:rgba(255,255,255,0.22);
+  align-self:flex-end;
+}
+
+.help-chat-input-row{
+  display:flex;
+  gap:4px;
+  padding:6px 8px 8px;
+  background:rgba(0,0,0,0.25);
+}
+.help-chat-input-row input{
+  flex:1;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.4);
+  background:rgba(2,18,50,0.8);
+  color:#ffffff;
+  padding:4px 10px;
+  font-size:12px;
+  outline:none;
+}
+.help-chat-input-row button{
+  border-radius:999px;
+  border:none;
+  padding:4px 10px;
+  font-size:12px;
+  background:linear-gradient(135deg,#ffb957 0%,#ff8a1c 70%);
+  color:#fff;
+  cursor:pointer;
+}
+
+/* Make sure it stays usable on tiny screens */
+@media(max-width:480px){
+  .help-chat-window{
+    width:85vw;
+  }
+}
 </style>
 </head>
 
@@ -1602,6 +1734,26 @@ footer{
   <div class="img-lightbox-content">
     <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
     <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
+  </div>
+</div>
+
+<!-- FLOATING FAQ CHAT WIDGET -->
+<div class="help-chat" id="help-chat">
+  <button class="help-chat-toggle" id="help-chat-toggle" aria-label="Ask a Maya nut question">?</button>
+  <div class="help-chat-window" id="help-chat-window" aria-label="Maya nut helper" role="dialog">
+    <div class="help-chat-header">
+      <span>Ask about MayaNut™</span>
+      <button class="help-chat-close" id="help-chat-close" aria-label="Close help">&times;</button>
+    </div>
+    <div class="help-chat-messages" id="help-chat-messages">
+      <div class="help-chat-message help-chat-message-bot">
+        Hi! I’m a tiny FAQ bot. Ask me about Maya nut, Brosimum alicastrum, ramón, or this website.
+      </div>
+    </div>
+    <form class="help-chat-input-row" id="help-chat-form">
+      <input type="text" id="help-chat-input" placeholder="Type your question..." autocomplete="off">
+      <button type="submit">Send</button>
+    </form>
   </div>
 </div>
 
@@ -2072,6 +2224,142 @@ footer{
     if (e.key === 'Escape' && backdrop.classList.contains('open')){
       closeLightbox();
     }
+  });
+})();
+
+// Floating FAQ chat widget logic
+(function(){
+  const toggle = document.getElementById('help-chat-toggle');
+  const windowEl = document.getElementById('help-chat-window');
+  const closeBtn = document.getElementById('help-chat-close');
+  const form = document.getElementById('help-chat-form');
+  const input = document.getElementById('help-chat-input');
+  const messages = document.getElementById('help-chat-messages');
+
+  if (!toggle || !windowEl || !form || !input || !messages) return;
+
+  function openChat(){
+    windowEl.classList.add('open');
+    setTimeout(() => input.focus(), 50);
+  }
+  function closeChat(){
+    windowEl.classList.remove('open');
+  }
+
+  toggle.addEventListener('click', () => {
+    if (windowEl.classList.contains('open')) {
+      closeChat();
+    } else {
+      openChat();
+    }
+  });
+  if (closeBtn){
+    closeBtn.addEventListener('click', closeChat);
+  }
+
+  function addMessage(text, from){
+    const div = document.createElement('div');
+    div.className = 'help-chat-message ' + (from === 'bot' ? 'help-chat-message-bot' : 'help-chat-message-user');
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  const thanksPatterns = [/thank/i, /thanks/i, /thx/i, /good job/i, /great/i, /awesome/i];
+  const greetingPatterns = [/^hi\b/i, /^hello\b/i, /^hey\b/i];
+
+  const mayaKeywords = [
+    'maya nut','mayanut','maya-nut','brosimum alicastrum','brosimum','breadnut',
+    'ramon','ramón','ojoche','guimaro','guiamaro','tropical tree','this website','site','plantation'
+  ];
+
+  const answers = {
+    whatIs: [
+      "Maya nut is the seed of the tropical tree Brosimum alicastrum, sometimes called breadnut, ramón or ojoche.",
+      "Maya nut (Brosimum alicastrum) is a rainforest tree whose seeds can be roasted and used for drinks, flours and more."
+    ],
+    uses: [
+      "People roast Maya nuts for a rich, coffee-style drink, and they can also be ground into flour for baking.",
+      "Traditional uses of Maya nut include drinks, porridges, and flours. This site is exploring future beverages and products."
+    ],
+    whereGrow: [
+      "Brosimum alicastrum is native to tropical Mesoamerica, but this project focuses on growing it in warm, frost-free parts of Florida.",
+      "The tree likes humid, tropical to subtropical climates. In Florida, areas roughly south of about 27°N are especially promising."
+    ],
+    site: [
+      "This website belongs to The MayaNut Company, focused on developing Maya nut plantations and future beverages.",
+      "You’re on The MayaNut Company home page — a preview of future MayaNut™ beverages, research, and farms."
+    ],
+    fallbackMaya: [
+      "I’m a tiny FAQ bot and can only talk about Maya nut, Brosimum alicastrum, ramón, and this website.",
+      "I’m only trained on Maya nut questions. Try asking things like “What is Brosimum alicastrum?” or “Where does Maya nut grow?”"
+    ],
+    greet: [
+      "Hi there! Ask me anything about Maya nut or Brosimum alicastrum.",
+      "Hello! I’m here for Maya nut and site-related questions. 🌱"
+    ],
+    thanks: [
+      "You’re welcome! 🌿",
+      "Glad to help! 💧"
+    ]
+  };
+
+  function pick(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function handleBotReply(text){
+    const lower = text.toLowerCase().trim();
+
+    // greetings
+    if (greetingPatterns.some(r => r.test(lower))){
+      addMessage(pick(answers.greet), 'bot');
+      return;
+    }
+
+    // thanks / praise
+    if (thanksPatterns.some(r => r.test(lower))){
+      addMessage(pick(answers.thanks), 'bot');
+      return;
+    }
+
+    // Check if question has any Maya-related keyword
+    const mentionsMaya = mayaKeywords.some(k => lower.includes(k));
+
+    if (!mentionsMaya){
+      addMessage(pick(answers.fallbackMaya), 'bot');
+      return;
+    }
+
+    // Heuristic routing
+    if (lower.includes('what') || lower.includes('define') || lower.includes('meaning')){
+      addMessage(pick(answers.whatIs), 'bot');
+      return;
+    }
+    if (lower.includes('use') || lower.includes('drink') || lower.includes('beverage') || lower.includes('flour') || lower.includes('powder')){
+      addMessage(pick(answers.uses), 'bot');
+      return;
+    }
+    if (lower.includes('where') || lower.includes('grow') || lower.includes('range') || lower.includes('climate') || lower.includes('florida')){
+      addMessage(pick(answers.whereGrow), 'bot');
+      return;
+    }
+    if (lower.includes('website') || lower.includes('site') || lower.includes('company') || lower.includes('store')){
+      addMessage(pick(answers.site), 'bot');
+      return;
+    }
+
+    // Default when it's Maya-ish but not matched
+    addMessage(pick(answers.fallbackMaya), 'bot');
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    addMessage(value, 'user');
+    input.value = '';
+    setTimeout(() => handleBotReply(value), 250);
   });
 })();
 </script>
