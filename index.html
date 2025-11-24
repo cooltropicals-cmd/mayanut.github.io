@@ -31,19 +31,6 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 مايا نَت, مايانَت, جوز المايا, شجرة استوائية, Brosimum alicastrum
 ">
 
-<!-- Open Graph (social sharing) -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="The MayaNut Company – Maya nut beverage coming soon">
-<meta property="og:description" content="Maya nut beverage and products made from Brosimum alicastrum, a tropical rainforest tree also known as breadnut, ojoche, ramón, and guiamaro.">
-<meta property="og:url" content="https://mayanut.com">
-<meta property="og:image" content="https://mayanut.com/mayanut-the-maya-nut-company-logo.png">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="The MayaNut Company – Maya nut beverage coming soon">
-<meta name="twitter:description" content="Maya nut beverage and products made from Brosimum alicastrum – a future superfood from tropical rainforest trees.">
-<meta name="twitter:image" content="https://mayanut.com/mayanut-the-maya-nut-company-logo.png">
-
 <style>
 :root{
   --bg:#18A7FF;
@@ -54,7 +41,7 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
     radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
     #0a56c2;
 
-  /* BUY background – mostly white, soft pink, lavender at edges */
+  /* BUY / bottom logo background – mostly white, soft pink, lavender at edges */
   --buy-grad:
     radial-gradient(circle at 50% 30%, #ffffff 0, #ffffff 40%, #ffe9f5 65%, #e8ddff 90%),
     #ffffff;
@@ -119,7 +106,7 @@ body{
 .menu-toggle{
   grid-area:menu;
   width:32px;
-  height:30px;
+  height:30px; /* slightly taller = more spacing */
   border:none;
   background:transparent;
   display:flex;
@@ -136,7 +123,6 @@ body{
   height:3px;
   border-radius:999px;
   background:#ffffff;
-  margin:2px 0; /* a little extra breathing room */
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
@@ -320,6 +306,17 @@ body{
   cursor:pointer;
 }
 
+/* GLOBAL SNOW CANVAS (BACKGROUND) */
+#snow{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  pointer-events:none;
+  z-index:0;
+}
+
 /* HERO */
 .hero{
   position:relative;
@@ -332,9 +329,10 @@ body{
   background:var(--bg-grad);
   background-size:200% 200%;
   animation:lavaMove 40s ease-in-out infinite alternate;
+  z-index:1;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION – only hero */
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION – hero */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
@@ -351,17 +349,6 @@ body{
   gap:40px;
   position:relative;
   z-index:1;
-}
-
-/* Snow canvas */
-canvas#snow{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  display:block;
-  pointer-events:none;
-  z-index:0;
 }
 
 /* HERO CONTENT */
@@ -558,6 +545,7 @@ canvas#snow{
   font-size:14px;
   margin-bottom:10px;
   overflow:hidden;
+  cursor:pointer;
 }
 .store-item-photo{
   width:100%;
@@ -568,6 +556,66 @@ canvas#snow{
   font-size:14px;
   color:#40437a;
   text-align:center;
+}
+
+/* Featured store modal */
+.store-featured-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2300;
+}
+.store-featured-backdrop.open{
+  display:flex;
+}
+.store-featured-modal{
+  background:#ffffff;
+  color:#123055;
+  max-width:640px;
+  width:90%;
+  border-radius:18px;
+  padding:18px 18px 20px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.45);
+  display:flex;
+  gap:16px;
+  align-items:center;
+}
+.store-featured-image{
+  flex:0 0 45%;
+}
+.store-featured-image img{
+  width:100%;
+  height:auto;
+  border-radius:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.3);
+}
+.store-featured-text{
+  flex:1;
+  font-size:15px;
+  line-height:1.7;
+}
+.store-featured-text h3{
+  margin:0 0 8px;
+  font-size:19px;
+}
+.store-featured-close{
+  margin-top:10px;
+  display:inline-flex;
+  padding:4px 12px;
+  border-radius:999px;
+  border:none;
+  background:#0a56c2;
+  color:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
+@media(max-width:600px){
+  .store-featured-modal{
+    flex-direction:column;
+  }
 }
 
 /* ABOUT SECTION */
@@ -739,17 +787,17 @@ canvas#snow{
   margin-top:0;
   margin-bottom:8px;
   color:#30346a;
-}
-
-/* Make main About title underlined */
-.about-text-card.about-card-1 h2{
-  font-size:19px;
   text-decoration:underline;
   text-underline-offset:4px;
+}
+
+/* Make main About title underlined and likely one line */
+.about-text-card.about-card-1 h2{
+  font-size:19px;
   white-space:nowrap;
 }
 
-/* STORE / ABOUT / GALLERY layout on smaller screens */
+/* STORE / ABOUT layout on smaller screens */
 @media(max-width:800px){
   .hero{
     padding-top:calc(var(--bar-h) + 40px);
@@ -781,96 +829,9 @@ canvas#snow{
   }
 }
 
-/* GALLERY */
-.section--gallery{
-  background:var(--bg-grad);
-}
-.gallery-inner{
-  text-align:center;
-}
-.gallery-inner h2{
-  margin:0 0 12px;
-  font-size:22px;
-}
-.gallery-inner p{
-  margin:0 0 18px;
-  font-size:15px;
-}
-.gallery-grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px;
-  max-width:900px;
-  margin:0 auto;
-}
-.gallery-tile{
-  aspect-ratio:4/3;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 2px 10px rgba(0,0,0,0.25);
-  transition:transform 0.18s ease, box-shadow 0.18s ease;
-}
-.gallery-tile img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.gallery-tile:hover{
-  transform:translateY(-2px) scale(1.02);
-  box-shadow:0 4px 14px rgba(0,0,0,0.35);
-}
-
-/* Hide inner Gallery heading text on small screens */
-@media(max-width:600px){
-  .gallery-inner h2{
-    display:none;
-  }
-}
-
-/* Gallery "view more" control */
-.gallery-more-wrap{
-  margin-top:18px;
-}
-.gallery-more-button{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  border:2px solid #d6d8e8;
-  background:rgba(255,255,255,0.18);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 8px;
-  cursor:pointer;
-  transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-}
-.gallery-more-button:hover{
-  transform:scale(1.05);
-  background:rgba(255,255,255,0.28);
-  box-shadow:0 3px 10px rgba(0,0,0,0.35);
-}
-.gallery-more-arrow{
-  width:0;
-  height:0;
-  border-left:8px solid transparent;
-  border-right:8px solid transparent;
-  border-top:12px solid #d6d8e8;
-}
-.gallery-more-text{
-  font-size:13px;
-  color:#e5ecff;
-}
-.gallery-grid-extra{
-  display:none;
-  margin-top:16px;
-}
-
 /* BOTTOM LOGO */
 .section--bottom-logo{
-  background:
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    #003cc7;
+  background:var(--buy-grad);
   text-align:center;
 }
 .section--bottom-logo img{
@@ -878,36 +839,6 @@ canvas#snow{
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.3));
   cursor:pointer;
-}
-
-/* Back-to-top circle + label */
-.back-home-wrap{
-  margin-top:14px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-}
-.back-home-circle{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  border:2px solid #ffffff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-.back-home-circle-arrow{
-  width:0;
-  height:0;
-  border-left:7px solid transparent;
-  border-right:7px solid transparent;
-  border-bottom:12px solid #ffffff;
-}
-.back-home-text{
-  font-size:13px;
-  color:#f5fbff;
 }
 
 /* FOOTER */
@@ -1020,54 +951,30 @@ footer{
   position:relative;
 }
 .nav-modal-title{
-  margin:0 0 8px;
+  margin:0 0 4px;
   font-weight:800;
   font-size:20px;
   text-align:center;
 }
-
-/* Easter-egg logo wrapper in nav modal */
-.nav-logo-easter-wrapper{
-  margin:6px auto 10px;
-  width:120px;
-  height:80px;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.nav-logo-easter{
-  width:100px;
-  height:auto;
-  cursor:pointer;
-  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.6));
-  z-index:2;
-}
-.nav-logo-ricky-message{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  font-size:9px;
-  line-height:1.4;
-  text-align:center;
-  color:rgba(255,255,255,0.5);
-  opacity:0;
-  pointer-events:none;
-  z-index:1;
-  white-space:nowrap;
-}
-.nav-logo-ricky-message.show{
-  opacity:1;
+.nav-modal-title-underline{
+  width:90px;
+  height:3px;
+  margin:5px auto 10px;
+  background:#ffffff;
+  border-radius:999px;
 }
 
+/* Top vs bottom link groups in menu */
+.nav-modal-links--top,
+.nav-modal-links--bottom{
+  margin-top:10px;
+}
+
+/* Light blue hover background on menu items */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
   gap:10px;
-  margin-top:8px;
 }
 .nav-modal-links a{
   position:relative;
@@ -1075,29 +982,38 @@ footer{
   text-decoration:none;
   font-weight:600;
   font-size:15px;
-  padding:6px 10px;
-  border-radius:8px;
+  padding:6px 6px;
+  border-radius:10px;
+  display:block;
 }
-/* Short underline only when active */
 .nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:10px;
+  left:0;
   bottom:-2px;
-  width:40%;
+  width:100%;
   height:2px;
   background:var(--orange);
-  opacity:0;
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.15s ease;
 }
+.nav-modal-links a:hover{
+  background:rgba(255,255,255,0.16);
+}
+.nav-modal-links a:hover::after{
+  transform:scaleX(1);
+}
+
+/* Active page in menu = orange text + short underline */
 .nav-modal-links a.nav-link-active{
   color:var(--orange);
 }
 .nav-modal-links a.nav-link-active::after{
-  opacity:1;
+  transform:scaleX(1);
+  height:3px;
 }
-.nav-modal-links a:hover{
-  background:rgba(255,255,255,0.14);
-}
+
 .nav-close{
   position:absolute;
   top:10px;
@@ -1108,6 +1024,48 @@ footer{
   font-size:20px;
   line-height:1;
   cursor:pointer;
+}
+
+/* Middle logo + Ricky message */
+.nav-modal-logo-wrap{
+  margin:18px auto 8px;
+  width:100%;
+  max-width:220px;
+  height:120px;
+  position:relative;
+}
+
+#nav-logo-draggable{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  max-width:120px;
+  height:auto;
+  cursor:grab;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+  z-index:2;
+}
+
+.nav-logo-message{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  text-align:center;
+  color:#ffffff;
+  opacity:0;
+  pointer-events:none;
+  z-index:1;
+  line-height:1.5;
+  text-shadow:0 1px 3px rgba(0,0,0,0.7);
+  transition:opacity 0.25s ease;
+}
+.nav-logo-message.show{
+  opacity:1;
 }
 
 /* Generic modal (Privacy / DNS) */
@@ -1254,11 +1212,8 @@ footer{
   }
 }
 
-/* Responsive breakpoints for gallery + store */
+/* Responsive breakpoints */
 @media(max-width:800px){
-  .gallery-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
   .footer-row{
     flex-direction:row;
     justify-content:space-between;
@@ -1315,29 +1270,8 @@ footer{
   </div>
 </header>
 
-<!-- Custom dropdown BELOW the bar -->
-<div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
-  <ul>
-    <li data-file="index.html">English</li>
-    <li data-file="index-es.html">Español</li>
-    <li data-file="index-pt.html">Português</li>
-    <li data-file="index-fr.html">Français</li>
-    <li data-file="index-de.html">Deutsch</li>
-    <li data-file="index-it.html">Italiano</li>
-    <li data-file="index-ru.html">Русский</li>
-    <li data-file="index-zh.html">中文</li>
-    <li data-file="index-ja.html">日本語</li>
-    <li data-file="index-hi.html">हिन्दी</li>
-    <li data-file="index-ur.html">اردو</li>
-    <li data-file="index-bn.html">বাংলা</li>
-    <li data-file="index-id.html">Bahasa Indonesia</li>
-    <li data-file="index-ar.html">العربية</li>
-    <li data-file="index-sw.html">Kiswahili</li>
-    <li data-file="index-ha.html">Hausa</li>
-    <li data-file="index-fil.html">Filipino</li>
-    <li data-file="index-yo.html">Yorùbá</li>
-  </ul>
-</div>
+<!-- Global snow canvas -->
+<canvas id="snow"></canvas>
 
 <!-- Fixed logo below the bar (desktop only) -->
 <a href="#top" class="topbar-logo-link">
@@ -1348,29 +1282,34 @@ footer{
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Menu</h2>
 
-    <!-- Easter-egg logo in menu -->
-    <div class="nav-logo-easter-wrapper">
-      <div class="nav-logo-ricky-message" id="nav-ricky-message">
+    <h2 class="nav-modal-title">Menu</h2>
+    <div class="nav-modal-title-underline"></div>
+
+    <!-- TOP LINKS (scrolling inside page) -->
+    <div class="nav-modal-links nav-modal-links--top">
+      <a href="#top" data-section="top">HOME</a>
+      <a href="#buy" data-section="buy">STORE</a>
+      <a href="#about" data-section="about">ABOUT</a>
+    </div>
+
+    <!-- DRAGGABLE LOGO / RICKY EASTER EGG -->
+    <div class="nav-modal-logo-wrap">
+      <img
+        src="mayanut-the-maya-nut-company-logo.png"
+        alt="The MayaNut Company logo"
+        id="nav-logo-draggable"
+      >
+
+      <div class="nav-logo-message" id="nav-logo-message">
         <div>THIS WEBSITE AND COMPANY</div>
         <div>IS DEDICATED TO RICKY</div>
         <div>🩵 FOREVER LOVED 🩵</div>
       </div>
-      <img
-        src="mayanut-the-maya-nut-company-logo.png"
-        alt="The MayaNut Company logo"
-        class="nav-logo-easter"
-        id="nav-logo-easter"
-        draggable="false"
-      >
     </div>
 
-    <div class="nav-modal-links">
-      <a href="#top" data-section="top">HOME</a>
-      <a href="#buy" data-section="buy">STORE</a>
-      <a href="#about" data-section="about">ABOUT</a>
-      <a href="#gallery" data-section="gallery">GALLERY</a>
+    <!-- BOTTOM LINKS (open new pages) -->
+    <div class="nav-modal-links nav-modal-links--bottom">
       <a href="research.html" data-external="true">RESEARCH</a>
       <a href="blog.html" data-external="true">BLOG</a>
       <a href="faq.html" data-external="true">FAQ</a>
@@ -1383,8 +1322,6 @@ footer{
 
   <!-- HERO -->
   <section class="hero" id="top">
-    <canvas id="snow"></canvas>
-
     <div class="hero-inner">
       <div class="hero-right">
         <div>
@@ -1414,17 +1351,17 @@ footer{
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>Maya nut Store — Coming Soon</h2>
+        <h2>Store Products Coming For Sale Soon!</h2>
         <p>Scroll to preview future beverages, powder, and flour products. These are placeholder items while the first Maya nut plantation grows.</p>
       </div>
 
       <div class="store-scroller-wrapper">
         <div class="store-scroller">
           <div class="store-item">
-            <div class="store-item-image">
+            <div class="store-item-image" id="store-featured-trigger">
               <img src="rach20.png" alt="Chilled Maya nut beverage glass" class="store-item-photo">
             </div>
-            <div class="store-item-label">Chilled Maya nut Beverage</div>
+            <div class="store-item-label">MayaNut™ Beverage Coming Soon!</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 2</div>
@@ -1523,80 +1460,12 @@ footer{
     </div>
   </section>
 
-  <!-- TRANSITION: GALLERY -->
-  <div class="transition-strip">GALLERY</div>
-
-  <!-- GALLERY -->
-  <section class="section section--gallery" id="gallery">
-    <div class="section-inner gallery-inner">
-      <h2>Gallery</h2>
-      <p>Images from our trees, fruit, and future products — coming soon.</p>
-
-      <div class="gallery-grid">
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of Maya nut fruit Brosimum alicastrum on the tree">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Cluster of Maya nut fruits on Brosimum alicastrum branches">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit in tropical forest light">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on a rainforest tree trunk">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Detailed view of ripe Maya nut fruit texture">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Multiple Maya nut fruits of Brosimum alicastrum on branches">
-        </div>
-      </div>
-
-      <div class="gallery-more-wrap">
-        <div class="gallery-more-button" id="gallery-more-button">
-          <div class="gallery-more-arrow"></div>
-        </div>
-        <div class="gallery-more-text">👆 Click to View More Images 👆</div>
-      </div>
-
-      <div class="gallery-grid gallery-grid-extra" id="gallery-grid-extra">
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 7">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 8">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 9">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 10">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 11">
-        </div>
-        <div class="gallery-tile">
-          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 12">
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- BOTTOM LOGO SECTION -->
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top" id="bottom-logo-link">
         <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
       </a>
-
-      <div class="back-home-wrap">
-        <div class="back-home-circle" id="back-home-circle">
-          <div class="back-home-circle-arrow"></div>
-        </div>
-        <div class="back-home-text">👆 Click to Return Home 👆</div>
-      </div>
     </div>
   </section>
 
@@ -1664,43 +1533,19 @@ footer{
   </div>
 </div>
 
-<!-- JSON-LD: Organization + Product -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mayanut.com/#org",
-      "name": "The MayaNut Company, Inc.",
-      "url": "https://mayanut.com",
-      "logo": "https://mayanut.com/mayanut-the-maya-nut-company-logo.png",
-      "description": "The MayaNut Company is developing Brosimum alicastrum (Maya nut) as a new agricultural crop in the United States, starting with plantations in South Florida.",
-      "sameAs": [
-        "https://instagram.com/themayanutcompany"
-      ]
-    },
-    {
-      "@type": "Product",
-      "@id": "https://mayanut.com/#product-maya-nut-beverage",
-      "name": "Maya nut beverage",
-      "brand": {
-        "@type": "Brand",
-        "name": "The MayaNut Company"
-      },
-      "description": "A chilled, caffeine-free Maya nut beverage inspired by Brosimum alicastrum, a tropical rainforest tree species historically used across Mesoamerica.",
-      "image": "https://mayanut.com/rach20.png",
-      "url": "https://mayanut.com",
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/PreOrder",
-        "price": "0.00",
-        "priceCurrency": "USD"
-      }
-    }
-  ]
-}
-</script>
+<!-- Featured store product modal -->
+<div class="store-featured-backdrop" id="store-featured-backdrop">
+  <div class="store-featured-modal">
+    <div class="store-featured-image">
+      <img src="rach20.png" alt="MayaNut Beverage glass">
+    </div>
+    <div class="store-featured-text">
+      <h3>MayaNut™ Beverage</h3>
+      <p>The MayaNut Company's Signature Beverage Coming Soon to a Store Near You!</p>
+      <button class="store-featured-close" id="store-featured-close">Close</button>
+    </div>
+  </div>
+</div>
 
 <script>
 // Language dropdown (custom, below bar)
@@ -1774,26 +1619,25 @@ footer{
   });
 })();
 
-// Canvas snowflakes in hero, with pause when tab not visible
+// Canvas snowflakes (global background), with cyan color + pause when tab not visible
 (function () {
   const canvas = document.getElementById("snow");
   if (!canvas) return;
-  const hero = canvas.parentElement;
   const ctx = canvas.getContext("2d");
 
-  let width = hero.clientWidth;
-  let height = hero.clientHeight;
+  let width = window.innerWidth;
+  let height = window.innerHeight;
 
   function resize() {
-    width = hero.clientWidth;
-    height = hero.clientHeight;
+    width = window.innerWidth;
+    height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
   }
   resize();
   window.addEventListener("resize", resize);
 
-  const FLAKE_COUNT = 60;
+  const FLAKE_COUNT = 80;
   const flakes = [];
 
   function random(min, max) {
@@ -1826,7 +1670,7 @@ footer{
     ctx.save();
     ctx.translate(flake.x, flake.y);
     ctx.rotate(flake.rotation);
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.strokeStyle = "rgba(140, 230, 255, 0.9)"; // cyan-blue snow
     ctx.lineWidth = 1;
 
     const armLength = flake.size;
@@ -1960,14 +1804,12 @@ footer{
   }
 })();
 
-// NAV overlay (hamburger menu) + active underline tracking + easter egg logo
+// NAV overlay (hamburger menu) + active underline tracking
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
   const navClose = document.getElementById('nav-close');
-  const links = document.querySelectorAll('.nav-modal-links a');
-  const navLogo = document.getElementById('nav-logo-easter');
-  const rickyMessage = document.getElementById('nav-ricky-message');
+  const links = document.querySelectorAll('.nav-modal-links a[data-section]');
 
   if(!toggle || !navBackdrop) return;
 
@@ -1986,7 +1828,6 @@ footer{
     if(navBackdrop.classList.contains('open')){
       closeNav();
     }else{
-      closeNav(); // ensure state reset
       openNav();
     }
   });
@@ -2004,21 +1845,9 @@ footer{
     }
   });
 
-  // File-based active state (for external pages like research.html)
-  const currentPath = window.location.pathname;
-  const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
-
-  links.forEach(link => {
-    const href = link.getAttribute('href');
-    if (!href || href.startsWith('#')) return;
-    if (href === currentFile) {
-      link.classList.add('nav-link-active');
-    }
-  });
-
-  // Active underline follows visible section (for in-page anchors on index.html)
+  // Active underline follows visible section (for in-page anchors)
   const sectionMap = {};
-  document.querySelectorAll('.nav-modal-links a[data-section]').forEach(link => {
+  links.forEach(link => {
     const href = link.getAttribute('href');
     if (!href || !href.startsWith('#')) return;
     const id = href.replace('#','');
@@ -2039,8 +1868,7 @@ footer{
 
     if (mostVisible) {
       const id = mostVisible.id;
-      // clear only for hash-links
-      document.querySelectorAll('.nav-modal-links a[data-section]').forEach(l => l.classList.remove('nav-link-active'));
+      links.forEach(l => l.classList.remove('nav-link-active'));
       if (sectionMap[id]) {
         sectionMap[id].link.classList.add('nav-link-active');
       }
@@ -2050,79 +1878,6 @@ footer{
   });
 
   Object.values(sectionMap).forEach(({section}) => observer.observe(section));
-
-  // Helper to scroll home
-  function scrollHomeFromMenu() {
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }
-
-  // Easter egg: drag logo vs click
-  if (navLogo) {
-    let dragStart = null;
-    let dragged = false;
-
-    function getPoint(e){
-      if (e.touches && e.touches.length){
-        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }
-      return { x: e.clientX, y: e.clientY };
-    }
-
-    function pointerMove(e){
-      if (!dragStart) return;
-      const p = getPoint(e);
-      const dx = p.x - dragStart.x;
-      const dy = p.y - dragStart.y;
-      if (Math.hypot(dx, dy) > 18){
-        dragged = true;
-      }
-    }
-
-    function pointerUp(e){
-      if (!dragStart) return;
-      const wasDragged = dragged;
-      dragStart = null;
-      dragged = false;
-
-      document.removeEventListener('mousemove', pointerMove);
-      document.removeEventListener('mouseup', pointerUp);
-      document.removeEventListener('touchmove', pointerMove);
-      document.removeEventListener('touchend', pointerUp);
-
-      if (!wasDragged){
-        // Simple click: go home
-        closeNav();
-        scrollHomeFromMenu();
-      } else {
-        // Drag release: show Ricky dedication text
-        if (rickyMessage){
-          rickyMessage.classList.add('show');
-        }
-      }
-    }
-
-    navLogo.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      const p = getPoint(e);
-      dragStart = p;
-      dragged = false;
-      document.addEventListener('mousemove', pointerMove);
-      document.addEventListener('mouseup', pointerUp);
-    });
-
-    navLogo.addEventListener('touchstart', (e) => {
-      const p = getPoint(e);
-      dragStart = p;
-      dragged = false;
-      document.addEventListener('touchmove', pointerMove);
-      document.addEventListener('touchend', pointerUp);
-    });
-  }
 })();
 
 // Welcome popup
@@ -2169,20 +1924,7 @@ footer{
   });
 })();
 
-// Gallery "view more" toggle
-(function(){
-  const btn = document.getElementById('gallery-more-button');
-  const extra = document.getElementById('gallery-grid-extra');
-  if (!btn || !extra) return;
-
-  let open = false;
-  btn.addEventListener('click', () => {
-    open = !open;
-    extra.style.display = open ? 'grid' : 'none';
-  });
-})();
-
-// Make the fixed logo, mobile header logo, and bottom circle scroll smoothly to the top section
+// Smooth scroll for desktop logo, mobile logo, bottom logo
 (function(){
   const topSection = document.getElementById('top');
   function scrollHome(e){
@@ -2207,11 +1949,6 @@ footer{
   const bottomLogoLink = document.getElementById('bottom-logo-link');
   if (bottomLogoLink){
     bottomLogoLink.addEventListener('click', scrollHome);
-  }
-
-  const backCircle = document.getElementById('back-home-circle');
-  if (backCircle){
-    backCircle.addEventListener('click', scrollHome);
   }
 })();
 
@@ -2257,6 +1994,158 @@ footer{
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && backdrop.classList.contains('open')){
       closeLightbox();
+    }
+  });
+})();
+
+// Featured store modal (first product)
+(function(){
+  const trigger = document.getElementById('store-featured-trigger');
+  const backdrop = document.getElementById('store-featured-backdrop');
+  const closeBtn = document.getElementById('store-featured-close');
+
+  if (!trigger || !backdrop || !closeBtn) return;
+
+  function openModal(){
+    backdrop.classList.add('open');
+  }
+  function closeModal(){
+    backdrop.classList.remove('open');
+  }
+
+  trigger.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')){
+      closeModal();
+    }
+  });
+})();
+
+// Menu logo drag + Ricky easter egg
+(function(){
+  const logo = document.getElementById('nav-logo-draggable');
+  const message = document.getElementById('nav-logo-message');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const toggle = document.getElementById('menu-toggle');
+  const originalSrc = logo ? logo.src : null;
+
+  if (!logo || !message) return;
+
+  let isMouseDown = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+  let hasMoved = false;
+  let isRickyShown = false;
+
+  // helper: go home + close menu
+  function goHomeAndCloseMenu(){
+    if (navBackdrop) navBackdrop.classList.remove('open');
+    if (toggle) toggle.classList.remove('open');
+
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior:'smooth' });
+    } else {
+      window.scrollTo({ top:0, behavior:'smooth' });
+    }
+  }
+
+  // get bounding box for constraining drag
+  function getBounds(){
+    const modal = logo.closest('.nav-modal');
+    if (!modal) return null;
+    const rect = modal.getBoundingClientRect();
+    return {
+      left:0,
+      top:0,
+      right:rect.width,
+      bottom:rect.height
+    };
+  }
+
+  logo.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    isMouseDown = true;
+    logo.style.cursor = 'grabbing';
+
+    const rect = logo.getBoundingClientRect();
+    const modal = logo.closest('.nav-modal');
+    const modalRect = modal.getBoundingClientRect();
+
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = rect.left - modalRect.left;
+    startTop = rect.top - modalRect.top;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isMouseDown) return;
+
+    const bounds = getBounds();
+    if (!bounds) return;
+
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    let newLeft = startLeft + dx;
+    let newTop = startTop + dy;
+
+    const halfW = logo.offsetWidth / 2;
+    const halfH = logo.offsetHeight / 2;
+
+    // constrain inside modal
+    newLeft = Math.max(bounds.left + halfW, Math.min(bounds.right - halfW, newLeft));
+    newTop = Math.max(bounds.top + halfH, Math.min(bounds.bottom - halfH, newTop));
+
+    logo.style.left = newLeft + 'px';
+    logo.style.top = newTop + 'px';
+    logo.style.transform = 'translate(-50%, -50%)';
+
+    // once moved a bit, flag as "moved" and show message + bark tooltip
+    if (!hasMoved && (Math.abs(dx) > 8 || Math.abs(dy) > 8)){
+      hasMoved = true;
+      message.classList.add('show');
+      logo.title = 'Harf, Harf!';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!isMouseDown) return;
+    isMouseDown = false;
+    logo.style.cursor = 'grab';
+  });
+
+  // click behavior depends on whether it has been moved
+  logo.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    // Not moved yet: use logo like a normal "home" button
+    if (!hasMoved){
+      goHomeAndCloseMenu();
+      return;
+    }
+
+    // Moved: toggle Ricky <-> Home
+    if (!isRickyShown){
+      // first click after moving: show Ricky
+      if (originalSrc){
+        logo.dataset.originalSrc = originalSrc;
+      }
+      logo.src = 'ricky.jpeg';   // make sure this file exists in your site folder
+      isRickyShown = true;
+      logo.title = 'Harf, Harf!'; // bark tooltip
+    } else {
+      // second click: restore logo and go home
+      const orig = logo.dataset.originalSrc || originalSrc;
+      if (orig) logo.src = orig;
+      isRickyShown = false;
+      goHomeAndCloseMenu();
     }
   });
 })();
