@@ -36,8 +36,8 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
   --blue-deep:#0000df;
   --blue-mid:#0060ff;
   --blue-soft:#1e5dff;
-  --orange:#ff8a1c;
-  --orange-light:#ffc152;
+  --orange:#ff991f;
+  --orange-light:#ffc95a;
 
   --bar-h:72px;
 }
@@ -64,11 +64,11 @@ html,body{
   color:#fff;
 }
 
-/* Overall background: vivid orange + vivid blue (non-moving) */
+/* Overall background: brighter oranges + vivid blue */
 body{
   background:
-    radial-gradient(circle at 10% 10%, var(--orange) 0, transparent 45%),
-    radial-gradient(circle at 90% 80%, var(--orange-light) 0, transparent 50%),
+    radial-gradient(circle at 10% 10%, #ffb347 0, transparent 45%),
+    radial-gradient(circle at 90% 80%, #ffcf73 0, transparent 50%),
     radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
     radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
   background-attachment:fixed;
@@ -98,33 +98,35 @@ body{
 .menu-toggle{
   grid-area:menu;
   width:32px;
-  height:28px;
+  height:32px;
   border:none;
   background:transparent;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
-  padding:2px 0;
+  justify-content:center;
+  align-items:flex-start;
+  gap:4px;
+  padding:0;
   cursor:pointer;
-  justify-self:start;
   margin-left:2px;
   z-index:1100;
 }
 .menu-toggle span{
   display:block;
+  width:100%;
   height:3px;
   border-radius:999px;
   background:#ffffff;
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
-  transform:translateY(9px) rotate(45deg);
+  transform:translateY(6px) rotate(45deg);
 }
 .menu-toggle.open span:nth-child(2){
   opacity:0;
 }
 .menu-toggle.open span:nth-child(3){
-  transform:translateY(-9px) rotate(-45deg);
+  transform:translateY(-6px) rotate(-45deg);
 }
 
 /* Title in top bar */
@@ -235,7 +237,7 @@ body{
   }
 }
 
-/* MOBILE TOPBAR: inline logo centered, language right, menu left */
+/* MOBILE TOPBAR: logo centered, menu left, language right */
 .topbar-logo-inline{
   display:none;
 }
@@ -259,6 +261,7 @@ body{
     line-height:1.2;
     margin-top:4px;
     padding:0 4px;
+    white-space:normal;
   }
   .topbar-logo-inline{
     grid-area:centerlogo;
@@ -298,8 +301,8 @@ body{
   justify-content:center;
   overflow:hidden;
   background:
-    radial-gradient(circle at 15% 15%, var(--orange) 0, transparent 50%),
-    radial-gradient(circle at 85% 80%, var(--orange-light) 0, transparent 55%),
+    radial-gradient(circle at 15% 15%, #ffb347 0, transparent 50%),
+    radial-gradient(circle at 85% 80%, #ffcf73 0, transparent 55%),
     radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
     radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
   background-size:200% 200%;
@@ -1052,7 +1055,7 @@ footer{
   }
 }
 
-/* Chat assistant launcher (lower-right now) */
+/* Chat assistant launcher (lower-right) */
 .chat-launcher{
   position:fixed;
   right:16px;
@@ -1079,7 +1082,7 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Chat assistant panel – anchored to bottom-right */
+/* Chat assistant panel */
 .chat-panel{
   position:fixed;
   right:16px;
@@ -1658,7 +1661,7 @@ FOREVER LOVED
   }
 })();
 
-// NAV overlay + Ricky easter egg (basic version: click logo to go home)
+// NAV overlay + simple Ricky easter egg logic
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
@@ -1726,7 +1729,7 @@ FOREVER LOVED
     }
   });
 
-  // Simple click behavior: first click reveals Ricky + text, second click goes to image, third click goes home
+  // Simple click behavior: first click shows Ricky + text, second click opens image, third click returns home
   let clickCount = 0;
   logoEaster.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -1784,7 +1787,7 @@ FOREVER LOVED
   });
 })();
 
-// Smooth scroll for logo links on this page
+// Smooth scroll for logo links
 (function(){
   const topSection = document.getElementById('top');
   function scrollHome(e){
@@ -1858,7 +1861,7 @@ FOREVER LOVED
   });
 })();
 
-// Hero snowflakes on main hero only
+// Hero snowflakes
 (function(){
   const hero = document.querySelector('.hero');
   if (!hero) return;
@@ -1893,7 +1896,6 @@ FOREVER LOVED
 })();
 
 // Chat assistant logic using external FAQ data in /bot/faq-bot-content.json
-// Now with: simple "AI" style matching + local storage log.
 (function(){
   const launcher = document.getElementById('chat-launcher');
   const panel = document.getElementById('chat-panel');
@@ -1909,7 +1911,6 @@ FOREVER LOVED
   let lastTopicId = null;
   let questionLog = [];
 
-  // Load previous questions from localStorage (per browser)
   try{
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored){
@@ -1922,14 +1923,11 @@ FOREVER LOVED
 
   function saveLog(){
     try{
-      // keep only the last 100 questions
       if (questionLog.length > 100){
         questionLog = questionLog.slice(questionLog.length - 100);
       }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(questionLog));
-    }catch(e){
-      // ignore storage errors (private mode, etc.)
-    }
+    }catch(e){}
   }
 
   function logQuestion(text, topicId){
@@ -1941,7 +1939,6 @@ FOREVER LOVED
     saveLog();
   }
 
-  // Load bot content from separate folder: /bot/faq-bot-content.json
   fetch('bot/faq-bot-content.json')
     .then(res => res.json())
     .then(data => {
@@ -2004,7 +2001,6 @@ FOREVER LOVED
     return fallback;
   }
 
-  // Simple "AI-ish" scoring: count keyword matches for each topic
   function scoreTopic(lower, topic){
     if (!topic || !Array.isArray(topic.keywords)) return 0;
     let score = 0;
@@ -2013,7 +2009,6 @@ FOREVER LOVED
       const k = kw.toLowerCase();
       if (!k) continue;
       if (lower.includes(k)){
-        // longer keywords get a bit more weight
         score += k.length > 10 ? 3 : (k.length > 4 ? 2 : 1);
       }
     }
@@ -2032,7 +2027,6 @@ FOREVER LOVED
         best = topic;
       }
     }
-    // require at least a tiny match
     if (bestScore <= 0) return null;
     return best;
   }
@@ -2071,10 +2065,8 @@ FOREVER LOVED
     appendMsg('You', raw);
     const lower = raw.toLowerCase();
 
-    // store in log first (topic ID added later when we know it)
     let usedTopicId = null;
 
-    // "what did I ask before" style
     if (
       lower.includes('what did i ask') ||
       lower.includes('my previous questions') ||
@@ -2086,7 +2078,6 @@ FOREVER LOVED
       return;
     }
 
-    // "tell me more" or similar followup
     if (
       (lower.includes('tell me more') || lower.includes('more about') || lower === 'more') &&
       lastTopicId
@@ -2101,7 +2092,6 @@ FOREVER LOVED
       return;
     }
 
-    // How are you
     if (lower.includes('how are you') || lower.includes('how\'s your day') || lower.includes('hows your day')){
       const defaults = [
         'I’m a tiny maya nut bot, doing great among the Brosimum alicastrum trees! How can I help you today?',
@@ -2114,7 +2104,6 @@ FOREVER LOVED
       return;
     }
 
-    // greetings
     if (greetWords.some(g => lower.includes(g))){
       const defaults = [
         'Hi! Ask me something about maya nut or Brosimum alicastrum.',
@@ -2127,7 +2116,6 @@ FOREVER LOVED
       return;
     }
 
-    // thanks
     if (thanksWords.some(t => lower.includes(t))){
       const defaults = [
         'You’re very welcome!',
@@ -2141,7 +2129,6 @@ FOREVER LOVED
       return;
     }
 
-    // Try to find best topic in knowledge base
     const bestTopic = findBestTopic(lower);
     if (bestTopic){
       usedTopicId = bestTopic.id || null;
@@ -2153,7 +2140,6 @@ FOREVER LOVED
       }
     }
 
-    // On-topic but not in JSON = generic response
     const onTopic =
       lower.replace(/\s+/g,'').includes('mayanut') ||
       lower.includes('maya nut') ||
@@ -2177,7 +2163,6 @@ FOREVER LOVED
       return;
     }
 
-    // Off-topic
     const defaultsOff = [
       'I’m a very small helper bot. I only answer questions about maya nut, Brosimum alicastrum, ojoche/ramón, or this website. Try asking about those topics!'
     ];
