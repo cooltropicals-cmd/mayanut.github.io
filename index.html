@@ -34,19 +34,16 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 <style>
 :root{
   --bg:#18A7FF;
-  /* Blue–purple–orange gradient background, with orange at outer edges */
+  /* Blue–orange–white gradient background with a little lavender */
   --bg-grad:
-    radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 35%, transparent 70%),
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #6c46ff 0, #001996 55%, transparent 80%),
-    radial-gradient(circle at 0% 0%, rgba(255,171,64,0.55) 0, transparent 55%),
-    radial-gradient(circle at 100% 0%, rgba(255,171,64,0.55) 0, transparent 55%),
+    radial-gradient(circle at 50% 20%, #4fd8ff 0, #18A7FF 30%, transparent 65%),
+    radial-gradient(circle at 0% 100%, #ffb957 0, #ff8a1c 40%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #ffe9f5 0, #18A7FF 45%, transparent 80%),
     #0a56c2;
 
-  /* BUY background – mostly white, soft pink, lavender at edges + light orange fade */
+  /* BUY background – mostly white, soft pink, lavender at edges */
   --buy-grad:
     radial-gradient(circle at 50% 30%, #ffffff 0, #ffffff 40%, #ffe9f5 65%, #e8ddff 90%),
-    radial-gradient(circle at 0% 100%, rgba(255,171,64,0.35) 0, transparent 70%),
     #ffffff;
 
   --bar:#003cc7;
@@ -89,8 +86,8 @@ body{
   position:fixed;
   top:0; left:0; right:0;
   background:
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #ffb957 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #ffb957 0, #003cc7 55%, transparent 80%),
     #003cc7;
   color:#fff;
   display:grid;
@@ -129,13 +126,13 @@ body{
   transition:transform 0.2s ease, opacity 0.2s ease;
 }
 .menu-toggle.open span:nth-child(1){
-  transform:translateY(10px) rotate(45deg);
+  transform:translateY(11px) rotate(45deg);
 }
 .menu-toggle.open span:nth-child(2){
   opacity:0;
 }
 .menu-toggle.open span:nth-child(3){
-  transform:translateY(-10px) rotate(-45deg);
+  transform:translateY(-11px) rotate(-45deg);
 }
 
 /* Title in top bar */
@@ -235,7 +232,18 @@ body{
   text-underline-offset:3px;
 }
 
-/* MOBILE TOPBAR LAYOUT */
+/* Narrow screens: hide "Language" word */
+@media (max-width: 420px){
+  .topbar-lang-label-text{
+    display:none;
+  }
+  .topbar-lang-current-btn{
+    font-size:11px;
+    padding:2px 7px;
+  }
+}
+
+/* INLINE LOGO IN TOP BAR (MOBILE ONLY) */
 .topbar-logo-inline{
   display:none;
 }
@@ -245,6 +253,7 @@ body{
   filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
 }
 
+/* MOBILE TOPBAR LAYOUT */
 @media (max-width: 600px){
   .topbar{
     grid-template-columns:auto 1fr auto;
@@ -311,7 +320,7 @@ body{
   animation:lavaMove 40s ease-in-out infinite alternate;
 }
 
-/* LAVA-LAMP STYLE BACKGROUND ANIMATION – hero only */
+/* LAVA-LAMP STYLE BACKGROUND ANIMATION – only hero */
 @keyframes lavaMove{
   0%   { background-position: 0% 0%; }
   50%  { background-position: 100% 50%; }
@@ -330,9 +339,8 @@ body{
   z-index:1;
 }
 
-/* Generic snow canvas for sections */
-.section-snow,
-#snow-hero{
+/* Snow canvas */
+canvas#snow{
   position:absolute;
   inset:0;
   width:100%;
@@ -450,7 +458,7 @@ body{
     90deg,
     #7bc4ff 0%,
     #0e4fb8 24%,
-    #aa00fe 50%,
+    #ff8a1c 50%,
     #0e4fb8 76%,
     #7bc4ff 100%
   );
@@ -480,16 +488,16 @@ body{
   margin:0 auto;
 }
 
-/* STORE SECTION (with cyan snowflakes) */
+/* STORE SECTION */
 .section--buy{
   background:var(--buy-grad);
   color:#083b7c;
   padding:40px 16px 60px;
+  scroll-margin-top:calc(var(--bar-h) + 30px);
 }
 .store-inner{
   max-width:900px;
   margin:0 auto;
-  position:relative;
 }
 .store-heading{
   text-align:center;
@@ -523,7 +531,6 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  position:relative;
 }
 .store-item-image{
   width:100%;
@@ -538,7 +545,6 @@ body{
   font-size:14px;
   margin-bottom:10px;
   overflow:hidden;
-  cursor:pointer;
 }
 .store-item-photo{
   width:100%;
@@ -551,7 +557,7 @@ body{
   text-align:center;
 }
 
-/* ABOUT SECTION (with vivid blue snowflakes) */
+/* ABOUT SECTION */
 .section--about::before{
   content:"";
   position:absolute;
@@ -563,16 +569,14 @@ body{
   border-radius:50% 50% 0 0;
   z-index:-1;
   background:
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #ffb957 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #ffb957 0, #003cc7 55%, transparent 80%),
     #003cc7;
 }
 .section--about{
   background:var(--bg-grad);
   color:#fff;
-}
-.section--about .section-inner{
-  position:relative;
+  scroll-margin-top:calc(var(--bar-h) + 30px);
 }
 
 .about-grid{
@@ -703,19 +707,19 @@ body{
 }
 /* Soft lavender gradients */
 .about-card-1{
-  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
+  background:linear-gradient(135deg, #fef6e9 0%, #ffffff 55%, #f4e6ff 100%);
 }
 .about-card-2{
-  background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #e7dcff 100%);
+  background:linear-gradient(135deg, #fff4e4 0%, #ffffff 55%, #f1e4ff 100%);
 }
 .about-card-3{
-  background:linear-gradient(135deg, #f4ecff 0%, #ffffff 55%, #e3d8ff 100%);
+  background:linear-gradient(135deg, #fff2e0 0%, #ffffff 55%, #ede0ff 100%);
 }
 .about-card-4{
-  background:linear-gradient(135deg, #f3eaff 0%, #ffffff 55%, #ded2ff 100%);
+  background:linear-gradient(135deg, #fff0dd 0%, #ffffff 55%, #e8daff 100%);
 }
 .about-card-5{
-  background:linear-gradient(135deg, #f2e8ff 0%, #ffffff 55%, #d9ccff 100%);
+  background:linear-gradient(135deg, #ffeeda 0%, #ffffff 55%, #e3d5ff 100%);
 }
 
 .about-text-card h2,
@@ -723,17 +727,17 @@ body{
   margin-top:0;
   margin-bottom:8px;
   color:#30346a;
-  text-decoration:underline;
-  text-underline-offset:4px;
 }
 
-/* Make main About title slightly larger and underlined */
+/* Make main About title underlined and likely one line */
 .about-text-card.about-card-1 h2{
   font-size:19px;
+  text-decoration:underline;
+  text-underline-offset:4px;
   white-space:nowrap;
 }
 
-/* STORE / ABOUT layout on smaller screens */
+/* STORE / ABOUT / GALLERY layout on smaller screens */
 @media(max-width:800px){
   .hero{
     padding-top:calc(var(--bar-h) + 40px);
@@ -765,29 +769,98 @@ body{
   }
 }
 
-@media(max-width:500px){
-  .hero-glass{
-    max-width:75vw;
-  }
-  .hero-headline{
-    font-size:32px;
+/* GALLERY */
+.section--gallery{
+  background:var(--bg-grad);
+}
+.gallery-inner{
+  text-align:center;
+}
+.gallery-inner h2{
+  margin:0 0 12px;
+  font-size:22px;
+}
+.gallery-inner p{
+  margin:0 0 18px;
+  font-size:15px;
+}
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  max-width:900px;
+  margin:0 auto;
+}
+.gallery-tile{
+  aspect-ratio:4/3;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  transition:transform 0.18s ease, box-shadow 0.18s ease;
+}
+.gallery-tile img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.gallery-tile:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 4px 14px rgba(0,0,0,0.35);
+}
+
+/* Hide *inner* Gallery heading text on small screens,
+   so only the bar word “GALLERY” shows there */
+@media(max-width:600px){
+  .gallery-inner h2{
+    display:none;
   }
 }
 
-/* BOTTOM LOGO SECTION – darker vivid blue with orange snowflakes */
+/* Gallery "view more" control */
+.gallery-more-wrap{
+  margin-top:18px;
+}
+.gallery-more-button{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:2px solid #d6d8e8;
+  background:rgba(255,255,255,0.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 8px;
+  cursor:pointer;
+  transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.gallery-more-button:hover{
+  transform:scale(1.05);
+  background:rgba(255,255,255,0.28);
+  box-shadow:0 3px 10px rgba(0,0,0,0.35);
+}
+.gallery-more-arrow{
+  width:0;
+  height:0;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:12px solid #d6d8e8;
+}
+.gallery-more-text{
+  font-size:13px;
+  color:#e5ecff;
+}
+.gallery-grid-extra{
+  display:none;
+  margin-top:16px;
+}
+
+/* BOTTOM LOGO */
 .section--bottom-logo{
   background:
-    radial-gradient(circle at 0% 100%, #360096 0, #002a7a 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #360096 0, #002a7a 55%, transparent 80%),
-    radial-gradient(circle at 0% 0%, rgba(255,171,64,0.6) 0, transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(255,171,64,0.6) 0, transparent 60%),
-    #001845;
+    radial-gradient(circle at 0% 100%, #ffb957 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #ffb957 0, #003cc7 55%, transparent 80%),
+    #0030a4;
   text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.section--bottom-logo .section-inner{
-  position:relative;
 }
 .section--bottom-logo img{
   width:200px;
@@ -796,12 +869,42 @@ body{
   cursor:pointer;
 }
 
+/* Back-to-top circle + label */
+.back-home-wrap{
+  margin-top:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.back-home-circle{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  border:2px solid #ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.back-home-circle-arrow{
+  width:0;
+  height:0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:12px solid #ffffff;
+}
+.back-home-text{
+  font-size:13px;
+  color:#f5fbff;
+}
+
 /* FOOTER */
 footer{
   background:
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    #003cc7;
+    radial-gradient(circle at 0% 100%, #ffb957 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #ffb957 0, #003cc7 55%, transparent 80%),
+    #0030a4;
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -899,12 +1002,11 @@ footer{
   font-size:15px;
   line-height:1.7;
   background:
-    radial-gradient(circle at 50% 20%, #49d5ff 0, #18A7FF 40%, transparent 80%),
-    radial-gradient(circle at 0% 100%, #3a0b9f 0, #083f94 55%, transparent 80%),
-    radial-gradient(circle at 100% 100%, #3a0b9f 0, #07336f 55%, transparent 80%),
+    radial-gradient(circle at 50% 20%, #ffb957 0, #18A7FF 40%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #0c6fda 0, #083f94 55%, transparent 80%),
+    radial-gradient(circle at 100% 100%, #0c6fda 0, #07336f 55%, transparent 80%),
     #0a56c2;
   position:relative;
-  overflow:hidden;
 }
 .nav-modal-title{
   margin:0 0 4px;
@@ -919,55 +1021,11 @@ footer{
   background:#ffffff;
   border-radius:999px;
 }
-
-/* Ricky easter egg logo + dedication text */
-.nav-logo-easter-wrap{
-  position:relative;
-  margin:10px auto 8px;
-  width:140px;
-  height:110px;
-}
-.nav-logo-easter{
-  position:relative;
-  width:100px;
-  height:auto;
-  display:block;
-  margin:0 auto;
-  cursor:grab;
-  transition:transform 0.15s ease;
-  z-index:2;
-}
-.nav-logo-easter.dragging{
-  cursor:grabbing;
-}
-.nav-logo-message{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  font-size:10px;
-  text-align:center;
-  color:#ffffff;
-  opacity:0;
-  pointer-events:none;
-  padding:4px;
-  line-height:1.4;
-}
-
-/* Menu link lists */
 .nav-modal-links{
   display:flex;
   flex-direction:column;
-  gap:4px;
+  gap:10px;
   margin-top:8px;
-}
-.nav-group{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-bottom:10px;
 }
 .nav-modal-links a{
   position:relative;
@@ -975,32 +1033,27 @@ footer{
   text-decoration:none;
   font-weight:600;
   font-size:15px;
-  padding:6px 8px;
-  border-radius:10px;
-}
-.nav-modal-links a:hover{
-  background:rgba(255,255,255,0.15);
+  padding:6px 0;
 }
 .nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:8px;
-  bottom:2px;
-  width:40%;
+  left:0;
+  bottom:-2px;
+  width:100%;
   height:2px;
   background:var(--orange);
   transform:scaleX(0);
   transform-origin:left;
   transition:transform 0.15s ease;
 }
-.nav-modal-links a.nav-link-active{
-  color:var(--orange);
+.nav-modal-links a:hover::after{
+  transform:scaleX(1);
 }
 .nav-modal-links a.nav-link-active::after{
   transform:scaleX(1);
-  height:2px;
+  height:3px;
 }
-
 .nav-close{
   position:absolute;
   top:10px;
@@ -1083,8 +1136,8 @@ footer{
   border-radius:18px;
   padding:20px 22px 22px;
   background:
-    radial-gradient(circle at 0% 100%, #6c46ff 0, #003cc7 55%, transparent 80%),
-    radial-gradient(circle at 100% 0%, #6c46ff 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 0% 100%, #ffb957 0, #003cc7 55%, transparent 80%),
+    radial-gradient(circle at 100% 0%, #ffb957 0, #003cc7 55%, transparent 80%),
     #0a56c2;
   box-shadow:0 10px 30px rgba(0,0,0,0.55);
 }
@@ -1157,56 +1210,11 @@ footer{
   }
 }
 
-/* Store product modal (Signature beverage) */
-.store-modal-backdrop{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:2100;
-}
-.store-modal{
-  background:#ffffff;
-  color:#123055;
-  max-width:520px;
-  width:90%;
-  border-radius:16px;
-  padding:16px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.5);
-  display:flex;
-  gap:14px;
-  align-items:center;
-}
-.store-modal img{
-  width:180px;
-  height:auto;
-  border-radius:12px;
-  object-fit:cover;
-}
-.store-modal-text{
-  font-size:14px;
-}
-.store-modal-close{
-  position:absolute;
-  top:-14px;
-  right:-14px;
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  border:none;
-  background:#ffffff;
-  color:#000;
-  cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,0.6);
-}
-.store-modal-wrap{
-  position:relative;
-}
-
-/* Responsive breakpoints for store / footer */
+/* Responsive breakpoints for gallery + store */
 @media(max-width:800px){
+  .gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
   .footer-row{
     flex-direction:row;
     justify-content:space-between;
@@ -1217,6 +1225,14 @@ footer{
   }
   .store-item{
     flex:0 0 70vw;
+  }
+}
+@media(max-width:500px){
+  .hero-glass{
+    max-width:75vw;
+  }
+  .hero-headline{
+    font-size:32px;
   }
 }
 </style>
@@ -1290,32 +1306,15 @@ footer{
     <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-title-underline"></div>
-
     <div class="nav-modal-links">
-      <!-- Scrollable in-page links -->
-      <div class="nav-group">
-        <a href="#top" data-section="top">HOME</a>
-        <a href="#buy" data-section="buy">STORE</a>
-        <a href="#about" data-section="about">ABOUT</a>
-      </div>
-
-      <!-- Logo in the middle (Ricky easter egg) -->
-      <div class="nav-logo-easter-wrap">
-        <img src="mayanut-the-maya-nut-company-logo.png" alt="Menu logo" id="nav-logo-easter" class="nav-logo-easter">
-        <div class="nav-logo-message" id="nav-logo-message">
-          🩵💙🩵<br>
-          THE MAYANUT COMPANY DEDICATES THIS WEBSITE TO RICKY FOREVER LOVED<br>
-          🩵💙🩵
-        </div>
-      </div>
-
-      <!-- External pages -->
-      <div class="nav-group">
-        <a href="research.html" data-external="true">RESEARCH</a>
-        <a href="blog.html" data-external="true">BLOG</a>
-        <a href="faq.html" data-external="true">FAQ</a>
-        <a href="contact.html" data-external="true">CONTACT</a>
-      </div>
+      <a href="#top" data-section="top">HOME</a>
+      <a href="#buy" data-section="buy">STORE</a>
+      <a href="#about" data-section="about">ABOUT</a>
+      <a href="#gallery" data-section="gallery">GALLERY</a>
+      <a href="research.html" data-external="true">RESEARCH</a>
+      <a href="blog.html" data-external="true">BLOG</a>
+      <a href="faq.html" data-external="true">FAQ</a>
+      <a href="contact.html" data-external="true">CONTACT</a>
     </div>
   </div>
 </div>
@@ -1324,8 +1323,7 @@ footer{
 
   <!-- HERO -->
   <section class="hero" id="top">
-    <!-- Hero snow: white flakes -->
-    <canvas id="snow-hero"></canvas>
+    <canvas id="snow"></canvas>
 
     <div class="hero-inner">
       <div class="hero-right">
@@ -1352,25 +1350,22 @@ footer{
   <!-- TRANSITION: STORE -->
   <div class="transition-strip">STORE</div>
 
-  <!-- STORE / BUY (with cyan snow) -->
+  <!-- STORE / BUY -->
   <section class="section section--buy" id="buy">
-    <canvas id="snow-store" class="section-snow"></canvas>
-
     <div class="section-inner store-inner">
       <div class="store-heading">
-        <h2>Store Products Coming For Sale Soon!</h2>
+        <h2>Maya nut Store — Coming Soon</h2>
+        <p>Scroll to preview future beverages, powder, and flour products. These are placeholder items while the first Maya nut plantation grows.</p>
       </div>
 
       <div class="store-scroller-wrapper">
         <div class="store-scroller">
-          <!-- Signature beverage item (clickable for popup) -->
-          <div class="store-item" id="store-item-main">
+          <div class="store-item">
             <div class="store-item-image">
               <img src="rach20.png" alt="Chilled Maya nut beverage glass" class="store-item-photo">
             </div>
-            <div class="store-item-label">MayaNut™ Beverage Coming Soon!</div>
+            <div class="store-item-label">Chilled Maya nut Beverage</div>
           </div>
-
           <div class="store-item">
             <div class="store-item-image">Product 2</div>
             <div class="store-item-label">Maya nut Beverage – Vanilla</div>
@@ -1395,10 +1390,8 @@ footer{
   <!-- TRANSITION: ABOUT -->
   <div class="transition-strip">ABOUT</div>
 
-  <!-- ABOUT (with vivid blue snow) -->
+  <!-- ABOUT -->
   <section class="section section--about" id="about">
-    <canvas id="snow-about" class="section-snow"></canvas>
-
     <div class="section-inner">
       <div class="about-grid">
         <div class="about-images">
@@ -1461,6 +1454,7 @@ footer{
           </div>
 
           <div class="about-text-card about-card-5">
+            <p><strong>More information coming soon as our first trees grow.</strong></p>
             <h3>Our Fascination</h3>
             <p>From their wicked, entangled roots that grip ever tighter upon the Earth, there grows an agricultural miracle. We are fascinated by <em>Brosimum alicastrum</em> because this is a resource that no one has truly valued in America yet. People have used this tree for millennia in its native range, but by growing it in Florida, we give everyone a chance to try this delicious superfood. Developing something that people love is not easy — but it is the perfect challenge for The MayaNut Company to accomplish.</p>
           </div>
@@ -1470,14 +1464,80 @@ footer{
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION (with orange snowflakes) -->
-  <section class="section section--bottom-logo">
-    <canvas id="snow-bottom" class="section-snow"></canvas>
+  <!-- TRANSITION: GALLERY -->
+  <div class="transition-strip">GALLERY</div>
 
+  <!-- GALLERY -->
+  <section class="section section--gallery" id="gallery">
+    <div class="section-inner gallery-inner">
+      <h2>Gallery</h2>
+      <p>Images from our trees, fruit, and future products — coming soon.</p>
+
+      <div class="gallery-grid">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Close-up of Maya nut fruit Brosimum alicastrum on the tree">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Cluster of Maya nut fruits on Brosimum alicastrum branches">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit in tropical forest light">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on a rainforest tree trunk">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Detailed view of ripe Maya nut fruit texture">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Multiple Maya nut fruits of Brosimum alicastrum on branches">
+        </div>
+      </div>
+
+      <div class="gallery-more-wrap">
+        <div class="gallery-more-button" id="gallery-more-button">
+          <div class="gallery-more-arrow"></div>
+        </div>
+        <div class="gallery-more-text">👆 Click to View More Images 👆</div>
+      </div>
+
+      <div class="gallery-grid gallery-grid-extra" id="gallery-grid-extra">
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 7">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 8">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 9">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 10">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 11">
+        </div>
+        <div class="gallery-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Placeholder Maya nut image 12">
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BOTTOM LOGO SECTION -->
+  <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top" id="bottom-logo-link">
         <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
       </a>
+
+      <div class="back-home-wrap">
+        <div class="back-home-circle" id="back-home-circle">
+          <div class="back-home-circle-arrow"></div>
+        </div>
+        <div class="back-home-text">👆 Click to Return Home 👆</div>
+      </div>
     </div>
   </section>
 
@@ -1542,20 +1602,6 @@ footer{
   <div class="img-lightbox-content">
     <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
     <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
-  </div>
-</div>
-
-<!-- Store product popup -->
-<div class="store-modal-backdrop" id="store-modal-backdrop">
-  <div class="store-modal-wrap">
-    <div class="store-modal">
-      <img src="rach20.png" alt="MayaNut beverage glass" id="store-modal-img">
-      <div class="store-modal-text">
-        <p><strong>The MayaNut Company's Signature Beverage Coming Soon to a Store Near You!</strong></p>
-        <p>This chilled MayaNut™ drink will showcase the rich, toasty flavor of <em>Brosimum alicastrum</em> in a smooth, refreshing beverage designed for everyday enjoyment.</p>
-      </div>
-    </div>
-    <button class="store-modal-close" id="store-modal-close" aria-label="Close product info">&times;</button>
   </div>
 </div>
 
@@ -1631,174 +1677,149 @@ footer{
   });
 })();
 
-// Generic snow creator (with color + pause on tab inactive)
-(function(){
-  function createSnow(canvasId, options){
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const parent = canvas.parentElement;
-    const ctx = canvas.getContext("2d");
+// Canvas snowflakes in hero, with pause when tab not visible
+(function () {
+  const canvas = document.getElementById("snow");
+  if (!canvas) return;
+  const hero = canvas.parentElement;
+  const ctx = canvas.getContext("2d");
 
-    let width = parent.clientWidth;
-    let height = parent.clientHeight;
+  let width = hero.clientWidth;
+  let height = hero.clientHeight;
 
-    function resize() {
-      width = parent.clientWidth;
-      height = parent.clientHeight;
-      canvas.width = width;
-      canvas.height = height;
+  function resize() {
+    width = hero.clientWidth;
+    height = hero.clientHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const FLAKE_COUNT = 60;
+  const flakes = [];
+
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function createFlake(initial = false) {
+    return {
+      x: random(0, width),
+      y: initial ? random(0, height) : random(-height * 0.2, 0),
+      size: random(2, 5),
+      speedY: random(0.03, 0.12),
+      speedX: random(-0.03, 0.03),
+      sway: random(0.5, 1.5),
+      swaySpeed: random(0.0005, 0.002),
+      swayOffset: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI * 2,
+      rotationSpeed: random(-0.003, 0.003)
+    };
+  }
+
+  function initFlakes() {
+    flakes.length = 0;
+    for (let i = 0; i < FLAKE_COUNT; i++) {
+      flakes.push(createFlake(true));
     }
-    resize();
-    window.addEventListener("resize", resize);
+  }
 
-    const FLAKE_COUNT = options.count || 70;
-    const flakes = [];
+  function drawFlake(flake) {
+    ctx.save();
+    ctx.translate(flake.x, flake.y);
+    ctx.rotate(flake.rotation);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    ctx.lineWidth = 1;
 
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
+    const armLength = flake.size;
+
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI * 2 / 6) * i;
+      const x = Math.cos(angle) * armLength;
+      const y = Math.sin(angle) * armLength;
+
+      ctx.moveTo(0, 0);
+      ctx.lineTo(x, y);
+
+      const branchLen = armLength * 0.4;
+      const sideAngle1 = angle + Math.PI / 6;
+      const sideAngle2 = angle - Math.PI / 6;
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle1) * branchLen,
+        y * 0.4 + Math.sin(sideAngle1) * branchLen
+      );
+
+      ctx.moveTo(x * 0.4, y * 0.4);
+      ctx.lineTo(
+        x * 0.4 + Math.cos(sideAngle2) * branchLen,
+        y * 0.4 + Math.sin(sideAngle2) * branchLen
+      );
     }
+    ctx.stroke();
+    ctx.restore();
+  }
 
-    function createFlake(initial = false) {
-      return {
-        x: random(0, width),
-        y: initial ? random(0, height) : random(-height * 0.2, 0),
-        size: random(options.sizeMin || 3, options.sizeMax || 7),
-        speedY: random(0.04, 0.13),
-        speedX: random(-0.03, 0.03),
-        sway: random(0.5, 1.5),
-        swaySpeed: random(0.0005, 0.002),
-        swayOffset: Math.random() * Math.PI * 2,
-        rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: random(-0.003, 0.003)
-      };
-    }
+  function updateFlake(flake, deltaTime) {
+    flake.x += flake.speedX * deltaTime +
+      Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
 
-    function initFlakes() {
-      flakes.length = 0;
-      for (let i = 0; i < FLAKE_COUNT; i++) {
-        flakes.push(createFlake(true));
-      }
-    }
+    flake.y += flake.speedY * deltaTime;
 
-    function drawFlake(flake) {
-      ctx.save();
-      ctx.translate(flake.x, flake.y);
-      ctx.rotate(flake.rotation);
-      ctx.strokeStyle = options.color || "rgba(255,255,255,0.9)";
-      ctx.lineWidth = 1;
+    flake.rotation += flake.rotationSpeed * deltaTime;
 
-      const armLength = flake.size;
-
-      ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI * 2 / 6) * i;
-        const x = Math.cos(angle) * armLength;
-        const y = Math.sin(angle) * armLength;
-
-        ctx.moveTo(0, 0);
-        ctx.lineTo(x, y);
-
-        const branchLen = armLength * 0.45;
-        const sideAngle1 = angle + Math.PI / 6;
-        const sideAngle2 = angle - Math.PI / 6;
-
-        ctx.moveTo(x * 0.4, y * 0.4);
-        ctx.lineTo(
-          x * 0.4 + Math.cos(sideAngle1) * branchLen,
-          y * 0.4 + Math.sin(sideAngle1) * branchLen
-        );
-
-        ctx.moveTo(x * 0.4, y * 0.4);
-        ctx.lineTo(
-          x * 0.4 + Math.cos(sideAngle2) * branchLen,
-          y * 0.4 + Math.sin(sideAngle2) * branchLen
-        );
-      }
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    function updateFlake(flake, deltaTime) {
-      flake.x += flake.speedX * deltaTime +
-        Math.sin(flake.swayOffset + performance.now() * flake.swaySpeed) * 0.05 * flake.sway;
-
-      flake.y += flake.speedY * deltaTime;
-      flake.rotation += flake.rotationSpeed * deltaTime;
-
-      if (flake.y > height + flake.size * 2) {
-        const replacement = createFlake(false);
-        Object.assign(flake, replacement);
-      }
-
-      if (flake.x < -20) flake.x = width + 20;
-      if (flake.x > width + 20) flake.x = -20;
-    }
-
-    let lastTime = performance.now();
-    let running = true;
-
-    function animate(now) {
-      if (!running) return;
-
-      const TIME_SCALE = 0.15;
-      const deltaTime = (now - lastTime) * TIME_SCALE;
-      lastTime = now;
-
-      ctx.clearRect(0, 0, width, height);
-
-      for (const flake of flakes) {
-        updateFlake(flake, deltaTime);
-        drawFlake(flake);
-      }
-
-      requestAnimationFrame(animate);
+    if (flake.y > height + flake.size * 2) {
+      const replacement = createFlake(false);
+      flake.x = replacement.x;
+      flake.y = replacement.y;
+      flake.speedY = replacement.speedY;
+      flake.speedX = replacement.speedX;
+      flake.sway = replacement.sway;
+      flake.swaySpeed = replacement.swaySpeed;
+      flake.swayOffset = replacement.swayOffset;
+      flake.rotation = replacement.rotation;
+      flake.rotationSpeed = replacement.rotationSpeed;
     }
 
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        running = true;
-        lastTime = performance.now();
-        requestAnimationFrame(animate);
-      } else {
-        running = false;
-      }
-    });
+    if (flake.x < -20) flake.x = width + 20;
+    if (flake.x > width + 20) flake.x = -20;
+  }
 
-    initFlakes();
+  let lastTime = performance.now();
+  let running = true;
+
+  function animate(now) {
+    if (!running) return;
+
+    const TIME_SCALE = 0.15;
+    const deltaTime = (now - lastTime) * TIME_SCALE;
+    lastTime = now;
+
+    ctx.clearRect(0, 0, width, height);
+
+    for (const flake of flakes) {
+      updateFlake(flake, deltaTime);
+      drawFlake(flake);
+    }
+
     requestAnimationFrame(animate);
   }
 
-  // Hero: white snow
-  createSnow('snow-hero', {
-    color:"rgba(255,255,255,0.92)",
-    sizeMin:3,
-    sizeMax:7,
-    count:70
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      running = true;
+      lastTime = performance.now();
+      requestAnimationFrame(animate);
+    } else {
+      running = false;
+    }
   });
 
-  // Store: cyan snow
-  createSnow('snow-store', {
-    color:"rgba(120,244,255,0.9)",
-    sizeMin:3,
-    sizeMax:7,
-    count:70
-  });
-
-  // About: vivid blue snow
-  createSnow('snow-about', {
-    color:"rgba(80,188,255,0.95)",
-    sizeMin:3,
-    sizeMax:7,
-    count:70
-  });
-
-  // Bottom: orange snow
-  createSnow('snow-bottom', {
-    color:"rgba(255,184,77,0.95)",
-    sizeMin:3,
-    sizeMax:7,
-    count:60
-  });
+  initFlakes();
+  requestAnimationFrame(animate);
 })();
 
 // Privacy / DNS Modal
@@ -1842,21 +1863,18 @@ footer{
   }
 })();
 
-// NAV overlay (hamburger menu) + active underline tracking + Ricky easter egg
+// NAV overlay (hamburger menu) + active underline tracking
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
   const navClose = document.getElementById('nav-close');
   const links = document.querySelectorAll('.nav-modal-links a[data-section]');
-  const logo = document.getElementById('nav-logo-easter');
-  const logoMsg = document.getElementById('nav-logo-message');
 
   if(!toggle || !navBackdrop) return;
 
   function openNav(){
     navBackdrop.classList.add('open');
     toggle.classList.add('open');
-    resetEasterEgg();
   }
 
   function closeNav(){
@@ -1919,86 +1937,6 @@ footer{
   });
 
   Object.values(sectionMap).forEach(({section}) => observer.observe(section));
-
-  // Easter egg drag + Ricky behavior
-  if (!logo || !logoMsg) return;
-
-  let dragging = false;
-  let hasBeenDragged = false;
-  let showingRicky = false;
-  let startX = 0, startY = 0;
-  let currentX = 0, currentY = 0;
-  let startMouseX = 0, startMouseY = 0;
-
-  function resetEasterEgg(){
-    hasBeenDragged = false;
-    showingRicky = false;
-    currentX = 0;
-    currentY = 0;
-    logo.style.transform = 'translate(0px,0px)';
-    logoMsg.style.opacity = 0;
-    logo.src = 'mayanut-the-maya-nut-company-logo.png';
-    logo.removeAttribute('title');
-  }
-
-  function scrollHome(){
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior:'smooth' });
-    } else {
-      window.scrollTo({ top:0, behavior:'smooth' });
-    }
-  }
-
-  logo.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    dragging = true;
-    logo.classList.add('dragging');
-    startMouseX = e.clientX;
-    startMouseY = e.clientY;
-    startX = currentX;
-    startY = currentY;
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (!dragging) return;
-    const dx = e.clientX - startMouseX;
-    const dy = e.clientY - startMouseY;
-    currentX = startX + dx;
-    currentY = startY + dy;
-    logo.style.transform = `translate(${currentX}px, ${currentY}px)`;
-  });
-
-  document.addEventListener('mouseup', (e) => {
-    if (!dragging) return;
-    dragging = false;
-    logo.classList.remove('dragging');
-    const totalMove = Math.hypot(currentX - startX, currentY - startY);
-
-    if (totalMove > 10){
-      hasBeenDragged = true;
-      logoMsg.style.opacity = 1;
-    } else {
-      // Treat as click
-      if (!hasBeenDragged && !showingRicky){
-        // normal click: go home
-        closeNav();
-        scrollHome();
-      } else if (hasBeenDragged && !showingRicky){
-        // show Ricky image
-        logo.src = 'ricky.jpeg';
-        logo.title = 'Harf, Harf!';
-        showingRicky = true;
-      } else if (hasBeenDragged && showingRicky){
-        // click again while Ricky showing: go home & reset
-        closeNav();
-        scrollHome();
-        resetEasterEgg();
-      }
-    }
-  });
-
-  // Hover text for Ricky "Harf, Harf!" already via title attribute
 })();
 
 // Welcome popup
@@ -2045,7 +1983,20 @@ footer{
   });
 })();
 
-// Make the fixed logo, mobile header logo, and bottom logo scroll smoothly to the top section
+// Gallery "view more" toggle
+(function(){
+  const btn = document.getElementById('gallery-more-button');
+  const extra = document.getElementById('gallery-grid-extra');
+  if (!btn || !extra) return;
+
+  let open = false;
+  btn.addEventListener('click', () => {
+    open = !open;
+    extra.style.display = open ? 'grid' : 'none';
+  });
+})();
+
+// Make the fixed logo, mobile header logo, and bottom circle scroll smoothly to the top section
 (function(){
   const topSection = document.getElementById('top');
   function scrollHome(e){
@@ -2070,6 +2021,11 @@ footer{
   const bottomLogoLink = document.getElementById('bottom-logo-link');
   if (bottomLogoLink){
     bottomLogoLink.addEventListener('click', scrollHome);
+  }
+
+  const backCircle = document.getElementById('back-home-circle');
+  if (backCircle){
+    backCircle.addEventListener('click', scrollHome);
   }
 })();
 
@@ -2116,30 +2072,6 @@ footer{
     if (e.key === 'Escape' && backdrop.classList.contains('open')){
       closeLightbox();
     }
-  });
-})();
-
-// Store main product popup
-(function(){
-  const item = document.getElementById('store-item-main');
-  const backdrop = document.getElementById('store-modal-backdrop');
-  const closeBtn = document.getElementById('store-modal-close');
-  if (!item || !backdrop || !closeBtn) return;
-
-  function openModal(){
-    backdrop.style.display = 'flex';
-  }
-  function closeModal(){
-    backdrop.style.display = 'none';
-  }
-
-  item.addEventListener('click', openModal);
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', (e) => {
-    if (e.target === backdrop) closeModal();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
   });
 })();
 </script>
