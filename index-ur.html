@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The MayaNut Company</title>
+
+<!-- Christmas font -->
+<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+
+<!-- Base + headline fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
+<link rel="shortcut icon" type="image/png" href="the-maya-nut-company-favicon-logo.png" />
+
+<meta name="theme-color" content="#0000df" />
+<meta name="robots" content="index,follow" />
+
+<!-- SEO: description + keywords -->
+<meta name="description" content="MayaNut مشروب اور مصنوعات Brosimum alicastrum سے بنی ہوئی، جسے breadnut، ojoche، ramón، guaimaro بھی کہا جاتا ہے — ایک اشنکٹبندیی برساتی جنگل کا درخت۔ اشنکٹبندیی درخت، ایگرو فاریسٹری اور مستقبل کے maya nut مشروبات، پاؤڈر اور آٹے۔">
+<meta name="keywords" content="
+Maya nut, maya nut, mayanut, MayaNut, Brosimum alicastrum, breadnut, bread nut, ojoche, ramón, guiamaro, tropical trees, tropical tree, rainforest tree, agroforestry,
+玛雅坚果, 面包果, 热带树木, 热带雨林树, Brosimum alicastrum,
+माया नट, मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़, Brosimum alicastrum,
+Майя-нут, маянут, хлебное дерево, тропические деревья, Brosimum alicastrum,
+nuez maya, ramón, ojoche, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
+noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
+مايا نَت, مايانَت, جوز المايا, شجرة استوائية, Brosimum alicastrum
+">
+
+<style>
+:root{
+  --blue-deep:#0000df;
+  --blue-mid:#3a7cff;
+  --blue-soft:#1e5dff;
+  --orange:#ff941f;
+  --orange-light:#ffc85a;
+
+  --bar-h:72px;
+}
+
+/* Slightly taller bar on very small screens */
+@media (max-width: 600px){
+  :root{
+    --bar-h:90px;
+  }
+}
+
+/* GLOBAL */
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html{
+  margin:0;
+  padding:0;
+  background:#ffffff; /* outside / overscroll area white */
+}
+
+html,body{
+  scroll-behavior:smooth;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:#fff;
+}
+
+body{
+  margin:0;
+  padding:0;
+  /* Overall background: vivid orange + vivid blue (desktop) */
+  background:
+    radial-gradient(circle at 10% 10%, var(--orange) 0, transparent 45%),
+    radial-gradient(circle at 90% 80%, var(--orange-light) 0, transparent 50%),
+    radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
+    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
+  background-attachment:fixed;
+}
+
+/* TOP BAR */
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  background:
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
+    /* darker vivid blue on edges, lighter center */
+    linear-gradient(90deg, #00003a 0%, var(--blue-deep) 18%, var(--blue-mid) 50%, var(--blue-deep) 82%, #00003a 100%);
+  color:#fff;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  grid-template-areas:"menu title lang";
+  align-items:center;
+  column-gap:6px;
+  padding:8px 10px;
+  min-height:var(--bar-h);
+  z-index:1200;
+  border-bottom:1px solid rgba(255,255,255,0.35);
+  padding-top:calc(8px + env(safe-area-inset-top, 0px));
+}
+
+/* Hamburger (always visible) */
+.menu-toggle{
+  grid-area:menu;
+  width:36px;
+  height:30px;
+  border:1px solid rgba(255,255,255,0.8);
+  background:#c85a00;  /* dark vivid orange behind bars */
+  border-radius:999px;
+  display:flex !important;
+  flex-direction:column;
+  justify-content:center;
+  padding:4px 6px;
+  cursor:pointer;
+  justify-self:start;
+  margin-left:2px;
+  z-index:2001;
+}
+.menu-toggle span{
+  display:block;
+  height:4px;
+  border-radius:999px;
+  background:#ffffff;
+  transition:transform 0.2s ease, opacity 0.2s ease;
+}
+.menu-toggle span + span{
+  margin-top:3px;
+}
+.menu-toggle.open span:nth-child(1){
+  transform:translateY(7px) rotate(45deg);
+}
+.menu-toggle.open span:nth-child(2){
+  opacity:0;
+}
+.menu-toggle.open span:nth-child(3){
+  transform:translateY(-7px) rotate(-45deg);
+}
+
+/* Title in top bar */
+.topbar-title{
+  grid-area:title;
+  font-family:"Mountains of Christmas", cursive;
+  font-size:18px;
+  text-align:center;
+  animation:merrygiggle 6s ease-in-out infinite;
+  max-width:100%;
+  justify-self:center;
+  padding:0 6px;
+}
+
+/* LANGUAGE SWITCHER */
+.topbar-lang{
+  grid-area:lang;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  justify-self:end;
+  font-size:12px;
+  margin-right:4px;
+}
+.topbar-lang-label{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.topbar-lang-label-emoji{
+  font-size:18px;
+  line-height:1;
+}
+.topbar-lang-label-text{
+  font-size:13px;
+}
+.topbar-lang-current-btn{
+  margin-top:2px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.8);
+  background:rgba(0,0,0,0.18);
+  color:#fff;
+  font-size:12px;
+  cursor:pointer;
+  outline:none;
+}
+.topbar-lang-current{
+  line-height:1;
+}
+.topbar-lang-caret{
+  font-size:10px;
+  transform:translateY(1px);
+}
+
+/* Language dropdown */
+.lang-dropdown{
+  position:fixed;
+  top:calc(var(--bar-h) + 2px);
+  right:10px;
+  background:rgba(0,0,0,0.92);
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 8px 20px rgba(0,0,0,0.6);
+  padding:6px 0;
+  z-index:1500;
+  display:none;
+  min-width:180px;
+}
+.lang-dropdown.open{
+  display:block;
+}
+.lang-dropdown ul{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.lang-dropdown li{
+  padding:6px 14px;
+  font-size:13px;
+  color:#ffffff;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.lang-dropdown li:hover{
+  background:rgba(255,255,255,0.16);
+}
+.lang-dropdown li.active{
+  color:var(--orange);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+/* Small screens: keep “Language” text visible but a bit smaller */
+@media (max-width: 420px){
+  .topbar-lang-label-text{
+    display:inline;
+    font-size:11px;
+  }
+  .topbar-lang-current-btn{
+    font-size:11px;
+    padding:2px 7px;
+  }
+}
+
+/* MOBILE TOPBAR: row 1 = menu + logo + lang, row 2 = title */
+.topbar-logo-inline{
+  display:none;
+}
+.topbar-logo-inline img{
+  height:50px;
+  width:auto;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+}
+
+@media (max-width: 600px){
+  .topbar{
+    grid-template-columns:auto 1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:
+      "menu centerlogo lang"
+      "title title title";
+    padding-left:8px;
+    padding-right:8px;
+    align-items:center;
+  }
+
+  .topbar-logo-inline{
+    grid-area:centerlogo;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  .topbar-logo-inline img{
+    height:50px; /* a bit bigger */
+  }
+
+  .topbar-title{
+    font-size:14px;
+    line-height:1.2;
+    margin-top:4px;
+    padding:0 4px;
+    text-align:center;
+  }
+
+  .topbar-lang{
+    align-items:flex-end;
+  }
+}
+
+/* Fixed logo (desktop only) */
+.topbar-logo-link{
+  position:fixed;
+  left:12px;
+  top:calc(var(--bar-h) + 12px);
+  z-index:900;
+}
+.topbar-logo{
+  width:95px;
+  height:95px;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+  cursor:pointer;
+}
+@media (max-width:600px){
+  .topbar-logo-link{
+    display:none;
+  }
+}
+
+/* HERO – animated vivid orange + vivid blue, with snow layer */
+.hero{
+  position:relative;
+  min-height:100vh;
+  padding-top:calc(var(--bar-h) + 120px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 15% 15%, var(--orange) 0, transparent 50%),
+    radial-gradient(circle at 85% 80%, var(--orange-light) 0, transparent 55%),
+    radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
+    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
+  background-size:200% 200%;
+  animation:lavaMove 40s ease-in-out infinite alternate;
+}
+@keyframes lavaMove{
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 100%; }
+}
+.hero-inner{
+  width:100%;
+  max-width:1100px;
+  padding:0 16px 80px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:3; /* above snow */
+}
+.hero-right{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+}
+
+/* Snow layer (hero only) */
+.hero-snow{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:2;
+}
+.snowflake{
+  position:absolute;
+  top:-12vh;
+  color:#ffffff;
+  filter:drop-shadow(0 0 3px rgba(255,255,255,0.7));
+  animation-name:snowFall;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+}
+@keyframes snowFall{
+  0%{
+    transform:translate3d(0, -12vh, 0);
+  }
+  50%{
+    transform:translate3d(var(--drift1, 20px), 55vh, 0);
+  }
+  100%{
+    transform:translate3d(var(--drift2, -20px), 115vh, 0);
+  }
+}
+
+/* Headline */
+.hero-headline{
+  flex:1;
+  max-width:520px;
+  margin-left:8px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:70px;
+  line-height:1.05;
+  font-weight:400;
+  color:#ffffff;
+  -webkit-text-stroke:3px #0040c8;
+  text-stroke:3px #0040c8;
+  text-shadow:
+    0 3px 0 #0040c8,
+    0 6px 12px rgba(0,0,0,0.5);
+}
+.hero-headline span{
+  display:block;
+  white-space:nowrap;
+}
+.hero-headline .headline-coming{
+  text-decoration:underline;
+  text-decoration-color:var(--blue-deep);
+  text-underline-offset:5px;
+  position:relative;
+}
+.hero-headline .headline-coming::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-8px;
+  height:2px;
+  background:linear-gradient(90deg,#6bb4ff 0%,#ffffff 50%,#6bb4ff 100%);
+  border-radius:999px;
+}
+
+/* CTA Button */
+.hero-cta-wrap{
+  margin-top:24px;
+  display:flex;
+  justify-content:center;
+}
+.hero-cta-btn{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px 48px;
+  border-radius:999px;
+  border:none;
+  text-decoration:none;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:20px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  background:linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 45%, #ffe27a 100%);
+  color:#fff;
+  box-shadow:0 4px 14px rgba(0,0,0,0.45);
+  cursor:pointer;
+  transition:box-shadow 0.18s ease, transform 0.18s ease;
+}
+.hero-cta-btn::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:999px;
+  border:2px solid rgba(255,255,255,0.9);
+  opacity:0;
+  pointer-events:none;
+  animation:buttonShine 1.8s ease-in-out infinite;
+}
+@keyframes buttonShine{
+  0%,100%{ opacity:0; }
+  50%{ opacity:1; }
+}
+.hero-cta-btn:hover{
+  box-shadow:0 7px 20px rgba(0,0,0,0.55);
+}
+
+/* Hero glass image */
+.hero-image-wrap{
+  flex:0 0 auto;
+  margin-left:auto;
+}
+.hero-image-link{
+  display:inline-block;
+}
+.hero-glass{
+  width:520px;
+  max-width:85vw;
+  display:block;
+  cursor:pointer;
+}
+
+/* TRANSITION STRIP */
+.transition-strip{
+  background:linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-deep) 100%);
+  color:#f5fbff;
+  text-align:center;
+  padding:14px 16px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing:0.06em;
+  font-size:15px;
+  position:relative;
+  z-index:1;
+  text-shadow:0 1px 2px rgba(0,0,0,0.55);
+  border-top:1px solid rgba(255,255,255,0.45);
+  border-bottom:1px solid rgba(0,0,0,0.65);
+  box-shadow:0 3px 8px rgba(0,0,0,0.55);
+}
+
+/* GENERIC SECTION */
+.section{
+  padding:70px 16px 80px;
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+.section-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* STORE SECTION */
+.section--buy{
+  background:
+    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 60%),
+    radial-gradient(circle at 100% 0%, var(--orange-light) 0, transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#f3f3ff 100%);
+  color:#083b7c;
+  padding:40px 16px 60px;
+}
+.store-inner{
+  max-width:900px;
+  margin:0 auto;
+}
+.store-heading{
+  text-align:center;
+  margin-bottom:22px;
+}
+.store-heading h2{
+  margin:0 0 6px;
+  font-size:22px;
+  color:#2b346c;
+}
+.store-heading p{
+  margin:0;
+  font-size:14px;
+  color:#4a5288;
+}
+.store-scroller-wrapper{
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+.store-scroller{
+  display:flex;
+  gap:16px;
+  padding-bottom:4px;
+}
+.store-item{
+  flex:0 0 220px;
+  background:linear-gradient(135deg,#f5ecff 0%,#ffffff 45%,#e7dcff 100%);
+  border-radius:18px;
+  padding:14px 14px 18px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.16);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.store-item-image{
+  width:100%;
+  aspect-ratio:4/5;
+  border-radius:14px;
+  background:radial-gradient(circle at 30% 20%, #f3eaff 0, #ffffff 45%, #e4defe 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#5f63a8;
+  font-weight:600;
+  font-size:14px;
+  margin-bottom:10px;
+  overflow:hidden;
+}
+.store-item-photo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.store-item-label{
+  font-size:14px;
+  color:#40437a;
+  text-align:center;
+}
+
+/* ABOUT SECTION */
+.section--about{
+  background:
+    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 55%),
+    radial-gradient(circle at 85% 0%, var(--orange-light) 0, transparent 60%),
+    radial-gradient(circle at 50% 50%, var(--blue-mid) 0, transparent 80%),
+    linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);
+  color:#ffffff;
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:28px;
+  align-items:flex-start;
+}
+.about-images{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.about-image-tile{
+  position:relative;
+}
+.about-images img{
+  width:100%;
+  border-radius:14px;
+  object-fit:cover;
+  box-shadow:0 2px 10px rgba(0,0,0,0.25);
+  display:block;
+}
+.about-images .square{
+  aspect-ratio:1/1;
+}
+
+/* Expand button overlay */
+.img-expand-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  border:none;
+  border-radius:999px;
+  padding:4px 10px;
+  background:rgba(0,0,0,0.65);
+  color:#ffffff;
+  font-size:11px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.img-expand-icon{
+  font-size:13px;
+}
+.img-expand-hint{
+  opacity:0;
+  transition:opacity 0.18s ease, transform 0.18s.ease;
+}
+
+/* Desktop hover hint */
+@media(min-width: 801px){
+  .about-image-tile:hover .img-expand-hint{
+    opacity:1;
+    transform:translateY(-1px);
+  }
+  .about-image-tile:hover .img-expand-btn{
+    transform:scale(1.04);
+  }
+}
+
+/* Mobile: keep icon, hide hint text */
+@media(max-width: 800px){
+  .img-expand-hint{
+    display:none;
+  }
+}
+
+/* Lightbox for expanded images */
+.img-lightbox-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2600;
+}
+.img-lightbox-backdrop.open{
+  display:flex;
+}
+.img-lightbox-content{
+  position:relative;
+  max-width:min(90vw, 650px);
+  max-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.img-lightbox-img{
+  max-width:100%;
+  max-height:100%;
+  border-radius:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.7);
+  object-fit:contain;
+}
+.img-lightbox-close{
+  position:absolute;
+  top:-18px;
+  right:-18px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.95);
+  color:#000;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* About text side */
+.about-text-col{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+.about-text-card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 20px 20px;
+  box-shadow:0 3px 14px rgba(0,0,0,0.25);
+  color:#3b3f7a;
+  font-size:15px;
+  line-height:1.7;
+}
+.about-card-1{
+  background:linear-gradient(135deg, #f6f1ff 0%, #ffffff 55%, #ece0ff 100%);
+}
+.about-card-2{
+  background:linear-gradient(135deg, #f5edff 0%, #ffffff 55%, #e7dcff 100%);
+}
+.about-card-3{
+  background:linear-gradient(135deg, #f4ecff 0%, #ffffff 55%, #e3d8ff 100%);
+}
+.about-card-4{
+  background:linear-gradient(135deg, #f3eaff 0%, #ffffff 55%, #ded2ff 100%);
+}
+.about-card-5{
+  background:linear-gradient(135deg, #f2e8ff 0%, #ffffff 55%, #d9ccff 100%);
+}
+.about-text-card h2,
+.about-text-card h3{
+  margin-top:0;
+  margin-bottom:8px;
+  color:#30346a;
+}
+.about-text-card.about-card-1 h2{
+  font-size:19px;
+  text-decoration:underline;
+  text-underline-offset:4px;
+  white-space:nowrap;
+}
+
+/* BOTTOM LOGO */
+.section--bottom-logo{
+  background:
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);
+  text-align:center;
+}
+.section--bottom-logo img{
+  width:200px;
+  height:auto;
+  filter:drop-shadow(0 3px 12px rgba(0,0,0,0.45));
+  cursor:pointer;
+}
+
+/* FOOTER */
+footer{
+  background:
+    radial-gradient(circle at 100% 0%, #3a7cff 0, transparent 70%),
+    /* darker vivid blue on edges, lighter center */
+    linear-gradient(90deg, #00003a 0%, var(--blue-deep) 18%, var(--blue-mid) 50%, var(--blue-deep) 82%, #00003a 100%);
+  color:#d5e3ff;
+  padding:18px 16px 28px;
+  font-size:13px;
+}
+.footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+}
+.footer-line{
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.35);
+  margin:0 0 10px;
+}
+.footer-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.footer-links a{
+  color:#d5e3ff;
+  text-decoration:none;
+  border-bottom:1px dashed rgba(213,227,255,0.6);
+  cursor:pointer;
+}
+.footer-instagram a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  border:2px solid #ffffff;
+  position:relative;
+  text-decoration:none;
+}
+.footer-instagram span{
+  display:none;
+}
+.footer-instagram a::before{
+  content:"";
+  position:absolute;
+  width:16px;
+  height:16px;
+  border:2px solid #ffffff;
+  border-radius:4px;
+  top:7px;
+  left:6px;
+}
+.footer-instagram a::after{
+  content:"";
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#ffffff;
+  top:3px;
+  right:3px;
+}
+.footer-copy{
+  font-size:12px;
+  margin-top:6px;
+}
+
+/* Mobile footer: keep IG near text links (avoids chat icon overlap) */
+@media (max-width:600px){
+  .footer-row{
+    justify-content:flex-start;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+}
+
+/* NAV OVERLAY + RICKY EASTER EGG */
+.nav-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1400;
+}
+.nav-backdrop.open{
+  display:flex;
+}
+.nav-modal{
+  max-width:420px;
+  width:min(90vw, 420px);
+  border-radius:18px;
+  padding:22px 24px 24px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+  color:#ffffff;
+  text-align:left;
+  font-size:15px;
+  line-height:1.7;
+  background:
+    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, var(--orange-light) 0, transparent 60%),
+    linear-gradient(135deg, var(--blue-deep) 0%, #00001a 100%);
+  position:relative;
+}
+.nav-modal-title{
+  margin:0 0 4px;
+  font-weight:800;
+  font-size:20px;
+  text-align:center;
+}
+.nav-modal-title-underline{
+  width:90px;
+  height:3px;
+  margin:5px auto 10px;
+  background:#ffffff;
+  border-radius:999px;
+}
+.nav-modal-links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+.nav-modal-section-top,
+.nav-modal-section-bottom{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.nav-modal-links a{
+  position:relative;
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+  font-size:15px;
+  padding:6px 0;
+}
+.nav-modal-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-2px;
+  width:100%;
+  height:2px;
+  background:var(--orange);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.15s ease;
+}
+.nav-modal-links a:hover::after{
+  transform:scaleX(1);
+}
+.nav-modal-links a.nav-link-active::after{
+  transform:scaleX(1);
+  height:3px;
+}
+.nav-modal-links a.nav-link-active{
+  color:var(--orange-light);
+}
+.nav-logo-easter-wrapper{
+  display:flex;
+  justify-content:center;
+  margin:10px 0 14px;
+  position:relative;
+}
+#nav-logo-easter{
+  width:120px;
+  height:auto;
+  cursor:pointer;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.7));
+  user-select:none;
+  position:relative;
+}
+#nav-ricky-message{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:11px;
+  line-height:1.4;
+  color:#000000;
+  background:#ffffff;
+  border-radius:14px;
+  opacity:0;
+  pointer-events:none;
+  white-space:pre-line;
+  transition:opacity 0.3s ease;
+}
+.nav-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* Privacy modal + welcome popup */
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+.modal{
+  background:#ffffff;
+  color:#123055;
+  max-width:420px;
+  width:90%;
+  border-radius:14px;
+  padding:18px 18px 16px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.35);
+  font-size:14px;
+}
+.modal h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+.modal p{
+  margin:0 0 6px;
+  line-height:1.6;
+}
+.modal-close{
+  margin-top:10px;
+  display:inline-flex;
+  padding:4px 10px;
+  border-radius:999px;
+  border:none;
+  background:var(--blue-deep);
+  color:#fff;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.welcome-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2500;
+}
+.welcome-modal{
+  max-width:760px;
+  width:min(95vw, 760px);
+  margin:20px;
+  display:flex;
+  gap:18px;
+  position:relative;
+  background:transparent;
+  box-shadow:none;
+  padding:0;
+}
+.welcome-panel{
+  flex:1;
+  border-radius:18px;
+  padding:20px 22px 22px;
+  background:
+    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 60%),
+    linear-gradient(135deg, var(--blue-deep) 0%, #00001a 100%);
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+}
+.welcome-panel-left{min-width:0;}
+.welcome-panel-right{
+  max-width:260px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.welcome-logo{
+  width:160px;
+  height:auto;
+  margin-bottom:16px;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,0.6));
+}
+.welcome-title{
+  margin:0 0 8px;
+  font-weight:700;
+  font-size:18px;
+}
+.welcome-panel-left p{
+  margin:0 0 8px;
+  font-size:14px;
+  line-height:1.7;
+}
+.welcome-main-btn{
+  margin-top:4px;
+  font-size:16px;
+  padding:10px 26px;
+}
+.welcome-close{
+  position:absolute;
+  top:-18px;
+  right:-18px;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:26px;
+  line-height:1;
+  cursor:pointer;
+}
+@media(max-width:700px){
+  .welcome-modal{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .welcome-panel-right{
+    max-width:none;
+  }
+  .welcome-close{
+    top:8px;
+    right:8px;
+  }
+}
+
+/* Chat assistant launcher (bottom-right, chat bubble icon) */
+.chat-launcher{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#0000df;
+  box-shadow:0 3px 12px rgba(0,0,0,0.55);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:1800;
+}
+.chat-launcher:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 16px rgba(0,0,0,0.7);
+}
+
+/* Inner chat bubble icon */
+.chat-icon-bubble{
+  position:relative;
+  width:30px;
+  height:22px;
+  background:#ffffff;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.chat-icon-bubble::after{
+  content:"";
+  position:absolute;
+  bottom:-6px;
+  left:6px;
+  width:0;
+  height:0;
+  border-style:solid;
+  border-width:6px 6px 0 0;
+  border-color:#ffffff transparent transparent transparent;
+  transform:rotate(-25deg);
+}
+.chat-icon-dots{
+  font-size:13px;
+  color:#0000df;
+  letter-spacing:1px;
+}
+
+/* Chat assistant panel – anchored to bottom-right */
+.chat-panel{
+  position:fixed;
+  right:16px;
+  bottom:74px;
+  width:280px;
+  max-width:80vw;
+  border-radius:16px;
+  background:rgba(4,10,40,0.95);
+  color:#eaf0ff;
+  box-shadow:0 8px 24px rgba(0,0,0,0.8);
+  padding:10px 10px 12px;
+  font-size:13px;
+  display:none;
+  z-index:1800;
+}
+.chat-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+.chat-panel-title{
+  font-weight:700;
+  font-size:13px;
+}
+.chat-panel-close{
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  cursor:pointer;
+  font-size:16px;
+  line-height:1;
+}
+.chat-panel-body{
+  border-radius:10px;
+  background:rgba(5,12,50,0.9);
+  border:1px solid rgba(255,255,255,0.18);
+  padding:8px 8px 6px;
+  max-height:210px;
+  overflow-y:auto;
+}
+.chat-msg{
+  margin-bottom:6px;
+}
+.chat-msg strong{
+  font-weight:700;
+}
+.chat-panel-input-row{
+  margin-top:6px;
+  display:flex;
+  gap:4px;
+}
+.chat-panel-input{
+  flex:1;
+  border-radius:999px;
+  border:none;
+  padding:6px 8px;
+  font-size:13px;
+  outline:none;
+}
+.chat-panel-send{
+  border-radius:999px;
+  border:none;
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);
+  color:#ffffff;
+}
+
+/* Title wiggle */
+@keyframes merrygiggle{
+  0%   { transform:translateX(0); }
+  25%  { transform:translateX(4px); }
+  50%  { transform:translateX(0); }
+  75%  { transform:translateX(-4px); }
+  100% { transform:translateX(0); }
+}
+
+/* Responsive tweaks */
+@media(max-width:800px){
+  .hero{
+    padding-top:calc(var(--bar-h) + 60px);
+  }
+  .hero-inner{
+    flex-direction:column;
+    gap:24px;
+    padding-top:8px;
+  }
+  .hero-right{
+    flex-direction:column-reverse;
+    align-items:center;
+    gap:20px;
+  }
+  .hero-headline{
+    font-size:42px;
+    max-width:none;
+    -webkit-text-stroke:2px #0040c8;
+    text-stroke:2px #0040c8;
+    text-align:center;
+    margin-left:0;
+  }
+  .hero-image-wrap{
+    margin-left:0;
+    align-self:center;
+  }
+  .about-grid{
+    grid-template-columns:1fr;
+  }
+  .footer-row{
+    flex-direction:row;
+  }
+  .transition-strip{
+    font-size:13px;
+    letter-spacing:0.04em;
+  }
+  .store-item{
+    flex:0 0 70vw;
+  }
+}
+@media(max-width:500px){
+  .hero-glass{
+    max-width:75vw;
+  }
+  .hero-headline{
+    font-size:34px;
+  }
+}
+
+/* Mobile: force full-page background white (below footer, bounce edges) */
+@media (max-width: 600px){
+  html, body{
+    background:#ffffff !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <!-- Menu icon -->
+  <button class="menu-toggle" id="menu-toggle" aria-label="مینو کھولیں">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Mobile inline logo (centered on mobile) -->
+  <a href="#top" class="topbar-logo-inline" id="topbar-logo-inline">
+    <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company کا لوگو">
+  </a>
+
+  <div class="topbar-title">
+    ❄️ The MayaNut Company آپ کو 2025 کی خوشگوار تعطیلات کی مبارک باد دیتا ہے ❄️
+  </div>
+
+  <!-- Language selector (right) -->
+  <div class="topbar-lang" id="topbar-lang">
+    <span class="topbar-lang-label">
+      <span class="topbar-lang-label-emoji">🌎</span>
+      <span class="topbar-lang-label-text">زبان</span>
+    </span>
+    <button class="topbar-lang-current-btn" id="lang-toggle" aria-haspopup="true" aria-expanded="false">
+      <span id="lang-current">اردو</span>
+      <span class="topbar-lang-caret">▾</span>
+    </button>
+  </div>
+</header>
+
+<!-- Language dropdown -->
+<div class="lang-dropdown" id="lang-dropdown" aria-label="سائٹ کی زبان">
+  <ul>
+    <li data-file="index.html">English</li>
+    <li data-file="index-es.html">Español</li>
+    <li data-file="index-pt.html">Português</li>
+    <li data-file="index-fr.html">Français</li>
+    <li data-file="index-de.html">Deutsch</li>
+    <li data-file="index-it.html">Italiano</li>
+    <li data-file="index-ru.html">Русский</li>
+    <li data-file="index-zh.html">中文</li>
+    <li data-file="index-ja.html">日本語</li>
+    <li data-file="index-hi.html">हिन्दी</li>
+    <li data-file="index-ur.html">اردو</li>
+    <li data-file="index-bn.html">বাংলা</li>
+    <li data-file="index-id.html">Bahasa Indonesia</li>
+    <li data-file="index-ar.html">العربية</li>
+    <li data-file="index-sw.html">Kiswahili</li>
+    <li data-file="index-ha.html">Hausa</li>
+    <li data-file="index-fil.html">Filipino</li>
+    <li data-file="index-yo.html">Yorùbá</li>
+  </ul>
+</div>
+
+<!-- Fixed logo (desktop) -->
+<a href="#top" class="topbar-logo-link">
+  <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company کا لوگو" class="topbar-logo">
+</a>
+
+<!-- NAV OVERLAY WITH RICKY EASTER EGG -->
+<div class="nav-backdrop" id="nav-backdrop">
+  <div class="nav-modal">
+    <button class="nav-close" id="nav-close" aria-label="مینو بند کریں">&times;</button>
+    <h2 class="nav-modal-title">مینو</h2>
+    <div class="nav-modal-title-underline"></div>
+
+    <div class="nav-modal-links">
+      <div class="nav-modal-section-top">
+        <a href="#top" data-section="top" class="nav-link-active">ہوم</a>
+        <a href="#buy" data-section="buy">اسٹور</a>
+        <a href="#about" data-section="about">ہمارے بارے میں</a>
+      </div>
+
+      <div class="nav-logo-easter-wrapper">
+        <img src="mayanut-the-maya-nut-company-logo.png"
+             alt="The MayaNut Company کا لوگو"
+             id="nav-logo-easter">
+        <div id="nav-ricky-message">
+💙🧡💙
+THE MAYANUT COMPANY
+DEDICATES THIS WEBSITE
+TO RICKY
+FOREVER LOVED
+💙🧡💙
+        </div>
+      </div>
+
+      <div class="nav-modal-section-bottom">
+        <a href="research.html" data-external="true">تحقیق</a>
+        <a href="blog.html" data-external="true">بلاگ</a>
+        <a href="faq.html" data-external="true">عمومی سوالات (FAQ)</a>
+        <a href="contact.html" data-external="true">رابطہ</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+      <div class="hero-right">
+        <div>
+          <div class="hero-headline">
+            <span>MayaNut</span>
+            <span>مشروب</span>
+            <span class="headline-coming">جلد آ رہا ہے!</span>
+          </div>
+          <div class="hero-cta-wrap">
+            <a href="#buy" class="hero-cta-btn">ابھی آزمائیں!</a>
+          </div>
+        </div>
+
+        <div class="hero-image-wrap">
+          <a href="#buy" class="hero-image-link">
+            <img src="rach20.png" alt="MayaNut مشروب کا ٹھنڈا گلاس" class="hero-glass">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: STORE -->
+  <div class="transition-strip">اسٹور</div>
+
+  <!-- STORE / BUY -->
+  <section class="section section--buy" id="buy">
+    <div class="section-inner store-inner">
+      <div class="store-heading">
+        <h2>MayaNut اسٹور — جلد آ رہا ہے</h2>
+        <p>آئندہ آنے والی مشروبات، پاؤڈر اور آٹے کی جھلک دیکھنے کے لیے اسکرول کریں۔ یہ عارضی مصنوعات ہیں، جب تک پہلی maya nut کی شجرکاری بڑھ کر تیار نہیں ہو جاتی۔</p>
+      </div>
+
+      <div class="store-scroller-wrapper">
+        <div class="store-scroller">
+          <div class="store-item">
+            <div class="store-item-image">
+              <img src="rach20.png" alt="MayaNut مشروب کا گلاس" class="store-item-photo">
+            </div>
+            <div class="store-item-label">MayaNut مشروب جلد آ رہا ہے!</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">مصنوعہ 2</div>
+            <div class="store-item-label">MayaNut مشروب – ونیلا</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">مصنوعہ 3</div>
+            <div class="store-item-label">MayaNut مشروب – موکا</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">مصنوعہ 4</div>
+            <div class="store-item-label">maya nut آٹا (breadnut اسٹائل)</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">مصنوعہ 5</div>
+            <div class="store-item-label">مستقبل کے MayaNut ٹراپیکل اسنیکس</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: ABOUT -->
+  <div class="transition-strip">ہمارے بارے میں</div>
+
+  <!-- ABOUT -->
+  <section class="section section--about" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-images">
+          <div class="about-image-tile">
+            <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Brosimum alicastrum درخت پر maya nut کے پھل، اشنکٹبندیی ماحول میں">
+            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" aria-label="تصویر بڑی کریں">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 بڑا کرنے کے لیے کلک کریں 👆</span>
+            </button>
+          </div>
+
+          <div class="about-image-tile">
+            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="The MayaNut Company کے بانی August Kokus">
+            <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="تصویر بڑی کریں">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 بڑا کرنے کے لیے کلک کریں 👆</span>
+            </button>
+          </div>
+
+          <div class="about-image-tile">
+            <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="maya nut Brosimum alicastrum کے نوخیز درخت نرسری میں بڑھتے ہوئے">
+            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-nursery.jpg" aria-label="تصویر بڑی کریں">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 بڑا کرنے کے لیے کلک کریں 👆</span>
+            </button>
+          </div>
+
+          <div class="about-image-tile">
+            <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="maya nut درخت Brosimum alicastrum، خاندان Moraceae سے">
+            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-moraceae.jpg" aria-label="تصویر بڑی کریں">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 بڑا کرنے کے لیے کلک کریں 👆</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="about-text-col">
+          <div class="about-text-card about-card-1">
+            <h2>The MayaNut Company کے بارے میں</h2>
+            <p><strong>mayanut.com میں خوش آمدید، The MayaNut Company کا گھر۔</strong> ہماری بنیاد 2025 میں August Kokus نے رکھی، جو فلوریڈا کے جنوبی حصے سے تعلق رکھنے والے ایک نباتات دان اور پودوں کے محقق ہیں۔ ان کا مشن یہ ہے کہ maya nut پودے، <em>Brosimum alicastrum</em>، کو ریاستہائے متحدہ میں ایک نئی زرعی فصل کے طور پر متعارف اور ترقی دی جائے۔</p>
+          </div>
+
+          <div class="about-text-card about-card-2">
+            <h3>August Kokus</h3>
+            <p>August Kokus نے The MayaNut Company اس لیے قائم کی کہ وہ دنیا کے لیے کچھ ایسا چھوڑنا چاہتے تھے جو لوگ واقعی پسند کریں — ایسی چیز جو بدلتی ہوئی دنیا کے ساتھ خود کو ڈھال سکے۔</p>
+            <p>اگر ہم کم استعمال ہونے والی کسی نوع، جیسے <em>Brosimum alicastrum</em>، کو کاشت کریں اور اس کے گرد ایک مکمل نئی صنعت کھڑی کریں تو کیا ہوگا؟</p>
+            <p>2025 میں بالکل یہی خیال August Kokus کے ذہن میں تھا۔ The MayaNut Company کی بنیاد ان کے نباتات سے عشق کو ایک جرات مند اور عملی شکل دینے کا ذریعہ تھی۔ یہ آسان نہیں ہوگا، لیکن پوری صنعت کو بالکل ابتدا سے — لفظی طور پر — تعمیر کرنا ایک ایسی چیلنج تھا جسے قبول کرنا قابلِ قدر تھا۔</p>
+            <p>2030 تک، August کی امید ہے کہ کم از کم ایک فعال فارم (کم از کم ایک ایکڑ پر) قائم ہو چکا ہوگا، تاکہ دنیا maya nut مصنوعات سے لطف اندوز ہونا شروع کر سکے۔</p>
+          </div>
+
+          <div class="about-text-card about-card-3">
+            <h3>ہم کہاں کاشت کر رہے ہیں</h3>
+            <p>فلوریڈا کے جنوبی حصے کا نیم اشنکٹبندیی موسم اس نوع کے لیے خاص طور پر موزوں ہے۔ اسی لیے ایک مخصوص maya nut شجرکاری تیار کی جا رہی ہے، جو مستقبل کی maya nut مشروبات، پاؤڈر اور دیگر مصنوعات کی بنیاد بنے گی۔</p>
+            <p>یہ ابھی تک واضح نہیں کہ فلوریڈا میں کتنی شمالی حد تک <em>Brosimum alicastrum</em> کو کامیابی سے اگایا جا سکتا ہے، لیکن فلوریڈا میں 27°N یا اس سے جنوب (تقریباً Stuart, Florida سے ذرا جنوب) کے مقامات پر درختوں کا موسمِ سرما گزارنا ثابت شدہ ہے۔ غالب امکان ہے کہ درخت تقریباً 28°N تک بھی بچ سکتے ہیں، لیکن طویل مدتی تجربات ابھی باقی ہیں۔</p>
+          </div>
+
+          <div class="about-text-card about-card-4">
+            <h3>ہمارا مشن</h3>
+            <p>ہم جو حاصل کرنا چاہتے ہیں وہ آنے والی صدیوں تک قائم رہنے والا اثر ہے — کچھ نیا اور خوبصورت قائم کرنے کا طریقہ۔ ہم چاہتے ہیں کہ نوع <em>Brosimum alicastrum</em> (جسے maya nut، breadnut، ojoche، ramón یا guaimaro بھی کہا جاتا ہے) نظر انداز نہ ہو بلکہ امریکی ثقافت میں بھی پسند اور منائی جائے۔</p>
+          </div>
+
+          <div class="about-text-card about-card-5">
+            <h3>ہماری دلکشی</h3>
+            <p>اپنی پیچیدہ اور الجھی ہوئی جڑوں سے، جو زمین کو مضبوطی سے تھامے رکھتی ہیں، ایک حقیقی زرعی معجزہ ابھرتا ہے۔ ہم <em>Brosimum alicastrum</em> سے اس لیے متاثر ہیں کہ یہ ایک ایسا وسیلہ ہے جسے ابھی تک امریکا میں واقعی قدر کی نگاہ سے نہیں دیکھا گیا۔ اس کے قدرتی مسکن میں لوگ ہزاروں برسوں سے اس درخت سے فائدہ اٹھاتے رہے ہیں، لیکن فلوریڈا میں اسے اگا کر ہم سب کو یہ موقع دیتے ہیں کہ وہ اس مزیدار "superfood" کو آزما سکیں۔ ایسی چیز پیدا کرنا جسے لوگ پسند کریں، آسان نہیں — لیکن یہی وہ بہترین چیلنج ہے جسے The MayaNut Company پورا کرنے کے لیے پرعزم ہے۔</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM LOGO SECTION -->
+  <section class="section section--bottom-logo">
+    <div class="section-inner">
+      <a href="#top" id="bottom-logo-link">
+        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company کا لوگو">
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <hr class="footer-line" />
+    <div class="footer-row">
+      <div class="footer-links">
+        <a id="privacy-link">پرائیویسی پالیسی</a>
+        <a id="dns-link">میری معلومات فروخت نہ کریں</a>
+      </div>
+      <div class="footer-instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company انسٹاگرام پر">
+          <span>IG</span>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      © 2025 The MayaNut Company, Inc. جملہ حقوق محفوظ ہیں۔
+    </div>
+  </div>
+</footer>
+
+<!-- Welcome popup -->
+<div class="welcome-backdrop" id="welcome-backdrop">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcome-close" aria-label="خوش آمدید پیغام بند کریں">&times;</button>
+
+    <div class="welcome-panel welcome-panel-left">
+      <h2 class="welcome-title">mayanut.com میں خوش آمدید</h2>
+      <p>ہم اس وقت فلوریڈا میں maya nut (<em>Brosimum alicastrum</em>) کے درختوں کی پہلی شجرکاریوں میں سے ایک کو ترقی دے رہے ہیں۔</p>
+      <p>ہم امید کرتے ہیں کہ 2028 تک ہم آپ کو اپنا مزیدار MayaNut مشروب پیش کر سکیں گے۔ صبر اور دلچسپی کا شکریہ!</p>
+    </div>
+
+    <div class="welcome-panel welcome-panel-right">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company کا لوگو" class="welcome-logo">
+      <button class="welcome-main-btn hero-cta-btn" id="welcome-main-btn">مرکزی صفحہ پر جائیں</button>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy / DNS Modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">پرائیویسی پالیسی</h3>
+    <div id="modal-body">
+      <p>ہم اس ویب سائٹ کو چلانے کے لیے صرف اتنی کم سے کم معلومات اکٹھا کرتے ہیں جتنی ضروری ہو، جیسے سرور کے معیاری لاگز اور گمنام استعمال کے اعداد و شمار۔</p>
+      <p>جو بھی معلومات آپ ہمیں رضاکارانہ طور پر بھیجتے ہیں (مثلاً ای میل کے ذریعے)، وہ صرف آپ کی درخواست کا جواب دینے اور ہماری سروس بہتر بنانے کے لیے استعمال کی جاتی ہے۔</p>
+      <p>ہم آپ کی ذاتی معلومات فروخت نہیں کرتے۔ ویب سائٹ پر کچھ ترجمے انگریزی سے 100٪ درست نہ بھی ہو سکتے ہیں۔</p>
+    </div>
+    <button class="modal-close" id="modal-close">بند کریں</button>
+  </div>
+</div>
+
+<!-- Lightbox for expanded About images -->
+<div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
+  <div class="img-lightbox-content">
+    <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
+    <button class="img-lightbox-close" id="img-lightbox-close" aria-label="تصویر بند کریں">&times;</button>
+  </div>
+</div>
+
+<!-- Chat assistant launcher + panel -->
+<div class="chat-launcher" id="chat-launcher" aria-label="MayaNut چیٹ اسسٹنٹ کھولیں">
+  <div class="chat-icon-bubble">
+    <span class="chat-icon-dots">...</span>
+  </div>
+</div>
+
+<div class="chat-panel" id="chat-panel" aria-label="MayaNut چیٹ اسسٹنٹ">
+  <div class="chat-panel-header">
+    <div class="chat-panel-title">MayaNut اسسٹنٹ</div>
+    <button class="chat-panel-close" id="chat-close" aria-label="چیٹ بند کریں">&times;</button>
+  </div>
+  <div class="chat-panel-body" id="chat-log">
+    <div class="chat-msg">
+      <strong>Bot:</strong> السلام علیکم! میں ایک چھوٹا سا FAQ مددگار ہوں۔ مجھ سے maya nut، Brosimum alicastrum یا اس ویب سائٹ کے بارے میں سوال کریں۔
+    </div>
+  </div>
+  <div class="chat-panel-input-row">
+    <input type="text" id="chat-input" class="chat-panel-input" placeholder="مختصر سوال پوچھیں…" />
+    <button class="chat-panel-send" id="chat-send">پوچھیں</button>
+  </div>
+</div>
+
+<script>
+// Language dropdown
+(function(){
+  const toggle = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  const currentSpan = document.getElementById('lang-current');
+  if (!toggle || !dropdown || !currentSpan) return;
+
+  const items = dropdown.querySelectorAll('[data-file]');
+
+  const path = window.location.pathname;
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'index-ur.html';
+
+  let matched = false;
+  items.forEach(item => {
+    const f = item.getAttribute('data-file');
+    if (f === file) {
+      currentSpan.textContent = item.textContent.trim();
+      item.classList.add('active');
+      matched = true;
+    }
+  });
+  if (!matched) {
+    currentSpan.textContent = 'اردو';
+    items.forEach(item => {
+      if (item.getAttribute('data-file') === 'index-ur.html') {
+        item.classList.add('active');
+      }
+    });
+  }
+
+  function openMenu() {
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMenu() {
+    if (dropdown.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.getAttribute('data-file') || 'index.html';
+      window.location.href = target;
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
+  });
+})();
+
+// Privacy / DNS Modal
+(function(){
+  const backdrop = document.getElementById('modal-backdrop');
+  const titleEl = document.getElementById('modal-title');
+  const bodyEl  = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('modal-close');
+  const privacyLink = document.getElementById('privacy-link');
+  const dnsLink = document.getElementById('dns-link');
+
+  function openModal(kind){
+    if(kind === 'privacy'){
+      titleEl.textContent = 'پرائیویسی پالیسی';
+      bodyEl.innerHTML = `
+        <p>ہم اس ویب سائٹ کو چلانے کے لیے صرف اتنی کم سے کم معلومات اکٹھا کرتے ہیں جتنی ضروری ہو، جیسے سرور کے معیاری لاگز اور گمنام استعمال کے اعداد و شمار۔</p>
+        <p>جو بھی معلومات آپ ہمیں رضاکارانہ طور پر بھیجتے ہیں (مثلاً ای میل کے ذریعے)، وہ صرف آپ کی درخواست کا جواب دینے اور ہماری سروس بہتر بنانے کے لیے استعمال کی جاتی ہے۔</p>
+        <p>ہم آپ کی ذاتی معلومات فروخت نہیں کرتے۔ ویب سائٹ پر کچھ ترجمے انگریزی سے سو فیصد درست نہ بھی ہو سکتے ہیں۔</p>
+      `;
+    }else{
+      titleEl.textContent = 'میری معلومات فروخت نہ کریں';
+      bodyEl.innerHTML = `
+        <p>The MayaNut Company, Inc. آپ کی ذاتی معلومات فروخت نہیں کرتی۔</p>
+        <p>اگر آپ کے پاس کوئی سوال ہو، یا آپ جاننا چاہیں کہ ہمارے پاس کون سی معلومات ہے، یا اس کی حذف کی درخواست دینا چاہیں، تو براہِ کرم ہم سے رابطہ کریں، ہم جلد جواب دیں گے۔</p>
+      `;
+    }
+    backdrop.style.display = 'flex';
+  }
+
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
+})();
+
+// NAV overlay + Ricky easter egg (click toggles logo/Ricky, drag shows dedication)
+(function(){
+  const toggle = document.getElementById('menu-toggle');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const navClose = document.getElementById('nav-close');
+  const logoEaster = document.getElementById('nav-logo-easter');
+  const rickyMsg = document.getElementById('nav-ricky-message');
+
+  if(!toggle || !navBackdrop || !logoEaster || !rickyMsg) return;
+
+  const homeSrc = "mayanut-the-maya-nut-company-logo.png";
+  const rickySrc = "ricky.jpeg"; // must exist
+  let isRicky = false;
+
+  const wrapper = logoEaster.parentElement;
+  wrapper.style.position = 'relative';
+
+  function resetEasterEgg(){
+    isRicky = false;
+    logoEaster.src = homeSrc;
+    logoEaster.style.left = '0px';
+    logoEaster.style.top = '0px';
+    logoEaster.style.transition = '';
+    rickyMsg.style.opacity = 0;
+  }
+
+  function scrollHomeAndClose(){
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+    resetEasterEgg();
+  }
+
+  function openNav(){
+    navBackdrop.classList.add('open');
+    toggle.classList.add('open');
+    resetEasterEgg();
+  }
+
+  function closeNav(){
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+    resetEasterEgg();
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(navBackdrop.classList.contains('open')){
+      closeNav();
+    }else{
+      openNav();
+    }
+  });
+
+  if (navClose){
+    navClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeNav();
+    });
+  }
+
+  navBackdrop.addEventListener('click', (e) => {
+    if(e.target === navBackdrop){
+      closeNav();
+    }
+  });
+
+  // Drag + click behavior
+  (function(){
+    let dragActive = false;
+    let startX = 0, startY = 0;
+    let startLeft = 0, startTop = 0;
+    const dragThreshold = 8;
+
+    function onMouseDown(e){
+      if (e.button !== 0) return;
+      e.preventDefault();
+      const rect = logoEaster.getBoundingClientRect();
+      const parentRect = wrapper.getBoundingClientRect();
+      startLeft = rect.left - parentRect.left;
+      startTop = rect.top - parentRect.top;
+      startX = e.clientX;
+      startY = e.clientY;
+      dragActive = false;
+
+      function onMove(ev){
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        const distSq = dx*dx + dy*dy;
+        if (!dragActive && distSq > dragThreshold*dragThreshold){
+          dragActive = true;
+          logoEaster.style.position = 'relative';
+          logoEaster.style.transition = 'none';
+          rickyMsg.style.opacity = 1;   // show hidden white square text
+        }
+        if (!dragActive) return;
+        logoEaster.style.left = (startLeft + dx) + 'px';
+        logoEaster.style.top  = (startTop + dy) + 'px';
+      }
+
+      function onUp(ev){
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        const distSq = dx*dx + dy*dy;
+
+        if (!dragActive && distSq <= dragThreshold*dragThreshold){
+          // Click: toggle between home logo and Ricky image
+          if (!isRicky){
+            logoEaster.src = rickySrc;
+            isRicky = true;
+            rickyMsg.style.opacity = 1;
+          } else {
+            // Clicking Ricky sends home and resets
+            scrollHomeAndClose();
+          }
+        }
+        dragActive = false;
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    }
+
+    logoEaster.addEventListener('mousedown', onMouseDown);
+
+    // Simple touch support
+    let touchStartTime = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchDrag = false;
+
+    logoEaster.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      touchStartTime = Date.now();
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+      touchDrag = false;
+    }, {passive:true});
+
+    logoEaster.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      const distSq = dx*dx + dy*dy;
+      if (!touchDrag && distSq > dragThreshold*dragThreshold){
+        touchDrag = true;
+        rickyMsg.style.opacity = 1;
+      }
+      if (!touchDrag) return;
+      const rect = logoEaster.getBoundingClientRect();
+      const parentRect = wrapper.getBoundingClientRect();
+      logoEaster.style.position = 'relative';
+      logoEaster.style.left = (rect.left - parentRect.left + dx * 0.05) + 'px';
+      logoEaster.style.top  = (rect.top - parentRect.top + dy * 0.05) + 'px';
+    }, {passive:true});
+
+    logoEaster.addEventListener('touchend', (e) => {
+      const elapsed = Date.now() - touchStartTime;
+      if (!touchDrag && elapsed < 500){
+        // Treat as tap/click
+        if (!isRicky){
+          logoEaster.src = rickySrc;
+          isRicky = true;
+          rickyMsg.style.opacity = 1;
+        } else {
+          scrollHomeAndClose();
+        }
+      }
+      touchDrag = false;
+    });
+  })();
+})();
+
+// Welcome popup
+(function(){
+  const welcomeBackdrop = document.getElementById('welcome-backdrop');
+  const welcomeClose = document.getElementById('welcome-close');
+  const welcomeMainBtn = document.getElementById('welcome-main-btn');
+
+  if(!welcomeBackdrop || !welcomeClose) return;
+
+  function closeWelcome(){
+    welcomeBackdrop.style.display = 'none';
+  }
+
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+    setTimeout(() => {
+      if (welcomeBackdrop.style.display !== 'none') {
+        closeWelcome();
+      }
+    }, 60000);
+  });
+
+  welcomeClose.addEventListener('click', closeWelcome);
+
+  if (welcomeMainBtn){
+    welcomeMainBtn.addEventListener('click', () => {
+      closeWelcome();
+      const topSection = document.getElementById('top');
+      if (topSection){
+        topSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if(e.target === welcomeBackdrop) closeWelcome();
+  });
+})();
+
+// Smooth scroll for logo links on this page
+(function(){
+  const topSection = document.getElementById('top');
+  function scrollHome(e){
+    if (e) e.preventDefault();
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  const logoLink = document.querySelector('.topbar-logo-link');
+  if (logoLink){
+    logoLink.addEventListener('click', scrollHome);
+  }
+
+  const topbarLogoInline = document.getElementById('topbar-logo-inline');
+  if (topbarLogoInline){
+    topbarLogoInline.addEventListener('click', scrollHome);
+  }
+
+  const bottomLogoLink = document.getElementById('bottom-logo-link');
+  if (bottomLogoLink){
+    bottomLogoLink.addEventListener('click', scrollHome);
+  }
+})();
+
+// About image lightbox expand
+(function(){
+  const buttons = document.querySelectorAll('.img-expand-btn');
+  const backdrop = document.getElementById('img-lightbox-backdrop');
+  const imgEl = document.getElementById('img-lightbox-img');
+  const closeBtn = document.getElementById('img-lightbox-close');
+  if (!backdrop || !imgEl || !closeBtn) return;
+
+  function openLightbox(src, alt){
+    imgEl.src = src;
+    imgEl.alt = alt || '';
+    backdrop.classList.add('open');
+  }
+
+  function closeLightbox(){
+    backdrop.classList.remove('open');
+    imgEl.src = '';
+    imgEl.alt = '';
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const src = btn.getAttribute('data-img-src');
+      const img = btn.closest('.about-image-tile')?.querySelector('img');
+      const alt = img ? img.alt : '';
+      if (src){
+        openLightbox(src, alt);
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop){
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')){
+      closeLightbox();
+    }
+  });
+})();
+
+// Hero snowflakes on main hero only (slower, graceful drift)
+(function(){
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  const snowLayer = document.createElement('div');
+  snowLayer.className = 'hero-snow';
+  hero.appendChild(snowLayer);
+
+  const SNOW_COUNT = 60;
+  const symbols = ['❄','✻','✼'];
+
+  for (let i = 0; i < SNOW_COUNT; i++){
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    const size = 8 + Math.random()*16;
+    const left = Math.random()*100;
+    const duration = 22 + Math.random()*14; // slower fall
+    const delay = Math.random()*-duration;
+    const drift = (Math.random()*40 + 15) * (Math.random() < 0.5 ? -1 : 1);
+
+    flake.style.fontSize = size + 'px';
+    flake.style.left = left + '%';
+    flake.style.animationDuration = duration + 's';
+    flake.style.animationDelay = delay + 's';
+    flake.style.opacity = (0.55 + Math.random()*0.35).toFixed(2);
+    flake.style.setProperty('--drift1', drift + 'px');
+    flake.style.setProperty('--drift2', (-drift) + 'px');
+
+    snowLayer.appendChild(flake);
+  }
+})();
+
+// Chat assistant logic (still matches mainly English keywords)
+(function(){
+  const launcher = document.getElementById('chat-launcher');
+  const panel = document.getElementById('chat-panel');
+  const closeBtn = document.getElementById('chat-close');
+  const logEl = document.getElementById('chat-log');
+  const inputEl = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+
+  if (!launcher || !panel || !logEl || !inputEl || !sendBtn) return;
+
+  function openPanel(){
+    panel.style.display = 'block';
+  }
+  function closePanel(){
+    panel.style.display = 'none';
+  }
+
+  launcher.addEventListener('click', () => {
+    if (panel.style.display === 'block'){
+      closePanel();
+    } else {
+      openPanel();
+      inputEl.focus();
+    }
+  });
+  closeBtn.addEventListener('click', closePanel);
+
+  function appendMsg(role, text){
+    const div = document.createElement('div');
+    div.className = 'chat-msg';
+    const strong = document.createElement('strong');
+    strong.textContent = role + ':';
+    div.appendChild(strong);
+    div.appendChild(document.createTextNode(' ' + text));
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  const greetWords = ['hi','hello','hey','hola','hallo','yo','salam','salaam','assalam'];
+  const thanksWords = ['thank','thanks','thank you','shukriya','shukria','mahshukriya'];
+
+  const topicGroups = [
+    {
+      // "What is MayaNut?"
+      match: (t) =>
+        t.includes('what is') &&
+        (t.replace(/\s+/g,'').includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      answers: [
+        'Maya nut دراصل اشنکٹبندیی درخت Brosimum alicastrum کا بھونا ہوا بیج ہے۔ اس سے قدرتی طور پر کیفین سے پاک، گاڑھی مشروب یا مفید آٹا بنایا جا سکتا ہے۔',
+        'جب آپ پوچھتے ہیں “What is MayaNut?” تو اس کا مطلب ہے Brosimum alicastrum کا بیج — ایک اشنکٹبندیی درخت جس کے بیج بھون کر مشروبات اور غذائیں تیار کی جا سکتی ہیں۔'
+      ]
+    },
+    {
+      // General maya nut
+      match: (t) => {
+        const noSpace = t.replace(/\s+/g,'');
+        return noSpace.includes('mayanut') || t.includes('maya nut');
+      },
+      answers: [
+        'maya nut درخت Brosimum alicastrum کا بیج ہے، جسے اس کے قدرتی مسکن میں صدیوں سے بطور خوراک اور مشروب استعمال کیا جا رہا ہے۔',
+        'نام “maya nut” عموماً Brosimum alicastrum کے بیج کے لیے استعمال ہوتا ہے۔ بھونی ہوئی maya nut کو مشروب کی صورت میں یا آٹے کے طور پر استعمال کیا جا سکتا ہے۔'
+      ]
+    },
+    {
+      // Brosimum alicastrum
+      match: (t) => t.includes('brosimum') || t.includes('alicastrum') || t.includes('b alicastrum'),
+      answers: [
+        'Brosimum alicastrum، maya nut درخت کا سائنسی نام ہے۔ یہ Moraceae خاندان سے تعلق رکھتا ہے، جس میں mulberry اور fig بھی شامل ہیں۔',
+        'Brosimum alicastrum وہ لاطینی نام ہے جس درخت کے بیج کو ہم maya nut کہتے ہیں۔'
+      ]
+    },
+    {
+      // Ojoche / ramón / breadnut
+      match: (t) => t.includes('ojoche') || t.includes('ramon') || t.includes('ramón') || t.includes('breadnut'),
+      answers: [
+        'Ojoche، ramón اور breadnut مختلف علاقوں میں اسی نوع، Brosimum alicastrum، کے لیے استعمال ہونے والے نام ہیں۔',
+        'ojoche اور ramón جیسے نام عموماً maya nut درخت یا اس کے بیج کے لیے استعمال ہوتے ہیں، جو علاقے کے لحاظ سے بدل سکتے ہیں۔'
+      ]
+    },
+    {
+      // Scientific / research-style questions
+      match: (t) =>
+        (t.includes('scientific') || t.includes('science') || t.includes('study') || t.includes('studies') ||
+         t.includes('research') || t.includes('paper') || t.includes('nutrition') || t.includes('nutritional') ||
+         t.includes('composition') || t.includes('protein')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum') || t.includes('alicastrum')),
+      answers: [
+        'اگر آپ Brosimum alicastrum (maya nut) کے بارے میں سائنسی معلومات چاہتے ہیں تو براہِ کرم ہماری Research صفحہ دیکھیں: مینو میں "تحقیق" پر کلک کریں یا research.html کھولیں۔',
+        'maya nut کے بارے میں سائنسی اور تکنیکی تفصیل، بشمول تحقیقی مقالے، کے لیے ہماری Research صفحہ (research.html) دیکھیں۔'
+      ]
+    },
+    {
+      // Where it grows / Florida
+      match: (t) => (t.includes('where') || t.includes('grow') || t.includes('growing')) &&
+        (t.includes('florida') || t.includes('tree') || t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      answers: [
+        'The MayaNut Company فلوریڈا کے گرم علاقوں، خصوصاً جنوبی فلوریڈا (تقریباً 27°N سے نیچے) پر توجہ دے رہی ہے، جہاں Brosimum alicastrum موسمِ سرما کو بہتر طور پر برداشت کر سکتا ہے۔',
+        'ہماری ابتدائی آزمائشیں نیم اشنکٹبندیی جنوبی فلوریڈا میں ہیں۔ وقت کے ساتھ ہم جاننا چاہتے ہیں کہ maya nut درخت کو فلوریڈا میں کتنی شمالی حد تک کاشت کیا جا سکتا ہے۔'
+      ]
+    },
+    {
+      // Store / buy / products
+      match: (t) => (t.includes('store') || t.includes('buy') || t.includes('purchase') || t.includes('product')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('beverage') || t.includes('drink')),
+      answers: [
+        'آن لائن اسٹور ابھی کھلا نہیں ہے۔ مرکزی صفحے پر اسٹور سیکشن میں فی الحال MayaNut مصنوعات کا preview دکھایا گیا ہے، جب تک شجرکاری آگے بڑھ رہی ہے۔',
+        'MayaNut مشروبات اب بھی ڈیولپمنٹ میں ہیں۔ فی الحال آپ اسٹور کی جھلک دیکھ کر مستقبل کی منصوبہ بندی کو دیکھ سکتے ہیں۔'
+      ]
+    },
+    {
+      // About the company
+      match: (t) =>
+        (t.includes('about') || t.includes('who are you') || t.includes('tell me about') ||
+         t.includes('company')) &&
+        (t.includes('mayanut company') || t.includes('mayanut')),
+      answers: [
+        'The MayaNut Company کی بنیاد 2025 میں August Kokus نے فلوریڈا کے جنوبی حصے میں رکھی۔ ہمارا مقصد Brosimum alicastrum درختوں کو اگا کر مستقبل کے MayaNut مشروبات، پاؤڈر اور آٹے تیار کرنا ہے۔',
+        'ہم The MayaNut Company ہیں، جو فلوریڈا میں Brosimum alicastrum درختوں کی پہلی شجرکاریوں میں سے ایک کو ترقی دے رہی ہے، تاکہ لوگ MayaNut غذاؤں اور مشروبات سے لطف اندوز ہو سکیں۔'
+      ]
+    },
+    {
+      // Creator / founder from About section
+      match: (t) => t.includes('who created') || t.includes('who is august') || t.includes('founder'),
+      answers: [
+        'The MayaNut Company کے بانی August Kokus ہیں، جو فلوریڈا کے جنوبی حصے کے ایک نباتات دان اور پودوں کے محقق ہیں۔',
+        'ہمارے بانی August Kokus نے 2025 میں The MayaNut Company کی بنیاد رکھی، تاکہ Brosimum alicastrum کو امریکا میں ایک نئی زرعی فصل کے طور پر پیش کیا جا سکے۔'
+      ]
+    }
+  ];
+
+  function pickRandom(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  function handleUserMessage(){
+    const raw = inputEl.value.trim();
+    if (!raw) return;
+    inputEl.value = '';
+    appendMsg('آپ', raw);
+
+    const lower = raw.toLowerCase();
+
+    // "How are you" / "How's your day"
+    if (lower.includes('how are you') || lower.includes('how\'s your day') || lower.includes('hows your day')){
+      appendMsg('Bot', pickRandom([
+        'میں ایک چھوٹا سا maya nut بوٹ ہوں، Brosimum alicastrum کے درختوں کے درمیان بہت اچھا ہوں! آج میں آپ کی کس طرح مدد کر سکتا ہوں؟',
+        'میرا دن اس ڈیجیٹل شجرکاری میں اچھا گزر رہا ہے۔ maya nut یا The MayaNut Company کے بارے میں کوئی سوال ہو تو پوچھیں!'
+      ]));
+      return;
+    }
+
+    // greetings
+    if (greetWords.some(g => lower.includes(g))){
+      appendMsg('Bot', pickRandom([
+        'سلام! مجھ سے maya nut یا Brosimum alicastrum کے بارے میں پوچھیں۔',
+        'ہیلو! میں MayaNut اور اس ویب سائٹ سے متعلق مختصر سوالوں کے جواب دے سکتا ہوں۔'
+      ]));
+      return;
+    }
+
+    // thanks
+    if (thanksWords.some(t => lower.includes(t))){
+      appendMsg('Bot', pickRandom([
+        'آپ کا شکریہ!',
+        'خوشی ہوئی کہ میں مدد کر سکا۔',
+        'The MayaNut Company کی ویب سائٹ پر آنے کا شکریہ۔'
+      ]));
+      return;
+    }
+
+    // On-topic groups
+    for (const group of topicGroups){
+      if (group.match(lower)){
+        appendMsg('Bot', pickRandom(group.answers));
+        return;
+      }
+    }
+
+    // Generic on-topic if they mention maya nut / brosimum / ojoche / ramon
+    const onTopic =
+      lower.replace(/\s+/g,'').includes('mayanut') ||
+      lower.includes('maya nut') ||
+      lower.includes('brosimum') ||
+      lower.includes('alicastrum') ||
+      lower.includes('ojoche') ||
+      lower.includes('ramon') ||
+      lower.includes('ramón');
+
+    if (onTopic){
+      appendMsg('Bot', pickRandom([
+        'میں maya nut درخت، اس کے مشروب یا آٹے کے استعمال، اور The MayaNut Company کے منصوبوں کے بارے میں بات کر سکتا ہوں۔',
+        'maya nut دراصل Brosimum alicastrum کا بیج ہے۔ آپ چاہیں تو مجھ سے پوچھیں کہ یہ کہاں اگتا ہے، کیسے استعمال ہوتا ہے، یا ہم کون سے مصنوعات بنا رہے ہیں۔'
+      ]));
+      return;
+    }
+
+    // Off-topic fallback
+    appendMsg('Bot',
+      'میں ایک چھوٹا سا FAQ اسسٹنٹ ہوں۔ میں صرف maya nut، Brosimum alicastrum، ojoche/ramón یا اس ویب سائٹ سے متعلق سوالوں کے جواب دیتا ہوں۔ براہِ کرم انہی موضوعات پر سوال کریں!');
+  }
+
+  sendBtn.addEventListener('click', handleUserMessage);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      handleUserMessage();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
