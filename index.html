@@ -34,11 +34,10 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 <style>
 :root{
   --blue-deep:#0000df;
-  --blue-mid:#3a7cff;
+  --blue-mid:#0060ff;
   --blue-soft:#1e5dff;
   --orange:#ff941f;
   --orange-light:#ffc85a;
-  --hover-blue:rgba(80,140,255,0.35);
 
   --bar-h:72px;
 }
@@ -107,7 +106,7 @@ body{
   width:36px;
   height:30px;
   border:none;
-  background:rgba(255,140,0,0.9); /* vivid orange backing so bars pop */
+  background:rgba(255,140,0,0.9); /* vivid orange behind bars */
   border-radius:999px;
   display:flex !important;
   flex-direction:column;
@@ -225,7 +224,7 @@ body{
   white-space:nowrap;
 }
 .lang-dropdown li:hover{
-  background:var(--hover-blue);
+  background:rgba(104,167,255,0.45); /* light blue highlight */
 }
 .lang-dropdown li.active{
   color:var(--orange);
@@ -250,7 +249,7 @@ body{
   display:none;
 }
 .topbar-logo-inline img{
-  height:48px;
+  height:46px;
   width:auto;
   filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
 }
@@ -275,7 +274,7 @@ body{
   }
 
   .topbar-logo-inline img{
-    height:48px;
+    height:48px;          /* a little bigger */
   }
 
   .topbar-title{
@@ -351,6 +350,31 @@ body{
   gap:40px;
 }
 
+/* New hero text image + arrow layout */
+.hero-text-block{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.hero-text-img{
+  max-width:100%;
+  height:auto;
+  display:block;
+}
+.hero-arrow-wrap{
+  margin-top:16px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+.hero-arrow{
+  width:150px;
+  max-width:45vw;
+  height:auto;
+  display:block;
+}
+
 /* Snow layer (hero only) */
 .hero-snow{
   position:absolute;
@@ -380,15 +404,15 @@ body{
   }
 }
 
-/* Headline (3 lines, less cartoony, still bold) */
+/* (Old text headline kept in case you ever re-use it, but unused now) */
 .hero-headline{
   flex:1;
   max-width:520px;
   margin-left:8px;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size:70px;
   line-height:1.05;
-  font-weight:900;
+  font-weight:400;
   color:#ffffff;
   -webkit-text-stroke:3px #0040c8;
   text-stroke:3px #0040c8;
@@ -398,19 +422,35 @@ body{
 }
 .hero-headline span{
   display:block;
-  white-space:nowrap; /* force exactly 3 lines */
+  white-space:nowrap;
 }
 .hero-headline .headline-coming{
   text-decoration:underline;
   text-decoration-color:var(--blue-deep);
   text-underline-offset:5px;
+  position:relative;
+}
+.hero-headline .headline-coming::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-8px;
+  height:2px;
+  background:linear-gradient(90deg,#6bb4ff 0%,#ffffff 50%,#6bb4ff 100%);
+  border-radius:999px;
 }
 
 /* CTA Button */
 .hero-cta-wrap{
   margin-top:24px;
   display:flex;
-  justify-content:center;
+  justify-content:flex-start; /* left on mobile/overall */
+}
+@media (min-width:801px){
+  .hero-cta-wrap{
+    justify-content:center;   /* centered under text on desktop */
+  }
 }
 .hero-cta-btn{
   position:relative;
@@ -777,10 +817,6 @@ footer{
   border-bottom:1px dashed rgba(213,227,255,0.6);
   cursor:pointer;
 }
-.footer-instagram{
-  display:flex;
-  align-items:center;
-}
 .footer-instagram a{
   display:inline-flex;
   align-items:center;
@@ -818,6 +854,16 @@ footer{
 .footer-copy{
   font-size:12px;
   margin-top:6px;
+}
+
+/* Move IG left on mobile so it’s not under the chat button */
+@media (max-width:600px){
+  .footer-row{
+    justify-content:flex-start;
+  }
+  .footer-instagram{
+    margin-left:8px;
+  }
 }
 
 /* NAV OVERLAY + RICKY EASTER EGG */
@@ -881,7 +927,6 @@ footer{
   font-weight:600;
   font-size:15px;
   padding:6px 0;
-  border-radius:8px;
 }
 .nav-modal-links a::after{
   content:"";
@@ -890,13 +935,10 @@ footer{
   bottom:-2px;
   width:100%;
   height:2px;
-  background:var(--orange);
+  background:#7bccff; /* light blue on hover */
   transform:scaleX(0);
   transform-origin:left;
   transition:transform 0.15s ease;
-}
-.nav-modal-links a:hover{
-  background:var(--hover-blue);
 }
 .nav-modal-links a:hover::after{
   transform:scaleX(1);
@@ -904,6 +946,7 @@ footer{
 .nav-modal-links a.nav-link-active::after{
   transform:scaleX(1);
   height:3px;
+  background:var(--orange); /* orange only for active page */
 }
 .nav-modal-links a.nav-link-active{
   color:var(--orange-light);
@@ -913,31 +956,19 @@ footer{
   justify-content:center;
   margin:10px 0 14px;
   position:relative;
-  width:120px;
-  height:120px;
-  margin-left:auto;
-  margin-right:auto;
 }
 #nav-logo-easter{
   width:120px;
-  height:120px;
+  height:auto;
   cursor:pointer;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,0.7));
   user-select:none;
-  position:absolute;
-  top:0;
-  left:0;
+  position:relative;
   z-index:2;
 }
 #nav-ricky-message{
   position:absolute;
-  top:0;
-  left:0;
-  width:120px;
-  height:120px;
-  background:#ffffff;
-  border-radius:16px;
-  padding:10px;
+  inset:0;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -945,10 +976,11 @@ footer{
   font-size:11px;
   line-height:1.4;
   color:#000000;
-  opacity:0;
-  pointer-events:none;
-  box-shadow:0 4px 14px rgba(0,0,0,0.5);
-  z-index:1; /* behind logo */
+  background:#ffffff;
+  border-radius:18px;
+  padding:8px;
+  white-space:pre-line;
+  z-index:1;  /* behind the logo, always visible but hidden by it */
 }
 .nav-close{
   position:absolute;
@@ -1107,13 +1139,13 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Inner chat bubble icon — cleaned up */
+/* Inner chat bubble icon - fixed */
 .chat-icon-bubble{
   position:relative;
   width:30px;
   height:22px;
   background:#ffffff;
-  border-radius:12px;
+  border-radius:14px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -1121,13 +1153,12 @@ footer{
 .chat-icon-bubble::after{
   content:"";
   position:absolute;
-  bottom:-3px;
-  left:8px;
-  width:0;
-  height:0;
-  border-style:solid;
-  border-width:6px 6px 0 0;
-  border-color:#ffffff transparent transparent transparent;
+  bottom:3px;
+  left:4px;
+  width:8px;
+  height:8px;
+  background:#ffffff;
+  transform:rotate(45deg);   /* little diamond tail fully attached */
 }
 .chat-icon-dots{
   font-size:13px;
@@ -1221,36 +1252,32 @@ footer{
 /* Responsive tweaks */
 @media(max-width:800px){
   .hero{
-    padding-top:calc(var(--bar-h) + 60px);
+    padding-top:calc(var(--bar-h) + 80px);
   }
   .hero-inner{
-    flex-direction:column;
-    gap:24px;
-    padding-top:8px;
+    padding-top:16px;
   }
   .hero-right{
-    flex-direction:column-reverse;
-    align-items:center;
-    gap:20px;
+    gap:18px;
   }
-  .hero-headline{
-    font-size:42px;
-    max-width:none;
-    -webkit-text-stroke:2px #0040c8;
-    text-stroke:2px #0040c8;
-    text-align:center;
-    margin-left:0;
+  .hero-text-block{
+    flex:1 1 50%;
+    align-items:flex-start;
   }
   .hero-image-wrap{
-    margin-left:0;
-    align-self:center;
+    flex:0 0 50%;
+    display:flex;
+    justify-content:flex-end;
   }
+  .hero-glass{
+    max-width:55vw;
+  }
+
   .about-grid{
     grid-template-columns:1fr;
   }
   .footer-row{
     flex-direction:row;
-    justify-content:space-between;
   }
   .transition-strip{
     font-size:13px;
@@ -1262,10 +1289,10 @@ footer{
 }
 @media(max-width:500px){
   .hero-glass{
-    max-width:75vw;
+    max-width:55vw;
   }
-  .hero-headline{
-    font-size:34px;
+  .hero-text-img{
+    max-width:80vw;
   }
 }
 
@@ -1352,6 +1379,9 @@ footer{
       </div>
 
       <div class="nav-logo-easter-wrapper">
+        <img src="mayanut-the-maya-nut-company-logo.png"
+             alt="The MayaNut Company logo"
+             id="nav-logo-easter">
         <div id="nav-ricky-message">
 💙🧡💙
 THE MAYANUT COMPANY
@@ -1360,9 +1390,6 @@ TO RICKY
 FOREVER LOVED
 💙🧡💙
         </div>
-        <img src="mayanut-the-maya-nut-company-logo.png"
-             alt="The MayaNut Company logo"
-             id="nav-logo-easter">
       </div>
 
       <div class="nav-modal-section-bottom">
@@ -1381,14 +1408,21 @@ FOREVER LOVED
   <section class="hero" id="top">
     <div class="hero-inner">
       <div class="hero-right">
-        <div>
-          <div class="hero-headline">
-            <span>MayaNut</span>
-            <span>Beverage</span>
-            <span class="headline-coming">Coming Soon!</span>
-          </div>
+        <div class="hero-text-block">
+          <img
+            src="mayanut-maya-nut-beverage-brosimum-alicastrum.png"
+            alt="MayaNut Beverage Coming Soon"
+            class="hero-text-img"
+          />
           <div class="hero-cta-wrap">
             <a href="#buy" class="hero-cta-btn">Try Now!</a>
+          </div>
+          <div class="hero-arrow-wrap">
+            <img
+              src="arrow-the-maya-nut-company-mayanut.png"
+              alt=""
+              class="hero-arrow"
+            />
           </div>
         </div>
 
@@ -1723,7 +1757,7 @@ FOREVER LOVED
   }
 })();
 
-// NAV overlay + Ricky easter egg (click toggles image, drag reveals dedication square)
+// NAV overlay + Ricky easter egg (click toggles logo/Ricky, drag reveals text square)
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
@@ -1746,27 +1780,18 @@ FOREVER LOVED
     logoEaster.style.left = '0px';
     logoEaster.style.top = '0px';
     logoEaster.style.transition = '';
-    rickyMsg.style.opacity = 0;
   }
 
-  function scrollHome(){
+  function scrollHomeAndClose(){
     const topSection = document.getElementById('top');
     if (topSection){
       topSection.scrollIntoView({ behavior: 'smooth' });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }
-
-  function closeNavAndReset(){
     navBackdrop.classList.remove('open');
     toggle.classList.remove('open');
     resetEasterEgg();
-  }
-
-  function scrollHomeAndClose(){
-    scrollHome();
-    closeNavAndReset();
   }
 
   function openNav(){
@@ -1803,7 +1828,18 @@ FOREVER LOVED
     }
   });
 
-  // Pointer-based drag / click behavior so it works on mouse + touch
+  function handleClick(){
+    // If showing logo, change to Ricky image
+    if (!isRicky){
+      logoEaster.src = rickySrc;
+      isRicky = true;
+    } else {
+      // If already Ricky, go home and reset
+      scrollHomeAndClose();
+    }
+  }
+
+  // Drag behavior: dragging moves logo away, revealing white text square underneath
   (function(){
     let dragActive = false;
     let startX = 0, startY = 0;
@@ -1813,69 +1849,59 @@ FOREVER LOVED
     function onPointerDown(e){
       if (e.button !== undefined && e.button !== 0) return;
       e.preventDefault();
-      logoEaster.setPointerCapture(e.pointerId);
-
+      const pointX = e.clientX ?? (e.touches && e.touches[0].clientX);
+      const pointY = e.clientY ?? (e.touches && e.touches[0].clientY);
       const rect = logoEaster.getBoundingClientRect();
       const parentRect = wrapper.getBoundingClientRect();
       startLeft = rect.left - parentRect.left;
       startTop = rect.top - parentRect.top;
-      startX = e.clientX;
-      startY = e.clientY;
+      startX = pointX;
+      startY = pointY;
       dragActive = false;
-    }
 
-    function onPointerMove(e){
-      if (!logoEaster.hasPointerCapture || typeof logoEaster.hasPointerCapture !== 'function') {
-        // older browsers: fall back, but pointer events should support this
-      }
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      const distSq = dx*dx + dy*dy;
-
-      if (!dragActive && distSq > dragThreshold*dragThreshold){
-        dragActive = true;
-        logoEaster.style.position = 'absolute';
-        logoEaster.style.transition = 'none';
-        // Drag reveals dedication square behind the logo
-        rickyMsg.style.opacity = 1;
-        // Keep logo as logo (do not force ricky on drag)
-      }
-
-      if (!dragActive) return;
-
-      logoEaster.style.left = (startLeft + dx) + 'px';
-      logoEaster.style.top  = (startTop + dy) + 'px';
-    }
-
-    function onPointerUp(e){
-      try{
-        logoEaster.releasePointerCapture(e.pointerId);
-      }catch(_){}
-
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      const distSq = dx*dx + dy*dy;
-
-      if (!dragActive && distSq <= dragThreshold*dragThreshold){
-        // Treat as click
-        if (!isRicky){
-          // First click: show Ricky image + dedication square
-          logoEaster.src = rickySrc;
-          isRicky = true;
-          rickyMsg.style.opacity = 1;
-        } else {
-          // Second click when Ricky visible: go home + reset menu
-          scrollHomeAndClose();
+      function onPointerMove(ev){
+        const moveX = ev.clientX ?? (ev.touches && ev.touches[0].clientX);
+        const moveY = ev.clientY ?? (ev.touches && ev.touches[0].clientY);
+        const dx = moveX - startX;
+        const dy = moveY - startY;
+        const distSq = dx*dx + dy*dy;
+        if (!dragActive && distSq > dragThreshold*dragThreshold){
+          dragActive = true;
+          logoEaster.style.position = 'relative';
+          logoEaster.style.transition = 'none';
         }
+        if (!dragActive) return;
+        logoEaster.style.left = (startLeft + dx) + 'px';
+        logoEaster.style.top  = (startTop + dy) + 'px';
       }
-      // After drag, logo stays where you put it; dedication square remains visible.
-      dragActive = false;
+
+      function onPointerUp(ev){
+        document.removeEventListener('mousemove', onPointerMove);
+        document.removeEventListener('mouseup', onPointerUp);
+        document.removeEventListener('touchmove', onPointerMove);
+        document.removeEventListener('touchend', onPointerUp);
+
+        const endX = ev.clientX ?? (ev.changedTouches && ev.changedTouches[0].clientX) ?? startX;
+        const endY = ev.clientY ?? (ev.changedTouches && ev.changedTouches[0].clientY) ?? startY;
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const distSq = dx*dx + dy*dy;
+
+        if (!dragActive && distSq <= dragThreshold*dragThreshold){
+          // Treat as click
+          handleClick();
+        }
+        dragActive = false;
+      }
+
+      document.addEventListener('mousemove', onPointerMove);
+      document.addEventListener('mouseup', onPointerUp);
+      document.addEventListener('touchmove', onPointerMove, {passive:false});
+      document.addEventListener('touchend', onPointerUp);
     }
 
-    logoEaster.addEventListener('pointerdown', onPointerDown);
-    logoEaster.addEventListener('pointermove', onPointerMove);
-    logoEaster.addEventListener('pointerup', onPointerUp);
-    logoEaster.addEventListener('pointercancel', onPointerUp);
+    logoEaster.addEventListener('mousedown', onPointerDown);
+    logoEaster.addEventListener('touchstart', onPointerDown, {passive:false});
   })();
 })();
 
@@ -2027,79 +2053,7 @@ FOREVER LOVED
   }
 })();
 
-// Scroll-based active menu highlight for HOME / STORE / ABOUT
-(function(){
-  const sectionConfigs = [
-    { id: 'top',   selector: 'a[data-section="top"]'   },
-    { id: 'buy',   selector: 'a[data-section="buy"]'   },
-    { id: 'about', selector: 'a[data-section="about"]' }
-  ];
-
-  const sectionState = {};
-  let currentId = 'top';
-
-  function updateNavActive(newId){
-    if (newId === currentId) return;
-    currentId = newId;
-
-    const links = document.querySelectorAll('.nav-modal-links a[data-section]');
-    links.forEach(link => {
-      link.classList.remove('nav-link-active');
-    });
-
-    const targetConfig = sectionConfigs.find(c => c.id === newId);
-    if (!targetConfig) return;
-    const targetLink = document.querySelector(targetConfig.selector);
-    if (targetLink){
-      targetLink.classList.add('nav-link-active');
-    }
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    let bestId = currentId;
-    let bestRatio = 0;
-    let bestTime = 0;
-
-    entries.forEach(entry => {
-      const id = entry.target.id;
-      if (!sectionConfigs.some(c => c.id === id)) return;
-
-      if (!sectionState[id]){
-        sectionState[id] = { ratio:0, time:0 };
-      }
-
-      if (entry.isIntersecting){
-        sectionState[id].ratio = entry.intersectionRatio;
-        sectionState[id].time = performance.now();
-      } else {
-        sectionState[id].ratio = 0;
-      }
-    });
-
-    // Decide which section is "current"
-    Object.keys(sectionState).forEach(id => {
-      const s = sectionState[id];
-      if (s.ratio > 0.5){
-        if (s.ratio > bestRatio || (s.ratio === bestRatio && s.time > bestTime)){
-          bestId = id;
-          bestRatio = s.ratio;
-          bestTime = s.time;
-        }
-      }
-    });
-
-    updateNavActive(bestId);
-  }, {
-    threshold:[0.5, 0.75]
-  });
-
-  sectionConfigs.forEach(cfg => {
-    const el = document.getElementById(cfg.id);
-    if (el) observer.observe(el);
-  });
-})();
-
-// Chat assistant logic (FAQ-style)
+// Chat assistant logic (uses simple FAQ rules)
 (function(){
   const launcher = document.getElementById('chat-launcher');
   const panel = document.getElementById('chat-panel');
