@@ -34,8 +34,8 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 <style>
 :root{
   --blue-deep:#0000df;
-  --blue-mid:#1e5dff;
-  --blue-soft:#4d86ff;
+  --blue-mid:#2b6fff;
+  --blue-soft:#1e5dff;
   --orange:#ff941f;
   --orange-light:#ffc85a;
 
@@ -71,7 +71,7 @@ html,body{
 body{
   margin:0;
   padding:0;
-  /* Overall background: vivid orange + vivid blue (desktop) */
+  /* Overall background (desktop): vivid oranges + blues */
   background:
     radial-gradient(circle at 10% 10%, var(--orange) 0, transparent 45%),
     radial-gradient(circle at 90% 80%, var(--orange-light) 0, transparent 50%),
@@ -85,8 +85,8 @@ body{
   position:fixed;
   top:0; left:0; right:0;
   background:
-    radial-gradient(circle at 0% 0%, #4d86ff 0, transparent 70%),
-    linear-gradient(90deg, #000036 0%, var(--blue-mid) 50%, #000036 100%);
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-deep) 100%);
   color:#fff;
   display:grid;
   grid-template-columns:auto 1fr auto;
@@ -104,22 +104,22 @@ body{
 .menu-toggle{
   grid-area:menu;
   width:38px;
-  height:30px;
+  height:32px;
   border:none;
-  background:rgba(255,148,31,0.9); /* vivid orange so bars pop on dark blue */
+  background:var(--orange); /* vivid orange pill behind bars */
   border-radius:999px;
   display:flex !important;
   flex-direction:column;
   justify-content:center;
-  padding:4px 6px;
+  padding:5px 7px;
   cursor:pointer;
   justify-self:start;
   margin-left:2px;
   z-index:2001;
+  box-shadow:0 2px 6px rgba(0,0,0,0.45);
 }
 .menu-toggle span{
   display:block;
-  width:100%;
   height:4px;
   border-radius:999px;
   background:#ffffff;
@@ -181,7 +181,7 @@ body{
   padding:3px 10px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.8);
-  background:rgba(0,0,0,0.9);
+  background:rgba(0,0,0,0.18);
   color:#fff;
   font-size:12px;
   cursor:pointer;
@@ -225,7 +225,7 @@ body{
   white-space:nowrap;
 }
 .lang-dropdown li:hover{
-  background:rgba(77,134,255,0.35); /* light blue hover */
+  background:rgba(43,111,255,0.35);
 }
 .lang-dropdown li.active{
   color:var(--orange);
@@ -233,7 +233,7 @@ body{
   text-underline-offset:3px;
 }
 
-/* Small screens: keep “Language” text visible but a bit smaller */
+/* Small screens: keep “Language” text readable */
 @media (max-width: 420px){
   .topbar-lang-label-text{
     display:inline;
@@ -250,7 +250,7 @@ body{
   display:none;
 }
 .topbar-logo-inline img{
-  height:48px;
+  height:46px;
   width:auto;
   filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
 }
@@ -275,7 +275,7 @@ body{
   }
 
   .topbar-logo-inline img{
-    height:46px;
+    height:48px; /* slightly larger but still fits with title */
   }
 
   .topbar-title{
@@ -299,8 +299,8 @@ body{
   z-index:900;
 }
 .topbar-logo{
-  width:100px;
-  height:100px;
+  width:95px;
+  height:95px;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
   cursor:pointer;
@@ -315,7 +315,7 @@ body{
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 110px);
+  padding-top:calc(var(--bar-h) + 130px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -337,68 +337,81 @@ body{
   width:100%;
   max-width:1100px;
   padding:0 16px 80px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
   position:relative;
   z-index:3; /* above snow */
 }
 
-/* New hero layout: text image + glass */
-.hero-layout{
-  width:100%;
-  display:flex;
+/* NEW HERO LAYOUT (grid for desktop, column for mobile) */
+.hero-main{
+  display:grid;
+  grid-template-columns:minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-rows:auto auto;
+  grid-template-areas:
+    "hero-text hero-glass"
+    "hero-cta  hero-glass";
   align-items:center;
+  column-gap:40px;
+}
+
+/* text image column */
+.hero-text-block{
+  grid-area:hero-text;
+  display:flex;
   justify-content:center;
-  gap:48px;
+  align-items:flex-start;
 }
-
-/* Columns */
-.hero-text-col{
-  flex:0 0 auto;
+.hero-text-inner{
+  position:relative;
+  display:inline-block;
 }
-.hero-glass-col{
-  flex:0 0 auto;
-}
-
-/* Desktop & mobile text images */
 .hero-text-img{
   display:block;
-  max-width:440px;
+  max-width:100%;
   height:auto;
 }
-.hero-text-img--desktop{
+
+/* desktop vs mobile text images */
+.hero-text-desktop{
   display:block;
 }
-.hero-text-img--mobile{
+.hero-text-mobile{
   display:none;
 }
 
-/* Glass */
-.hero-image-link{
-  display:inline-block;
+/* glass column */
+.hero-glass-block{
+  grid-area:hero-glass;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+}
+.hero-glass-inner{
+  position:relative;
+  margin-top:-50px; /* lift glass into the transparent area of desktop text image */
 }
 .hero-glass{
-  width:520px;
-  max-width:360px;
+  width:480px;
+  max-width:85vw;
   display:block;
   cursor:pointer;
 }
 
-/* CTA row */
-.hero-cta-row{
-  margin-top:22px;
+/* CTA block */
+.hero-cta-block{
+  grid-area:hero-cta;
   display:flex;
   justify-content:center;
-  width:100%;
+  align-items:flex-start;
+  margin-top:-8px;
 }
+
+/* CTA Button */
 .hero-cta-btn{
   position:relative;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:16px 60px;
+  padding:14px 60px;
   border-radius:999px;
   border:none;
   text-decoration:none;
@@ -408,7 +421,7 @@ body{
   text-transform:uppercase;
   background:linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 45%, #ffe27a 100%);
   color:#fff;
-  box-shadow:0 4px 18px rgba(0,0,0,0.55);
+  box-shadow:0 4px 14px rgba(0,0,0,0.45);
   cursor:pointer;
   transition:box-shadow 0.18s ease, transform 0.18s ease;
 }
@@ -427,7 +440,7 @@ body{
   50%{ opacity:1; }
 }
 .hero-cta-btn:hover{
-  box-shadow:0 7px 22px rgba(0,0,0,0.65);
+  box-shadow:0 7px 20px rgba(0,0,0,0.55);
 }
 
 /* Snow layer (hero only) */
@@ -462,7 +475,8 @@ body{
 /* TRANSITION STRIP */
 .transition-strip{
   background:
-    linear-gradient(90deg, #000036 0%, var(--blue-mid) 50%, #000036 100%);
+    radial-gradient(circle at 100% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-deep) 100%);
   color:#f5fbff;
   text-align:center;
   padding:14px 16px;
@@ -726,8 +740,8 @@ body{
 /* BOTTOM LOGO */
 .section--bottom-logo{
   background:
-    radial-gradient(circle at 0% 0%, #4d86ff 0, transparent 70%),
-    linear-gradient(180deg, #000036 0%, #00001a 100%);
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(180deg, var(--blue-deep) 0%, #000028 100%);
   text-align:center;
 }
 .section--bottom-logo img{
@@ -740,8 +754,8 @@ body{
 /* FOOTER */
 footer{
   background:
-    radial-gradient(circle at 100% 0%, #4d86ff 0, transparent 70%),
-    linear-gradient(180deg, #000036 0%, #00001a 100%);
+    radial-gradient(circle at 100% 0%, #3a7cff 0, transparent 70%),
+    linear-gradient(90deg, var(--blue-deep) 0%, var(--blue-mid) 50%, var(--blue-deep) 100%);
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -775,6 +789,8 @@ footer{
 }
 .footer-instagram{
   display:flex;
+  justify-content:flex-end;
+  flex:1;
 }
 .footer-instagram a{
   display:inline-flex;
@@ -815,15 +831,7 @@ footer{
   margin-top:6px;
 }
 
-/* Mobile: move IG closer to links (left-ish) */
-@media(max-width:600px){
-  .footer-row{
-    justify-content:flex-start;
-    gap:10px 20px;
-  }
-}
-
-/* NAV OVERLAY + RICKY EASTER EGG */
+/* NAV OVERLAY + RICKY EASTER EGG (click to toggle logo/Ricky, drag shows dedication) */
 .nav-backdrop{
   position:fixed;
   inset:0;
@@ -849,7 +857,7 @@ footer{
   background:
     radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 55%),
     radial-gradient(circle at 100% 100%, var(--orange-light) 0, transparent 60%),
-    linear-gradient(135deg, #000036 0%, #00001a 100%);
+    linear-gradient(135deg, var(--blue-deep) 0%, #00001a 100%);
   position:relative;
 }
 .nav-modal-title{
@@ -930,12 +938,10 @@ footer{
   text-align:center;
   font-size:11px;
   line-height:1.4;
-  color:#000000;
-  background:#ffffff;
+  color:#ffffff;
   opacity:0;
   pointer-events:none;
   white-space:pre-line;
-  border-radius:10px;
   transition:opacity 0.3s ease;
 }
 .nav-close{
@@ -1095,7 +1101,7 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Inner chat bubble icon (fixed tail) */
+/* Inner chat bubble icon – FIXED tail */
 .chat-icon-bubble{
   position:relative;
   width:30px;
@@ -1109,13 +1115,12 @@ footer{
 .chat-icon-bubble::after{
   content:"";
   position:absolute;
-  bottom:-6px;
-  left:9px;
-  width:0;
-  height:0;
-  border-style:solid;
+  bottom:2px;
+  left:4px;
   border-width:7px 7px 0 0;
+  border-style:solid;
   border-color:#ffffff transparent transparent transparent;
+  transform:rotate(35deg);
 }
 .chat-icon-dots{
   font-size:13px;
@@ -1209,31 +1214,33 @@ footer{
 /* Responsive tweaks */
 @media(max-width:800px){
   .hero{
-    padding-top:calc(var(--bar-h) + 70px);
-    min-height:0;
+    min-height:auto;
+    padding-top:calc(var(--bar-h) + 60px);
+    padding-bottom:40px;
   }
   .hero-inner{
-    padding-bottom:50px;
+    padding-bottom:40px;
   }
-  .hero-layout{
+  .hero-main{
+    display:flex;
     flex-direction:column;
-    gap:14px;
     align-items:center;
-    justify-content:flex-start;
+    gap:12px;
   }
-  .hero-text-img--desktop{
+  .hero-text-desktop{
     display:none;
   }
-  .hero-text-img--mobile{
+  .hero-text-mobile{
     display:block;
-    max-width:360px;
-    width:90vw;
+  }
+  .hero-glass-inner{
+    margin-top:8px; /* no overlap on mobile, closer to text */
   }
   .hero-glass{
-    max-width:220px;
+    max-width:70vw;
   }
-  .hero-cta-row{
-    margin-top:12px;
+  .hero-cta-block{
+    margin-top:10px;
   }
   .hero-cta-btn{
     padding:12px 40px;
@@ -1256,17 +1263,7 @@ footer{
 }
 @media(max-width:500px){
   .hero-glass{
-    max-width:200px;
-  }
-}
-
-/* Desktop-specific tweaks for hero */
-@media(min-width:801px){
-  .hero-text-img--desktop{
-    display:block;
-  }
-  .hero-text-img--mobile{
-    display:none;
+    max-width:68vw;
   }
 }
 
@@ -1381,29 +1378,32 @@ FOREVER LOVED
   <!-- HERO -->
   <section class="hero" id="top">
     <div class="hero-inner">
-      <div class="hero-layout">
-        <div class="hero-text-col">
-          <!-- Desktop text + arrow image -->
-          <img
-            src="desktop-maya-nut-beverage-brosimum-alicastrum.png"
-            alt="MayaNut Beverage is here! text with arrow"
-            class="hero-text-img hero-text-img--desktop">
-          <!-- Mobile text + two arrows image -->
-          <img
-            src="mobile-maya-nut-beverage-brosimum-alicastrum.png"
-            alt="MayaNut Beverage is here! text with arrows"
-            class="hero-text-img hero-text-img--mobile">
+      <div class="hero-main">
+        <!-- TEXT IMAGE (desktop vs mobile) -->
+        <div class="hero-text-block">
+          <div class="hero-text-inner">
+            <img src="desktop-maya-nut-beverage-brosimum-alicastrum.png"
+                 alt="MayaNut Beverage Is Here text with underline and arrow"
+                 class="hero-text-img hero-text-desktop">
+            <img src="mobile-maya-nut-beverage-brosimum-alicastrum.png"
+                 alt="MayaNut Beverage Is Here text with curved arrows for mobile"
+                 class="hero-text-img hero-text-mobile">
+          </div>
         </div>
 
-        <div class="hero-glass-col">
-          <a href="#buy" class="hero-image-link">
-            <img src="rach20.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
-          </a>
+        <!-- GLASS IMAGE -->
+        <div class="hero-glass-block">
+          <div class="hero-glass-inner">
+            <a href="#buy" class="hero-image-link">
+              <img src="rach20.png" alt="Chilled MayaNut beverage in a glass" class="hero-glass">
+            </a>
+          </div>
         </div>
-      </div>
 
-      <div class="hero-cta-row">
-        <a href="#buy" class="hero-cta-btn">Try Now!</a>
+        <!-- CTA BUTTON -->
+        <div class="hero-cta-block">
+          <a href="#buy" class="hero-cta-btn">Try Now!</a>
+        </div>
       </div>
     </div>
   </section>
@@ -1428,8 +1428,12 @@ FOREVER LOVED
             <div class="store-item-label">MayaNut Beverage Coming Soon!</div>
           </div>
           <div class="store-item">
-            <div class="store-item-image">Product 2</div>
-            <div class="store-item-label">MayaNut Beverage – Vanilla</div>
+            <div class="store-item-image">
+              <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png"
+                   alt="MayaNut powder product"
+                   class="store-item-photo">
+            </div>
+            <div class="store-item-label">MayaNut Powder (Breadnut-style)</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 3</div>
@@ -1437,7 +1441,7 @@ FOREVER LOVED
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 4</div>
-            <div class="store-item-label">maya nut Powder (Breadnut-style)</div>
+            <div class="store-item-label">Future MayaNut Beverage Flavors</div>
           </div>
           <div class="store-item">
             <div class="store-item-image">Product 5</div>
@@ -1730,7 +1734,7 @@ FOREVER LOVED
   }
 })();
 
-// NAV overlay + Ricky easter egg (simplified: drag reveals text, click toggles image)
+// NAV overlay + Ricky easter egg (click toggles, drag shows dedication)
 (function(){
   const toggle = document.getElementById('menu-toggle');
   const navBackdrop = document.getElementById('nav-backdrop');
@@ -1754,18 +1758,6 @@ FOREVER LOVED
     logoEaster.style.top = '0px';
     logoEaster.style.transition = '';
     rickyMsg.style.opacity = 0;
-  }
-
-  function scrollHomeAndClose(){
-    const topSection = document.getElementById('top');
-    if (topSection){
-      topSection.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    navBackdrop.classList.remove('open');
-    toggle.classList.remove('open');
-    resetEasterEgg();
   }
 
   function openNav(){
@@ -1802,69 +1794,99 @@ FOREVER LOVED
     }
   });
 
-  // Drag behavior: dragging reveals Ricky + dedication
+  // Drag behavior (desktop & mobile pointer events)
   (function(){
     let dragActive = false;
     let startX = 0, startY = 0;
     let startLeft = 0, startTop = 0;
     const dragThreshold = 8;
 
-    function onMouseDown(e){
-      if (e.button !== 0) return;
-      e.preventDefault();
+    function startDrag(clientX, clientY){
       const rect = logoEaster.getBoundingClientRect();
       const parentRect = wrapper.getBoundingClientRect();
       startLeft = rect.left - parentRect.left;
       startTop = rect.top - parentRect.top;
-      startX = e.clientX;
-      startY = e.clientY;
+      startX = clientX;
+      startY = clientY;
       dragActive = false;
+    }
+
+    function moveDrag(clientX, clientY){
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      const distSq = dx*dx + dy*dy;
+      if (!dragActive && distSq > dragThreshold*dragThreshold){
+        dragActive = true;
+        logoEaster.style.position = 'relative';
+        logoEaster.style.transition = 'none';
+        if (!isRicky){
+          logoEaster.src = rickySrc;
+          isRicky = true;
+        }
+        rickyMsg.style.opacity = 1;
+      }
+      if (!dragActive) return;
+      logoEaster.style.left = (startLeft + dx) + 'px';
+      logoEaster.style.top  = (startTop + dy) + 'px';
+    }
+
+    function endDrag(clientX, clientY){
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      const distSq = dx*dx + dy*dy;
+      if (!dragActive && distSq <= dragThreshold*dragThreshold){
+        // simple tap/click toggles image + text
+        if (!isRicky){
+          logoEaster.src = rickySrc;
+          isRicky = true;
+          rickyMsg.style.opacity = 1;
+        } else {
+          logoEaster.src = homeSrc;
+          isRicky = false;
+          rickyMsg.style.opacity = 0;
+        }
+      }
+      dragActive = false;
+    }
+
+    // Mouse
+    logoEaster.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      startDrag(e.clientX, e.clientY);
 
       function onMove(ev){
-        const dx = ev.clientX - startX;
-        const dy = ev.clientY - startY;
-        const distSq = dx*dx + dy*dy;
-        if (!dragActive && distSq > dragThreshold*dragThreshold){
-          dragActive = true;
-          logoEaster.style.position = 'relative';
-          logoEaster.style.transition = 'none';
-          if (!isRicky){
-            logoEaster.src = homeSrc; // keep logo image while dragging
-            isRicky = false;
-          }
-          rickyMsg.style.opacity = 1;
-        }
-        if (!dragActive) return;
-        logoEaster.style.left = (startLeft + dx) + 'px';
-        logoEaster.style.top  = (startTop + dy) + 'px';
+        moveDrag(ev.clientX, ev.clientY);
       }
-
       function onUp(ev){
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
-
-        const dx = ev.clientX - startX;
-        const dy = ev.clientY - startY;
-        const distSq = dx*dx + dy*dy;
-
-        if (!dragActive && distSq <= dragThreshold*dragThreshold){
-          // Click: toggle between home logo and Ricky image, click Ricky => scroll home
-          if (!isRicky){
-            logoEaster.src = rickySrc;
-            isRicky = true;
-            rickyMsg.style.opacity = 1;
-          } else {
-            scrollHomeAndClose();
-          }
-        }
-        dragActive = false;
+        endDrag(ev.clientX, ev.clientY);
       }
-
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
-    }
+    });
 
-    logoEaster.addEventListener('mousedown', onMouseDown);
+    // Touch (long press = drag)
+    logoEaster.addEventListener('touchstart', (e) => {
+      if (!e.touches || !e.touches[0]) return;
+      const touch = e.touches[0];
+      startDrag(touch.clientX, touch.clientY);
+
+      function onMove(ev){
+        if (!ev.touches || !ev.touches[0]) return;
+        const t = ev.touches[0];
+        moveDrag(t.clientX, t.clientY);
+      }
+      function onEnd(ev){
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onEnd);
+        // approximate last position with start coords (tap)
+        endDrag(startX, startY);
+      }
+      document.addEventListener('touchmove', onMove);
+      document.addEventListener('touchend', onEnd);
+    });
   })();
 })();
 
@@ -2016,7 +2038,7 @@ FOREVER LOVED
   }
 })();
 
-// Chat assistant logic (uses simple FAQ rules)
+// Chat assistant logic (simple FAQ rules)
 (function(){
   const launcher = document.getElementById('chat-launcher');
   const panel = document.getElementById('chat-panel');
