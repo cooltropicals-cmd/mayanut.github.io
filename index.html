@@ -91,42 +91,6 @@ body{
   padding-top:calc(8px + env(safe-area-inset-top, 0px));
 }
 
-/* SEO INTRO BLOCK (new) */
-.seo-intro{
-  max-width:1100px;
-  margin:calc(var(--bar-h) + 10px) auto 0;
-  padding:10px 16px 12px;
-  color:#f5fbff;
-  font-size:14px;
-  line-height:1.6;
-  text-shadow:0 1px 2px rgba(0,0,0,0.55);
-  position:relative;
-  z-index:1;
-}
-.seo-intro-inner{
-  background:rgba(0,0,40,0.55);
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.35);
-  padding:10px 14px;
-}
-.seo-intro h1{
-  margin:0 0 4px;
-  font-size:18px;
-  font-weight:800;
-}
-.seo-intro p{
-  margin:0;
-}
-@media(max-width:600px){
-  .seo-intro{
-    font-size:13px;
-    margin:calc(var(--bar-h) + 6px) auto 0;
-  }
-  .seo-intro h1{
-    font-size:16px;
-  }
-}
-
 /* Hamburger (always visible) */
 .menu-toggle{
   grid-area:menu;
@@ -1270,21 +1234,6 @@ footer{
   </div>
 </header>
 
-<!-- NEW SEO INTRO BLOCK -->
-<section class="seo-intro">
-  <div class="seo-intro-inner">
-    <h1>Maya Nut (Brosimum alicastrum) – The MayaNut Company</h1>
-    <p>
-      The MayaNut Company at mayanut.com is dedicated to the tropical rainforest tree
-      <em>Brosimum alicastrum</em>, also known as maya nut, breadnut, ramón, ojoche and guaimaro. From our
-      subtropical South Florida plantings we are exploring this underutilized Moraceae species as a resilient
-      agricultural crop, developing future MayaNut beverages, powders and flours while studying its ecology,
-      nutrition, seed genetics and agroforestry potential. For more detailed information and scientific references,
-      please visit our Research page on <em>Brosimum alicastrum</em>.
-    </p>
-  </div>
-</section>
-
 <!-- Language dropdown -->
 <div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
   <ul>
@@ -1604,7 +1553,697 @@ FOREVER LOVED
   </div>
 </div>
 <script>
-/* (JS unchanged, omitted here for brevity in explanation – keep your existing script exactly as it was) */
+// Language dropdown
+(function(){
+  const toggle = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  const currentSpan = document.getElementById('lang-current');
+  if (!toggle || !dropdown || !currentSpan) return;
+
+  const items = dropdown.querySelectorAll('[data-file]');
+
+  const path = window.location.pathname;
+  const file = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+
+  let matched = false;
+  items.forEach(item => {
+    const f = item.getAttribute('data-file');
+    if (f === file) {
+      currentSpan.textContent = item.textContent.trim();
+      item.classList.add('active');
+      matched = true;
+    }
+  });
+  if (!matched) {
+    currentSpan.textContent = 'English';
+    items.forEach(item => {
+      if (item.getAttribute('data-file') === 'index.html') {
+        item.classList.add('active');
+      }
+    });
+  }
+
+  function openMenu() {
+    dropdown.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    dropdown.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMenu() {
+    if (dropdown.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.getAttribute('data-file') || 'index.html';
+      window.location.href = target;
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
+  });
+})();
+
+// Privacy / DNS Modal
+(function(){
+  const backdrop = document.getElementById('modal-backdrop');
+  const titleEl = document.getElementById('modal-title');
+  const bodyEl  = document.getElementById('modal-body');
+  const closeBtn = document.getElementById('modal-close');
+  const privacyLink = document.getElementById('privacy-link');
+  const dnsLink = document.getElementById('dns-link');
+
+  function openModal(kind){
+    if(kind === 'privacy'){
+      titleEl.textContent = 'Privacy Policy';
+      bodyEl.innerHTML = `
+        <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+        <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+        <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
+      `;
+    }else{
+      titleEl.textContent = 'Do Not Sell My Info';
+      bodyEl.innerHTML = `
+        <p>The MayaNut Company, Inc. does not sell your personal information.</p>
+        <p>If you have any questions or would like to request or delete information we may have about you, please contact us and we will respond as soon as possible.</p>
+      `;
+    }
+    backdrop.style.display = 'flex';
+  }
+
+  function closeModal(){
+    backdrop.style.display = 'none';
+  }
+
+  if (privacyLink) privacyLink.addEventListener('click', () => openModal('privacy'));
+  if (dnsLink) dnsLink.addEventListener('click', () => openModal('dns'));
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (backdrop) {
+    backdrop.addEventListener('click', (e) => {
+      if(e.target === backdrop) closeModal();
+    });
+  }
+})();
+
+// NAV overlay + Ricky easter egg (click go home when Ricky, drag reveals message)
+(function(){
+  const toggle = document.getElementById('menu-toggle');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const navClose = document.getElementById('nav-close');
+  const logoEaster = document.getElementById('nav-logo-easter');
+  const rickyMsg = document.getElementById('nav-ricky-message');
+
+  if(!toggle || !navBackdrop || !logoEaster || !rickyMsg) return;
+
+  const homeSrc = "mayanut-the-maya-nut-company-logo.png";
+  const rickySrc = "ricky.jpeg"; // must exist
+  let isRicky = false;
+
+  const wrapper = logoEaster.parentElement;
+  wrapper.style.position = 'relative';
+
+  function resetEasterEgg(){
+    isRicky = false;
+    logoEaster.src = homeSrc;
+    logoEaster.style.left = '0px';
+    logoEaster.style.top = '0px';
+    logoEaster.style.position = 'relative';
+    logoEaster.style.transition = '';
+    rickyMsg.style.opacity = 0;
+  }
+
+  function scrollHomeAndClose(){
+    const topSection = document.getElementById('top');
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+    resetEasterEgg();
+  }
+
+  function openNav(){
+    navBackdrop.classList.add('open');
+    toggle.classList.add('open');
+    resetEasterEgg();
+  }
+
+  function closeNav(){
+    navBackdrop.classList.remove('open');
+    toggle.classList.remove('open');
+    resetEasterEgg();
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(navBackdrop.classList.contains('open')){
+      closeNav();
+    }else{
+      openNav();
+    }
+  });
+
+  if (navClose){
+    navClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeNav();
+    });
+  }
+
+  navBackdrop.addEventListener('click', (e) => {
+    if(e.target === navBackdrop){
+      closeNav();
+    }
+  });
+
+  // Drag + tap logic (mouse + touch)
+  (function(){
+    let dragActive = false;
+    let startX = 0, startY = 0;
+    let startLeft = 0, startTop = 0;
+    const dragThreshold = 8;
+
+    function beginDrag(clientX, clientY){
+      const rect = logoEaster.getBoundingClientRect();
+      const parentRect = wrapper.getBoundingClientRect();
+      startLeft = rect.left - parentRect.left;
+      startTop = rect.top - parentRect.top;
+      startX = clientX;
+      startY = clientY;
+      dragActive = false;
+    }
+
+    function handleMove(clientX, clientY){
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      const distSq = dx*dx + dy*dy;
+      if (!dragActive && distSq > dragThreshold*dragThreshold){
+        dragActive = true;
+        logoEaster.style.position = 'relative';
+        logoEaster.style.transition = 'none';
+        if (!isRicky){
+          logoEaster.src = rickySrc;
+          isRicky = true;
+        }
+        rickyMsg.style.opacity = 1;
+      }
+      if (!dragActive) return;
+      logoEaster.style.left = (startLeft + dx) + 'px';
+      logoEaster.style.top  = (startTop + dy) + 'px';
+    }
+
+    function handleEnd(clientX, clientY){
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      const distSq = dx*dx + dy*dy;
+
+      if (!dragActive && distSq <= dragThreshold*dragThreshold){
+        // Click behavior:
+        // - if currently Ricky image -> go home + reset
+        // - else show Ricky + message
+        if (isRicky){
+          scrollHomeAndClose();
+        } else {
+          logoEaster.src = rickySrc;
+          isRicky = true;
+          rickyMsg.style.opacity = 1;
+        }
+      }
+      dragActive = false;
+    }
+
+    // Mouse
+    logoEaster.addEventListener('mousedown', (e) => {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      beginDrag(e.clientX, e.clientY);
+
+      const onMove = (ev) => handleMove(ev.clientX, ev.clientY);
+      const onUp = (ev) => {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        handleEnd(ev.clientX, ev.clientY);
+      };
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+
+    // Touch (mobile) – long-ish press -> drag, tap -> same click behavior
+    logoEaster.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      beginDrag(t.clientX, t.clientY);
+    });
+
+    logoEaster.addEventListener('touchmove', (e) => {
+      const t = e.touches[0];
+      handleMove(t.clientX, t.clientY);
+    });
+
+    logoEaster.addEventListener('touchend', (e) => {
+      const t = e.changedTouches[0];
+      handleEnd(t.clientX, t.clientY);
+    });
+  })();
+})();
+
+// Welcome popup
+(function(){
+  const welcomeBackdrop = document.getElementById('welcome-backdrop');
+  const welcomeClose = document.getElementById('welcome-close');
+  const welcomeMainBtn = document.getElementById('welcome-main-btn');
+
+  if(!welcomeBackdrop || !welcomeClose) return;
+
+  function closeWelcome(){
+    welcomeBackdrop.style.display = 'none';
+  }
+
+  window.addEventListener('load', () => {
+    welcomeBackdrop.style.display = 'flex';
+    setTimeout(() => {
+      if (welcomeBackdrop.style.display !== 'none') {
+        closeWelcome();
+      }
+    }, 60000);
+  });
+
+  welcomeClose.addEventListener('click', closeWelcome);
+
+  if (welcomeMainBtn){
+    welcomeMainBtn.addEventListener('click', () => {
+      closeWelcome();
+      const topSection = document.getElementById('top');
+      if (topSection){
+        topSection.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+
+  welcomeBackdrop.addEventListener('click', (e) => {
+    if(e.target === welcomeBackdrop) closeWelcome();
+  });
+})();
+
+// Smooth scroll for logo links on this page
+(function(){
+  const topSection = document.getElementById('top');
+  function scrollHome(e){
+    if (e) e.preventDefault();
+    if (topSection){
+      topSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  const logoLink = document.querySelector('.topbar-logo-link');
+  if (logoLink){
+    logoLink.addEventListener('click', scrollHome);
+  }
+
+  const topbarLogoInline = document.getElementById('topbar-logo-inline');
+  if (topbarLogoInline){
+    topbarLogoInline.addEventListener('click', scrollHome);
+  }
+
+  const bottomLogoLink = document.getElementById('bottom-logo-link');
+  if (bottomLogoLink){
+    bottomLogoLink.addEventListener('click', scrollHome);
+  }
+})();
+
+// About image lightbox expand
+(function(){
+  const buttons = document.querySelectorAll('.img-expand-btn');
+  const backdrop = document.getElementById('img-lightbox-backdrop');
+  const imgEl = document.getElementById('img-lightbox-img');
+  const closeBtn = document.getElementById('img-lightbox-close');
+  if (!backdrop || !imgEl || !closeBtn) return;
+
+  function openLightbox(src, alt){
+    imgEl.src = src;
+    imgEl.alt = alt || '';
+    backdrop.classList.add('open');
+  }
+
+  function closeLightbox(){
+    backdrop.classList.remove('open');
+    imgEl.src = '';
+    imgEl.alt = '';
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const src = btn.getAttribute('data-img-src');
+      const img = btn.closest('.about-image-tile')?.querySelector('img');
+      const alt = img ? img.alt : '';
+      if (src){
+        openLightbox(src, alt);
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', closeLightbox);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop){
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')){
+      closeLightbox();
+    }
+  });
+})();
+
+// Hero snowflakes (slower, graceful drift)
+(function(){
+  const hero = document.querySelector('.hero');
+  const snowLayer = hero?.querySelector('.hero-snow');
+  if (!hero || !snowLayer) return;
+
+  const SNOW_COUNT = 60;
+  const symbols = ['❄','✻','✼'];
+
+  for (let i = 0; i < SNOW_COUNT; i++){
+    const flake = document.createElement('div');
+    flake.className = 'snowflake';
+    flake.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    const size = 8 + Math.random()*16;
+    const left = Math.random()*100;
+    const duration = 22 + Math.random()*14; // slower fall
+    const delay = Math.random()*-duration;
+    const drift = (Math.random()*40 + 15) * (Math.random() < 0.5 ? -1 : 1);
+
+    flake.style.fontSize = size + 'px';
+    flake.style.left = left + '%';
+    flake.style.animationDuration = duration + 's';
+    flake.style.animationDelay = delay + 's';
+    flake.style.opacity = (0.55 + Math.random()*0.35).toFixed(2);
+    flake.style.setProperty('--drift1', drift + 'px');
+    flake.style.setProperty('--drift2', (-drift) + 'px');
+
+    snowLayer.appendChild(flake);
+  }
+})();
+
+// Scroll-based nav underline (HOME / STORE / ABOUT)
+(function(){
+  const links = document.querySelectorAll('.nav-modal-links a[data-section]');
+  const sections = {
+    top: document.getElementById('top'),
+    buy: document.getElementById('buy'),
+    about: document.getElementById('about')
+  };
+
+  function updateActive(){
+    const scrollY = window.scrollY || window.pageYOffset;
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+
+    let activeKey = 'top';
+
+    const topRect = sections.top?.getBoundingClientRect();
+    const buyRect = sections.buy?.getBoundingClientRect();
+    const aboutRect = sections.about?.getBoundingClientRect();
+
+    const middle = scrollY + vh/2;
+
+    function rectMid(rect){
+      if (!rect) return 0;
+      const topAbs = rect.top + scrollY;
+      return topAbs + rect.height/2;
+    }
+
+    const midTop = rectMid(topRect);
+    const midBuy = rectMid(buyRect);
+    const midAbout = rectMid(aboutRect);
+
+    const distances = {
+      top: Math.abs(middle - midTop),
+      buy: Math.abs(middle - midBuy),
+      about: Math.abs(middle - midAbout)
+    };
+
+    let bestKey = 'top';
+    let bestDist = distances.top;
+    (['buy','about']).forEach(key => {
+      if (distances[key] < bestDist){
+        bestDist = distances[key];
+        bestKey = key;
+      }
+    });
+
+    activeKey = bestKey;
+
+    links.forEach(link => {
+      if (link.dataset.section === activeKey){
+        link.classList.add('nav-link-active');
+      } else {
+        link.classList.remove('nav-link-active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActive);
+  window.addEventListener('load', updateActive);
+  window.addEventListener('resize', updateActive);
+})();
+
+// Chat assistant logic (FAQ-style)
+(function(){
+  const launcher = document.getElementById('chat-launcher');
+  const panel = document.getElementById('chat-panel');
+  const closeBtn = document.getElementById('chat-close');
+  const logEl = document.getElementById('chat-log');
+  const inputEl = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
+
+  if (!launcher || !panel || !logEl || !inputEl || !sendBtn) return;
+
+  function openPanel(){
+    panel.style.display = 'block';
+  }
+  function closePanel(){
+    panel.style.display = 'none';
+  }
+
+  launcher.addEventListener('click', () => {
+    if (panel.style.display === 'block'){
+      closePanel();
+    } else {
+      openPanel();
+      inputEl.focus();
+    }
+  });
+  closeBtn.addEventListener('click', closePanel);
+
+  function appendMsg(role, text){
+    const div = document.createElement('div');
+    div.className = 'chat-msg';
+    const strong = document.createElement('strong');
+    strong.textContent = role + ':';
+    div.appendChild(strong);
+    div.appendChild(document.createTextNode(' ' + text));
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  const greetWords = ['hi','hello','hey','hola','hallo','yo'];
+  const thanksWords = ['thank','thanks','thank you','ty'];
+
+  const topicGroups = [
+    {
+      // "What is MayaNut?" style
+      match: (t) =>
+        t.includes('what is') &&
+        (t.replace(/\s+/g,'').includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      answers: [
+        'Maya nut is the roasted seed of the tropical tree Brosimum alicastrum. It can be used to make a rich, naturally caffeine-free drink or a versatile flour.',
+        'When you ask “What is MayaNut?”, it’s the seed of Brosimum alicastrum – a tropical tree whose seeds can be roasted, ground, and turned into drinks and foods.'
+      ]
+    },
+    {
+      // General maya nut / MayaNut variations
+      match: (t) => {
+        const noSpace = t.replace(/\s+/g,'');
+        return noSpace.includes('mayanut') || t.includes('maya nut');
+      },
+      answers: [
+        'maya nut is the seed of the Brosimum alicastrum tree. It’s been used for centuries in its native range as a food and drink.',
+        'People use the name “maya nut” for the seed of Brosimum alicastrum. Roasted maya nut can be brewed as a drink or milled into flour.'
+      ]
+    },
+    {
+      // Brosimum alicastrum / B. alicastrum
+      match: (t) => t.includes('brosimum') || t.includes('alicastrum') || t.includes('b alicastrum'),
+      answers: [
+        'Brosimum alicastrum is the scientific name for the maya nut tree. It belongs to the Moraceae family, like mulberries and figs.',
+        'When you see Brosimum alicastrum, that’s the Latin name for the tropical tree whose seed we call maya nut.'
+      ]
+    },
+    {
+      // Ojoche / ramón / breadnut
+      match: (t) => t.includes('ojoche') || t.includes('ramon') || t.includes('ramón') || t.includes('breadnut'),
+      answers: [
+        'Ojoche, ramón, and breadnut are different common names for the same species, Brosimum alicastrum, in different regions.',
+        'Yes, names like ojoche and ramón usually refer to the maya nut tree or its seeds, depending on local tradition.'
+      ]
+    },
+    {
+      // Scientific / research-style questions
+      match: (t) =>
+        (t.includes('scientific') || t.includes('science') || t.includes('study') || t.includes('studies') ||
+         t.includes('research') || t.includes('paper') || t.includes('nutrition') || t.includes('nutritional') ||
+         t.includes('composition') || t.includes('protein')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum') || t.includes('alicastrum')),
+      answers: [
+        'If you’re looking for scientific information on Brosimum alicastrum (maya nut), please visit our Research page: use the “RESEARCH” link in the menu or go directly to research.html.',
+        'For more technical and scientific details about maya nut, including research papers on Brosimum alicastrum, please check our Research page (research.html).'
+      ]
+    },
+    {
+      // Where it grows / Florida
+      match: (t) => (t.includes('where') || t.includes('grow') || t.includes('growing')) &&
+        (t.includes('florida') || t.includes('tree') || t.includes('mayanut') || t.includes('maya nut') || t.includes('brosimum')),
+      answers: [
+        'The MayaNut Company is focusing on warm parts of Florida, especially South Florida below about 27°N, where Brosimum alicastrum can handle winters more easily.',
+        'Our early trials are in subtropical South Florida. Over time we hope to learn exactly how far north the maya nut tree can be grown in Florida.'
+      ]
+    },
+    {
+      // Store / buy / products
+      match: (t) => (t.includes('store') || t.includes('buy') || t.includes('purchase') || t.includes('product')) &&
+        (t.includes('mayanut') || t.includes('maya nut') || t.includes('beverage') || t.includes('drink')),
+      answers: [
+        'The online store isn’t open yet. On the main page, the Store section shows placeholder MayaNut products while our plantation grows.',
+        'MayaNut beverages are still in development. For now you can scroll through the Store preview to see what we’re planning.'
+      ]
+    },
+    {
+      // About the company
+      match: (t) =>
+        (t.includes('about') || t.includes('who are you') || t.includes('tell me about')) &&
+        (t.includes('company') || t.includes('mayanut company')),
+      answers: [
+        'The MayaNut Company was founded in 2025 by August Kokus in South Florida. Our mission is to grow Brosimum alicastrum trees and create future MayaNut beverages, powders, and flours.',
+        'We are The MayaNut Company, developing one of Florida’s first plantations of Brosimum alicastrum trees so people can enjoy MayaNut drinks and foods.'
+      ]
+    },
+    {
+      // Creator / founder from About section
+      match: (t) => t.includes('who created') || t.includes('who is august') || t.includes('founder'),
+      answers: [
+        'The founder of The MayaNut Company is August Kokus, a South Floridian botanist and plant explorer.',
+        'Our founder, August Kokus, started The MayaNut Company in 2025 to develop Brosimum alicastrum as a new agricultural crop in the United States.'
+      ]
+    }
+  ];
+
+  function pickRandom(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  function handleUserMessage(){
+    const raw = inputEl.value.trim();
+    if (!raw) return;
+    inputEl.value = '';
+    appendMsg('You', raw);
+
+    const lower = raw.toLowerCase();
+
+    // "How are you" / "How's your day"
+    if (lower.includes('how are you') || lower.includes('how\'s your day') || lower.includes('hows your day')){
+      appendMsg('Bot', pickRandom([
+        'I’m a tiny maya nut bot, doing great among the Brosimum alicastrum trees! How can I help you today?',
+        'My day is going well in this little digital plantation. Ask me something about maya nut or The MayaNut Company!'
+      ]));
+      return;
+    }
+
+    // greetings
+    if (greetWords.some(g => lower.includes(g))){
+      appendMsg('Bot', pickRandom([
+        'Hi! Ask me something about maya nut or Brosimum alicastrum.',
+        'Hello! I can answer short questions about MayaNut and this website.'
+      ]));
+      return;
+    }
+
+    // thanks
+    if (thanksWords.some(t => lower.includes(t))){
+      appendMsg('Bot', pickRandom([
+        'You’re very welcome!',
+        'Glad to help!',
+        'Thank you for visiting The MayaNut Company site.'
+      ]));
+      return;
+    }
+
+    // On-topic groups
+    for (const group of topicGroups){
+      if (group.match(lower)){
+        appendMsg('Bot', pickRandom(group.answers));
+        return;
+      }
+    }
+
+    // Generic on-topic if they mention maya nut / brosimum / ojoche / ramon but didn’t match any specific group
+    const onTopic =
+      lower.replace(/\s+/g,'').includes('mayanut') ||
+      lower.includes('maya nut') ||
+      lower.includes('brosimum') ||
+      lower.includes('alicastrum') ||
+      lower.includes('ojoche') ||
+      lower.includes('ramon') ||
+      lower.includes('ramón');
+
+    if (onTopic){
+      appendMsg('Bot', pickRandom([
+        'I can chat about the maya nut tree, how it’s used as a drink or flour, and what The MayaNut Company is planning.',
+        'maya nut is the seed of Brosimum alicastrum. If you want, ask about where it grows, how it’s used, or our future products.'
+      ]));
+      return;
+    }
+
+    // Off-topic fallback
+    appendMsg('Bot',
+      'I’m a very small helper bot. I only answer questions about maya nut, Brosimum alicastrum, ojoche/ramón, or this website. Try asking about those topics!');
+  }
+
+  sendBtn.addEventListener('click', handleUserMessage);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){
+      handleUserMessage();
+    }
+  });
+})();
 </script>
 
 </body>
