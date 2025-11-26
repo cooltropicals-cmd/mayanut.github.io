@@ -110,19 +110,20 @@ body{
 /* Hamburger (always visible, darker orange behind it) */
 .menu-toggle{
   grid-area:menu;
-  width:36px;
-  height:30px;
-  border:none;
+  width:42px;
+  height:32px;
+  border:1px solid #ffffff;
   background:#ff7a00; /* vivid orange behind the white bars */
   border-radius:999px;
   display:flex !important;
   flex-direction:column;
   justify-content:center;
-  padding:4px 6px;
+  padding:5px 6px;
   cursor:pointer;
   justify-self:start;
   margin-left:2px;
   z-index:2001;
+  box-shadow:0 2px 6px rgba(0,0,0,0.5);
 }
 .menu-toggle span{
   display:block;
@@ -317,7 +318,7 @@ body{
 .hero{
   position:relative;
   min-height:100vh;
-  padding-top:calc(var(--bar-h) + 120px);
+  padding-top:calc(var(--bar-h) + 110px); /* slightly higher on page */
   display:flex;
   align-items:center;
   justify-content:center;
@@ -338,7 +339,7 @@ body{
 .hero-inner{
   width:100%;
   max-width:1100px;
-  padding:0 16px 80px;
+  padding:0 16px 70px;
   position:relative;
   z-index:3; /* above snow */
   display:flex;
@@ -404,8 +405,9 @@ body{
 }
 .hero-cta-wrap{
   margin-top:22px;
+  width:100%;
   display:flex;
-  justify-content:flex-start;
+  justify-content:center; /* desktop button centered between text + glass */
 }
 .hero-cta-btn{
   position:relative;
@@ -447,7 +449,7 @@ body{
 /* Separate mobile CTA (below glass) */
 .hero-cta-mobile{
   display:none;
-  margin-top:14px;
+  margin-top:10px;
   justify-content:center;
 }
 .hero-cta-mobile .hero-cta-btn{
@@ -1230,13 +1232,16 @@ footer{
 /* Responsive tweaks */
 @media(max-width:800px){
   .hero{
-    padding-top:calc(var(--bar-h) + 60px);
+    padding-top:calc(var(--bar-h) + 70px); /* mobile: text + glass higher */
+  }
+  .hero-inner{
+    padding-bottom:40px;
   }
   .hero-row{
     flex-direction:column;
     align-items:center;
     justify-content:flex-start;
-    gap:16px;
+    gap:10px; /* tighter stack */
   }
   .hero-text-col{
     align-items:center;
@@ -1247,6 +1252,10 @@ footer{
   .hero-text-mobile{
     display:block;
     max-width:85vw;
+    margin-bottom:4px; /* slight gap above glass */
+  }
+  .hero-image-wrap{
+    margin-top:0;
   }
   .hero-glass{
     width:260px;
@@ -1257,6 +1266,9 @@ footer{
   }
   .hero-cta-mobile{
     display:flex;
+  }
+  .hero-cta-mobile .hero-cta-btn{
+    font-size:17px;
   }
   .about-grid{
     grid-template-columns:1fr;
@@ -1427,7 +1439,7 @@ FOREVER LOVED 💙🧡💙
             alt="MayaNut Beverage is here text with two downward arrows"
             class="hero-text hero-text-mobile">
 
-          <!-- Desktop CTA under text image -->
+          <!-- Desktop CTA under text image, centered between text + glass -->
           <div class="hero-cta-wrap hero-cta-desktop">
             <a href="#buy" class="hero-cta-btn">Try Now!</a>
           </div>
@@ -2261,6 +2273,17 @@ FOREVER LOVED 💙🧡💙
     // Off-topic fallback
     appendMsg('Bot',
       'I’m a very small helper bot. I only answer questions about maya nut, Brosimum alicastrum, ojoche/ramón, or this website. Try asking about those topics!');
+  }
+
+  function appendMsg(role, text){
+    const div = document.createElement('div');
+    div.className = 'chat-msg';
+    const strong = document.createElement('strong');
+    strong.textContent = role + ':';
+    div.appendChild(strong);
+    div.appendChild(document.createTextNode(' ' + text));
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
   }
 
   sendBtn.addEventListener('click', handleUserMessage);
