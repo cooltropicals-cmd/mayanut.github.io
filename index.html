@@ -72,6 +72,19 @@ body{
   background-attachment:fixed;
 }
 
+/* Visually hidden (for SEO + accessibility) */
+.seo-visually-hidden{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
 /* TOP BAR */
 .topbar{
   position:fixed;
@@ -326,16 +339,6 @@ body{
   gap:40px;
 }
 
-/* SEO heading for hero */
-.hero-heading-text{
-  margin:0 0 18px;
-  max-width:620px;
-  font-size:16px;
-  line-height:1.6;
-  text-align:center;
-  text-shadow:0 2px 6px rgba(0,0,0,0.65);
-}
-
 /* Snow layer (hero only, both desktop + mobile) */
 .hero-snow{
   position:absolute;
@@ -388,8 +391,8 @@ body{
 }
 .hero-image-link{ display:inline-block; }
 .hero-glass{
-  width:520px;          /* bigger glass on desktop */
-  max-width:80vw;       /* still respect viewport */
+  width:420px;
+  max-width:75vw;
   display:block;
   cursor:pointer;
 }
@@ -437,7 +440,7 @@ body{
   margin-top:-110px;        /* move up */
   display:flex;
   justify-content:flex-end; /* move right */
-  padding-right:380px;      /* distance from text */
+  padding-right:330px;      /* distance from text */
 }
 
 /* TRANSITION STRIP */
@@ -1052,7 +1055,7 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Inner chat bubble icon — tweaked tail so it’s clean */
+/* Inner chat bubble icon — fixed tail */
 .chat-icon-bubble{
   position:relative;
   width:30px;
@@ -1066,10 +1069,10 @@ footer{
 .chat-icon-bubble::after{
   content:"";
   position:absolute;
-  bottom:-4px;
-  left:12px;
-  width:8px;
-  height:8px;
+  bottom:-5px;
+  left:10px;
+  width:10px;
+  height:10px;
   background:#ffffff;
   transform:rotate(45deg);
 }
@@ -1213,6 +1216,36 @@ footer{
   html, body{ background:#ffffff !important; }
 }
 </style>
+
+<!-- Structured data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "url": "https://mayanut.com",
+      "name": "The MayaNut Company",
+      "inLanguage": "en",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://mayanut.com/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "The MayaNut Company",
+      "url": "https://mayanut.com",
+      "logo": "https://mayanut.com/mayanut-the-maya-nut-company-logo.png",
+      "sameAs": [
+        "https://instagram.com/themayanutcompany"
+      ],
+      "description": "The MayaNut Company develops beverages, powders and flours made from the maya nut tree Brosimum alicastrum, grown in subtropical Florida."
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -1319,10 +1352,13 @@ FOREVER LOVED
     <div class="hero-snow"></div>
 
     <div class="hero-inner">
-      <!-- New SEO-friendly heading without breaking design -->
-      <h1 class="hero-heading-text">
-        MayaNut beverage and products made from Brosimum alicastrum (maya nut, breadnut, ojoche, ramón) — grown and developed in South Florida by The MayaNut Company.
+      <!-- Hidden SEO title + summary -->
+      <h1 class="seo-visually-hidden">
+        MayaNut Beverage from Brosimum alicastrum | The MayaNut Company
       </h1>
+      <p class="seo-visually-hidden">
+        The MayaNut Company in South Florida is developing beverages, powders and flours from the maya nut tree Brosimum alicastrum, also known as breadnut, ramón and ojoche, grown in subtropical Florida agroforestry plantations.
+      </p>
 
       <div class="hero-right">
         <!-- Text image block (desktop + mobile versions) -->
@@ -1345,56 +1381,9 @@ FOREVER LOVED
         </div>
       </div>
 
-      <!-- Try Now button (desktop centered under text, mobile centered under glass/text stack) -->
+      <!-- Try Now button (desktop, mobile) -->
       <div class="hero-cta-wrap">
         <a href="#buy" class="hero-cta-btn">Try Now!</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRANSITION: STORE -->
-  <div class="transition-strip">STORE</div>
-
-  <!-- STORE / BUY -->
-  <section class="section section--buy" id="buy">
-    <div class="section-inner store-inner">
-      <div class="store-heading">
-        <h2>MayaNut Store — Coming Soon</h2>
-        <p>Scroll to preview future beverages, powder, and flour products. These are placeholder items while the first maya nut plantation grows.</p>
-      </div>
-
-      <div class="store-scroller-wrapper">
-        <div class="store-scroller">
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="rach20.png" alt="Chilled MayaNut beverage glass" class="store-item-photo">
-            </div>
-            <div class="store-item-label">MayaNut Beverage Coming Soon!</div>
-          </div>
-
-          <!-- Second placeholder now uses the MayaNut powder image -->
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png"
-                   alt="MayaNut powder made from Brosimum alicastrum"
-                   class="store-item-photo">
-            </div>
-            <div class="store-item-label">MayaNut Powder (Brosimum alicastrum)</div>
-          </div>
-
-          <div class="store-item">
-            <div class="store-item-image">Product 3</div>
-            <div class="store-item-label">MayaNut Beverage – Vanilla</div>
-          </div>
-          <div class="store-item">
-            <div class="store-item-image">Product 4</div>
-            <div class="store-item-label">MayaNut Beverage – Mocha</div>
-          </div>
-          <div class="store-item">
-            <div class="store-item-image">Product 5</div>
-            <div class="store-item-label">Future MayaNut Tropical Treats</div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -1470,6 +1459,53 @@ FOREVER LOVED
             <p>From their wicked, entangled roots that grip ever tighter upon the Earth, there grows an agricultural miracle. We are fascinated by <em>Brosimum alicastrum</em> because this is a resource that no one has truly valued in America yet. People have used this tree for millennia in its native range, but by growing it in Florida, we give everyone a chance to try this delicious superfood. Developing something that people love is not easy — but it is the perfect challenge for The MayaNut Company to accomplish.</p>
           </div>
 
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSITION: STORE -->
+  <div class="transition-strip">STORE</div>
+
+  <!-- STORE / BUY -->
+  <section class="section section--buy" id="buy">
+    <div class="section-inner store-inner">
+      <div class="store-heading">
+        <h2>MayaNut Store — Coming Soon</h2>
+        <p>Scroll to preview future beverages, powder, and flour products. These are placeholder items while the first maya nut plantation grows.</p>
+      </div>
+
+      <div class="store-scroller-wrapper">
+        <div class="store-scroller">
+          <div class="store-item">
+            <div class="store-item-image">
+              <img src="rach20.png" alt="Chilled MayaNut beverage glass" class="store-item-photo">
+            </div>
+            <div class="store-item-label">MayaNut Beverage Coming Soon!</div>
+          </div>
+
+          <!-- Second placeholder now uses the MayaNut powder image -->
+          <div class="store-item">
+            <div class="store-item-image">
+              <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png"
+                   alt="MayaNut powder made from Brosimum alicastrum"
+                   class="store-item-photo">
+            </div>
+            <div class="store-item-label">MayaNut Powder (Brosimum alicastrum)</div>
+          </div>
+
+          <div class="store-item">
+            <div class="store-item-image">Product 3</div>
+            <div class="store-item-label">MayaNut Beverage – Vanilla</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 4</div>
+            <div class="store-item-label">MayaNut Beverage – Mocha</div>
+          </div>
+          <div class="store-item">
+            <div class="store-item-image">Product 5</div>
+            <div class="store-item-label">Future MayaNut Tropical Treats</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1567,6 +1603,7 @@ FOREVER LOVED
     <button class="chat-panel-send" id="chat-send">Ask</button>
   </div>
 </div>
+
 <script>
 // Language dropdown
 (function(){
@@ -1826,7 +1863,7 @@ FOREVER LOVED
       document.addEventListener('mouseup', onUp);
     });
 
-    // Touch (mobile) – long-ish press -> drag, tap -> same click behavior
+    // Touch (mobile)
     logoEaster.addEventListener('touchstart', (e) => {
       const t = e.touches[0];
       beginDrag(t.clientX, t.clientY);
