@@ -693,9 +693,14 @@ body{
 }
 
 /* RESEARCH / BLOG / FAQ / CONTACT sections */
+
+/* Research: dark + light blue gradient, static */
 .section--research{
-  background:linear-gradient(180deg,#f5f8ff 0%,#ffffff 100%);
-  color:#123055;
+  background:
+    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 65%),
+    radial-gradient(circle at 100% 100%, #001a80 0, transparent 60%),
+    linear-gradient(180deg,#001a80 0%,#000028 100%);
+  color:#eaf0ff;
 }
 .section--research h2{
   margin-top:0;
@@ -716,9 +721,10 @@ body{
   background:#ffffff;
   border-radius:16px;
   padding:16px 18px 18px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+  box-shadow:0 2px 10px rgba(0,0,0,0.12);
   font-size:14px;
   line-height:1.7;
+  color:#203a68;
 }
 .research-card h2{
   margin-top:0;
@@ -732,8 +738,12 @@ body{
   }
 }
 
+/* Blog: orange + blue gradient */
 .section--blog{
-  background:linear-gradient(180deg,#ffffff 0%,#fdf7ff 100%);
+  background:
+    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, var(--blue-soft) 0, transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#f3f6ff 100%);
   color:#2b305f;
 }
 .section--blog h2{
@@ -746,8 +756,12 @@ body{
   font-size:15px;
 }
 
+/* FAQ: orange + blue gradient */
 .section--faq{
-  background:linear-gradient(180deg,#f4f7ff 0%,#ffffff 100%);
+  background:
+    radial-gradient(circle at 0% 0%, var(--blue-soft) 0, transparent 55%),
+    radial-gradient(circle at 100% 100%, var(--orange-light) 0, transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#f5f7ff 100%);
   color:#15244a;
 }
 .faq-list{
@@ -767,11 +781,13 @@ body{
   font-size:14px;
 }
 
+/* Contact: orange gradients similar to store section */
 .section--contact{
   background:
-    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
-    linear-gradient(180deg, #001a80 0%, #000028 100%);
-  color:#e4ecff;
+    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 60%),
+    radial-gradient(circle at 100% 0%, var(--orange-light) 0, transparent 60%),
+    linear-gradient(180deg,#ffffff 0%,#fff7ea 100%);
+  color:#283868;
 }
 .section--contact h2{
   margin-top:0;
@@ -927,33 +943,40 @@ footer{
 }
 .nav-modal-links a{
   position:relative;
+  display:block;
   color:#ffffff;
   text-decoration:none;
   font-weight:600;
   font-size:15px;
-  padding:6px 0;
+  padding:8px 12px;
+  border-radius:10px;
+  transition:background-color 0.15s ease;
 }
 .nav-modal-links a::after{
   content:"";
   position:absolute;
-  left:0;
-  bottom:-2px;
-  width:100%;
+  left:12px;
+  bottom:4px;
+  width:calc(100% - 24px);
   height:2px;
   background:var(--orange);
   transform:scaleX(0);
   transform-origin:left;
   transition:transform 0.15s ease;
 }
+.nav-modal-links a:hover{
+  background:rgba(0,0,0,0.35); /* highlight whole line on hover */
+}
 .nav-modal-links a:hover::after{
   transform:scaleX(1);
+}
+.nav-modal-links a.nav-link-active{
+  color:var(--orange-light);
+  background:rgba(0,0,0,0.45);
 }
 .nav-modal-links a.nav-link-active::after{
   transform:scaleX(1);
   height:3px;
-}
-.nav-modal-links a.nav-link-active{
-  color:var(--orange-light);
 }
 .nav-logo-easter-wrapper{
   display:flex;
@@ -980,7 +1003,7 @@ footer{
   line-height:1.4;
   background:#ffffff;
   color:#000000;
-  border-radius:14px;
+  border-radius:18px;
   opacity:0;
   pointer-events:none;
   white-space:pre-line;
@@ -1124,7 +1147,7 @@ footer{
   }
 }
 
-/* Chat assistant launcher (bottom-right, chat bubble icon – simplified, no tail glitch) */
+/* Chat assistant launcher (bottom-right, chat bubble icon with tail + three dots) */
 .chat-launcher{
   position:fixed;
   right:16px;
@@ -1145,17 +1168,29 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Inner chat bubble icon – clean pill with dots, no tail */
+/* Inner chat bubble icon – chat bubble with tail and dots */
 .chat-icon-bubble{
   position:relative;
-  padding:2px 8px;
-  border-radius:999px;
+  padding:4px 9px;
+  border-radius:14px;
   background:#ffffff;
   display:flex;
   align-items:center;
   justify-content:center;
-  min-width:28px;
+  min-width:30px;
   min-height:18px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.25);
+}
+.chat-icon-bubble::after{
+  content:"";
+  position:absolute;
+  left:6px;
+  bottom:-5px;
+  width:10px;
+  height:10px;
+  background:#ffffff;
+  transform:rotate(45deg);
+  box-shadow:0 1px 4px rgba(0,0,0,0.25);
 }
 .chat-icon-dots{
   font-size:13px;
@@ -1275,11 +1310,10 @@ footer{
     max-width:55vw;
   }
 
-  /* MOBILE ABOUT: images on left half, text on right, smaller fonts */
+  /* MOBILE ABOUT: vertical layout (images stacked over text) */
   .about-grid{
-    grid-template-columns:minmax(0, 42%) minmax(0, 58%);
-    gap:14px;
-    align-items:flex-start;
+    grid-template-columns:minmax(0,1fr);
+    gap:20px;
   }
   .about-text-card{
     font-size:13px;
@@ -1689,8 +1723,8 @@ FOREVER LOVED
     <div class="section-inner">
       <h2>Contact The MayaNut Company</h2>
       <p>If you are interested in maya nut trees, future maya nut beverages and powders, agroforestry in Florida, or potential research or business collaborations, we would be happy to hear from you.</p>
-      <p><strong>Email:</strong> <a href="mailto:themayanutcompany@gmail.com" style="color:#ffdd7a; text-decoration:underline;">themayanutcompany@gmail.com</a></p>
-      <p><strong>Instagram:</strong> <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" style="color:#ffdd7a; text-decoration:underline;">@themayanutcompany</a></p>
+      <p><strong>Email:</strong> <a href="mailto:themayanutcompany@gmail.com" style="color:#ff941f; text-decoration:underline;">themayanutcompany@gmail.com</a></p>
+      <p><strong>Instagram:</strong> <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" style="color:#ff941f; text-decoration:underline;">@themayanutcompany</a></p>
       <p>As the project grows, this main page at mayanut.com will remain the central place to learn about our plantation, products, and news.</p>
     </div>
   </section>
