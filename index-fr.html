@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lava Jelly Background</title>
+<title>Red + Blue Liquid Flow</title>
 
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,60 +15,55 @@
     background: #000;
   }
 
-  /* --- LAVA JELLY BACKGROUND --- */
-  .lava {
+  /* LAYER 1 — flowing red liquid */
+  .red-liquid {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-      linear-gradient(120deg,
-        rgba(255, 30, 0, 0.80),
-        rgba(255, 120, 0, 0.80),
-        rgba(255, 200, 0, 0.65),
-        rgba(0, 35, 150, 0.85)
-      );
-    background-size: 400% 400%;
-    filter: blur(60px);
-    animation: lavaFlow 18s ease-in-out infinite alternate;
+    background: linear-gradient(
+      120deg,
+      rgba(255, 0, 40, 0.75),
+      rgba(255, 40, 20, 0.75),
+      rgba(255, 0, 80, 0.65)
+    );
+    background-size: 250% 250%;
+    filter: blur(70px);
+    animation: redFlow 18s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
   }
 
-  /* Deeper dark blue shifting underneath */
-  .lava-deep {
+  /* LAYER 2 — flowing vivid blue liquid */
+  .blue-liquid {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
-    background:
-      linear-gradient(210deg,
-        rgba(0, 20, 60, 0.95),
-        rgba(0, 10, 30, 1),
-        rgba(255, 60, 0, 0.25),
-        rgba(0, 50, 180, 0.90)
-      );
-    background-size: 350% 350%;
-    animation: deepFlow 26s ease-in-out infinite alternate;
-    mix-blend-mode: hard-light;
-    filter: blur(90px);
+    background: linear-gradient(
+      240deg,
+      rgba(0, 20, 120, 0.85),
+      rgba(0, 5, 60, 0.85),
+      rgba(0, 60, 200, 0.75)
+    );
+    background-size: 250% 250%;
+    filter: blur(70px);
+    animation: blueFlow 20s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
   }
 
-  @keyframes lavaFlow {
-    0%   { background-position: 10% 10%; transform: scale(1.02); }
-    50%  { background-position: 90% 60%; transform: scale(1.08); }
-    100% { background-position: 40% 90%; transform: scale(1.03); }
+  @keyframes redFlow {
+    0%   { background-position: 20% 30%; transform: scale(1.1); }
+    50%  { background-position: 80% 70%; transform: scale(1.15); }
+    100% { background-position: 40% 10%; transform: scale(1.05); }
   }
 
-  @keyframes deepFlow {
-    0%   { background-position: 80% 30%; transform: scale(1.05); }
-    50%  { background-position: 20% 80%; transform: scale(1.00); }
-    100% { background-position: 60% 10%; transform: scale(1.06); }
+  @keyframes blueFlow {
+    0%   { background-position: 70% 20%; transform: scale(1.05); }
+    50%  { background-position: 10% 80%; transform: scale(1.15); }
+    100% { background-position: 50% 40%; transform: scale(1.1); }
   }
 </style>
 </head>
 <body>
 
-<div class="lava"></div>
-<div class="lava-deep"></div>
+<div class="red-liquid"></div>
+<div class="blue-liquid"></div>
 
 </body>
 </html>
