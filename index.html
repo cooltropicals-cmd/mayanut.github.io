@@ -54,7 +54,7 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 html{
   margin:0;
   padding:0;
-  background:#ffffff; /* outside / overscroll area white */
+  background:#000000; /* outside / overscroll area */
 }
 html,body{
   scroll-behavior:smooth;
@@ -64,12 +64,8 @@ html,body{
 body{
   margin:0;
   padding:0;
-  background:
-    radial-gradient(circle at 10% 10%, var(--orange) 0, transparent 45%),
-    radial-gradient(circle at 90% 80%, var(--orange-light) 0, transparent 50%),
-    radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
-    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
-  background-attachment:fixed;
+  background:#000009; /* dark base behind gradients */
+  overflow-x:hidden;
 }
 
 /* Visually hidden SEO block */
@@ -298,7 +294,7 @@ body{
   .topbar-logo-link{ display:none; }
 }
 
-/* HERO – animated vivid orange + vivid blue, with snow layer (desktop + mobile) */
+/* HERO – now transparent so muddy gradient shows through */
 .hero{
   position:relative;
   min-height:100vh;
@@ -307,18 +303,7 @@ body{
   align-items:flex-start;
   justify-content:center;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 15% 15%, var(--orange) 0, transparent 50%),
-    radial-gradient(circle at 85% 80%, var(--orange-light) 0, transparent 55%),
-    radial-gradient(circle at 50% 0%, var(--blue-soft) 0, transparent 55%),
-    radial-gradient(circle at 0% 100%, var(--blue-deep) 0, #000028 80%);
-  background-size:200% 200%;
-  animation:lavaMove 40s ease-in-out infinite alternate;
-}
-@keyframes lavaMove{
-  0%{ background-position:0% 0%; }
-  50%{ background-position:100% 50%; }
-  100%{ background-position:0% 100%; }
+  background:transparent;
 }
 .hero-inner{
   width:100%;
@@ -329,7 +314,7 @@ body{
   align-items:center;
   justify-content:flex-start;
   position:relative;
-  z-index:3; /* above snow */
+  z-index:3; /* above gradients + snow */
 }
 .hero-right{
   width:100%;
@@ -472,12 +457,14 @@ body{
   margin:0 auto;
 }
 
-/* STORE SECTION */
+/* STORE SECTION – dark to light orange */
 .section--buy{
-  background:
-    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 60%),
-    radial-gradient(circle at 100% 0%, var(--orange-light) 0, transparent 60%),
-    linear-gradient(180deg,#ffffff 0%,#f3f3ff 100%);
+  background:linear-gradient(
+    180deg,
+    #cc4a00 0%,
+    #ff7a1a 40%,
+    #ffb347 100%
+  ) !important;
   color:#083b7c;
   padding:40px 16px 60px;
 }
@@ -543,13 +530,14 @@ body{
   text-align:center;
 }
 
-/* ABOUT SECTION */
+/* ABOUT SECTION – light blue at top, darker blue further down */
 .section--about{
-  background:
-    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 55%),
-    radial-gradient(circle at 85% 0%, var(--orange-light) 0, transparent 60%),
-    radial-gradient(circle at 50% 50%, var(--blue-mid) 0, transparent 80%),
-    linear-gradient(180deg, #001a80 0%, #000028 100%);
+  background:linear-gradient(
+    180deg,
+    #7fc7ff 0%,
+    #3f8bff 40%,
+    #003b9f 100%
+  ) !important;
   color:#ffffff;
 }
 .about-grid{
@@ -692,14 +680,14 @@ body{
   white-space:nowrap;
 }
 
-/* RESEARCH / BLOG / FAQ / CONTACT sections */
-
-/* Research: dark + light blue gradient, static */
+/* RESEARCH – orange to red */
 .section--research{
-  background:
-    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 65%),
-    radial-gradient(circle at 100% 100%, #001a80 0, transparent 60%),
-    linear-gradient(180deg,#001a80 0%,#000028 100%);
+  background:linear-gradient(
+    180deg,
+    #ff8a1a 0%,
+    #ff4d1a 50%,
+    #b30000 100%
+  ) !important;
   color:#eaf0ff;
 }
 .section--research h2{
@@ -738,12 +726,14 @@ body{
   }
 }
 
-/* Blog: orange + blue gradient */
+/* BLOG – light blue to deep blue */
 .section--blog{
-  background:
-    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, var(--blue-soft) 0, transparent 60%),
-    linear-gradient(180deg,#ffffff 0%,#f3f6ff 100%);
+  background:linear-gradient(
+    180deg,
+    #b5ddff 0%,
+    #5fa8ff 40%,
+    #003a80 100%
+  ) !important;
   color:#2b305f;
 }
 .section--blog h2{
@@ -756,12 +746,14 @@ body{
   font-size:15px;
 }
 
-/* FAQ: orange + blue gradient */
+/* FAQ – orange center to dark orange outer parts */
 .section--faq{
-  background:
-    radial-gradient(circle at 0% 0%, var(--blue-soft) 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, var(--orange-light) 0, transparent 60%),
-    linear-gradient(180deg,#ffffff 0%,#f5f7ff 100%);
+  background:radial-gradient(circle at 50% 50%,
+    #ffb347 0%,
+    #ff7a1a 40%,
+    #cc4a00 75%,
+    #662200 100%
+  ) !important;
   color:#15244a;
 }
 .faq-list{
@@ -781,12 +773,14 @@ body{
   font-size:14px;
 }
 
-/* Contact: orange gradients similar to store section */
+/* CONTACT – blue and light blue gradient */
 .section--contact{
-  background:
-    radial-gradient(circle at 0% 100%, var(--orange) 0, transparent 60%),
-    radial-gradient(circle at 100% 0%, var(--orange-light) 0, transparent 60%),
-    linear-gradient(180deg,#ffffff 0%,#fff7ea 100%);
+  background:linear-gradient(
+    180deg,
+    #b5e1ff 0%,
+    #6bbaff 45%,
+    #002d66 100%
+  ) !important;
   color:#283868;
 }
 .section--contact h2{
@@ -798,11 +792,13 @@ body{
   line-height:1.7;
 }
 
-/* BOTTOM LOGO */
+/* BOTTOM LOGO – orange to dark orange */
 .section--bottom-logo{
-  background:
-    radial-gradient(circle at 0% 0%, #3a7cff 0, transparent 70%),
-    linear-gradient(180deg, #001a80 0%, #000028 100%);
+  background:radial-gradient(circle at 50% 50%,
+    #ffb347 0%,
+    #ff7a1a 40%,
+    #cc4a00 80%
+  ) !important;
   text-align:center;
 }
 .section--bottom-logo img{
@@ -812,10 +808,13 @@ body{
   cursor:pointer;
 }
 
-/* FOOTER */
+/* FOOTER – dark blue outer edges fade to lighter blue center */
 footer{
-  background:
-    linear-gradient(180deg, #001a80 0%, #00001a 100%);
+  background:radial-gradient(circle at center,
+    #1a4cff 0%,
+    #002080 65%,
+    #000028 100%
+  ) !important;
   color:#d5e3ff;
   padding:18px 16px 28px;
   font-size:13px;
@@ -1198,6 +1197,35 @@ footer{
   letter-spacing:1px;
 }
 
+/* FAQ icon – chat bubble with tail + blue ... */
+.faq-icon-bubble{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:2px 7px;
+  margin-right:6px;
+  border-radius:999px;
+  background:#ffffff;
+  position:relative;
+  box-shadow:0 1px 4px rgba(0,0,0,0.3);
+}
+.faq-icon-bubble::after{
+  content:"";
+  position:absolute;
+  left:6px;
+  bottom:-5px;
+  width:9px;
+  height:9px;
+  background:#ffffff;
+  transform:rotate(45deg);
+  box-shadow:0 1px 4px rgba(0,0,0,0.25);
+}
+.faq-icon-dots{
+  font-size:11px;
+  color:#0000df;
+  letter-spacing:1px;
+}
+
 /* Chat assistant panel – anchored to bottom-right */
 .chat-panel{
   position:fixed;
@@ -1342,13 +1370,95 @@ footer{
   .hero-glass{ max-width:70vw; }
 }
 
-/* Mobile: force full-page background white (below footer, bounce edges) */
+/* Mobile: keep background behavior sane */
 @media (max-width:600px){
-  html, body{ background:#ffffff !important; }
+  body{ background:#000009; }
+}
+
+/* MAIN PAGE ANIMATED MUDDY GRADIENT (behind hero) */
+.gradient-base,
+.gradient-muddy,
+.gradient-streaks{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
+}
+
+/* LAYER 1 – main fast-moving gradient (strong colors) */
+.gradient-base {
+  background: linear-gradient(
+    135deg,
+    #ff2b2b,
+    #ff7a1a,
+    #ffb347,
+    #2040ff,
+    #06153f
+  );
+  background-size: 400% 400%;
+  animation: baseFlow 9s ease-in-out infinite alternate;
+  filter: blur(45px);
+}
+
+/* LAYER 2 – muddy overlay (adds dirty in-betweens) */
+.gradient-muddy {
+  background:
+    linear-gradient(
+      215deg,
+      rgba(90, 10, 10, 0.85),
+      rgba(120, 50, 5, 0.85),
+      rgba(15, 20, 60, 0.95),
+      rgba(5, 5, 20, 1)
+    );
+  background-size: 350% 350%;
+  mix-blend-mode: soft-light;
+  filter: blur(65px);
+  opacity: 0.95;
+  animation: muddyFlow 7s ease-in-out infinite alternate;
+}
+
+/* LAYER 3 – highlight streaks (quick color flashes) */
+.gradient-streaks {
+  background:
+    linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 140, 0, 0.0),
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 120, 255, 0.15)
+    );
+  background-size: 300% 300%;
+  mix-blend-mode: screen;
+  filter: blur(40px);
+  animation: streakFlow 6s ease-in-out infinite alternate;
+}
+
+/* Animations */
+@keyframes baseFlow {
+  0%   { background-position: 0% 30%;   transform: scale(1.02); }
+  50%  { background-position: 80% 70%;  transform: scale(1.08); }
+  100% { background-position: 40% 100%; transform: scale(1.03); }
+}
+
+@keyframes muddyFlow {
+  0%   { background-position: 70% 0%;   transform: scale(1.05); opacity: 0.9; }
+  50%  { background-position: 0% 80%;   transform: scale(1.1);  opacity: 1;   }
+  100% { background-position: 60% 40%;  transform: scale(1.03); opacity: 0.85;}
+}
+
+@keyframes streakFlow {
+  0%   { background-position: 0% 50%;   opacity: 0.55; }
+  50%  { background-position: 100% 50%; opacity: 0.9;  }
+  100% { background-position: 50% 0%;   opacity: 0.4;  }
 }
 </style>
 </head>
 <body>
+
+<!-- Animated muddy gradient background (main page / hero) -->
+<div class="gradient-base"></div>
+<div class="gradient-muddy"></div>
+<div class="gradient-streaks"></div>
 
 <!-- Hidden SEO block high in the DOM for search engines and screen readers -->
 <div class="visually-hidden">
@@ -1444,13 +1554,15 @@ FOREVER LOVED
       <div class="nav-modal-section-bottom">
         <a href="#research" data-section="research">RESEARCH</a>
         <a href="#blog" data-section="blog">BLOG</a>
-        <a href="#faq" data-section="faq">FAQ</a>
+        <a href="#faq" data-section="faq">
+          <span class="faq-icon-bubble"><span class="faq-icon-dots">...</span></span>
+          FAQ
+        </a>
         <a href="#contact" data-section="contact">CONTACT</a>
       </div>
     </div>
   </div>
 </div>
-
 <main>
 
   <!-- HERO -->
@@ -1759,7 +1871,6 @@ FOREVER LOVED
     </div>
   </div>
 </footer>
-
 <!-- Welcome popup -->
 <div class="welcome-backdrop" id="welcome-backdrop">
   <div class="welcome-modal">
