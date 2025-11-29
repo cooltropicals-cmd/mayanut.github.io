@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gradient Background Test</title>
+  <title>Lava Lamp Background Test</title>
   <style>
-    /* Reset */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -18,75 +17,118 @@
     }
 
     body {
-      /* Fallback solid color */
-      background: #021943;
+      background: radial-gradient(circle at 50% 10%, #061a4f, #010516 60%);
       overflow: hidden;
       position: relative;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
     }
 
-    /* Main animated gradient */
-    .gradient-layer {
+    /* Container just to keep blobs below any future content */
+    .lava-stage {
       position: fixed;
       inset: 0;
-      background: linear-gradient(
-        135deg,
-        #ff3b30,
-        #ff9f0a,
-        #ffd60a,
-        #ff6b1a,
-        #021943
-      );
-      background-size: 300% 300%;
-      animation: warmFlow 18s ease-in-out infinite alternate;
-      z-index: 1;
+      overflow: hidden;
+      z-index: 0;
     }
 
-    /* Second soft overlay for extra depth with blue + warm glow */
-    .gradient-overlay {
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(255, 220, 130, 0.55), transparent 55%),
-        radial-gradient(circle at 80% 80%, rgba(255, 90, 40, 0.55), transparent 55%),
-        radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.12), transparent 50%),
-        radial-gradient(circle at 80% 10%, rgba(255, 190, 120, 0.35), transparent 55%),
-        radial-gradient(circle at 50% 50%, rgba(2, 15, 70, 0.9), rgba(0, 0, 0, 0.0));
+    .lava-blob {
+      position: absolute;
+      width: 45vmax;
+      height: 45vmax;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.85;
       mix-blend-mode: screen;
-      opacity: 0.9;
       pointer-events: none;
-      animation: overlayDrift 30s ease-in-out infinite alternate;
-      z-index: 2;
+      /* Soft organic gradient inside each blob */
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.5), transparent 45%),
+        radial-gradient(circle at 70% 70%, rgba(0,0,0,0.35), transparent 55%);
     }
 
-    @keyframes warmFlow {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 50% 100%;
-      }
+    /* Each blob gets its own base color + motion */
+
+    .blob-red {
+      background-color: #ff3b30;
+      top: 5%;
+      left: -10%;
+      animation: floatRed 28s ease-in-out infinite alternate;
     }
 
-    @keyframes overlayDrift {
-      0% {
-        transform: translate3d(0, 0, 0) scale(1);
-      }
-      50% {
-        transform: translate3d(-2%, 2%, 0) scale(1.05);
-      }
-      100% {
-        transform: translate3d(2%, -2%, 0) scale(1.02);
-      }
+    .blob-orange {
+      background-color: #ff8c1a;
+      bottom: -10%;
+      left: 10%;
+      animation: floatOrange 32s ease-in-out infinite alternate;
+    }
+
+    .blob-yellow {
+      background-color: #ffd60a;
+      top: 40%;
+      right: -15%;
+      animation: floatYellow 30s ease-in-out infinite alternate;
+    }
+
+    .blob-magenta {
+      background-color: #ff4f8b;
+      bottom: -20%;
+      right: 5%;
+      animation: floatMagenta 36s ease-in-out infinite alternate;
+      opacity: 0.8;
+    }
+
+    .blob-blue-glow {
+      /* big subtle blue wash to keep the deep vivid blue presence */
+      background-color: #021d7a;
+      width: 70vmax;
+      height: 70vmax;
+      top: 10%;
+      left: 15%;
+      opacity: 0.65;
+      filter: blur(70px);
+      animation: floatBlue 40s ease-in-out infinite alternate;
+      mix-blend-mode: lighten;
+    }
+
+    @keyframes floatRed {
+      0%   { transform: translate3d(0, 0, 0) scale(1.0); }
+      50%  { transform: translate3d(15%, 10%, 0) scale(1.2); }
+      100% { transform: translate3d(5%, -5%, 0) scale(0.95); }
+    }
+
+    @keyframes floatOrange {
+      0%   { transform: translate3d(0, 0, 0) scale(1.1); }
+      50%  { transform: translate3d(-10%, -15%, 0) scale(0.9); }
+      100% { transform: translate3d(5%, -5%, 0) scale(1.15); }
+    }
+
+    @keyframes floatYellow {
+      0%   { transform: translate3d(0, 0, 0) scale(0.95); }
+      50%  { transform: translate3d(-10%, 10%, 0) scale(1.15); }
+      100% { transform: translate3d(-5%, -10%, 0) scale(1.0); }
+    }
+
+    @keyframes floatMagenta {
+      0%   { transform: translate3d(0, 0, 0) scale(1.0); }
+      50%  { transform: translate3d(-5%, -10%, 0) scale(1.25); }
+      100% { transform: translate3d(10%, -5%, 0) scale(0.9); }
+    }
+
+    @keyframes floatBlue {
+      0%   { transform: translate3d(0, 0, 0) scale(1.05); }
+      50%  { transform: translate3d(-5%, 5%, 0) scale(1.15); }
+      100% { transform: translate3d(5%, -5%, 0) scale(1.0); }
     }
   </style>
 </head>
 <body>
-  <!-- Pure background test: no content -->
-  <div class="gradient-layer"></div>
-  <div class="gradient-overlay"></div>
+  <!-- Pure lava-lamp background (no content) -->
+  <div class="lava-stage">
+    <div class="lava-blob blob-blue-glow"></div>
+    <div class="lava-blob blob-red"></div>
+    <div class="lava-blob blob-orange"></div>
+    <div class="lava-blob blob-yellow"></div>
+    <div class="lava-blob blob-magenta"></div>
+  </div>
 </body>
 </html>
