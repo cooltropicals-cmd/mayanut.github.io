@@ -7,18 +7,13 @@
 
   <style>
     :root{
-      /* Warm red/orange gradients + NEW blue edges */
-      --bg:#00153a; /* dark blue base behind the red */
+      /* EXACT SAME GRADIENT COLORS */
+      --bg:#00153a;
       --bg-grad:
-        /* Blue glow around edges */
         radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 60, 200, 0.85) 100%),
-
-        /* Original warm red/orange center gradients */
         radial-gradient(circle at 50% 20%, #ffb347 0, #ff7043 35%, transparent 70%),
         radial-gradient(circle at 0% 100%, #ff3b3b 0, #b71c1c 55%, transparent 80%),
         radial-gradient(circle at 100% 100%, #ff3b3b 0, #b71c1c 55%, transparent 80%),
-
-        /* Base fallback */
         #3a0008;
     }
 
@@ -35,11 +30,19 @@
 
     body{
       background:var(--bg-grad);
-      background-attachment:fixed;
       background-repeat:no-repeat;
-      background-size:cover;
+      background-size:230% 230%; /* slightly larger to allow movement */
       overflow:hidden;
       font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      /* Smooth, subtle movement */
+      animation: bgMove 32s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgMove {
+      0%   { background-position: 45% 45%; }
+      50%  { background-position: 55% 60%; }
+      100% { background-position: 48% 50%; }
     }
   </style>
 </head>
