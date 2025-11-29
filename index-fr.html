@@ -7,13 +7,20 @@
 
   <style>
     :root{
-      /* Warm red/orange gradients + blue edges */
+      /* Deep blue outer aura */
       --bg:#00153a;
       --bg-grad:
-        radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 60, 200, 0.85) 100%),
+        /* Stronger blue edge glow */
+        radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 75, 255, 0.95) 100%),
+
+        /* Additional blue layer for deeper edges */
+        radial-gradient(circle at 50% 50%, transparent 45%, rgba(0, 40, 180, 0.85) 100%),
+
+        /* Original warm red/orange layers */
         radial-gradient(circle at 50% 20%, #ffb347 0, #ff7043 35%, transparent 70%),
         radial-gradient(circle at 0% 100%, #ff3b3b 0, #b71c1c 55%, transparent 80%),
         radial-gradient(circle at 100% 100%, #ff3b3b 0, #b71c1c 55%, transparent 80%),
+
         #3a0008;
     }
 
@@ -31,18 +38,18 @@
     body{
       background:var(--bg-grad);
       background-repeat:no-repeat;
-      background-size:200% 200%;
+      background-size:260% 260%; /* more room to move */
       overflow:hidden;
       font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-      /* Gentle animation */
-      animation: slowShift 40s ease-in-out infinite alternate;
+      /* More visible motion, still smooth */
+      animation: slowShift 26s ease-in-out infinite alternate;
     }
 
     @keyframes slowShift {
-      0%   { background-position: 48% 48%; }
-      50%  { background-position: 52% 52%; }
-      100% { background-position: 49% 51%; }
+      0%   { background-position: 45% 45%; }
+      50%  { background-position: 55% 60%; }
+      100% { background-position: 50% 40%; }
     }
   </style>
 </head>
