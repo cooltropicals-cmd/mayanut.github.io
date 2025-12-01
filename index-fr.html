@@ -1,27 +1,171 @@
-:root{
-  --blue-dark: #0038d4;   /* from your logo */
-  --blue-light: #00a9ff;  /* from your logo */
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>MayaNut Gradient Test – Clean Version</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-/* Hero Button */
-.hero-btn{
-  background:linear-gradient(135deg,
-    var(--blue-dark) 0%,
-    var(--blue-light) 100%
-  );
-}
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Bungee&display=swap" rel="stylesheet">
 
-/* Optional: section titles when we apply it to full site */
-.section-title{
-  color:var(--blue-dark);
-}
+  <style>
+    :root{
+      /* Your logo blues */
+      --blue-dark:#0803d4;
+      --blue-light:#00b6fb;
 
-/* Optional: paragraph backgrounds */
-.section-paragraph{
-  background:var(--blue-light);
-}
+      /* Hero background: darker corners + softer orange center, all blended */
+      --hero-bg:
+        radial-gradient(circle at 50% 45%,
+          #e85a00 0%,        /* vivid orange core */
+          #ff9b2f 20%,       /* warm orange ring */
+          #ffd34d 37%,       /* golden yellow */
+          #9acb4a 55%,       /* yellow-green bridge */
+          #2f7b3b 72%,       /* mid green */
+          #052f19 90%,       /* deep forest green */
+          #000b03 100%       /* very dark edge */
+        );
 
-/* FAQ chat bubble dots */
-.chat-icon-dots{
-  color:var(--blue-light);
-}
+      /* Top / bottom bar: dark outer → vivid green center */
+      --bar-green:linear-gradient(90deg,
+        #000b03 0%,
+        #0a6f2f 50%,
+        #000b03 100%
+      );
+
+      /* Soft aura behind logo block (optional) */
+      --logo-bg:
+        radial-gradient(circle at 50% 50%,
+          #e85a00 0%,
+          #ffb63a 22%,
+          #65c845 45%,
+          #045323 72%,
+          #001809 100%
+        );
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background:var(--hero-bg);
+      background-attachment:fixed;
+      background-repeat:no-repeat;
+      background-size:cover;
+      color:#ffffff;
+      overflow-x:hidden;
+    }
+
+    /* TOP BAR */
+    .topbar{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:70px;
+      background:var(--bar-green);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size:18px;
+      letter-spacing:0.08em;
+      color:#ffffff;
+      text-shadow:0 1px 2px rgba(0,0,0,0.6);
+      border-bottom:2px solid rgba(255,255,255,0.35);
+      z-index:10;
+    }
+
+    /* HERO */
+    .hero{
+      min-height:100vh;
+      padding:90px 16px 80px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      background:var(--hero-bg);
+    }
+
+    .hero-logo{
+      width:260px;
+      max-width:80vw;
+      padding:22px;
+      border-radius:30px;
+      background:var(--logo-bg);
+      box-shadow:0 0 38px rgba(0,0,0,0.45);
+      margin-bottom:40px;
+    }
+
+    .hero-logo img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .hero-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px 70px;
+      border-radius:999px;
+      border:none;
+      text-decoration:none;
+      font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size:24px;
+      letter-spacing:0.12em;
+      text-transform:uppercase;
+      background:linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-light) 100%);
+      color:#ffffff;
+      box-shadow:0 5px 16px rgba(0,0,0,0.35);
+      cursor:pointer;
+      transition:transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .hero-btn:hover{
+      transform:scale(1.03);
+      box-shadow:0 7px 20px rgba(0,0,0,0.45);
+    }
+
+    /* BOTTOM STRIP */
+    .bottom-strip{
+      height:70px;
+      background:var(--bar-green);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size:18px;
+      letter-spacing:0.08em;
+      color:#ffffff;
+      text-shadow:0 1px 2px rgba(0,0,0,0.6);
+      border-top:2px solid rgba(255,255,255,0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    THE MAYANUT COMPANY
+  </header>
+
+  <main>
+    <section class="hero">
+      <!-- Wrap your logo in this block so it gets the glow -->
+      <div class="hero-logo">
+        <img src="mayanut-the-maya-nut-company-logo.png"
+             alt="The MayaNut Company logo">
+      </div>
+
+      <a href="#buy" class="hero-btn">TRY NOW!</a>
+    </section>
+  </main>
+
+  <div class="bottom-strip">
+    SCROLL TO EXPLORE
+  </div>
+
+</body>
+</html>
