@@ -19,18 +19,17 @@
 <meta name="theme-color" content="#02401a" />
 <meta name="robots" content="index,follow" />
 
-<!-- SEO: description + keywords -->
-<meta name="description" content="The MayaNut Company – maya nut beverage, powder and flour from Brosimum alicastrum, also known as breadnut, ojoche, ramón, guaimaro. Tropical trees, agroforestry, Florida plantations and future maya nut drinks and foods.">
+<!-- SEO: description + keywords – all text visible on this page -->
+<meta name="description" content="The MayaNut Company – maya nut beverage, powder and flour from Brosimum alicastrum (maya nut, breadnut, ramón, ojoche, guaimaro). Tropical agroforestry research and Florida plantations by The MayaNut Company.">
 <meta name="keywords" content="
-Maya nut, maya nut drink, maya nut beverage, maya nut powder, maya nut flour, The MayaNut Company, themayanutcompany, mayanut.com,
-mayanut, MayaNut, Brosimum alicastrum, breadnut, bread nut, ojoche, ramón, guaimaro, oox, ox, guayumaro,
-tropical trees, tropical tree crops, rainforest trees, agroforestry, Florida tropical agriculture, Florida agroforestry, South Florida trees,
-玛雅坚果, 面包果, 热带树木, 热带雨林树, Brosimum alicastrum,
-माया नट, मयानट, ब्रेडनट, उष्णकटिबंधीय पेड़, Brosimum alicastrum,
-Майя-нут, маянут, хлебное дерево, тропические деревья, Brosimum alicastrum,
-nuez maya, nuez de ramón, ramón, ojoche, árbol tropical, árbol de la selva tropical, Brosimum alicastrum,
-noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum alicastrum,
-مايا نت, جوز المايا, شجرة استوائية, Brosimum alicastrum
+Maya nut, The MayaNut Company, mayanut.com, maya nut drink, maya nut beverage, maya nut powder, maya nut flour, maya nut Florida, maya nut plantation, Brosimum alicastrum, breadnut, bread nut, nuez de ramón, ojoche, guaimaro, guayumaro,
+maya nut agroforestry, tropical trees Florida, subtropical agriculture Florida, South Florida plantation,
+玛雅坚果, 面包果, Brosimum alicastrum, 热带树木,
+माया नट, ब्रेडनट, Brosimum alicastrum,
+Майя-нут, хлебное дерево, Brosimum alicastrum,
+nuez maya, nuez de ramón, ojoche, árbol tropical,
+noz maia, Brosimum alicastrum, árvore tropical,
+مايا نت, جوز المايا, شجرة استوائية
 ">
 
 <style>
@@ -39,55 +38,60 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
   --brand-blue-dark:#0803d4;
   --brand-blue-light:#00b6fb;
 
-  /* Accent cyan for titles/buttons */
+  /* Accent cyan for titles/buttons/text */
   --accent-cyan:#00fff2;
 
   /* Jungle gradient core */
-  --orange:#ff941f;
+  --orange:#ff8a00;
   --orange-light:#ffc85a;
+  --jungle-green:#065f46;
+  --jungle-deep:#022c22;
+
   --bg:#001109;
   --bg-grad:
-    radial-gradient(circle at 50% 35%,
+    radial-gradient(circle at 50% 30%,
       #ff8a00 0%,
-      #ffd85a 30%,
-      #15803d 70%,
+      #ffd85a 32%,
+      #15803d 68%,
       #022c22 100%);
 
   /* Top/bottom bar height */
   --bar-h:72px;
 }
 
-/* Slightly taller bar on very small screens */
 @media (max-width:600px){
   :root{ --bar-h:90px; }
 }
 
-/* GLOBAL */
+/* GLOBAL RESET */
 *,
 *::before,
-*::after{ box-sizing:border-box; }
+*::after{
+  box-sizing:border-box;
+}
 
 html{
   margin:0;
   padding:0;
   background:#000009;
+  min-height:100%;
 }
-html,body{
-  scroll-behavior:smooth;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color:#fff;
-}
+
 body{
   margin:0;
   padding:0;
+  min-height:100vh;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color:#ffffff;
   background:var(--bg-grad);
   background-attachment:fixed;
   background-repeat:no-repeat;
   background-size:cover;
+  background-position:center top;
   overflow-x:hidden;
 }
 
-/* Visually hidden SEO block */
+/* Hidden SEO block – still indexable, but visually off-screen */
 .visually-hidden{
   position:absolute;
   width:1px;
@@ -153,7 +157,7 @@ body{
   transform:translateY(-6px) rotate(-45deg);
 }
 
-/* Title in top bar – WHITE like you asked */
+/* Title in top bar – WHITE */
 .topbar-title{
   grid-area:title;
   font-family:"Mountains of Christmas", cursive;
@@ -214,9 +218,9 @@ body{
   position:fixed;
   top:calc(var(--bar-h) + 2px);
   right:10px;
-  background:rgba(0,0,0,0.92);
+  background:rgba(0,0,0,0.94);
   border-radius:12px;
-  border:1px solid rgba(255,255,255,0.6);
+  border:1px solid rgba(255,255,255,0.7);
   box-shadow:0 8px 20px rgba(0,0,0,0.6);
   padding:6px 0;
   z-index:1500;
@@ -245,7 +249,7 @@ body{
   text-underline-offset:3px;
 }
 
-/* topbar tweaks small screens */
+/* Mobile tweaks */
 @media (max-width:420px){
   .topbar-lang-label-text{
     display:inline;
@@ -257,7 +261,7 @@ body{
   }
 }
 
-/* MOBILE TOPBAR LOGO */
+/* MOBILE TOPBAR LOGO INLINE */
 .topbar-logo-inline{
   display:none;
 }
@@ -351,7 +355,6 @@ body{
   overflow:hidden;
   z-index:1;
 }
-/* drifting snowflakes */
 .snowflake{
   position:absolute;
   top:-12vh;
@@ -439,6 +442,7 @@ body{
   0%,100%{ opacity:0; }
   50%{ opacity:1; }
 }
+
 /* TRANSITION STRIP – dark blue band */
 .transition-strip{
   background:linear-gradient(90deg, #001a80 0%, #2e7aff 50%, #001a80 100%);
@@ -456,7 +460,7 @@ body{
   box-shadow:0 3px 8px rgba(0,0,0,0.55);
 }
 
-/* GENERIC SECTION (transparent so gradient shows through) */
+/* GENERIC SECTION */
 .section{
   padding:70px 16px 80px;
   position:relative;
@@ -469,7 +473,7 @@ body{
   margin:0 auto;
 }
 
-/* STORE SECTION – transparent but card backgrounds inside */
+/* STORE SECTION */
 .section--buy{
   background:transparent;
   color:#ffffff;
@@ -510,17 +514,17 @@ body{
   flex-direction:column;
   align-items:center;
 }
+
+/* Store image box – BLUE paragraph-style background but keep inner gradient idea */
 .store-item-image{
   width:100%;
   aspect-ratio:4/5;
   border-radius:14px;
-  background:radial-gradient(circle at 30% 20%, #ffe0b2 0, #ffffff 45%, #ffcc80 100%);
+  background:
+    linear-gradient(135deg, #020617 0%, #1d4ed8 50%, #0b1f4f 100%);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#5f3b15;
-  font-weight:600;
-  font-size:14px;
   margin-bottom:10px;
   overflow:hidden;
 }
@@ -604,7 +608,7 @@ body{
   .img-expand-hint{ display:none; }
 }
 
-/* About text column – uses blue gradient cards */
+/* About text column – blue gradient cards */
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -628,7 +632,7 @@ body{
   display:inline-block;
   padding:4px 10px;
   border-radius:999px;
-  background:linear-gradient(135deg, rgba(8,3,212,0.8), rgba(0,182,251,0.8));
+  background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
 }
 
 /* Paragraph tints for main sections */
@@ -654,7 +658,7 @@ body{
   display:inline-block;
   padding:4px 10px;
   border-radius:999px;
-  background:linear-gradient(135deg, rgba(8,3,212,0.8), rgba(0,182,251,0.8));
+  background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
 }
 .research-grid{
   display:grid;
@@ -683,7 +687,7 @@ body{
   display:inline-block;
   padding:4px 10px;
   border-radius:999px;
-  background:linear-gradient(135deg, rgba(8,3,212,0.8), rgba(0,182,251,0.8));
+  background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
 }
 
 /* GALLERY SECTION */
@@ -707,21 +711,21 @@ body{
   position:relative;
   margin-top:24px;
 }
+
+/* Gallery grid – dark blue borders between images */
 .gallery-block{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:8px;
+  gap:2px;
   margin-bottom:28px;
-}
-.gallery-block-extra{
-  display:none;
+  position:relative;
 }
 .gallery-item{
   position:relative;
   overflow:hidden;
   border-radius:10px;
   box-shadow:0 2px 8px rgba(0,0,0,0.75);
-  border:1px solid rgba(16,185,129,0.85);
+  border:1px solid #020617; /* dark blue lines */
 }
 .gallery-item img{
   display:block;
@@ -730,33 +734,48 @@ body{
   aspect-ratio:1/1;
   object-fit:cover;
 }
+
+/* Faded bottom for first block */
 .gallery-block.gallery-faded::after{
   content:"";
   position:absolute;
   left:0;
   right:0;
   bottom:0;
-  height:50%;
+  height:55%;
   pointer-events:none;
-  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0.7) 90%);
+  background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,0.75) 95%);
+  z-index:1;
 }
+
+/* Load more button – circle dark blue, light blue arrow */
 .gallery-more-wrap{
   text-align:center;
-  margin-top:-10px;
+  margin-top:12px;
   margin-bottom:10px;
+  position:relative;
+  z-index:2;
 }
 .gallery-more-btn{
   border:none;
-  border-radius:999px;
-  padding:10px 26px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:14px;
-  letter-spacing:0.06em;
-  text-transform:uppercase;
+  border-radius:50%;
+  width:44px;
+  height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
   cursor:pointer;
-  background:linear-gradient(135deg,#0803d4 0%,#00b6fb 100%);
+  background:linear-gradient(135deg,#020617 0%,#1d4ed8 100%);
   color:var(--accent-cyan);
   box-shadow:0 3px 10px rgba(0,0,0,0.7);
+}
+.gallery-more-btn span{
+  display:block;
+  transform:translateY(1px);
+}
+.gallery-block-extra{
+  display:none;
 }
 
 /* BLOG */
@@ -787,7 +806,7 @@ body{
   display:inline-block;
   padding:4px 10px;
   border-radius:999px;
-  background:linear-gradient(135deg, rgba(8,3,212,0.8), rgba(0,182,251,0.8));
+  background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
 }
 
 /* CONTACT */
@@ -892,7 +911,7 @@ footer{
   margin-top:6px;
 }
 
-/* Move IG away from chat on mobile */
+/* IG position on mobile */
 @media(max-width:600px){
   .footer-row{
     justify-content:flex-start;
@@ -903,7 +922,7 @@ footer{
   }
 }
 
-/* NAV OVERLAY + RICKY */
+/* NAV OVERLAY + RICKY TILE */
 .nav-backdrop{
   position:fixed;
   inset:0;
@@ -925,11 +944,12 @@ footer{
   text-align:left;
   font-size:15px;
   line-height:1.7;
-  background:
-    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 55%),
-    radial-gradient(circle at 100% 100%, var(--orange-light) 0, transparent 60%),
-    linear-gradient(135deg, #001a80 0%, #00001a 100%);
   position:relative;
+  /* ORANGE + GREEN gradient background */
+  background:
+    radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 60%),
+    radial-gradient(circle at 100% 100%, #16a34a 0, transparent 60%),
+    linear-gradient(135deg, #064e3b 0%, #022c22 100%);
 }
 .nav-modal-title{
   margin:0 0 4px;
@@ -974,13 +994,13 @@ footer{
   bottom:4px;
   width:calc(100% - 24px);
   height:2px;
-  background:var(--orange);
+  background:var(--orange-light);
   transform:scaleX(0);
   transform-origin:left;
   transition:transform 0.15s ease;
 }
 .nav-modal-links a:hover{
-  background:rgba(0,0,0,0.35);
+  background:rgba(0,0,0,0.3);
 }
 .nav-modal-links a:hover::after{
   transform:scaleX(1);
@@ -993,6 +1013,8 @@ footer{
   transform:scaleX(1);
   height:3px;
 }
+
+/* Easter egg logo wrapper */
 .nav-logo-easter-wrapper{
   display:flex;
   justify-content:center;
@@ -1007,25 +1029,32 @@ footer{
   user-select:none;
   position:relative;
 }
-#nav-ricky-message{
+
+/* New draggable RICKY tile */
+#nav-ricky-tile{
   position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
+  width:140px;
+  height:140px;
+  background:#020617;
+  border-radius:18px;
+  border:2px solid var(--brand-blue-light);
+  color:var(--accent-cyan);
+  box-shadow:0 4px 14px rgba(0,0,0,0.8);
+  display:none;
+  padding:10px;
   font-size:11px;
   line-height:1.4;
-  background:#ffffff;
-  color:#000000;
-  border-radius:18px;
-  opacity:0;
-  pointer-events:none;
-  white-space:pre-line;
-  padding:8px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.7);
-  transition:opacity 0.3s ease;
+  text-align:center;
+  z-index:20;
+  pointer-events:auto;
 }
+#nav-ricky-tile p{
+  margin:0;
+  background:none;
+  padding:0;
+}
+
+/* Nav close button */
 .nav-close{
   position:absolute;
   top:10px;
@@ -1078,12 +1107,12 @@ footer{
   cursor:pointer;
 }
 
-/* Welcome popup */
+/* Welcome popup – orange + green gradient */
 .welcome-backdrop{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.6);
-  display:none;
+  display:flex; /* show on desktop + mobile every load */
   align-items:center;
   justify-content:center;
   z-index:2500;
@@ -1105,7 +1134,8 @@ footer{
   padding:20px 22px 22px;
   background:
     radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 60%),
-    linear-gradient(135deg, #001a80 0%, #00001a 100%);
+    radial-gradient(circle at 100% 100%, #16a34a 0, transparent 60%),
+    linear-gradient(135deg, #064e3b 0%, #022c22 100%);
   box-shadow:0 10px 30px rgba(0,0,0,0.7);
   color:#ffffff;
 }
@@ -1185,19 +1215,19 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Inner chat bubble – FIXED tail (no diamond visible inside) */
+/* Chat bubble icon – cleaned up speech bubble */
 .chat-icon-bubble{
   position:relative;
-  padding:5px 11px;
+  padding:6px 12px;
   border-radius:14px;
   background:#ffffff;
   display:flex;
   align-items:center;
   justify-content:center;
   min-width:30px;
-  min-height:18px;
+  min-height:20px;
   box-shadow:0 1px 4px rgba(0,0,0,0.25);
-  overflow:hidden; /* hides inner diamond edges */
+  overflow:hidden;
 }
 .chat-icon-bubble::after{
   content:"";
@@ -1286,6 +1316,38 @@ footer{
   color:#ffffff;
 }
 
+/* Lightbox for images */
+.img-lightbox-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2600;
+}
+.img-lightbox-content{
+  position:relative;
+  max-width:95vw;
+  max-height:90vh;
+}
+.img-lightbox-img{
+  max-width:100%;
+  max-height:90vh;
+  border-radius:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.9);
+}
+.img-lightbox-close{
+  position:absolute;
+  top:-28px;
+  right:0;
+  border:none;
+  background:transparent;
+  color:#ffffff;
+  font-size:26px;
+  cursor:pointer;
+}
+
 /* Title wiggle */
 @keyframes merrygiggle{
   0%{ transform:translateX(0); }
@@ -1295,7 +1357,7 @@ footer{
   100%{ transform:translateX(0); }
 }
 
-/* Responsive tweaks hero + about + store */
+/* Responsive tweaks hero + about + store + gallery */
 @media(max-width:800px){
   .hero{
     padding-top:calc(var(--bar-h) + 77px);
@@ -1344,6 +1406,14 @@ footer{
   .store-item{
     flex:0 0 55vw;
   }
+
+  /* Gallery: 3 columns, only first 9 images in block 1 */
+  .gallery-block{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  #gallery-block-1 .gallery-item:nth-child(n+10){
+    display:none;
+  }
 }
 @media(max-width:380px){
   .hero-glass{ max-width:70vw; }
@@ -1352,10 +1422,10 @@ footer{
 </head>
 <body>
 
-<!-- Hidden SEO block -->
+<!-- Hidden SEO block – all words indexable on a single page -->
 <div class="visually-hidden">
-  <h1>The MayaNut Company – maya nut beverage, maya nut, mayanut, breadnut, mayan breadnut, powder from Brosimum alicastrum</h1>
-  <p>The MayaNut Company at mayanut.com is developing one of Florida’s first plantations of Brosimum alicastrum (maya nut, breadnut, ojoche, ramón, guaimaro). This page describes our maya nut beverages, powders and flours, tropical trees, agroforestry research, blog, FAQ and how to contact The MayaNut Company.</p>
+  <h1>The MayaNut Company – maya nut beverage, breadnut, ojoche, ramón, Brosimum alicastrum</h1>
+  <p>The MayaNut Company at mayanut.com is developing tropical plantations of Brosimum alicastrum (maya nut, breadnut, ramón, ojoche, guaimaro) in Florida. This single page describes our maya nut beverage concepts, powder and flour ideas, agroforestry research, FAQ, gallery, and contact information.</p>
 </div>
 
 <header class="topbar">
@@ -1414,7 +1484,6 @@ footer{
 <a href="#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
-
 <!-- NAV OVERLAY WITH RICKY EASTER EGG -->
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
@@ -1433,13 +1502,17 @@ footer{
         <img src="mayanut-the-maya-nut-company-logo.png"
              alt="The MayaNut Company logo"
              id="nav-logo-easter">
-        <div id="nav-ricky-message">
+
+        <!-- NEW draggable Ricky tile -->
+        <div id="nav-ricky-tile">
+          <p>
+💙🧡💙<br>
+THIS SITE IS<br>
+DEDICATED TO RICKY<br>
+FOREVER LOVED<br>
+BY THE MAYANUT COMPANY<br>
 💙🧡💙
-THE MAYANUT COMPANY
-DEDICATES THIS WEBSITE
-AND OUR TREES TO RICKY
-FOREVER LOVED!
-💙🧡💙
+          </p>
         </div>
       </div>
 
@@ -1449,6 +1522,8 @@ FOREVER LOVED!
         <a href="#blog" data-section="blog">BLOG</a>
         <a href="#faq" data-section="faq">FAQ</a>
         <a href="#contact" data-section="contact">CONTACT</a>
+        <!-- Extra tab under contact -->
+        <a href="#top" data-section="brand">THE MAYANUT COMPANY</a>
       </div>
     </div>
   </div>
@@ -1463,7 +1538,7 @@ FOREVER LOVED!
 
     <div class="hero-inner">
       <div class="hero-right">
-        <!-- Text image block -->
+        <!-- Text image block: desktop vs mobile -->
         <div class="hero-text-wrap">
           <picture>
             <source srcset="desktop-maya-nut-beverage-brosimum-alicastrum.png" media="(min-width: 801px)">
@@ -1740,9 +1815,9 @@ FOREVER LOVED!
 
       <div class="gallery-grid-wrapper">
 
-        <!-- First 3 rows -->
+        <!-- First block – on mobile becomes 3×3 (first 9 images only) with fade -->
         <div class="gallery-block gallery-faded" id="gallery-block-1">
-          <!-- 15 images: 3 rows × 5 columns -->
+          <!-- 15 images; CSS hides 10+ on small screens -->
           <!-- Row 1 -->
           <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 1"></div>
           <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 2"></div>
@@ -1764,10 +1839,12 @@ FOREVER LOVED!
         </div>
 
         <div class="gallery-more-wrap" id="gallery-more-1-wrap">
-          <button class="gallery-more-btn" id="gallery-more-1-btn">Click to view more</button>
+          <button class="gallery-more-btn" id="gallery-more-1-btn" aria-label="Show more gallery images">
+            <span>▼</span>
+          </button>
         </div>
 
-        <!-- Second set -->
+        <!-- Second block -->
         <div class="gallery-block gallery-block-extra" id="gallery-block-2">
           <!-- Row 4 -->
           <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 16"></div>
@@ -1790,10 +1867,12 @@ FOREVER LOVED!
         </div>
 
         <div class="gallery-more-wrap" id="gallery-more-2-wrap" style="display:none;">
-          <button class="gallery-more-btn" id="gallery-more-2-btn">Click to see more</button>
+          <button class="gallery-more-btn" id="gallery-more-2-btn" aria-label="Show more gallery images">
+            <span>▼</span>
+          </button>
         </div>
 
-        <!-- Third set -->
+        <!-- Third block -->
         <div class="gallery-block gallery-block-extra" id="gallery-block-3">
           <!-- Row 7 -->
           <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 31"></div>
@@ -1914,7 +1993,7 @@ FOREVER LOVED!
   </div>
 </footer>
 
-<!-- Welcome popup -->
+<!-- Welcome popup – now shows on desktop and mobile -->
 <div class="welcome-backdrop" id="welcome-backdrop">
   <div class="welcome-modal">
     <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
@@ -1946,7 +2025,7 @@ FOREVER LOVED!
 </div>
 
 <!-- Lightbox for expanded images -->
-<div class="img-lightbox-backdrop" id="img-lightbox-backdrop" style="display:none;">
+<div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
   <div class="img-lightbox-content">
     <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
     <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
@@ -2046,49 +2125,102 @@ FOREVER LOVED!
   backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
 })();
 
-/* NAV OVERLAY */
+/* NAV OVERLAY + LINK HIGHLIGHTING */
 (function(){
   const toggle=document.getElementById('menu-toggle');
   const backdrop=document.getElementById('nav-backdrop');
   const closeBtn=document.getElementById('nav-close');
+  const links = backdrop ? backdrop.querySelectorAll('.nav-modal-links a') : [];
 
   if(!toggle || !backdrop || !closeBtn) return;
+
+  function closeNav(){
+    toggle.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
 
   toggle.addEventListener('click',()=>{
     toggle.classList.toggle('open');
     backdrop.classList.toggle('open');
   });
 
-  closeBtn.addEventListener('click',()=>{
-    toggle.classList.remove('open');
-    backdrop.classList.remove('open');
-  });
+  closeBtn.addEventListener('click',closeNav);
 
   backdrop.addEventListener('click',e=>{
     if(e.target===backdrop){
-      toggle.classList.remove('open');
-      backdrop.classList.remove('open');
+      closeNav();
     }
+  });
+
+  links.forEach(link=>{
+    link.addEventListener('click',()=>{
+      closeNav();
+    });
+  });
+
+  window.addEventListener('hashchange',()=>{
+    const hash = window.location.hash || '#top';
+    links.forEach(a=>{
+      const sec=a.getAttribute('data-section');
+      if(!sec){ a.classList.remove('nav-link-active'); return; }
+      if(hash==='#'+sec || (hash==='#top' && sec==='top')){
+        a.classList.add('nav-link-active');
+      }else{
+        a.classList.remove('nav-link-active');
+      }
+    });
   });
 })();
 
-/* RICKY EASTER EGG – click = home, drag = message toggle */
+/* RICKY EASTER EGG – drag to show draggable tile, click logo = home, tile click toggles image/home */
 (function(){
   const logo = document.getElementById('nav-logo-easter');
-  const msg = document.getElementById('nav-ricky-message');
-  if(!logo || !msg) return;
+  const tile = document.getElementById('nav-ricky-tile');
+  const backdrop = document.getElementById('nav-backdrop');
+  if(!logo || !tile || !backdrop) return;
 
   let startX=null, startY=null, dragging=false, pointerId=null;
+  let tileDragged=false;
+  let tileClickStage=0; // 0 = message, 1 = showing ricky.jpeg
 
-  function reset(){
-    startX=null;
-    startY=null;
-    dragging=false;
-    pointerId=null;
+  function goHomeAndReset(){
+    // go home (top of page), close nav, reset tile
+    window.location.hash = '#top';
+    const menuToggle=document.getElementById('menu-toggle');
+    if(menuToggle){
+      menuToggle.classList.remove('open');
+    }
+    backdrop.classList.remove('open');
+    tile.style.display='none';
+    tileClickStage=0;
+    tileDragged=false;
+    // restore tile content to text
+    tile.innerHTML = `<p>
+💙🧡💙<br>
+THIS SITE IS<br>
+DEDICATED TO RICKY<br>
+FOREVER LOVED<br>
+BY THE MAYANUT COMPANY<br>
+💙🧡💙
+</p>`;
   }
 
+  // Helper: set tile position under pointer
+  function positionTile(clientX, clientY){
+    const modal = tile.closest('.nav-modal');
+    if(!modal) return;
+    const rect = modal.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    tile.style.left = x + 'px';
+    tile.style.top  = y + 'px';
+    tile.style.transform = 'translate(-50%, -50%)';
+  }
+
+  // LOGO pointer logic
   logo.addEventListener('pointerdown', e=>{
     dragging=false;
+    tileDragged=false;
     startX=e.clientX;
     startY=e.clientY;
     pointerId=e.pointerId;
@@ -2101,6 +2233,9 @@ FOREVER LOVED!
     const dy=Math.abs(e.clientY-startY);
     if(dx>6 || dy>6){
       dragging=true;
+      // show tile and move with pointer
+      tile.style.display='block';
+      positionTile(e.clientX, e.clientY);
     }
   });
 
@@ -2109,14 +2244,80 @@ FOREVER LOVED!
       try{ logo.releasePointerCapture(pointerId); }catch(_){}
     }
     if(dragging){
-      msg.style.opacity = (msg.style.opacity==='1') ? '0' : '1';
+      tileDragged=true;
+      // leave tile where last placed
     }else{
-      window.location.hash = '#top';
+      // simple click on logo: go home & reset
+      goHomeAndReset();
     }
-    reset();
+    startX=null;
+    startY=null;
+    dragging=false;
+    pointerId=null;
   });
 
-  logo.addEventListener('pointercancel', reset);
+  logo.addEventListener('pointercancel', ()=>{
+    startX=null;
+    startY=null;
+    dragging=false;
+    pointerId=null;
+  });
+
+  // TILE dragging
+  (function(){
+    let tPointerId=null;
+    let tStartX=null, tStartY=null;
+    let tDragging=false;
+
+    tile.addEventListener('pointerdown', e=>{
+      tDragging=false;
+      tStartX=e.clientX;
+      tStartY=e.clientY;
+      tPointerId=e.pointerId;
+      tile.setPointerCapture(tPointerId);
+    });
+
+    tile.addEventListener('pointermove', e=>{
+      if(tStartX===null) return;
+      const dx=Math.abs(e.clientX-tStartX);
+      const dy=Math.abs(e.clientY-tStartY);
+      if(dx>3 || dy>3){
+        tDragging=true;
+        positionTile(e.clientX, e.clientY);
+        tileDragged=true;
+      }
+    });
+
+    tile.addEventListener('pointerup', e=>{
+      if(tPointerId!==null){
+        try{ tile.releasePointerCapture(tPointerId); }catch(_){}
+      }
+      if(!tDragging){
+        // click on tile: after dragging, we toggle image/home
+        if(tileDragged){
+          if(tileClickStage===0){
+            // switch to Ricky image
+            tile.innerHTML = `<img src="ricky.jpeg" alt="Ricky dedication" style="width:100%; height:100%; object-fit:cover; border-radius:14px;">`;
+            tileClickStage=1;
+          }else{
+            // second click -> home + reset
+            goHomeAndReset();
+          }
+        }
+      }
+      tPointerId=null;
+      tStartX=null;
+      tStartY=null;
+      tDragging=false;
+    });
+
+    tile.addEventListener('pointercancel', ()=>{
+      tPointerId=null;
+      tStartX=null;
+      tStartY=null;
+      tDragging=false;
+    });
+  })();
 })();
 
 /* ABOUT IMAGE LIGHTBOX */
@@ -2137,8 +2338,13 @@ FOREVER LOVED!
     });
   });
 
-  close.addEventListener('click',()=>{ backdrop.style.display='none'; img.src=''; });
-  backdrop.addEventListener('click',e=>{ if(e.target===backdrop){ backdrop.style.display='none'; img.src=''; }});
+  function closeLightbox(){
+    backdrop.style.display='none';
+    img.src='';
+  }
+
+  close.addEventListener('click',closeLightbox);
+  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) closeLightbox(); });
 })();
 
 /* CHAT BOT */
@@ -2195,7 +2401,7 @@ FOREVER LOVED!
   });
 })();
 
-/* GALLERY LOAD MORE */
+/* GALLERY LOAD MORE – buttons never darkened */
 (function(){
   const b1=document.getElementById('gallery-block-1');
   const b2=document.getElementById('gallery-block-2');
@@ -2218,7 +2424,7 @@ FOREVER LOVED!
   });
 })();
 
-/* WELCOME POPUP – once per session */
+/* WELCOME POPUP – always show on load (desktop + mobile) */
 (function(){
   const backdrop=document.getElementById('welcome-backdrop');
   const closeBtn=document.getElementById('welcome-close');
@@ -2226,13 +2432,8 @@ FOREVER LOVED!
 
   if(!backdrop || !closeBtn || !mainBtn) return;
 
-  if(!sessionStorage.getItem('mayanut_welcome_seen')){
-    backdrop.style.display='flex';
-  }
-
   function close(){
     backdrop.style.display='none';
-    sessionStorage.setItem('mayanut_welcome_seen','1');
   }
 
   closeBtn.addEventListener('click',close);
