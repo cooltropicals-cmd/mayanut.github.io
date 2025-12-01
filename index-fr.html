@@ -1,49 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MayaNut Background Test</title>
+<style>
+/* ==== GLOBAL NEW GREEN GRADIENTS ==== */
+:root{
+  /* Full-spectrum hero gradient (Option A) */
+  --hero-bg: radial-gradient(circle at 50% 50%,
+      #ff7a00 0%,      /* deep orange center */
+      #ffbf00 28%,     /* yellow */
+      #42d600 55%,     /* vivid green */
+      #006a00 85%,     /* deep green */
+      #003300 100%     /* very dark edge green */
+  );
 
-  <style>
-    :root{
-      /* Warm red/orange gradients + NEW blue edges */
-      --bg:#00153a; /* dark blue base behind the red */
-      --bg-grad:
-        /* Blue glow around edges */
-        radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 60, 200, 0.85) 100%),
+  /* Top/Bottom bars: dark → vivid green symmetrical */
+  --bar-green: linear-gradient(90deg,
+      #003300 0%,
+      #007000 50%,
+      #003300 100%
+  );
 
-        /* Original warm red/orange center gradients */
-        radial-gradient(circle at 50% 20%, #ffb347 0, #ff7043 35%, transparent 70%),
-        radial-gradient(circle at 0% 100%, #ff3b3b 0, #b71c1c 55%, transparent 80%),
-        radial-gradient(circle at 100% 100%, #ff3b3b 0, #b71c1c 55%, transparent 80%),
+  /* Lighter vivid green center glow for the logo area */
+  --logo-bg: radial-gradient(circle at 50% 50%,
+      #ff9a00 0%,
+      #ffd34d 18%,
+      #4ee000 40%,
+      #006800 70%,
+      #003000 100%
+  );
+}
 
-        /* Base fallback */
-        #3a0008;
-    }
+/* RESET */
+body{
+  margin:0;
+  padding:0;
+  background:var(--hero-bg);
+  background-attachment:fixed;
+  font-family:"Inter", sans-serif;
+  color:#fff;
+  overflow-x:hidden;
+}
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+/* ==== TOP BAR WITH YOUR NEW DARK-TO-LIGHT GREEN ==== */
+.topbar{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:70px;
+  background:var(--bar-green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  z-index:2000;
+  border-bottom:2px solid rgba(255,255,255,0.35);
+}
 
-    html, body{
-      width:100%;
-      height:100%;
-    }
+/* ==== HERO SECTION WITH YOUR NEW SPECTRUM GRADIENT ==== */
+.hero{
+  min-height:100vh;
+  width:100%;
+  background:var(--hero-bg);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding-top:80px;
+  padding-bottom:80px;
+  text-align:center;
+}
 
-    body{
-      background:var(--bg-grad);
-      background-attachment:fixed;
-      background-repeat:no-repeat;
-      background-size:cover;
-      overflow:hidden;
-      font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-  </style>
-</head>
-<body>
-  <!-- Pure background test page – no content -->
-</body>
-</html>
+/* Hero Logo (unchanged, you’ll replace src with your image) */
+.hero-logo{
+  width:260px;
+  max-width:80vw;
+  display:block;
+  margin-bottom:40px;
+  background:var(--logo-bg);
+  padding:25px;
+  border-radius:30px;
+  box-shadow:0 0 40px rgba(0,0,0,0.45);
+}
+
+/* CTA BUTTON (your dark blue → light blue) */
+.hero-btn{
+  background:linear-gradient(135deg, #0803d4 0%, #00b6fb 100%);
+  padding:18px 65px;
+  border-radius:100px;
+  font-family:"Bungee", sans-serif;
+  font-size:25px;
+  color:white;
+  border:none;
+  text-decoration:none;
+  box-shadow:0 5px 15px rgba(0,0,0,0.35);
+}
+
+.hero-btn:hover{
+  transform:scale(1.03);
+}
+
+/* ==== BOTTOM BAR ==== */
+.bottom-strip{
+  height:70px;
+  background:var(--bar-green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  border-top:2px solid rgba(255,255,255,0.35);
+  font-family:"Bungee", sans-serif;
+  font-size:18px;
+}
+</style>
+
+
+<!-- ==== HTML STRUCTURE (Homepage Only) ==== -->
+<header class="topbar">
+  <div>THE MAYANUT COMPANY</div>
+</header>
+
+<section class="hero">
+  <img src="mayanut-the-maya-nut-company-logo.png" class="hero-logo" alt="The MayaNut Company logo">
+
+  <a href="#buy" class="hero-btn">Try Now!</a>
+</section>
+
+<div class="bottom-strip">
+  SCROLL TO EXPLORE
+</div>
