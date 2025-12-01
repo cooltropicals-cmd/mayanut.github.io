@@ -1,81 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>MayaNut Gradient Demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8" />
+<title>MayaNut Gradient Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <style>
-    :root{
-      --header-accent:#4fe2ff;
-    }
+<style>
+  :root{
+    --center-orange:#ff7a00;       /* vivid orange */
+    --ring-yellow-orange:#ffb41f;  /* outline ring */
+    --green-mid:#1fad26;           /* bright green */
+    --green-dark:#02400f;          /* deep dark outer green */
+    --header-accent:#4fe2ff;       /* your blue text color */
+  }
 
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
+  *{ margin:0; padding:0; box-sizing:border-box; }
 
-    html, body{
-      height:100%;
-    }
+  html, body{
+    height:100%;
+    font-family:system-ui, -apple-system, Segoe UI, sans-serif;
+  }
 
-    body{
-      /* Dark base so the gradient pops */
-      background:#001109;
-      background:
-        radial-gradient(circle at 50% 40%,
-          /* bright orange center */
-          #ff8a00 0%,
-          #ff7a00 10%,
-          #ff6a00 18%,
-          /* yellow-orange glowing ring */
-          #ffb52e 26%,
-          #ffd867 33%,
-          /* transition into vivid greens */
-          #87e58c 55%,
-          #24a45e 75%,
-          #065f38 100%);
-      background-attachment:fixed;
-      background-repeat:no-repeat;
-      background-size:cover;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      color:#ffffff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-    }
+  body{
+    background:
+      radial-gradient(circle at 50% 45%,
 
-    .hero-demo{
-      padding:24px 18px;
-      max-width:700px;
-      backdrop-filter:blur(4px);
-    }
+        /* 60% CENTER ORANGE */
+        var(--center-orange) 0%,
+        var(--center-orange) 55%,
 
-    .hero-demo h1{
-      font-size:clamp(32px, 5vw, 46px);
-      color:var(--header-accent);
-      text-shadow:0 2px 8px rgba(0,0,0,0.7);
-      margin-bottom:14px;
-    }
+        /* 10% YELLOW-ORANGE RING */
+        var(--ring-yellow-orange) 63%,
+        var(--ring-yellow-orange) 70%,
 
-    .hero-demo p{
-      font-size:14px;
-      line-height:1.7;
-      max-width:600px;
-      margin:0 auto;
-      text-shadow:0 1px 3px rgba(0,0,0,0.6);
-    }
-  </style>
+        /* OUTER 30% GREEN GRADIENT */
+        var(--green-mid) 78%,
+        var(--green-dark) 100%
+      );
+
+    background-attachment:fixed;
+    background-size:cover;
+    background-repeat:no-repeat;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    text-align:center;
+  }
+
+  h1{
+    font-size:clamp(32px, 6vw, 48px);
+    color:var(--header-accent);
+    text-shadow:0 3px 10px rgba(0,0,0,0.7);
+  }
+
+  p{
+    margin-top:12px;
+    max-width:600px;
+    font-size:15px;
+    line-height:1.7;
+    color:#ffffffd0;
+    text-shadow:0 2px 6px rgba(0,0,0,0.6);
+  }
+</style>
+
 </head>
 <body>
 
-  <div class="hero-demo">
+  <div>
     <h1>The MayaNut Company</h1>
     <p>
-      Demo of the new circular gradient: bright orange center, a yellow–orange glow ring,
-      fading out into vivid green and deep dark green on the edges.
+      Demo of the EXACT background using your logo’s real colors:
+      60% vivid orange center, 10% yellow-orange ring, and 30% green fade to dark green.
     </p>
   </div>
 
