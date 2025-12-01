@@ -1,238 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MayaNut Hero Gradient Test</title>
+  <meta charset="utf-8" />
+  <title>MayaNut Gradient Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --header-accent:#4fe2ff;
+    }
 
-<style>
-:root{
-  --header-text:#4fe2ff;
-  --bar-h:72px;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
 
-  /* New hero background:
-     light orange center
-     medium/deep orange ring
-     lighter orange halo
-     then gentle greens (less dominant, more fade) */
-  --bg:#050805;
-  --bg-grad:
-    radial-gradient(circle at 50% 35%,
-      #ffe1a8 0%,      /* very light orange core */
-      #ffd08a 14%,     /* light orange */
-      #ffb65a 26%,     /* medium orange */
-      #ff9430 38%,     /* strong orange */
-      #e86510 48%,     /* deeper orange ring */
-      #ffcf8f 60%,     /* soft light orange halo */
-      #98e0a8 75%,     /* soft light green */
-      #2e8a4a 88%,     /* darker green */
-      #05321a 100%);   /* deepest edge */
+    html, body{
+      height:100%;
+    }
 
-}
+    body{
+      /* Dark base so the gradient pops */
+      background:#001109;
+      background:
+        radial-gradient(circle at 50% 40%,
+          /* bright orange center */
+          #ff8a00 0%,
+          #ff7a00 10%,
+          #ff6a00 18%,
+          /* yellow-orange glowing ring */
+          #ffb52e 26%,
+          #ffd867 33%,
+          /* transition into vivid greens */
+          #87e58c 55%,
+          #24a45e 75%,
+          #065f38 100%);
+      background-attachment:fixed;
+      background-repeat:no-repeat;
+      background-size:cover;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color:#ffffff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
 
-*,
-*::before,
-*::after{ box-sizing:border-box; }
+    .hero-demo{
+      padding:24px 18px;
+      max-width:700px;
+      backdrop-filter:blur(4px);
+    }
 
-html,body{
-  margin:0;
-  padding:0;
-  scroll-behavior:smooth;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-}
+    .hero-demo h1{
+      font-size:clamp(32px, 5vw, 46px);
+      color:var(--header-accent);
+      text-shadow:0 2px 8px rgba(0,0,0,0.7);
+      margin-bottom:14px;
+    }
 
-html{
-  background:#000;
-}
-
-body{
-  background:var(--bg-grad);
-  background-attachment:fixed;
-  background-repeat:no-repeat;
-  background-size:cover;
-  color:#fff;
-  overflow-x:hidden;
-}
-
-/* TOP BAR (simple) */
-.topbar{
-  position:fixed;
-  top:0; left:0; right:0;
-  height:var(--bar-h);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:8px 12px;
-  background:linear-gradient(90deg,#02401a 0%, #4ade80 50%, #02401a 100%);
-  border-bottom:1px solid rgba(255,255,255,0.4);
-  z-index:10;
-}
-.topbar-title{
-  font-family:"Mountains of Christmas", cursive;
-  font-size:20px;
-  color:var(--header-text);
-  text-align:center;
-}
-
-/* HERO */
-.hero{
-  position:relative;
-  min-height:100vh;
-  padding-top:calc(var(--bar-h) + 80px);
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  overflow:hidden;
-}
-.hero-inner{
-  width:100%;
-  max-width:1100px;
-  padding:0 16px 80px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  position:relative;
-  z-index:2;
-}
-
-/* Snow layer */
-.hero-snow{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  overflow:hidden;
-  z-index:1;
-}
-.snowflake{
-  position:absolute;
-  top:-12vh;
-  color:#ffffff;
-  filter:drop-shadow(0 0 3px rgba(255,255,255,0.7));
-  animation-name:snowFall;
-  animation-timing-function:linear;
-  animation-iteration-count:infinite;
-}
-@keyframes snowFall{
-  0%{
-    transform:translate3d(0, -12vh, 0);
-  }
-  50%{
-    transform:translate3d(var(--drift1, 20px), 55vh, 0);
-  }
-  100%{
-    transform:translate3d(var(--drift2, -20px), 115vh, 0);
-  }
-}
-
-/* HERO CONTENT MOCKUP */
-.hero-title{
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:32px;
-  text-align:center;
-  margin-bottom:24px;
-  color:var(--header-text);
-  text-shadow:0 3px 10px rgba(0,0,0,0.8);
-}
-
-.hero-sub{
-  max-width:640px;
-  text-align:center;
-  font-size:16px;
-  line-height:1.7;
-  margin-bottom:32px;
-  text-shadow:0 2px 6px rgba(0,0,0,0.7);
-}
-
-.hero-cta-btn{
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px 75px;
-  border-radius:999px;
-  border:none;
-  text-decoration:none;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:21px;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  background:linear-gradient(135deg,#0803d4 0%, #00b6fb 100%);
-  color:var(--header-text);
-  box-shadow:0 4px 14px rgba(0,0,0,0.6);
-  cursor:pointer;
-}
-.hero-cta-btn::before{
-  content:"";
-  position:absolute;
-  inset:-3px;
-  border-radius:999px;
-  border:2px solid rgba(255,255,255,0.9);
-  opacity:0;
-  animation:buttonShine 1.8s ease-in-out infinite;
-}
-@keyframes buttonShine{
-  0%,100%{ opacity:0; }
-  50%{ opacity:1; }
-}
-
-/* Responsive */
-@media(max-width:600px){
-  :root{ --bar-h:90px; }
-  .topbar-title{ font-size:16px; }
-  .hero{
-    padding-top:calc(var(--bar-h) + 40px);
-  }
-  .hero-title{ font-size:24px; }
-}
-
-/* Snow init */
-</style>
+    .hero-demo p{
+      font-size:14px;
+      line-height:1.7;
+      max-width:600px;
+      margin:0 auto;
+      text-shadow:0 1px 3px rgba(0,0,0,0.6);
+    }
+  </style>
 </head>
 <body>
 
-<header class="topbar">
-  <div class="topbar-title">❄️ The MayaNut Company – Hero Gradient Test ❄️</div>
-</header>
-
-<section class="hero">
-  <div class="hero-snow"></div>
-
-  <div class="hero-inner">
-    <div class="hero-title">MAYA NUT BEVERAGE IS COMING</div>
-    <div class="hero-sub">
-      Updated gradient test: more orange dominance with a light orange halo,
-      less green overall, and a smoother fade out to tropical greens around
-      Brosimum alicastrum (maya nut).
-    </div>
-    <a href="#test" class="hero-cta-btn">Try Now!</a>
+  <div class="hero-demo">
+    <h1>The MayaNut Company</h1>
+    <p>
+      Demo of the new circular gradient: bright orange center, a yellow–orange glow ring,
+      fading out into vivid green and deep dark green on the edges.
+    </p>
   </div>
-</section>
-
-<script>
-/* simple snow generator for the hero */
-(function(){
-  const container=document.querySelector('.hero-snow');
-  if(!container) return;
-  const flakes=40;
-  for(let i=0;i<flakes;i++){
-    const span=document.createElement('span');
-    span.className='snowflake';
-    span.textContent='❄';
-    span.style.left=Math.random()*100+'vw';
-    span.style.fontSize=(10+Math.random()*16)+'px';
-    span.style.animationDuration=(8+Math.random()*10)+'s';
-    span.style.animationDelay=(Math.random()*-20)+'s';
-    span.style.setProperty('--drift1',(Math.random()*60-30)+'px');
-    span.style.setProperty('--drift2',(Math.random()*60-30)+'px');
-    container.appendChild(span);
-  }
-})();
-</script>
 
 </body>
 </html>
