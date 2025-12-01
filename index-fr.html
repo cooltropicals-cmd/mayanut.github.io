@@ -2,145 +2,123 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>MayaNut Gradient Test 2</title>
+<title>MayaNut Gradient Test 3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Bungee&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  /* HERO BACKGROUND
-     Center: darker vivid orange
-     Middle ring: previous center orange
-     Then yellow → darker greens (not neon) → very dark edges
-  */
+  /* HERO BACKGROUND — DARKER CORNERS + SOFTER ORANGE CENTER */
   --hero-bg: radial-gradient(circle at 50% 50%,
-      #e85a00 0%,      /* darker vivid orange core */
-      #ff9b2f 22%,     /* your previous orange center as mid ring */
-      #ffd34d 40%,     /* warm yellow */
-      #2c8f3a 60%,     /* darker, less-neon green */
-      #045323 82%,     /* deep forest green */
-      #001809 100%     /* very dark green edge */
+      #e85a00 0%,       /* vivid orange center */
+      #ff9b2f 18%,      /* orange mid ring */
+      #ffd34d 34%,      /* yellow transition */
+      rgba(70,181,61,0.85) 55%,  /* green but softer merge */
+      #085f33 75%,      /* darker green */
+      #01311a 90%,      /* deep emerald green */
+      #000b03 100%      /* very dark corner green */
   );
 
-  /* TOP/BOTTOM BARS – darker edges → vivid green center */
+  /* TOP/BOTTOM TAB — darker outer edges → vivid green center */
   --bar-green: linear-gradient(90deg,
-      #001808 0%,
+      #000b03 0%,
       #0a6f2f 50%,
-      #001808 100%
+      #000b03 100%
   );
 
-  /* Mini logo “aura” if you want to use it later */
+  /* MINI LOGO AURA — slightly softer too */
   --logo-bg: radial-gradient(circle at 50% 50%,
       #e85a00 0%,
       #ffb63a 20%,
-      #46b53d 42%,
-      #045323 75%,
+      rgba(70,181,61,0.85) 42%,
+      #045323 70%,
       #001809 100%
   );
 }
 
-/* RESET / BASE */
-*,
-*::before,
-*::after{ box-sizing:border-box; }
+/* RESET */
+*{ box-sizing:border-box; margin:0; padding:0; }
 
 body{
-  margin:0;
-  padding:0;
   background:var(--hero-bg);
   background-attachment:fixed;
-  background-repeat:no-repeat;
-  background-size:cover;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family:"Inter", sans-serif;
   color:#fff;
-  overflow-x:hidden;
 }
 
-/* TOP TAB – darker outer edges, vivid green center */
+/* TOP TAB */
 .topbar{
-  position:fixed;
-  top:0; left:0; right:0;
   height:70px;
   background:var(--bar-green);
   display:flex;
-  align-items:center;
   justify-content:center;
-  color:#ffffff;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size:18px;
+  align-items:center;
+  font-family:"Bungee";
+  font-size:19px;
   letter-spacing:0.08em;
-  z-index:2000;
   border-bottom:2px solid rgba(255,255,255,0.35);
+  color:white;
   text-shadow:0 1px 2px rgba(0,0,0,0.6);
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:2000;
 }
 
 /* HERO */
 .hero{
   min-height:100vh;
-  width:100%;
-  background:var(--hero-bg);
+  padding:90px 16px 70px;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
-  padding:90px 16px 80px;
+  align-items:center;
   text-align:center;
+  background:var(--hero-bg);
 }
 
-/* Logo block – you can later wrap this in the circular logo-bg if you want */
+/* Logo */
 .hero-logo{
   width:260px;
-  max-width:80vw;
-  display:block;
-  margin-bottom:40px;
-  padding:20px;
-  border-radius:32px;
+  padding:22px;
+  border-radius:30px;
   background:var(--logo-bg);
-  box-shadow:0 0 40px rgba(0,0,0,0.45);
+  box-shadow:0 0 38px rgba(0,0,0,0.45);
+  margin-bottom:40px;
 }
 
-/* CTA BUTTON – your blue gradient */
+/* Button */
 .hero-btn{
   background:linear-gradient(135deg, #0803d4 0%, #00b6fb 100%);
   padding:18px 70px;
   border-radius:999px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family:"Bungee";
   font-size:24px;
-  color:#ffffff;
-  border:none;
   text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
+  color:#fff;
   box-shadow:0 5px 16px rgba(0,0,0,0.35);
   letter-spacing:0.12em;
-  text-transform:uppercase;
-  margin-top:10px;
-  cursor:pointer;
-  transition:transform 0.12s ease, box-shadow 0.12s ease;
+  transition:0.15s ease;
 }
 .hero-btn:hover{
-  transform:translateY(-1px) scale(1.03);
-  box-shadow:0 7px 20px rgba(0,0,0,0.45);
+  transform:scale(1.03);
 }
 
-/* BOTTOM TAB – same bar, mirrored at the bottom */
+/* BOTTOM TAB */
 .bottom-strip{
   height:70px;
   background:var(--bar-green);
   display:flex;
-  align-items:center;
   justify-content:center;
-  color:#ffffff;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size:18px;
-  letter-spacing:0.08em;
+  align-items:center;
+  font-family:"Bungee";
+  color:white;
   border-top:2px solid rgba(255,255,255,0.35);
   text-shadow:0 1px 2px rgba(0,0,0,0.6);
 }
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
@@ -148,10 +126,9 @@ body{
 </header>
 
 <section class="hero">
-  <!-- Your real logo file goes here -->
   <img src="mayanut-the-maya-nut-company-logo.png"
-       alt="The MayaNut Company logo"
-       class="hero-logo">
+       class="hero-logo"
+       alt="The MayaNut Company Logo">
 
   <a href="#buy" class="hero-btn">TRY NOW!</a>
 </section>
