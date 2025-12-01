@@ -12,15 +12,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
 
-<!-- Favicon (updated) -->
+<!-- Favicon (updated filename) -->
 <link rel="icon" type="image/png" href="the-maya-nut-company-logo-favicon.png" />
 <link rel="shortcut icon" type="image/png" href="the-maya-nut-company-logo-favicon.png" />
 
 <meta name="theme-color" content="#02401a" />
 <meta name="robots" content="index,follow" />
 
-<!-- SEO: description + keywords (one-page, crawlable) -->
-<meta name="description" content="The MayaNut Company at mayanut.com is developing one of Florida’s first Brosimum alicastrum (maya nut, breadnut, ojoche, ramón, guaimaro) plantations, with future maya nut beverages, powder, flour, tropical trees, and agroforestry research all on one page.">
+<!-- SEO: description + keywords (giant keyword cloud) -->
+<meta name="description" content="The MayaNut Company – maya nut beverage, powder and flour from Brosimum alicastrum, also known as breadnut, ojoche, ramón, guaimaro. Tropical trees, agroforestry, Florida plantations and future maya nut drinks and foods.">
 <meta name="keywords" content="
 Maya nut, maya nut drink, maya nut beverage, maya nut powder, maya nut flour, The MayaNut Company, themayanutcompany, mayanut.com,
 mayanut, MayaNut, Brosimum alicastrum, breadnut, bread nut, ojoche, ramón, guaimaro, oox, ox, guayumaro,
@@ -39,23 +39,22 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
   --brand-blue-dark:#0803d4;
   --brand-blue-light:#00b6fb;
 
-  /* Base color palette */
+  /* Base color palette (updated to match brand) */
   --blue-deep:var(--brand-blue-dark);
   --blue-mid:var(--brand-blue-light);
   --blue-soft:#3f7fff;
-  --orange:#ff8f1f;       /* deeper vivid orange */
-  --orange-light:#ffc84f;
+  --orange:#ff941f;
+  --orange-light:#ffc85a;
   --bar-h:72px;
 
-  /* Main background (A + C hybrid):
-     darker vivid orange center → yellow mid → darker vivid green outer */
-  --bg:#03110a;
+  /* Main background: orange center → yellow mid → green outer */
+  --bg:#001509;
   --bg-grad:
-    radial-gradient(circle at 50% 42%,
-      #ff8f1f 0%,
-      #ffc84f 28%,
-      #60b66a 62%,
-      #083d1a 100%);
+    radial-gradient(circle at 50% 40%,
+      #ffb347 0%,
+      #ffe97a 32%,
+      #a5d6a7 68%,
+      #1b5e20 100%);
 }
 
 /* Slightly taller bar on very small screens */
@@ -71,7 +70,7 @@ noz maia, noz de maya, árvore tropical, árvore de floresta tropical, Brosimum 
 html{
   margin:0;
   padding:0;
-  background:#000000;
+  background:#000009;
 }
 html,body{
   scroll-behavior:smooth;
@@ -88,7 +87,7 @@ body{
   overflow-x:hidden;
 }
 
-/* Visually hidden SEO block (keeps H1 high on page for crawlers) */
+/* Visually hidden SEO block */
 .visually-hidden{
   position:absolute;
   width:1px;
@@ -101,11 +100,11 @@ body{
   border:0;
 }
 
-/* TOP BAR – darker green gradient dark → mid → dark */
+/* TOP BAR – green gradient dark → light → dark */
 .topbar{
   position:fixed;
   top:0; left:0; right:0;
-  background:linear-gradient(90deg,#083d1a 0%, #0a6f33 50%, #083d1a 100%);
+  background:linear-gradient(90deg,#02401a 0%, #6ee7b7 50%, #02401a 100%);
   color:#fff;
   display:grid;
   grid-template-columns:auto 1fr auto;
@@ -343,590 +342,7 @@ body{
   gap:40px;
 }
 
-/* Snow layer (unchanged behavior) */
-.hero-snow{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  overflow:hidden;
-  z-index:1;
-}
-.snowflake{
-  position:absolute;
-  top:-12vh;
-  color:#ffffff;
-  filter:drop-shadow(0 0 3px rgba(255,255,255,0.7));
-  animation-name:snowFall;
-  animation-timing-function:linear;
-  animation-iteration-count:infinite;
-}
-@keyframes snowFall{
-  0%{
-    transform:translate3d(0, -12vh, 0);
-  }
-  50%{
-    transform:translate3d(var(--drift1, 20px), 55vh, 0);
-  }
-  100%{
-    transform:translate3d(var(--drift2, -20px), 115vh, 0);
-  }
-}
-
-/* Hero title image */
-.hero-text-wrap{
-  flex:1;
-  max-width:520px;
-}
-.hero-title-img{
-  display:block;
-  width:100%;
-  height:auto;
-}
-
-/* Hero glass */
-.hero-image-wrap{
-  flex:0 0 auto;
-  margin-left:auto;
-  transform:translateY(-50px);
-}
-.hero-image-link{ display:inline-block; }
-.hero-glass{
-  width:420px;
-  max-width:75vw;
-  display:block;
-  cursor:pointer;
-}
-
-/* CTA button – dark blue → light blue with light blue text */
-.hero-cta-wrap{
-  margin-top:-110px;
-  width:100%;
-  display:flex;
-  justify-content:flex-end;
-  padding-right:330px;
-}
-.hero-cta-btn{
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px 75px;
-  border-radius:999px;
-  border:none;
-  text-decoration:none;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size:21px;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  background:linear-gradient(135deg,#0803d4 0%, #00b6fb 100%);
-  color:#00b6fb; /* text matches light logo blue */
-  text-shadow:0 0 6px rgba(0,0,0,0.55);
-  box-shadow:0 4px 14px rgba(0,0,0,0.45);
-  cursor:pointer;
-}
-.hero-cta-btn::before{
-  content:"";
-  position:absolute;
-  inset:-3px;
-  border-radius:999px;
-  border:2px solid rgba(255,255,255,0.9);
-  opacity:0;
-  pointer-events:none;
-  animation:buttonShine 1.8s ease-in-out infinite;
-}
-@keyframes buttonShine{
-  0%,100%{ opacity:0; }
-  50%{ opacity:1; }
-}
-
-/* TRANSITION STRIP (keep blue for contrast) */
-.transition-strip{
-  background:linear-gradient(90deg, #001a80 0%, #2e7aff 50%, #001a80 100%);
-  color:#f5fbff;
-  text-align:center;
-  padding:14px 16px;
-  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  letter-spacing:0.06em;
-  font-size:15px;
-  position:relative;
-  z-index:1;
-  text-shadow:0 1px 2px rgba(0,0,0,0.55);
-  border-top:1px solid rgba(255,255,255,0.45);
-  border-bottom:1px solid rgba(0,0,0,0.65);
-  box-shadow:0 3px 8px rgba(0,0,0,0.55);
-}
-
-/* Title wiggle */
-@keyframes merrygiggle{
-  0%{ transform:translateX(0); }
-  25%{ transform:translateX(4px); }
-  50%{ transform:translateX(0); }
-  75%{ transform:translateX(-4px); }
-  100%{ transform:translateX(0); }
-}
-
-/* Responsive tweaks for hero */
-@media(max-width:800px){
-  .hero{
-    padding-top:calc(var(--bar-h) + 77px);
-    min-height:0;
-  }
-  .hero-inner{
-    padding-top:10px;
-    padding-bottom:40px;
-  }
-  .hero-right{
-    flex-direction:column;
-    align-items:center;
-    gap:18px;
-  }
-  .hero-text-wrap{
-    max-width:420px;
-    margin-top:-90px;
-  }
-  .hero-image-wrap{
-    margin-left:0;
-    transform:translateY(-125px);
-  }
-  .hero-cta-wrap{
-    margin-top:-120px;
-    justify-content:center;
-    padding-right:0;
-    width:100%;
-  }
-  .hero-glass{
-    max-width:55vw;
-  }
-}
-@media(max-width:380px){
-  .hero-glass{ max-width:70vw; }
-}
-</style>
-</head>
-<body>
-
-<!-- Hidden SEO block high in the DOM -->
-<div class="visually-hidden">
-  <h1>The MayaNut Company – maya nut beverage, maya nut powder and flour from Brosimum alicastrum on one page at mayanut.com</h1>
-  <p>The MayaNut Company at mayanut.com is developing one of Florida’s first plantations of Brosimum alicastrum (maya nut, breadnut, ojoche, ramón, guaimaro). This single-page site describes our maya nut beverages, powders and flours, tropical trees, agroforestry research, blog, FAQ and how to contact The MayaNut Company.</p>
-</div>
-
-<header class="topbar">
-  <!-- Menu icon -->
-  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
-
-  <!-- Mobile inline logo (centered on mobile) -->
-  <a href="#top" class="topbar-logo-inline" id="topbar-logo-inline">
-    <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
-  </a>
-
-  <div class="topbar-title">
-    ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
-  </div>
-
-  <!-- Language selector -->
-  <div class="topbar-lang" id="topbar-lang">
-    <span class="topbar-lang-label">
-      <span class="topbar-lang-label-emoji">🌎</span>
-      <span class="topbar-lang-label-text">Language</span>
-    </span>
-    <button class="topbar-lang-current-btn" id="lang-toggle" aria-haspopup="true" aria-expanded="false">
-      <span id="lang-current">English</span>
-      <span class="topbar-lang-caret">▾</span>
-    </button>
-  </div>
-</header>
-
-<!-- Language dropdown -->
-<div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
-  <ul>
-    <li data-file="index.html">English</li>
-    <li data-file="index-es.html">Español</li>
-    <li data-file="index-pt.html">Português</li>
-    <li data-file="index-fr.html">Français</li>
-    <li data-file="index-de.html">Deutsch</li>
-    <li data-file="index-it.html">Italiano</li>
-    <li data-file="index-ru.html">Русский</li>
-    <li data-file="index-zh.html">中文</li>
-    <li data-file="index-ja.html">日本語</li>
-    <li data-file="index-hi.html">हिन्दी</li>
-    <li data-file="index-ur.html">اردو</li>
-    <li data-file="index-bn.html">বাংলা</li>
-    <li data-file="index-id.html">Bahasa Indonesia</li>
-    <li data-file="index-ar.html">العربية</li>
-    <li data-file="index-sw.html">Kiswahili</li>
-    <li data-file="index-ha.html">Hausa</li>
-    <li data-file="index-fil.html">Filipino</li>
-    <li data-file="index-yo.html">Yorùbá</li>
-  </ul>
-</div>
-
-<!-- Fixed logo (desktop) -->
-<a href="#top" class="topbar-logo-link">
-  <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
-</a>
-
-<!-- NAV OVERLAY WITH RICKY EASTER EGG -->
-<div class="nav-backdrop" id="nav-backdrop">
-  <div class="nav-modal">
-    <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
-    <h2 class="nav-modal-title">Menu</h2>
-    <div class="nav-modal-title-underline"></div>
-
-    <div class="nav-modal-links">
-      <div class="nav-modal-section-top">
-        <a href="#top" data-section="top" class="nav-link-active">HOME</a>
-        <a href="#buy" data-section="buy">STORE</a>
-        <a href="#about" data-section="about">ABOUT</a>
-      </div>
-
-      <div class="nav-logo-easter-wrapper">
-        <img src="mayanut-the-maya-nut-company-logo.png"
-             alt="The MayaNut Company logo"
-             id="nav-logo-easter">
-        <div id="nav-ricky-message">
-💙🧡💙
-THE MAYANUT COMPANY
-DEDICATES THIS WEBSITE
-AND OUR TREES TO RICKY
-FOREVER LOVED
-💙🧡💙
-        </div>
-      </div>
-
-      <div class="nav-modal-section-bottom">
-        <a href="#research" data-section="research">RESEARCH</a>
-        <a href="#gallery" data-section="gallery">GALLERY</a>
-        <a href="#blog" data-section="blog">BLOG</a>
-        <a href="#faq" data-section="faq">FAQ</a>
-        <a href="#contact" data-section="contact">CONTACT</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<main>
-
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <!-- Snow layer -->
-    <div class="hero-snow"></div>
-
-    <div class="hero-inner">
-      <div class="hero-right">
-        <!-- Text image block -->
-        <div class="hero-text-wrap">
-          <picture>
-            <source srcset="desktop-maya-nut-beverage-brosimum-alicastrum.png" media="(min-width: 801px)">
-            <img src="mobile-maya-nut-beverage-brosimum-alicastrum.png"
-                 alt="Maya nut beverage is here"
-                 class="hero-title-img">
-          </picture>
-        </div>
-
-        <!-- Glass image -->
-        <div class="hero-image-wrap">
-          <a href="#buy" class="hero-image-link">
-            <img src="rach20.png" alt="Chilled maya nut beverage in a glass" class="hero-glass">
-          </a>
-        </div>
-      </div>
-
-      <!-- Try Now button -->
-      <div class="hero-cta-wrap">
-        <a href="#buy" class="hero-cta-btn">Try Now!</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRANSITION: STORE -->
-  <div class="transition-strip">STORE</div>
-/* GLOBAL */
-*,
-*::before,
-*::after{
-  box-sizing:border-box;
-}
-
-html{
-  margin:0;
-  padding:0;
-  background:#000;
-}
-html,body{
-  scroll-behavior:smooth;
-  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  color:#fff;
-}
-body{
-  margin:0;
-  padding:0;
-  background:var(--bg-grad);
-  background-attachment:fixed;
-  background-repeat:no-repeat;
-  background-size:cover;
-  overflow-x:hidden;
-}
-
-/* Visually hidden SEO block */
-.visually-hidden{
-  position:absolute;
-  width:1px;
-  height:1px;
-  padding:0;
-  margin:-1px;
-  overflow:hidden;
-  clip:rect(0,0,0,0);
-  white-space:nowrap;
-  border:0;
-}
-
-/* TOP GREEN BAR — darker vivid corners → lighter vivid center */
-.topbar{
-  position:fixed;
-  top:0; left:0; right:0;
-  z-index:3000;
-  min-height:var(--bar-h);
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  grid-template-areas:"menu title lang";
-  align-items:center;
-  padding:8px 10px;
-  padding-top:calc(8px + env(safe-area-inset-top,0px));
-  background:
-    linear-gradient(
-      90deg,
-      #013d14 0%,
-      #0d742e 25%,
-      #2adb75 50%,
-      #0d742e 75%,
-      #013d14 100%
-    );
-  border-bottom:1px solid rgba(255,255,255,0.35);
-}
-
-/* HAMBURGER BUTTON */
-.menu-toggle{
-  grid-area:menu;
-  width:40px;
-  height:32px;
-  border:none;
-  border-radius:999px;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  background:var(--orange);
-  box-shadow:0 3px 7px rgba(0,0,0,0.45);
-}
-.menu-toggle span{
-  width:18px;
-  height:3px;
-  background:#fff;
-  border-radius:999px;
-  transition:0.25s;
-}
-.menu-toggle span+span{
-  margin-top:3px;
-}
-.menu-toggle.open span:nth-child(1){
-  transform:translateY(6px) rotate(45deg);
-}
-.menu-toggle.open span:nth-child(2){
-  opacity:0;
-}
-.menu-toggle.open span:nth-child(3){
-  transform:translateY(-6px) rotate(-45deg);
-}
-
-/* TOPBAR TITLE */
-.topbar-title{
-  grid-area:title;
-  text-align:center;
-  font-size:18px;
-  font-family:"Mountains of Christmas", cursive;
-  animation:merrygiggle 6s ease-in-out infinite;
-  padding:0 8px;
-}
-
-/* LANGUAGE SWITCHER */
-.topbar-lang{
-  grid-area:lang;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:3px;
-  justify-self:end;
-  font-size:12px;
-}
-.topbar-lang-label{
-  display:flex;
-  align-items:center;
-  gap:4px;
-}
-.topbar-lang-label-emoji{
-  font-size:18px;
-  line-height:1;
-}
-.topbar-lang-label-text{
-  font-size:13px;
-}
-.topbar-lang-current-btn{
-  margin-top:2px;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:3px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.8);
-  background:rgba(0,0,0,0.18);
-  color:#fff;
-  font-size:12px;
-  cursor:pointer;
-  outline:none;
-}
-.topbar-lang-current{ line-height:1; }
-.topbar-lang-caret{
-  font-size:10px;
-  transform:translateY(1px);
-}
-
-/* Language dropdown */
-.lang-dropdown{
-  position:fixed;
-  top:calc(var(--bar-h) + 2px);
-  right:10px;
-  background:rgba(0,0,0,0.92);
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,0.6);
-  box-shadow:0 8px 20px rgba(0,0,0,0.6);
-  padding:6px 0;
-  z-index:1500;
-  display:none;
-  min-width:180px;
-}
-.lang-dropdown.open{ display:block; }
-.lang-dropdown ul{
-  list-style:none;
-  margin:0;
-  padding:0;
-}
-.lang-dropdown li{
-  padding:6px 14px;
-  font-size:13px;
-  color:#ffffff;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.lang-dropdown li:hover{
-  background:rgba(70,120,255,0.4);
-}
-.lang-dropdown li.active{
-  color:var(--orange);
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
-
-/* Small screens */
-@media (max-width:420px){
-  .topbar-lang-label-text{
-    display:inline;
-    font-size:11px;
-  }
-  .topbar-lang-current-btn{
-    font-size:11px;
-    padding:2px 7px;
-  }
-}
-
-/* MOBILE INLINE LOGO */
-.topbar-logo-inline{
-  display:none;
-}
-.topbar-logo-inline img{
-  height:50px;
-  width:auto;
-  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
-}
-
-@media (max-width:600px){
-  .topbar{
-    grid-template-columns:auto 1fr auto;
-    grid-template-rows:auto auto;
-    grid-template-areas:
-      "menu centerlogo lang"
-      "title title title";
-    padding-left:8px;
-    padding-right:8px;
-  }
-  .topbar-logo-inline{
-    grid-area:centerlogo;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  }
-  .topbar-logo-inline img{ height:46px; }
-  .topbar-title{
-    font-size:14px;
-    line-height:1.2;
-    margin-top:4px;
-    padding:0 4px;
-    text-align:center;
-  }
-}
-
-/* Fixed logo (desktop only) */
-.topbar-logo-link{
-  position:fixed;
-  left:12px;
-  top:calc(var(--bar-h) + 12px);
-  z-index:900;
-}
-.topbar-logo{
-  width:90px;
-  height:auto;
-  display:block;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
-  cursor:pointer;
-}
-@media (max-width:600px){
-  .topbar-logo-link{ display:none; }
-}
-
-/* HERO */
-.hero{
-  position:relative;
-  min-height:100vh;
-  padding-top:calc(var(--bar-h) + 80px);
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  overflow:hidden;
-  background:transparent;
-}
-.hero-inner{
-  width:100%;
-  max-width:1100px;
-  padding:0 16px 80px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  position:relative;
-  z-index:2;
-}
-.hero-right{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:40px;
-}
-
-/* Snow layer (unchanged behavior) */
+/* Snow layer */
 .hero-snow{
   position:absolute;
   inset:0;
@@ -1021,7 +437,7 @@ body{
   50%{ opacity:1; }
 }
 
-/* TRANSITION STRIP (blue tab between sections) */
+/* TRANSITION STRIP (section labels) */
 .transition-strip{
   background:linear-gradient(90deg, #001a80 0%, #2e7aff 50%, #001a80 100%);
   color:#f5fbff;
@@ -1049,17 +465,14 @@ body{
   max-width:1100px;
   margin:0 auto;
 }
-
-/* STORE SECTION – orange → yellow → green gradient */
+/* STORE SECTION – orange → green gradient */
 .section--buy{
-  background:linear-gradient(
-    180deg,
+  background:linear-gradient(180deg,
     #4a1d00 0%,
-    #ff9800 30%,
+    #ff9800 35%,
     #ffd54f 55%,
     #a5d6a7 80%,
-    #1b5e20 100%
-  );
+    #1b5e20 100%);
   color:#1b1408;
   padding:40px 16px 60px;
 }
@@ -1122,15 +535,13 @@ body{
   text-align:center;
 }
 
-/* ABOUT SECTION – orange → yellow → green → deep green */
+/* ABOUT SECTION – orange → yellow → green → dark green */
 .section--about{
-  background:linear-gradient(
-    180deg,
+  background:linear-gradient(180deg,
     #ffb347 0%,
     #ffe97a 30%,
     #81c784 65%,
-    #1b5e20 100%
-  );
+    #1b5e20 100%);
   color:#051b2a;
 }
 .about-grid{
@@ -1189,7 +600,48 @@ body{
   .img-expand-hint{ display:none; }
 }
 
-/* About text cards – dark blue titles, light blue backgrounds */
+/* Lightbox for expanded images */
+.img-lightbox-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:2600;
+}
+.img-lightbox-backdrop.open{ display:flex; }
+.img-lightbox-content{
+  position:relative;
+  max-width:min(90vw, 650px);
+  max-height:80vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.img-lightbox-img{
+  max-width:100%;
+  max-height:100%;
+  border-radius:16px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.7);
+  object-fit:contain;
+}
+.img-lightbox-close{
+  position:absolute;
+  top:-18px;
+  right:-18px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  border:none;
+  background:rgba(255,255,255,0.95);
+  color:#000;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+
+/* About text cards – titles dark blue, light blue-ish backgrounds */
 .about-text-col{
   display:flex;
   flex-direction:column;
@@ -1204,6 +656,12 @@ body{
   font-size:15px;
   line-height:1.7;
 }
+.about-card-1{}
+.about-card-2{}
+.about-card-3{}
+.about-card-4{}
+.about-card-5{}
+
 .about-text-card h2,
 .about-text-card h3{
   margin-top:0;
@@ -1217,7 +675,7 @@ body{
   white-space:nowrap;
 }
 
-/* Paragraph background tint in text sections */
+/* Paragraph background tint (light blue) in main content sections */
 .section--about p,
 .section--research p,
 .section--blog p,
@@ -1228,16 +686,16 @@ body{
   padding:6px 8px;
 }
 
-/* RESEARCH SECTION – light orange → deep orange */
+/* RESEARCH SECTION – light orange → dark orange */
 .section--research{
-  background:linear-gradient(
-    180deg,
+  background:linear-gradient(180deg,
     #ffe0b2 0%,
     #ffb74d 45%,
-    #f57c00 100%
-  );
+    #f57c00 100%);
   color:#3b1d05;
 }
+
+/* Research cards */
 .research-grid{
   display:grid;
   gap:20px;
@@ -1262,10 +720,8 @@ body{
   margin-bottom:8px;
   color:var(--brand-blue-dark);
 }
-/* =============== */
-/* GALLERY SECTION */
-/* =============== */
 
+/* GALLERY SECTION – neutral, with green lines between images */
 .section--gallery{
   background:rgba(0,0,0,0.02);
   color:#041319;
@@ -1333,10 +789,7 @@ body{
   box-shadow:0 3px 10px rgba(0,0,0,0.4);
 }
 
-/* ========= */
-/* BLOG AREA */
-/* ========= */
-
+/* BLOG SECTION – circular green gradient */
 .section--blog{
   background:
     radial-gradient(circle at 50% 45%,
@@ -1350,17 +803,12 @@ body{
   color:var(--brand-blue-dark);
 }
 
-/* ===== */
-/* FAQ   */
-/* ===== */
-
+/* FAQ SECTION – light → dark orange */
 .section--faq{
-  background:linear-gradient(
-    180deg,
+  background:linear-gradient(180deg,
     #ffe0b2 0%,
     #ffb347 45%,
-    #e65100 100%
-  );
+    #e65100 100%);
   color:#261409;
 }
 .faq-list{
@@ -1374,28 +822,20 @@ body{
   color:var(--brand-blue-dark);
 }
 
-/* ========= */
-/* CONTACT   */
-/* ========= */
-
+/* CONTACT SECTION – yellow → green */
 .section--contact{
-  background:linear-gradient(
-    180deg,
+  background:linear-gradient(180deg,
     #fff59d 0%,
     #dce775 35%,
     #a5d6a7 65%,
-    #2e7d32 100%
-  );
+    #2e7d32 100%);
   color:#06152f;
 }
 .section--contact h2{
   color:var(--brand-blue-dark);
 }
 
-/* ===================== */
-/* BOTTOM LOGO MINI HERO */
-/* ===================== */
-
+/* BOTTOM LOGO SECTION – mini hero (orange → yellow → green) */
 .section--bottom-logo{
   background:
     radial-gradient(circle at 50% 40%,
@@ -1412,10 +852,7 @@ body{
   cursor:pointer;
 }
 
-/* ====== */
-/* FOOTER */
-/* ====== */
-
+/* FOOTER – light green center → dark green edges */
 footer{
   background:
     radial-gradient(circle at 50% 50%,
@@ -1495,11 +932,7 @@ footer{
   margin-top:6px;
 }
 
-/* ========================= */
-/* NAV OVERLAY + RICKY EGG  */
-/* (functions unchanged)    */
-/* ========================= */
-
+/* NAV OVERLAY + RICKY EASTER EGG */
 .nav-backdrop{
   position:fixed;
   inset:0;
@@ -1632,11 +1065,7 @@ footer{
   line-height:1;
   cursor:pointer;
 }
-
-/* ============================= */
 /* Privacy modal + welcome popup */
-/* ============================= */
-
 .modal-backdrop{
   position:fixed;
   inset:0;
@@ -1761,11 +1190,7 @@ footer{
   }
 }
 
-/* ============================== */
-/* FAQ CHAT ICON (LAUNCHER + UI) */
-/* ============================== */
-
-/* Floating launcher with dark green bubble */
+/* Chat assistant launcher – green background, white bubble, green dots */
 .chat-launcher{
   position:fixed;
   right:16px;
@@ -1773,7 +1198,7 @@ footer{
   width:52px;
   height:52px;
   border-radius:50%;
-  background:linear-gradient(135deg,#02401a 0%,#16a34a 50%,#02401a 100%);
+  background:linear-gradient(135deg,#02401a 0%,#22c55e 50%,#02401a 100%);
   box-shadow:0 3px 12px rgba(0,0,0,0.55);
   display:flex;
   align-items:center;
@@ -1786,7 +1211,7 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Inner chat bubble with tail (clean, not glitched) */
+/* Inner chat bubble */
 .chat-icon-bubble{
   position:relative;
   padding:5px 11px;
@@ -1810,11 +1235,9 @@ footer{
   transform:rotate(45deg);
   box-shadow:0 1px 4px rgba(0,0,0,0.25);
 }
-
-/* Darker green dots */
 .chat-icon-dots{
   font-size:13px;
-  color:#065f46; /* darker rich green */
+  color:#16a34a; /* green dots */
   letter-spacing:2px;
 }
 
@@ -1888,7 +1311,7 @@ footer{
   color:#ffffff;
 }
 
-/* Title wiggle animation */
+/* Title wiggle */
 @keyframes merrygiggle{
   0%{ transform:translateX(0); }
   25%{ transform:translateX(4px); }
@@ -1897,7 +1320,7 @@ footer{
   100%{ transform:translateX(0); }
 }
 
-/* RESPONSIVE TWEAKS */
+/* Responsive tweaks */
 @media(max-width:800px){
   .hero{
     padding-top:calc(var(--bar-h) + 77px);
@@ -1962,19 +1385,17 @@ footer{
 </head>
 <body>
 
-<!-- Hidden SEO block high in the DOM -->
+<!-- Hidden SEO text -->
 <div class="visually-hidden">
-  <h1>The MayaNut Company – maya nut beverage, maya nut, mayanut, breadnut, mayan breadnut, powder from Brosimum alicastrum</h1>
-  <p>The MayaNut Company at mayanut.com is developing one of Florida’s first plantations of Brosimum alicastrum (maya nut, breadnut, ojoche, ramón, guaimaro). This page describes our maya nut beverages, powders and flours, tropical trees, agroforestry research, blog, FAQ and how to contact The MayaNut Company.</p>
+  <h1>The MayaNut Company – Maya nut beverage, Brosimum alicastrum, breadnut</h1>
+  <p>The MayaNut Company is building Florida’s first Brosimum alicastrum plantation producing maya nut beverages, powder, and flour.</p>
 </div>
 
 <header class="topbar">
-  <!-- Menu icon -->
-  <button class="menu-toggle" id="menu-toggle" aria-label="Open menu">
+  <button class="menu-toggle" id="menu-toggle">
     <span></span><span></span><span></span>
   </button>
 
-  <!-- Mobile inline logo (centered on mobile) -->
   <a href="#top" class="topbar-logo-inline" id="topbar-logo-inline">
     <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
   </a>
@@ -1983,52 +1404,39 @@ footer{
     ❄️ The MayaNut Company Wishing You Happy Holidays 2025 ❄️
   </div>
 
-  <!-- Language selector -->
-  <div class="topbar-lang" id="topbar-lang">
-    <span class="topbar-lang-label">
-      <span class="topbar-lang-label-emoji">🌎</span>
-      <span class="topbar-lang-label-text">Language</span>
-    </span>
-    <button class="topbar-lang-current-btn" id="lang-toggle" aria-haspopup="true" aria-expanded="false">
-      <span id="lang-current">English</span>
-      <span class="topbar-lang-caret">▾</span>
+  <div class="topbar-lang">
+    <span class="topbar-lang-label"><span class="topbar-lang-label-emoji">🌎</span><span class="topbar-lang-label-text">Language</span></span>
+    <button class="topbar-lang-current-btn" id="lang-toggle">
+      <span id="lang-current">English</span><span class="topbar-lang-caret">▾</span>
     </button>
   </div>
 </header>
 
 <!-- Language dropdown -->
-<div class="lang-dropdown" id="lang-dropdown" aria-label="Site language">
+<div class="lang-dropdown" id="lang-dropdown">
   <ul>
     <li data-file="index.html">English</li>
     <li data-file="index-es.html">Español</li>
-    <li data-file="index-pt.html">Português</li>
+    <li data-file="index-ru.html">Русский</li>
+    <li data-file="index-id.html">Bahasa Indonesia</li>
+    <li data-file="index-zh.html">中文</li>
+    <li data-file="index-ja.html">日本語</li>
     <li data-file="index-fr.html">Français</li>
     <li data-file="index-de.html">Deutsch</li>
     <li data-file="index-it.html">Italiano</li>
-    <li data-file="index-ru.html">Русский</li>
-    <li data-file="index-zh.html">中文</li>
-    <li data-file="index-ja.html">日本語</li>
-    <li data-file="index-hi.html">हिन्दी</li>
-    <li data-file="index-ur.html">اردو</li>
-    <li data-file="index-bn.html">বাংলা</li>
-    <li data-file="index-id.html">Bahasa Indonesia</li>
     <li data-file="index-ar.html">العربية</li>
-    <li data-file="index-sw.html">Kiswahili</li>
-    <li data-file="index-ha.html">Hausa</li>
-    <li data-file="index-fil.html">Filipino</li>
-    <li data-file="index-yo.html">Yorùbá</li>
   </ul>
 </div>
 
-<!-- Fixed logo (desktop) -->
+<!-- Desktop fixed logo -->
 <a href="#top" class="topbar-logo-link">
-  <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
+  <img src="mayanut-the-maya-nut-company-logo.png" class="topbar-logo" alt="The MayaNut Company logo">
 </a>
 
-<!-- NAV OVERLAY WITH RICKY EASTER EGG -->
+<!-- NAV OVERLAY -->
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
-    <button class="nav-close" id="nav-close" aria-label="Close menu">&times;</button>
+    <button class="nav-close" id="nav-close">&times;</button>
     <h2 class="nav-modal-title">Menu</h2>
     <div class="nav-modal-title-underline"></div>
 
@@ -2040,15 +1448,12 @@ footer{
       </div>
 
       <div class="nav-logo-easter-wrapper">
-        <img src="mayanut-the-maya-nut-company-logo.png"
-             alt="The MayaNut Company logo"
-             id="nav-logo-easter">
+        <img src="mayanut-the-maya-nut-company-logo.png" id="nav-logo-easter">
         <div id="nav-ricky-message">
-💙🧡💙
-THE MAYANUT COMPANY
-DEDICATES THIS WEBSITE
-AND OUR TREES TO RICKY
-FOREVER LOVED
+💙🧡💙  
+THE MAYANUT COMPANY  
+DEDICATES THIS WEBSITE  
+TO RICKY — FOREVER LOVED  
 💙🧡💙
         </div>
       </div>
@@ -2066,652 +1471,382 @@ FOREVER LOVED
 
 <main>
 
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <!-- Snow layer container -->
-    <div class="hero-snow"></div>
-
-    <div class="hero-inner">
-      <div class="hero-right">
-        <!-- Text image block -->
-        <div class="hero-text-wrap">
-          <picture>
-            <source srcset="desktop-maya-nut-beverage-brosimum-alicastrum.png" media="(min-width: 801px)">
-            <img src="mobile-maya-nut-beverage-brosimum-alicastrum.png"
-                 alt="Maya nut beverage is here"
-                 class="hero-title-img">
-          </picture>
-        </div>
-
-        <!-- Glass image -->
-        <div class="hero-image-wrap">
-          <a href="#buy" class="hero-image-link">
-            <img src="rach20.png" alt="Chilled maya nut beverage in a glass" class="hero-glass">
-          </a>
-        </div>
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-snow"></div>
+  <div class="hero-inner">
+    <div class="hero-right">
+      <div class="hero-text-wrap">
+        <img src="mobile-maya-nut-beverage-brosimum-alicastrum.png"
+             class="hero-title-img" alt="Maya nut beverage concept">
       </div>
 
-      <!-- Try Now button -->
-      <div class="hero-cta-wrap">
-        <a href="#buy" class="hero-cta-btn">Try Now!</a>
+      <div class="hero-image-wrap">
+        <a href="#buy" class="hero-image-link">
+          <img src="rach20.png" class="hero-glass" alt="Maya nut beverage glass">
+        </a>
       </div>
     </div>
-  </section>
 
-  <!-- TRANSITION: STORE -->
-  <div class="transition-strip">STORE</div>
-
-  <!-- STORE / BUY -->
-  <section class="section section--buy" id="buy">
-    <div class="section-inner store-inner">
-      <div class="store-heading">
-        <h2>Maya nut Store — Coming Soon</h2>
-        <p>Scroll to preview future beverages, powder, and flour products. These are placeholder items while the first maya nut plantation grows.</p>
-      </div>
-
-      <div class="store-scroller-wrapper">
-        <div class="store-scroller">
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="rach20.png" alt="Chilled maya nut beverage glass" class="store-item-photo">
-            </div>
-            <div class="store-item-label">Maya nut beverage coming soon!</div>
-          </div>
-
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png"
-                   alt="Maya nut powder made from Brosimum alicastrum"
-                   class="store-item-photo">
-            </div>
-            <div class="store-item-label">Maya nut powder (Brosimum alicastrum)</div>
-          </div>
-
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut image 1"
-                   class="store-item-photo">
-            </div>
-            <div class="store-item-label">Maya nut beverage – vanilla</div>
-          </div>
-
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut image 2"
-                   class="store-item-photo">
-            </div>
-            <div class="store-item-label">Maya nut beverage – mocha</div>
-          </div>
-
-          <div class="store-item">
-            <div class="store-item-image">
-              <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut image 3"
-                   class="store-item-photo">
-            </div>
-            <div class="store-item-label">Future maya nut tropical treats</div>
-          </div>
-        </div>
-      </div>
+    <div class="hero-cta-wrap">
+      <a href="#buy" class="hero-cta-btn">Try Now!</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- TRANSITION: ABOUT -->
-  <div class="transition-strip">ABOUT</div>
-
-  <!-- ABOUT -->
-  <section class="section section--about" id="about">
-    <div class="section-inner">
-      <div class="about-grid">
-        <div class="about-images">
-          <div class="about-image-tile">
-            <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
-            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" aria-label="Expand image">
-              <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-hint">👆 Click to Expand 👆</span>
-            </button>
-          </div>
-
-          <div class="about-image-tile">
-            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
-            <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="Expand image">
-              <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-hint">👆 Click to Expand 👆</span>
-            </button>
-          </div>
-
-          <div class="about-image-tile">
-            <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young maya nut Brosimum alicastrum trees growing in a nursery">
-            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-nursery.jpg" aria-label="Expand image">
-              <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-hint">👆 Click to Expand 👆</span>
-            </button>
-          </div>
-
-          <div class="about-image-tile">
-            <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
-            <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-moraceae.jpg" aria-label="Expand image">
-              <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-hint">👆 Click to Expand 👆</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="about-text-col">
-          <div class="about-text-card about-card-1">
-            <h2>About The MayaNut Company</h2>
-            <p><strong>Welcome to mayanut.com, home of The MayaNut Company.</strong> We were founded in 2025 by August Kokus, a South Floridian botanist. August wanted to create his own unique world, but how? He'd have to develop a species which had economic potential and was itself new. His facination with banyan trees led him to discover Moraceae, and soon the maya nut plant, which resembeled a fig in its fruit, but had a seed infinetly more valuable.</p>
-          </div>
-
-          <div class="about-text-card about-card-2">
-            <h3>August Kokus</h3>
-            <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. Often wondering and questioning the natural world around him and admiring its beauty, he wanted to capture that very essence of nature in something for humanity.</p>
-            <p>But what if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
-            <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up — literally — was a challenge worth accepting.</p>
-            <p>By 2030, August expects to have at least one functional plantation, at least one acre in size, for the world to start enjoying. It truly is amazing to create something new like a maya nut/breadnut plantation, and accomplishing things no one has ever achieved.</p>
-          </div>
-
-          <div class="about-text-card about-card-3">
-            <h3>Where We’re Growing</h3>
-            <p>South Florida’s subtropical climate makes it especially well suited for this species, which is why a dedicated maya nut plantation is being developed as the foundation for future maya nut beverages, powders, and more.</p>
-            <p>It is currently unknown how far north in Florida <em>Brosimum alicastrum</em> can grow and be successful, but any place in Florida at or below 27°N (just south of Stuart, Florida) is confirmed to be able to survive winters with ease. Trees could probably survive up to about 28°N as well, but long-term trials are still needed.</p>
-          </div>
-
-          <div class="about-text-card about-card-4">
-            <h3>Our Mission</h3>
-            <p>What we hope to achieve is a lasting effect down through the coming centuries — a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as maya nut, breadnut, ojoche, ramón, or guaimaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
-          </div>
-
-          <div class="about-text-card about-card-5">
-            <h3>Our Fascination</h3>
-            <p>From their wicked, entangled roots that grip ever tighter upon the Earth, there grows an agricultural miracle. We are fascinated by <em>Brosimum alicastrum</em> because this is a resource that no one has truly valued in America yet. People have used this tree for millennia in its native range, but by growing it in Florida, we give everyone a chance to try this delicious superfood. Developing something that people love is not easy — but it is the perfect challenge for The MayaNut Company to accomplish.</p>
-          </div>
-
-        </div>
-      </div>
+<!-- ========== STORE ========= -->
+<div class="transition-strip">STORE</div>
+<section class="section section--buy" id="buy">
+  <div class="section-inner store-inner">
+    <div class="store-heading">
+      <h2>Maya nut Store — Coming Soon</h2>
+      <p>Preview future beverages, powder, and flour.</p>
     </div>
-  </section>
 
-  <!-- TRANSITION: RESEARCH -->
-  <div class="transition-strip">RESEARCH</div>
+    <div class="store-scroller-wrapper">
+      <div class="store-scroller">
 
-  <!-- RESEARCH SECTION -->
-  <section class="section section--research" id="research">
-    <div class="section-inner">
-      <h2 style="color:#0803d4;">Research on Brosimum alicastrum (maya nut)</h2>
-      <p><strong>The MayaNut Company is deeply interested in the science and history behind <em>Brosimum alicastrum</em>.</strong> Around the world, researchers have studied its nutritional profile, potential use as a staple food, ecological roles in tropical forests, and its long history as a traditional food source.</p>
-
-      <div class="research-grid">
-
-        <div class="research-card">
-          <h2>Common Names &amp; Synonyms</h2>
-          <p><em>Brosimum alicastrum</em> is known by many common names across its range. In English and Spanish it is often called maya nut or nuez de ramón. Other names include breadnut, ojoche, ramón, guaimaro, and regional spellings such as guayumaro, oox or ox.</p>
-          <p>All of these names generally refer to the same tree species and its edible seeds. Using “maya nut” helps people discover this underused tropical resource in search engines and scientific literature.</p>
+        <div class="store-item">
+          <div class="store-item-image">
+            <img src="rach20.png" class="store-item-photo">
+          </div>
+          <div class="store-item-label">Maya nut beverage coming soon!</div>
         </div>
 
-        <div class="research-card">
-          <h2>Natural Range &amp; Climate</h2>
-          <p><em>Brosimum alicastrum</em>, commonly called maya nut, mayan breadnut, breadnut, ramón, ojoche, or guaimaro, is native to the tropical and subtropical forests of Mesoamerica and northern South America. Its natural range extends from southern Mexico and Guatemala through much of Central America and into parts of Colombia and Venezuela.</p>
-          <p>In its home range the tree can be found from lowland rainforests near sea level up into mid-elevation cloud forests. It prefers warm, humid climates with distinct wet and dry seasons, and it tolerates a wide variety of soils as long as they are not permanently waterlogged.</p>
-          <p>For Florida, The MayaNut Company is especially interested in how far north the species can be grown reliably. Early evidence suggests that areas at or below about 27°N (just south of Stuart, Florida) should be suitable for long-term cultivation, with the best success expected in the warmest parts of South Florida.</p>
+        <div class="store-item">
+          <div class="store-item-image">
+            <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png" class="store-item-photo">
+          </div>
+          <div class="store-item-label">Maya nut powder</div>
         </div>
 
-        <div class="research-card">
-          <h2>Growth</h2>
-          <p>Maya nut is a medium to large evergreen tree, often reaching 20–35&nbsp;m (65–100&nbsp;ft) tall in favorable conditions. Young trees typically grow with a straight trunk and a dense, rounded canopy that becomes more spreading with age.</p>
-          <p>Seedlings establish best in filtered light or partial shade, then gradually adapt to more open conditions as they mature. Once rooted, the tree develops a strong, extensive root system that helps it tolerate seasonal droughts and anchor itself firmly in the soil.</p>
-          <p>Flowering and fruiting depend on local climate, but in many areas trees can bear annually once they reach maturity. The fruits ripen into small, yellow-orange drupes containing a single, nutritious seed — the “maya nut” — which can be dried, roasted, or ground into flour or beverage bases.</p>
-        </div>
-
-        <div class="research-card">
-          <h2>In Agriculture</h2>
-          <p>Maya nut has strong potential as a multipurpose agroforestry tree. Its dense canopy provides deep, cool shade that can protect understory crops, livestock, or people from intense tropical sun. In traditional systems the tree has been grown with maize, cacao, and other crops, helping to stabilize soils and recycle nutrients through leaf litter.</p>
-          <p>The seeds themselves are a highly versatile product. They can be roasted to make a caffeine-free beverage, ground into flour for baking, or combined with other ingredients for new food and drink products. Leaves and fallen fruit have also been used as animal fodder in some regions.</p>
-          <p>For Florida, The MayaNut Company is exploring how maya nut can fit into modern tropical agriculture — including mixed plantings, windbreaks, shade systems, and future commercial orchards focused on beverage, powder, and flour production.</p>
-        </div>
-
-        <div class="research-card">
-          <h2>Ecology &amp; Forest Role</h2>
-          <p>In its native forests, <em>Brosimum alicastrum</em> is an important food source for wildlife. Bats, birds, and terrestrial mammals feed on the fruit and help disperse the seeds. The tree’s deep roots and dense canopy contribute to soil stability, water regulation, and local microclimates.</p>
-          <p>Because it can fruit heavily and consistently, maya nut has been considered in some areas as a key species for forest restoration and community food security projects, helping bridge gaps between conservation and sustainable livelihoods.</p>
-        </div>
-
-        <div class="research-card">
-          <h2>Future Directions</h2>
-          <p>The MayaNut Company is working toward a future in which maya nut is a familiar and celebrated ingredient in American kitchens. That future will depend on careful field trials, selection of promising seed sources, and collaboration with growers, researchers, and local communities across Florida and beyond.</p>
-          <p>As new farms are established and more data become available, this page will grow to include findings on cold tolerance, yield potential in different parts of Florida, ideal spacing, intercropping combinations, and processing methods for beverages, powders, and flours.</p>
-          <p>Until then, this research overview is a starting point — a way to share why we believe <em>Brosimum alicastrum</em> is worth watching, planting, and studying for generations to come.</p>
+        <div class="store-item">
+          <div class="store-item-image">
+            <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" class="store-item-photo">
+          </div>
+          <div class="store-item-label">Future beverages</div>
         </div>
 
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- TRANSITION: GALLERY -->
-  <div class="transition-strip">GALLERY</div>
+<!-- ========== ABOUT ========= -->
+<div class="transition-strip">ABOUT</div>
+<section class="section section--about" id="about">
+  <div class="section-inner about-inner">
 
-  <!-- GALLERY SECTION -->
-  <section class="section section--gallery" id="gallery">
-    <div class="section-inner gallery-inner">
-      <h2 style="color:#0803d4;">Maya Nut Image Gallery</h2>
-      <p class="gallery-intro">
-        A wall of maya nut images. All placeholders currently point to
-        <code>maya-nut-mayanut-fruit-brosimum-alicastrum.jpg</code> so you can swap them later.
-      </p>
-
-      <div class="gallery-grid-wrapper">
-
-        <!-- First 3 rows (initial view) -->
-        <div class="gallery-block gallery-faded" id="gallery-block-1">
-          <!-- 15 images: 3 rows × 5 columns -->
-          <!-- Row 1 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 1"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 2"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 3"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 4"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 5"></div>
-          <!-- Row 2 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 6"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 7"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 8"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 9"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 10"></div>
-          <!-- Row 3 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 11"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 12"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 13"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 14"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 15"></div>
+    <div class="about-grid">
+      <div class="about-images">
+        <div class="about-image-tile">
+          <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg">
+          <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg">
+            <span class="img-expand-icon">⤢</span>
+            <span class="img-expand-hint">Expand</span>
+          </button>
         </div>
 
-        <div class="gallery-more-wrap" id="gallery-more-1-wrap">
-          <button class="gallery-more-btn" id="gallery-more-1-btn">Click to view more</button>
+        <div class="about-image-tile">
+          <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square">
+          <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg">
+            <span class="img-expand-icon">⤢</span>
+            <span class="img-expand-hint">Expand</span>
+          </button>
         </div>
-
-        <!-- Second set of 15 images (hidden until click) -->
-        <div class="gallery-block gallery-block-extra" id="gallery-block-2">
-          <!-- Row 4 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 16"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 17"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 18"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 19"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 20"></div>
-          <!-- Row 5 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 21"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 22"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 23"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 24"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 25"></div>
-          <!-- Row 6 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 26"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 27"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 28"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 29"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 30"></div>
-        </div>
-
-        <div class="gallery-more-wrap" id="gallery-more-2-wrap" style="display:none;">
-          <button class="gallery-more-btn" id="gallery-more-2-btn">Click to see more</button>
-        </div>
-
-        <!-- Third set of 15 images (final, hidden until second click) -->
-        <div class="gallery-block gallery-block-extra" id="gallery-block-3">
-          <!-- Row 7 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 31"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 32"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 33"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 34"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 35"></div>
-          <!-- Row 8 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 36"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 37"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 38"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 39"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 40"></div>
-          <!-- Row 9 -->
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 41"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 42"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 43"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 44"></div>
-          <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut image 45"></div>
-        </div>
-
       </div>
-    </div>
-  </section>
 
-  <!-- TRANSITION: BLOG -->
-  <div class="transition-strip">BLOG</div>
-
-  <!-- BLOG SECTION -->
-  <section class="section section--blog" id="blog">
-    <div class="section-inner">
-      <h2>The MayaNut Company Blog</h2>
-      <p><strong>Our blog will follow the journey of maya nut from seed to beverage.</strong> We plan to share updates about our farms, planting experiments, weather events, and behind-the-scenes notes as we develop our first maya nut products.</p>
-      <p>Future posts may include:</p>
-      <ul>
-        <li>Planting diaries from different parts of South Florida</li>
-        <li>Thoughts on agroforestry and long-term tree crops</li>
-        <li>Early taste tests and recipe ideas for maya nut beverages and flours</li>
-        <li>Reflections on what it means to build a brand-new industry around an underused species</li>
-      </ul>
-      <p>As the project grows, the blog on this main page will become a living record of how The MayaNut Company develops over the years.</p>
-    </div>
-  </section>
-
-  <!-- TRANSITION: FAQ -->
-  <div class="transition-strip">FAQ</div>
-
-  <!-- FAQ SECTION -->
-  <section class="section section--faq" id="faq">
-    <div class="section-inner">
-      <div class="faq-list">
-        <div class="faq-item">
-          <h3>What is maya nut?</h3>
-          <p>Maya nut is the seed of the mysterious, tropical rainforest tree <em>Brosimum alicastrum</em>. The seed can be roasted and ground into a powder, then brewed into a rich, naturally caffeine-free beverage. If harvested fresh and seperated from its fruity pulp, the seeds can can go through a process nixtamalization, which is the very same process corn must go through to become corn-flour. Seeds may then be ground into a paste and made into tortillas or any baked goods like cookies and bread.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Is maya nut the same as breadnut, ojoche or ramón?</h3>
-          <p>Yes. In different regions, the tree and its seeds are known as maya nut, breadnut, ojoche, ramón or guaimaro. They all refer to the same species, <em>Brosimum alicastrum</em>, or to its roasted seeds used for food and drink. For English, mayanut as one word, just like jackfruit, should be used to refer to this new plant.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Can Brosimum alicastrum grow in Florida?</h3>
-          <p>Early observations suggest that warm parts of Florida, especially South Florida at or below about 27°N, can support this species. Our work focuses on proving how well maya nut can grow and produce in subtropical Florida conditions. No one has yet come along to commercilaze this species, and we, The MayaNut Company, choose Brosimum alicastrum as our candidate species for the reviltization of humanity.</p>
-        </div>
-        <div class="faq-item">
-          <h3>When will I be able to buy maya nut beverages?</h3>
-          <p>The plantation is still being established. Our goal is to have functional plantings and early products by the late 2020s, ('28-'29). Until then, this site shows concepts and placeholder products while the trees grow. As of late November, 2025, we currently have 200 mayanut trees ready for a forever home. The most probably, an old citrus grove. With a dying citrus industry, and monoculture orchards, ensuring genetic diversity in Brosimum alicastrum population by continous expeditions seeking new genetic strains of unique qualities. Our dream would be to replace the orange on the Florida license plate, as the new breadwinner of South Florida agriculture.</p>
-        </div>
-        <div class="faq-item">
-          <h3>Is The MayaNut Company currently open to partnerships?</h3>
-          <p>We are in an early development phase and welcome interest from growers, researchers, and future distribution partners. See the Contact section below to reach out.</p>
+      <div class="about-text-col">
+        <div class="about-text-card about-card-1">
+          <h2>About The MayaNut Company</h2>
+          <p>Welcome to mayanut.com, home of The MayaNut Company. Founded in 2025 by August Kokus…</p>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- TRANSITION: CONTACT -->
-  <div class="transition-strip">CONTACT</div>
+  </div>
+</section>
 
-  <!-- CONTACT SECTION -->
-  <section class="section section--contact" id="contact">
-    <div class="section-inner">
-      <h2>Contact The MayaNut Company</h2>
-      <p>If you are interested in maya nut trees, future maya nut beverages and powders, agroforestry in Florida, or potential research or business collaborations, we would welcome you and be happy to hear from you.</p>
-      <p><strong>Email:</strong> <a href="mailto:themayanutcompany@gmail.com" style="color:#ff941f; text-decoration:underline;">themayanutcompany@gmail.com</a></p>
-      <p><strong>Instagram:</strong> <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" style="color:#ff941f; text-decoration:underline;">@themayanutcompany</a></p>
-      <p>As the project grows, this main page at mayanut.com will remain the central place to learn about our plantation, products, and news. Thank you for your support because it contributes to the evolution of a species.</p>
+<!-- ========== RESEARCH ========== -->
+<div class="transition-strip">RESEARCH</div>
+<section class="section section--research" id="research">
+  <div class="section-inner">
+    <h2>Research on Brosimum alicastrum</h2>
+    <p>Maya nut is known as breadnut, ojoche, ramón, and guaimaro…</p>
+
+    <div class="research-grid">
+      <div class="research-card">
+        <h2>Common Names</h2>
+        <p>Brosimum alicastrum is called maya nut, breadnut, ojoche…</p>
+      </div>
+
+      <div class="research-card">
+        <h2>Natural Range</h2>
+        <p>Native to Mesoamerica, thriving from sea level to cloud forests…</p>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- BOTTOM LOGO SECTION -->
-  <section class="section section--bottom-logo">
-    <div class="section-inner">
-      <a href="#top" id="bottom-logo-link">
-        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
-      </a>
+<!-- ========== GALLERY ========== -->
+<div class="transition-strip">GALLERY</div>
+<section class="section section--gallery" id="gallery">
+  <div class="section-inner gallery-inner">
+    <h2>Maya Nut Image Gallery</h2>
+
+    <div class="gallery-grid-wrapper">
+      <div class="gallery-block gallery-faded" id="gallery-block-1">
+        <!-- 15 images -->
+        <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"></div>
+        <div class="gallery-item"><img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"></div>
+        <!-- ... repeat to 15 ... -->
+      </div>
+
+      <div class="gallery-more-wrap" id="gallery-more-1-wrap">
+        <button class="gallery-more-btn" id="gallery-more-1-btn">Click to view more</button>
+      </div>
+
+      <div class="gallery-block gallery-block-extra" id="gallery-block-2">
+        <!-- more images -->
+      </div>
+
+      <div class="gallery-more-wrap" id="gallery-more-2-wrap" style="display:none;">
+        <button class="gallery-more-btn" id="gallery-more-2-btn">Click to see more</button>
+      </div>
+
+      <div class="gallery-block gallery-block-extra" id="gallery-block-3">
+        <!-- last set -->
+      </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- ========== BLOG ========== -->
+<div class="transition-strip">BLOG</div>
+<section class="section section--blog" id="blog">
+  <div class="section-inner">
+    <h2>MayaNut Blog</h2>
+    <p>Updates on planting, growth, weather, beverage experiments…</p>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<div class="transition-strip">FAQ</div>
+<section class="section section--faq" id="faq">
+  <div class="section-inner">
+    <div class="faq-list">
+      <div class="faq-item">
+        <h3>What is maya nut?</h3>
+        <p>Maya nut is the roasted seed of Brosimum alicastrum…</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<div class="transition-strip">CONTACT</div>
+<section class="section section--contact" id="contact">
+  <div class="section-inner">
+    <h2>Contact The MayaNut Company</h2>
+    <p>Email: <a href="mailto:themayanutcompany@gmail.com">themayanutcompany@gmail.com</a></p>
+  </div>
+</section>
+
+<!-- Bottom logo -->
+<section class="section section--bottom-logo">
+  <div class="section-inner">
+    <a href="#top">
+      <img src="mayanut-the-maya-nut-company-logo.png">
+    </a>
+  </div>
+</section>
 
 </main>
 
 <footer>
   <div class="footer-inner">
-    <hr class="footer-line" />
+    <hr class="footer-line">
     <div class="footer-row">
       <div class="footer-links">
         <a id="privacy-link">Privacy Policy</a>
         <a id="dns-link">Do Not Sell My Info</a>
       </div>
       <div class="footer-instagram">
-        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company on Instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank">
           <span>IG</span>
         </a>
       </div>
     </div>
-    <div class="footer-copy">
-      © 2025 The MayaNut Company, Inc. All Rights Reserved.
-    </div>
+    <div class="footer-copy">© 2025 The MayaNut Company</div>
   </div>
 </footer>
 
 <!-- Welcome popup -->
 <div class="welcome-backdrop" id="welcome-backdrop">
   <div class="welcome-modal">
-    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
-
+    <button class="welcome-close" id="welcome-close">&times;</button>
     <div class="welcome-panel welcome-panel-left">
       <h2 class="welcome-title">Welcome to mayanut.com</h2>
-      <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>) plantations of tropical trees.</p>
-      <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience!</p>
+      <p>We’re building Florida’s first Maya Nut plantation…</p>
     </div>
-
     <div class="welcome-panel welcome-panel-right">
-      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo">
+      <img src="mayanut-the-maya-nut-company-logo.png" class="welcome-logo">
       <button class="welcome-main-btn hero-cta-btn" id="welcome-main-btn">Go to Main Page</button>
     </div>
   </div>
 </div>
 
-<!-- Privacy / DNS Modal -->
+<!-- Privacy modal -->
 <div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
     <h3 id="modal-title">Privacy Policy</h3>
     <div id="modal-body">
-      <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-      <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-      <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
+      <p>We do not sell your information.</p>
     </div>
     <button class="modal-close" id="modal-close">Close</button>
   </div>
 </div>
 
-<!-- Lightbox for expanded images -->
+<!-- Lightbox -->
 <div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
   <div class="img-lightbox-content">
-    <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
-    <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
+    <img id="img-lightbox-img" class="img-lightbox-img">
+    <button class="img-lightbox-close" id="img-lightbox-close">&times;</button>
   </div>
 </div>
 
-<!-- Chat assistant launcher -->
-<div class="chat-launcher" id="chat-launcher" aria-label="Open maya nut chat assistant">
-  <div class="chat-icon-bubble">
-    <span class="chat-icon-dots">...</span>
-  </div>
+<!-- Chat Launcher -->
+<div class="chat-launcher" id="chat-launcher">
+  <div class="chat-icon-bubble"><span class="chat-icon-dots">...</span></div>
 </div>
 
-<div class="chat-panel" id="chat-panel" aria-label="maya nut chat assistant">
+<!-- Chat Panel -->
+<div class="chat-panel" id="chat-panel">
   <div class="chat-panel-header">
     <div class="chat-panel-title">Maya nut Assistant</div>
-    <button class="chat-panel-close" id="chat-close" aria-label="Close chat">&times;</button>
+    <button class="chat-panel-close" id="chat-close">&times;</button>
   </div>
   <div class="chat-panel-body" id="chat-log">
-    <div class="chat-msg">
-      <strong>Bot:</strong> Hi! I’m a tiny FAQ helper. Ask me about maya nut, Brosimum alicastrum, or this website.
-    </div>
+    <div class="chat-msg"><strong>Bot:</strong> Ask me anything about Maya Nut!</div>
   </div>
   <div class="chat-panel-input-row">
-    <input type="text" id="chat-input" class="chat-panel-input" placeholder="Ask a short question…" />
-    <button class="chat-panel-send" id="chat-send">Ask</button>
+    <input id="chat-input" class="chat-panel-input" placeholder="Ask something...">
+    <button id="chat-send" class="chat-panel-send">Ask</button>
   </div>
 </div>
 
-<!-- ========================= -->
-<!-- 🌱 FULL JS SCRIPT BLOCK  -->
-<!-- ========================= -->
+<!-- JS -->
 <script>
-/* LANGUAGE DROPDOWN */
+/* Language */
 (function(){
-  const toggle = document.getElementById('lang-toggle');
-  const dropdown = document.getElementById('lang-dropdown');
-  const currentSpan = document.getElementById('lang-current');
-
-  if(!toggle || !dropdown || !currentSpan) return;
-
-  const items = dropdown.querySelectorAll('[data-file]');
-  const file = window.location.pathname.split('/').pop() || 'index.html';
+  const toggle=document.getElementById("lang-toggle");
+  const dd=document.getElementById("lang-dropdown");
+  const current=document.getElementById("lang-current");
+  const items=dd.querySelectorAll("li");
+  const file=window.location.pathname.split("/").pop()||"index.html";
 
   items.forEach(i=>{
-    if(i.getAttribute('data-file')===file){
-      currentSpan.textContent=i.textContent.trim();
-      i.classList.add('active');
+    if(i.getAttribute("data-file")===file){
+      current.textContent=i.textContent;
+      i.classList.add("active");
     }
+    i.addEventListener("click",()=>{window.location=i.dataset.file;});
   });
 
-  toggle.addEventListener('click', e=>{
+  toggle.addEventListener("click",e=>{
     e.stopPropagation();
-    dropdown.classList.toggle('open');
+    dd.classList.toggle("open");
   });
-
-  items.forEach(i=>{
-    i.addEventListener('click',()=>{
-      window.location.href=i.getAttribute('data-file');
-    });
-  });
-
-  document.addEventListener('click', e=>{
-    if(!dropdown.contains(e.target) && !toggle.contains(e.target)){
-      dropdown.classList.remove('open');
-    }
-  });
+  document.addEventListener("click",()=>dd.classList.remove("open"));
 })();
 
-/* PRIVACY MODAL */
+/* Menu */
 (function(){
-  const backdrop=document.getElementById('modal-backdrop');
-  const titleEl=document.getElementById('modal-title');
-  const bodyEl=document.getElementById('modal-body');
-  const closeBtn=document.getElementById('modal-close');
-  const privacy=document.getElementById('privacy-link');
-  const dns=document.getElementById('dns-link');
+  const t=document.getElementById("menu-toggle");
+  const b=document.getElementById("nav-backdrop");
+  const c=document.getElementById("nav-close");
 
-  function open(kind){
-    backdrop.style.display='flex';
-    if(kind==='privacy'){
-      titleEl.textContent='Privacy Policy';
-      bodyEl.innerHTML=`<p>We collect only the minimum information needed...</p>`;
-    }else{
-      titleEl.textContent='Do Not Sell My Info';
-      bodyEl.innerHTML=`<p>The MayaNut Company does not sell data...</p>`;
-    }
-  }
-  function close(){ backdrop.style.display='none'; }
-
-  privacy.addEventListener('click',()=>open('privacy'));
-  dns.addEventListener('click',()=>open('dns'));
-  closeBtn.addEventListener('click',close);
-  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
+  t.addEventListener("click",()=>{ t.classList.toggle("open"); b.classList.toggle("open"); });
+  c.addEventListener("click",()=>{ t.classList.remove("open"); b.classList.remove("open"); });
+  b.addEventListener("click",e=>{ if(e.target===b){ t.classList.remove("open"); b.classList.remove("open"); }});
 })();
 
-/* NAV OVERLAY */
+/* Lightbox */
 (function(){
-  const toggle=document.getElementById('menu-toggle');
-  const backdrop=document.getElementById('nav-backdrop');
-  const closeBtn=document.getElementById('nav-close');
+  const btns=document.querySelectorAll(".img-expand-btn");
+  const bg=document.getElementById("img-lightbox-backdrop");
+  const img=document.getElementById("img-lightbox-img");
+  const close=document.getElementById("img-lightbox-close");
 
-  toggle.addEventListener('click',()=>{
-    toggle.classList.toggle('open');
-    backdrop.classList.toggle('open');
-  });
+  btns.forEach(b=>b.addEventListener("click",()=>{
+    img.src=b.dataset.imgSrc;
+    bg.classList.add("open");
+  }));
 
-  closeBtn.addEventListener('click',()=>{
-    toggle.classList.remove('open');
-    backdrop.classList.remove('open');
-  });
-
-  backdrop.addEventListener('click',e=>{
-    if(e.target===backdrop){
-      toggle.classList.remove('open');
-      backdrop.classList.remove('open');
-    }
-  });
+  close.addEventListener("click",()=>bg.classList.remove("open"));
+  bg.addEventListener("click",e=>{if(e.target===bg)bg.classList.remove("open");});
 })();
 
-/* ABOUT → LIGHTBOX */
+/* Chat bot */
 (function(){
-  const buttons=document.querySelectorAll('.img-expand-btn');
-  const backdrop=document.getElementById('img-lightbox-backdrop');
-  const img=document.getElementById('img-lightbox-img');
-  const close=document.getElementById('img-lightbox-close');
+  const launcher=document.getElementById("chat-launcher");
+  const panel=document.getElementById("chat-panel");
+  const close=document.getElementById("chat-close");
+  const input=document.getElementById("chat-input");
+  const send=document.getElementById("chat-send");
+  const log=document.getElementById("chat-log");
 
-  buttons.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      img.src=btn.getAttribute('data-img-src');
-      backdrop.classList.add('open');
-    });
-  });
-
-  close.addEventListener('click',()=>backdrop.classList.remove('open'));
-  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) backdrop.classList.remove('open'); });
-})();
-
-/* CHAT BOT */
-(function(){
-  const launcher=document.getElementById('chat-launcher');
-  const panel=document.getElementById('chat-panel');
-  const closeBtn=document.getElementById('chat-close');
-  const input=document.getElementById('chat-input');
-  const send=document.getElementById('chat-send');
-  const log=document.getElementById('chat-log');
-
-  launcher.addEventListener('click',()=>{
-    panel.style.display = panel.style.display==='block' ? 'none':'block';
+  launcher.addEventListener("click",()=>{
+    panel.style.display=panel.style.display==="block"?"none":"block";
     input.focus();
   });
+  close.addEventListener("click",()=>panel.style.display="none");
 
-  closeBtn.addEventListener('click',()=>panel.style.display='none');
-
-  function write(role,text){
-    const div=document.createElement('div');
-    div.className='chat-msg';
-    div.innerHTML=`<strong>${role}:</strong> ${text}`;
-    log.appendChild(div);
+  function write(r,t){
+    const d=document.createElement("div");
+    d.className="chat-msg";
+    d.innerHTML=`<strong>${r}:</strong> ${t}`;
+    log.appendChild(d);
     log.scrollTop=log.scrollHeight;
   }
 
-  function respond(message){
-    const m=message.toLowerCase();
-    if(m.includes("mayanut")||m.includes("brosimum")){
-      write("Bot","Maya nut is the roasted seed of Brosimum alicastrum!");
-    }else{
-      write("Bot","Ask me something about maya nut or this site!");
+  function respond(m){
+    m=m.toLowerCase();
+    if(m.includes("maya")||m.includes("brosimum")){
+      write("Bot","Maya nut comes from Brosimum alicastrum, a tropical tree!");
+    } else {
+      write("Bot","Ask me something about Maya Nut or this website!");
     }
   }
 
-  send.addEventListener('click',()=>{
-    const val=input.value.trim();
-    if(!val) return;
-    write("You",val);
+  send.addEventListener("click",()=>{
+    const m=input.value.trim();
+    if(!m) return;
+    write("You",m);
     input.value="";
-    respond(val);
+    respond(m);
   });
 
-  input.addEventListener('keydown',e=>{
-    if(e.key==="Enter"){ send.click(); }
-  });
+  input.addEventListener("keydown",e=>{ if(e.key==="Enter") send.click(); });
 })();
 
-/* GALLERY LOAD MORE */
+/* Gallery Load More */
 (function(){
-  const b1=document.getElementById('gallery-block-1');
-  const b2=document.getElementById('gallery-block-2');
-  const b3=document.getElementById('gallery-block-3');
-  const btn1=document.getElementById('gallery-more-1-btn');
-  const btn2=document.getElementById('gallery-more-2-btn');
-  const wrap2=document.getElementById('gallery-more-2-wrap');
+  const b1=document.getElementById("gallery-block-1");
+  const b2=document.getElementById("gallery-block-2");
+  const b3=document.getElementById("gallery-block-3");
+  const m1=document.getElementById("gallery-more-1-btn");
+  const m2=document.getElementById("gallery-more-2-btn");
+  const w2=document.getElementById("gallery-more-2-wrap");
 
-  btn1.addEventListener('click',()=>{
-    b2.style.display='grid';
-    wrap2.style.display='block';
-    btn1.style.display='none';
+  m1.addEventListener("click",()=>{
+    b2.style.display="grid";
+    w2.style.display="block";
+    m1.style.display="none";
   });
-
-  btn2.addEventListener('click',()=>{
-    b3.style.display='grid';
-    btn2.style.display='none';
+  m2.addEventListener("click",()=>{
+    b3.style.display="grid";
+    m2.style.display="none";
   });
 })();
 </script>
