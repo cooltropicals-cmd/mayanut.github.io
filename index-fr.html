@@ -1,44 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>MayaNut Gradient Test 2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Bungee&display=swap" rel="stylesheet">
+
 <style>
-/* ==== GLOBAL NEW GREEN GRADIENTS ==== */
 :root{
-  /* Full-spectrum hero gradient (Option A) */
+  /* HERO BACKGROUND
+     Center: darker vivid orange
+     Middle ring: previous center orange
+     Then yellow → darker greens (not neon) → very dark edges
+  */
   --hero-bg: radial-gradient(circle at 50% 50%,
-      #ff7a00 0%,      /* deep orange center */
-      #ffbf00 28%,     /* yellow */
-      #42d600 55%,     /* vivid green */
-      #006a00 85%,     /* deep green */
-      #003300 100%     /* very dark edge green */
+      #e85a00 0%,      /* darker vivid orange core */
+      #ff9b2f 22%,     /* your previous orange center as mid ring */
+      #ffd34d 40%,     /* warm yellow */
+      #2c8f3a 60%,     /* darker, less-neon green */
+      #045323 82%,     /* deep forest green */
+      #001809 100%     /* very dark green edge */
   );
 
-  /* Top/Bottom bars: dark → vivid green symmetrical */
+  /* TOP/BOTTOM BARS – darker edges → vivid green center */
   --bar-green: linear-gradient(90deg,
-      #003300 0%,
-      #007000 50%,
-      #003300 100%
+      #001808 0%,
+      #0a6f2f 50%,
+      #001808 100%
   );
 
-  /* Lighter vivid green center glow for the logo area */
+  /* Mini logo “aura” if you want to use it later */
   --logo-bg: radial-gradient(circle at 50% 50%,
-      #ff9a00 0%,
-      #ffd34d 18%,
-      #4ee000 40%,
-      #006800 70%,
-      #003000 100%
+      #e85a00 0%,
+      #ffb63a 20%,
+      #46b53d 42%,
+      #045323 75%,
+      #001809 100%
   );
 }
 
-/* RESET */
+/* RESET / BASE */
+*,
+*::before,
+*::after{ box-sizing:border-box; }
+
 body{
   margin:0;
   padding:0;
   background:var(--hero-bg);
   background-attachment:fixed;
-  font-family:"Inter", sans-serif;
+  background-repeat:no-repeat;
+  background-size:cover;
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color:#fff;
   overflow-x:hidden;
 }
 
-/* ==== TOP BAR WITH YOUR NEW DARK-TO-LIGHT GREEN ==== */
+/* TOP TAB – darker outer edges, vivid green center */
 .topbar{
   position:fixed;
   top:0; left:0; right:0;
@@ -47,12 +66,16 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  color:white;
+  color:#ffffff;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:18px;
+  letter-spacing:0.08em;
   z-index:2000;
   border-bottom:2px solid rgba(255,255,255,0.35);
+  text-shadow:0 1px 2px rgba(0,0,0,0.6);
 }
 
-/* ==== HERO SECTION WITH YOUR NEW SPECTRUM GRADIENT ==== */
+/* HERO */
 .hero{
   min-height:100vh;
   width:100%;
@@ -61,66 +84,81 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding-top:80px;
-  padding-bottom:80px;
+  padding:90px 16px 80px;
   text-align:center;
 }
 
-/* Hero Logo (unchanged, you’ll replace src with your image) */
+/* Logo block – you can later wrap this in the circular logo-bg if you want */
 .hero-logo{
   width:260px;
   max-width:80vw;
   display:block;
   margin-bottom:40px;
+  padding:20px;
+  border-radius:32px;
   background:var(--logo-bg);
-  padding:25px;
-  border-radius:30px;
   box-shadow:0 0 40px rgba(0,0,0,0.45);
 }
 
-/* CTA BUTTON (your dark blue → light blue) */
+/* CTA BUTTON – your blue gradient */
 .hero-btn{
   background:linear-gradient(135deg, #0803d4 0%, #00b6fb 100%);
-  padding:18px 65px;
-  border-radius:100px;
-  font-family:"Bungee", sans-serif;
-  font-size:25px;
-  color:white;
+  padding:18px 70px;
+  border-radius:999px;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:24px;
+  color:#ffffff;
   border:none;
   text-decoration:none;
-  box-shadow:0 5px 15px rgba(0,0,0,0.35);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 5px 16px rgba(0,0,0,0.35);
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  margin-top:10px;
+  cursor:pointer;
+  transition:transform 0.12s ease, box-shadow 0.12s ease;
 }
-
 .hero-btn:hover{
-  transform:scale(1.03);
+  transform:translateY(-1px) scale(1.03);
+  box-shadow:0 7px 20px rgba(0,0,0,0.45);
 }
 
-/* ==== BOTTOM BAR ==== */
+/* BOTTOM TAB – same bar, mirrored at the bottom */
 .bottom-strip{
   height:70px;
   background:var(--bar-green);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:white;
-  border-top:2px solid rgba(255,255,255,0.35);
-  font-family:"Bungee", sans-serif;
+  color:#ffffff;
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size:18px;
+  letter-spacing:0.08em;
+  border-top:2px solid rgba(255,255,255,0.35);
+  text-shadow:0 1px 2px rgba(0,0,0,0.6);
 }
 </style>
+</head>
+<body>
 
-
-<!-- ==== HTML STRUCTURE (Homepage Only) ==== -->
 <header class="topbar">
-  <div>THE MAYANUT COMPANY</div>
+  THE MAYANUT COMPANY
 </header>
 
 <section class="hero">
-  <img src="mayanut-the-maya-nut-company-logo.png" class="hero-logo" alt="The MayaNut Company logo">
+  <!-- Your real logo file goes here -->
+  <img src="mayanut-the-maya-nut-company-logo.png"
+       alt="The MayaNut Company logo"
+       class="hero-logo">
 
-  <a href="#buy" class="hero-btn">Try Now!</a>
+  <a href="#buy" class="hero-btn">TRY NOW!</a>
 </section>
 
 <div class="bottom-strip">
   SCROLL TO EXPLORE
 </div>
+
+</body>
+</html>
