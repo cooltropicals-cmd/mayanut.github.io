@@ -1,77 +1,64 @@
 # Security Policy
 
 ## Supported Versions
-We update security fixes for the following versions of this project:
+We currently support security updates for the latest version of this project.
 
-| Version | Supported          |
-|---------|--------------------|
-| main    | ✔ Always supported |
-| older versions | ❌ Not supported |
-
-If you find a vulnerability in an older version, please test it against `main` before reporting.
+| Version | Supported |
+|---------|-----------|
+| main    | ✔ Yes     |
+| older versions | ❌ No |
 
 ---
 
 ## Reporting a Vulnerability
 
-If you believe you’ve found a security vulnerability, please contact:
+If you discover a security vulnerability in the code, please **do not create a public issue**.
 
-**themayanutcompany@gmail.com**  
-Subject: **Security Vulnerability Report**
+Instead, contact us privately at:
+
+📧 **themayanutcompany@gmail.com**  
+Subject: *Security Vulnerability Report*
 
 Please include:
-- A detailed description of the issue  
-- Steps to reproduce the vulnerability  
-- Any relevant URLs, screenshots, or logs  
-- Your environment (browser, OS, device)
+- a detailed description  
+- steps to reproduce  
+- browser/device information  
+- screenshots (if helpful)
 
-We will reply within **5 business days**.
+We will acknowledge your message within **5 business days**.
 
 ---
 
-## Responsible Disclosure
+## Responsible Disclosure Guidelines
 
-We ask that:
-- You give us reasonable time to review and fix issues before public disclosure  
-- You avoid testing that affects service availability (no DDoS, spam, or destruction)  
-- You do not access private data you do not own  
-- You avoid using automated scanners against production servers
+We ask that you:
+- Do not publicly disclose vulnerabilities before we fix them  
+- Avoid testing that harms availability (e.g., DDoS)  
+- Do not attempt to access private user data  
+- Do not use automated scanning tools that overload the server  
 
 We will:
-- Review the issue promptly  
-- Provide updates as we validate and work on a fix  
-- Give credit (optional) if you want acknowledgment after a fix is released  
+- Review and validate the issue  
+- Provide updates during the fix  
+- Credit you (optional)  
 
 ---
 
 ## Scope
 
 This policy applies to:
-
-- **The mayanut.com website**
-- **All code in this repository**
-- **Public-facing web assets owned by The MayaNut Company**
+- https://mayanut.com  
+- This GitHub repository  
+- All public-facing assets created by The MayaNut Company  
 
 Out of scope:
 - Social media accounts  
-- 3rd-party services we use (e.g., GitHub Pages hosting)  
-- Physical security or social engineering attacks  
-
----
-
-## Security Best Practices for Contributors
-
-If you contribute to this repository:
-
-- Do not commit API keys, secrets, tokens, or sensitive environment variables  
-- Use `.gitignore` for build or local environment files  
-- Sanitize user input before processing or storing  
-- Avoid unsafe inline JS or eval-type functions  
-- Use HTTPS for all external resources  
-- Follow modern security guidelines (CSP, input validation, escape output)
+- Third-party platforms (e.g., GitHub Pages infrastructure)  
+- Physical security  
 
 ---
 
 ## Thank You
 
-We appreciate anyone who helps improve the security and integrity of The MayaNut Company’s digital ecosystem.
+We appreciate anyone who helps improve the security and stability
+of The MayaNut Company’s online presence!
