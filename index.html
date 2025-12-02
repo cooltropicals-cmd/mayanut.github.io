@@ -313,6 +313,14 @@ body{
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
   cursor:pointer;
 }
+
+/* 15% bigger logo on desktop only */
+@media (min-width:601px){
+  .topbar-logo{
+    width:103.5px;
+  }
+}
+
 @media (max-width:600px){
   .topbar-logo-link{ display:none; }
 }
@@ -370,10 +378,10 @@ body{
     transform:translate3d(var(--x-start, 0px), -12vh, 0);
   }
   50%{
-    transform:translate3d(var(--x-mid, 20px), 50vh, 0);
+    transform:translate3d(var(--x-mid, 40px), 50vh, 0);
   }
   100%{
-    transform:translate3d(var(--x-end, -20px), 115vh, 0);
+    transform:translate3d(var(--x-end, -40px), 115vh, 0);
   }
 }
 
@@ -699,33 +707,49 @@ body{
   max-width:1100px;
   margin:0 auto;
 }
-.gallery-inner h2{
+
+/* Gallery header with desktop/mobile titles + click hint */
+.gallery-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+}
+.gallery-title-desktop,
+.gallery-title-mobile{
   color:var(--accent-cyan);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  margin:0;
 }
-.gallery-intro{
-  font-size:14px;
+.gallery-title-mobile{
+  display:none;
+}
+.gallery-expand-hint{
+  font-size:13px;
   color:#e5f5ff;
-}
-.gallery-grid-wrapper{
-  position:relative;
-  margin-top:24px;
+  opacity:0.95;
+  white-space:nowrap;
 }
 
-/* Gallery grid – dark blue borders between images */
+/* Gallery grid – dark blue hairline between images */
+.gallery-grid-wrapper{
+  position:relative;
+  margin-top:18px;
+}
 .gallery-block{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:2px;
+  gap:1px; /* very thin lines */
   margin-bottom:28px;
   position:relative;
+  background:#020617; /* dark blue lines show through */
 }
 .gallery-item{
   position:relative;
   overflow:hidden;
   border-radius:10px;
   box-shadow:0 2px 8px rgba(0,0,0,0.75);
-  border:1px solid #020617; /* dark blue lines */
 }
 .gallery-item img{
   display:block;
@@ -823,12 +847,29 @@ body{
 .section--bottom-logo{
   background:transparent;
   text-align:center;
+  padding-top:40px;
+  padding-bottom:60px;
 }
 .section--bottom-logo img{
   width:200px;
   height:auto;
   filter:drop-shadow(0 3px 12px rgba(0,0,0,0.85));
   cursor:pointer;
+}
+
+/* Blue tab over bottom logo */
+.bottom-logo-tab{
+  max-width:420px;
+  margin:0 auto 14px;
+  padding:8px 18px;
+  border-radius:999px;
+  background:linear-gradient(90deg, #001a80 0%, #2e7aff 50%, #001a80 100%);
+  color:var(--accent-cyan);
+  font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size:14px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  box-shadow:0 3px 10px rgba(0,0,0,0.7);
 }
 
 /* FOOTER – jungle green */
@@ -1215,7 +1256,7 @@ footer{
   box-shadow:0 5px 16px rgba(0,0,0,0.7);
 }
 
-/* Chat bubble icon – cleaned up speech bubble */
+/* Chat bubble icon – tail pointing LEFT */
 .chat-icon-bubble{
   position:relative;
   padding:6px 12px;
@@ -1232,12 +1273,12 @@ footer{
 .chat-icon-bubble::after{
   content:"";
   position:absolute;
-  left:8px;
-  bottom:-6px;
+  left:-6px;
+  bottom:10px;
   width:12px;
   height:12px;
   background:#ffffff;
-  transform:rotate(45deg);
+  transform:rotate(45deg); /* tail pointing left */
   box-shadow:0 1px 4px rgba(0,0,0,0.25);
 }
 .chat-icon-dots{
@@ -1414,6 +1455,22 @@ footer{
   #gallery-block-1 .gallery-item:nth-child(n+10){
     display:none;
   }
+
+  .gallery-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+  }
+  .gallery-title-desktop{
+    display:none;
+  }
+  .gallery-title-mobile{
+    display:block;
+  }
+  .gallery-expand-hint{
+    font-size:12px;
+    white-space:normal;
+  }
 }
 @media(max-width:380px){
   .hero-glass{ max-width:70vw; }
@@ -1484,6 +1541,7 @@ footer{
 <a href="#top" class="topbar-logo-link">
   <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="topbar-logo">
 </a>
+
 <!-- NAV OVERLAY WITH RICKY EASTER EGG -->
 <div class="nav-backdrop" id="nav-backdrop">
   <div class="nav-modal">
@@ -1709,6 +1767,23 @@ BY THE MAYANUT COMPANY<br>
               <span class="img-expand-hint">👆 Click to Expand 👆</span>
             </button>
           </div>
+
+          <!-- Two placeholder images to fill space -->
+          <div class="about-image-tile">
+            <img src="mayanut-field-placeholder-1.jpg" alt="The MayaNut Company field placeholder image 1">
+            <button class="img-expand-btn" data-img-src="mayanut-field-placeholder-1.jpg" aria-label="Expand image">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 Click to Expand 👆</span>
+            </button>
+          </div>
+
+          <div class="about-image-tile">
+            <img src="mayanut-field-placeholder-2.jpg" alt="The MayaNut Company field placeholder image 2">
+            <button class="img-expand-btn" data-img-src="mayanut-field-placeholder-2.jpg" aria-label="Expand image">
+              <span class="img-expand-icon">⤢</span>
+              <span class="img-expand-hint">👆 Click to Expand 👆</span>
+            </button>
+          </div>
         </div>
 
         <!-- Text RIGHT -->
@@ -1745,6 +1820,87 @@ BY THE MAYANUT COMPANY<br>
       </div>
     </div>
   </section>
+  </section>
+
+  <!-- INLINE OVERRIDE STYLES FOR BLOCK 3+ -->
+  <style>
+    /* 15% bigger fixed desktop logo */
+    .topbar-logo {
+      width: 104px;
+    }
+
+    /* Chat bubble tail pointing left */
+    .chat-icon-bubble::after{
+      content:"";
+      position:absolute;
+      left:-6px;
+      top:50%;
+      bottom:auto;
+      width:12px;
+      height:12px;
+      background:#ffffff;
+      transform:translateY(-50%) rotate(45deg);
+      box-shadow:0 1px 4px rgba(0,0,0,0.25);
+    }
+
+    /* Gallery: thin dark-blue lines between images via gap background */
+    .gallery-block{
+      background:#020617;
+      gap:2px;
+    }
+    .gallery-item{
+      border:none;
+      background:#000000;
+    }
+
+    /* Gallery per-image "click to expand" label (upper-right) */
+    .gallery-item::after{
+      content:"Click to Expand";
+      position:absolute;
+      top:6px;
+      right:8px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:rgba(0,0,0,0.7);
+      color:#ffffff;
+      font-size:10px;
+      font-weight:600;
+      letter-spacing:0.02em;
+      pointer-events:none;
+      white-space:nowrap;
+    }
+
+    /* Gallery heading text: desktop vs mobile */
+    .gallery-title-desktop,
+    .gallery-title-mobile{
+      color:var(--accent-cyan);
+      font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      margin:0 0 6px;
+    }
+    .gallery-title-mobile{ display:none; }
+
+    @media(max-width:800px){
+      .gallery-title-desktop{ display:none; }
+      .gallery-title-mobile{ display:block; }
+    }
+
+    /* Bottom blue tab over the final logo */
+    .bottom-blue-tab{
+      background:linear-gradient(90deg,#001a80 0%,#2e7aff 50%,#001a80 100%);
+      color:var(--accent-cyan);
+      text-align:center;
+      padding:14px 16px;
+      font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      letter-spacing:0.06em;
+      font-size:15px;
+      position:relative;
+      z-index:1;
+      text-shadow:0 1px 2px rgba(0,0,0,0.55);
+      border-top:1px solid rgba(255,255,255,0.45);
+      border-bottom:1px solid rgba(0,0,0,0.65);
+      box-shadow:0 -3px 8px rgba(0,0,0,0.55);
+    }
+  </style>
 
   <!-- TRANSITION: RESEARCH -->
   <div class="transition-strip">RESEARCH</div>
@@ -1807,11 +1963,8 @@ BY THE MAYANUT COMPANY<br>
   <!-- GALLERY SECTION -->
   <section class="section section--gallery" id="gallery">
     <div class="section-inner gallery-inner">
-      <h2>Maya Nut Image Gallery</h2>
-      <p class="gallery-intro">
-        A wall of maya nut images. All placeholders currently point to
-        <code>maya-nut-mayanut-fruit-brosimum-alicastrum.jpg</code> so you can swap them later.
-      </p>
+      <h2 class="gallery-title-desktop">The MayaNut Company Field Gallery</h2>
+      <h2 class="gallery-title-mobile">The MayaNut Company Field Gallery - Click to Expand</h2>
 
       <div class="gallery-grid-wrapper">
 
@@ -1962,7 +2115,9 @@ BY THE MAYANUT COMPANY<br>
     </div>
   </section>
 
-  <!-- BOTTOM LOGO SECTION -->
+  <!-- BOTTOM BLUE TAB + LOGO SECTION -->
+  <div class="bottom-blue-tab">THE MAYANUT COMPANY</div>
+
   <section class="section section--bottom-logo">
     <div class="section-inner">
       <a href="#top" id="bottom-logo-link">
@@ -1993,498 +2148,469 @@ BY THE MAYANUT COMPANY<br>
   </div>
 </footer>
 
-<!-- Welcome popup – now shows on desktop and mobile -->
-<div class="welcome-backdrop" id="welcome-backdrop">
-  <div class="welcome-modal">
-    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
+<!-- (keep the rest of your existing modals, welcome popup, chat, gallery JS, etc. exactly as before) -->
 
-    <div class="welcome-panel welcome-panel-left">
-      <h2 class="welcome-title">Welcome to mayanut.com</h2>
-      <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>) plantations of tropical trees.</p>
-      <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience!</p>
-    </div>
-
-    <div class="welcome-panel welcome-panel-right">
-      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo">
-      <button class="welcome-main-btn hero-cta-btn" id="welcome-main-btn">Go to Main Page</button>
-    </div>
-  </div>
-</div>
-
-<!-- Privacy / DNS Modal -->
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <h3 id="modal-title">Privacy Policy</h3>
-    <div id="modal-body">
-      <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-      <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-      <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
-    </div>
-    <button class="modal-close" id="modal-close">Close</button>
-  </div>
-</div>
-
-<!-- Lightbox for expanded images -->
-<div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
-  <div class="img-lightbox-content">
-    <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
-    <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
-  </div>
-</div>
-
-<!-- Chat assistant launcher -->
-<div class="chat-launcher" id="chat-launcher" aria-label="Open maya nut chat assistant">
-  <div class="chat-icon-bubble">
-    <span class="chat-icon-dots">...</span>
-  </div>
-</div>
-
-<div class="chat-panel" id="chat-panel" aria-label="maya nut chat assistant">
-  <div class="chat-panel-header">
-    <div class="chat-panel-title">Maya nut Assistant</div>
-    <button class="chat-panel-close" id="chat-close" aria-label="Close chat">&times;</button>
-  </div>
-  <div class="chat-panel-body" id="chat-log">
-    <div class="chat-msg">
-      <strong>Bot:</strong> Hi! I’m a tiny FAQ helper. Ask me about maya nut, Brosimum alicastrum, or this website.
-    </div>
-  </div>
-  <div class="chat-panel-input-row">
-    <input type="text" id="chat-input" class="chat-panel-input" placeholder="Ask a short question…" />
-    <button class="chat-panel-send" id="chat-send">Ask</button>
-  </div>
-</div>
-<!-- ========================= -->
-<!-- 🌱 FULL JS SCRIPT BLOCK  -->
-<!-- ========================= -->
 <script>
-/* LANGUAGE DROPDOWN */
+/* GALLERY CLICK-TO-EXPAND HOOK INTO EXISTING LIGHTBOX */
 (function(){
-  const toggle = document.getElementById('lang-toggle');
-  const dropdown = document.getElementById('lang-dropdown');
-  const currentSpan = document.getElementById('lang-current');
-
-  if(!toggle || !dropdown || !currentSpan) return;
-
-  const items = dropdown.querySelectorAll('[data-file]');
-  const file = window.location.pathname.split('/').pop() || 'index.html';
-
-  items.forEach(i=>{
-    if(i.getAttribute('data-file')===file){
-      currentSpan.textContent=i.textContent.trim();
-      i.classList.add('active');
-    }
-  });
-
-  toggle.addEventListener('click', e=>{
-    e.stopPropagation();
-    dropdown.classList.toggle('open');
-  });
-
-  items.forEach(i=>{
-    i.addEventListener('click',()=>{
-      window.location.href=i.getAttribute('data-file');
-    });
-  });
-
-  document.addEventListener('click', e=>{
-    if(!dropdown.contains(e.target) && !toggle.contains(e.target)){
-      dropdown.classList.remove('open');
-    }
-  });
-})();
-
-/* PRIVACY MODAL */
-(function(){
-  const backdrop=document.getElementById('modal-backdrop');
-  const titleEl=document.getElementById('modal-title');
-  const bodyEl=document.getElementById('modal-body');
-  const closeBtn=document.getElementById('modal-close');
-  const privacy=document.getElementById('privacy-link');
-  const dns=document.getElementById('dns-link');
-
-  if(!backdrop || !titleEl || !bodyEl || !closeBtn || !privacy || !dns) return;
-
-  function open(kind){
-    backdrop.style.display='flex';
-    if(kind==='privacy'){
-      titleEl.textContent='Privacy Policy';
-      bodyEl.innerHTML=`<p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
-<p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
-<p>We do not sell your personal information. Some website translations from English may be wrong.</p>`;
-    }else{
-      titleEl.textContent='Do Not Sell My Info';
-      bodyEl.innerHTML=`<p>The MayaNut Company does not sell personal data. If you have questions or requests regarding your information, please contact us via email.</p>`;
-    }
-  }
-  function close(){ backdrop.style.display='none'; }
-
-  privacy.addEventListener('click',()=>open('privacy'));
-  dns.addEventListener('click',()=>open('dns'));
-  closeBtn.addEventListener('click',close);
-  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
-})();
-
-/* NAV OVERLAY + LINK HIGHLIGHTING */
-(function(){
-  const toggle=document.getElementById('menu-toggle');
-  const backdrop=document.getElementById('nav-backdrop');
-  const closeBtn=document.getElementById('nav-close');
-  const links = backdrop ? backdrop.querySelectorAll('.nav-modal-links a') : [];
-
-  if(!toggle || !backdrop || !closeBtn) return;
-
-  function closeNav(){
-    toggle.classList.remove('open');
-    backdrop.classList.remove('open');
-  }
-
-  toggle.addEventListener('click',()=>{
-    toggle.classList.toggle('open');
-    backdrop.classList.toggle('open');
-  });
-
-  closeBtn.addEventListener('click',closeNav);
-
-  backdrop.addEventListener('click',e=>{
-    if(e.target===backdrop){
-      closeNav();
-    }
-  });
-
-  links.forEach(link=>{
-    link.addEventListener('click',()=>{
-      closeNav();
-    });
-  });
-
-  window.addEventListener('hashchange',()=>{
-    const hash = window.location.hash || '#top';
-    links.forEach(a=>{
-      const sec=a.getAttribute('data-section');
-      if(!sec){ a.classList.remove('nav-link-active'); return; }
-      if(hash==='#'+sec || (hash==='#top' && sec==='top')){
-        a.classList.add('nav-link-active');
-      }else{
-        a.classList.remove('nav-link-active');
-      }
-    });
-  });
-})();
-
-/* RICKY EASTER EGG – drag to show draggable tile, click logo = home, tile click toggles image/home */
-(function(){
-  const logo = document.getElementById('nav-logo-easter');
-  const tile = document.getElementById('nav-ricky-tile');
-  const backdrop = document.getElementById('nav-backdrop');
-  if(!logo || !tile || !backdrop) return;
-
-  let startX=null, startY=null, dragging=false, pointerId=null;
-  let tileDragged=false;
-  let tileClickStage=0; // 0 = message, 1 = showing ricky.jpeg
-
-  function goHomeAndReset(){
-    // go home (top of page), close nav, reset tile
-    window.location.hash = '#top';
-    const menuToggle=document.getElementById('menu-toggle');
-    if(menuToggle){
-      menuToggle.classList.remove('open');
-    }
-    backdrop.classList.remove('open');
-    tile.style.display='none';
-    tileClickStage=0;
-    tileDragged=false;
-    // restore tile content to text
-    tile.innerHTML = `<p>
-💙🧡💙<br>
-THIS SITE IS<br>
-DEDICATED TO RICKY<br>
-FOREVER LOVED<br>
-BY THE MAYANUT COMPANY<br>
-💙🧡💙
-</p>`;
-  }
-
-  // Helper: set tile position under pointer
-  function positionTile(clientX, clientY){
-    const modal = tile.closest('.nav-modal');
-    if(!modal) return;
-    const rect = modal.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-    tile.style.left = x + 'px';
-    tile.style.top  = y + 'px';
-    tile.style.transform = 'translate(-50%, -50%)';
-  }
-
-  // LOGO pointer logic
-  logo.addEventListener('pointerdown', e=>{
-    dragging=false;
-    tileDragged=false;
-    startX=e.clientX;
-    startY=e.clientY;
-    pointerId=e.pointerId;
-    logo.setPointerCapture(pointerId);
-  });
-
-  logo.addEventListener('pointermove', e=>{
-    if(startX===null) return;
-    const dx=Math.abs(e.clientX-startX);
-    const dy=Math.abs(e.clientY-startY);
-    if(dx>6 || dy>6){
-      dragging=true;
-      // show tile and move with pointer
-      tile.style.display='block';
-      positionTile(e.clientX, e.clientY);
-    }
-  });
-
-  logo.addEventListener('pointerup', e=>{
-    if(pointerId!==null){
-      try{ logo.releasePointerCapture(pointerId); }catch(_){}
-    }
-    if(dragging){
-      tileDragged=true;
-      // leave tile where last placed
-    }else{
-      // simple click on logo: go home & reset
-      goHomeAndReset();
-    }
-    startX=null;
-    startY=null;
-    dragging=false;
-    pointerId=null;
-  });
-
-  logo.addEventListener('pointercancel', ()=>{
-    startX=null;
-    startY=null;
-    dragging=false;
-    pointerId=null;
-  });
-
-  // TILE dragging
-  (function(){
-    let tPointerId=null;
-    let tStartX=null, tStartY=null;
-    let tDragging=false;
-
-    tile.addEventListener('pointerdown', e=>{
-      tDragging=false;
-      tStartX=e.clientX;
-      tStartY=e.clientY;
-      tPointerId=e.pointerId;
-      tile.setPointerCapture(tPointerId);
-    });
-
-    tile.addEventListener('pointermove', e=>{
-      if(tStartX===null) return;
-      const dx=Math.abs(e.clientX-tStartX);
-      const dy=Math.abs(e.clientY-tStartY);
-      if(dx>3 || dy>3){
-        tDragging=true;
-        positionTile(e.clientX, e.clientY);
-        tileDragged=true;
-      }
-    });
-
-    tile.addEventListener('pointerup', e=>{
-      if(tPointerId!==null){
-        try{ tile.releasePointerCapture(tPointerId); }catch(_){}
-      }
-      if(!tDragging){
-        // click on tile: after dragging, we toggle image/home
-        if(tileDragged){
-          if(tileClickStage===0){
-            // switch to Ricky image
-            tile.innerHTML = `<img src="ricky.jpeg" alt="Ricky dedication" style="width:100%; height:100%; object-fit:cover; border-radius:14px;">`;
-            tileClickStage=1;
-          }else{
-            // second click -> home + reset
-            goHomeAndReset();
-          }
-        }
-      }
-      tPointerId=null;
-      tStartX=null;
-      tStartY=null;
-      tDragging=false;
-    });
-
-    tile.addEventListener('pointercancel', ()=>{
-      tPointerId=null;
-      tStartX=null;
-      tStartY=null;
-      tDragging=false;
-    });
-  })();
-})();
-
-/* ABOUT IMAGE LIGHTBOX */
-(function(){
-  const buttons=document.querySelectorAll('.img-expand-btn');
   const backdrop=document.getElementById('img-lightbox-backdrop');
   const img=document.getElementById('img-lightbox-img');
   const close=document.getElementById('img-lightbox-close');
-
   if(!backdrop || !img || !close) return;
 
-  buttons.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const src = btn.getAttribute('data-img-src');
-      if(!src) return;
-      img.src=src;
+  // Attach to gallery images
+  const galleryImgs=document.querySelectorAll('.gallery-item img');
+  galleryImgs.forEach(el=>{
+    el.addEventListener('click',()=>{
+      img.src=el.getAttribute('src');
+      img.alt=el.getAttribute('alt') || '';
       backdrop.style.display='flex';
     });
   });
-
-  function closeLightbox(){
-    backdrop.style.display='none';
-    img.src='';
-  }
-
-  close.addEventListener('click',closeLightbox);
-  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) closeLightbox(); });
-})();
-
-/* CHAT BOT */
-(function(){
-  const launcher=document.getElementById('chat-launcher');
-  const panel=document.getElementById('chat-panel');
-  const closeBtn=document.getElementById('chat-close');
-  const input=document.getElementById('chat-input');
-  const send=document.getElementById('chat-send');
-  const log=document.getElementById('chat-log');
-
-  if(!launcher || !panel || !closeBtn || !input || !send || !log) return;
-
-  launcher.addEventListener('click',()=>{
-    panel.style.display = panel.style.display==='block' ? 'none':'block';
-    if(panel.style.display==='block'){
-      setTimeout(()=>input.focus(),50);
-    }
-  });
-
-  closeBtn.addEventListener('click',()=>panel.style.display='none');
-
-  function write(role,text){
-    const div=document.createElement('div');
-    div.className='chat-msg';
-    div.innerHTML=`<strong>${role}:</strong> ${text}`;
-    log.appendChild(div);
-    log.scrollTop=log.scrollHeight;
-  }
-
-  function respond(message){
-    const m=message.toLowerCase();
-    if(m.includes("mayanut")||m.includes("maya nut")||m.includes("brosimum")){
-      write("Bot","Maya nut is the roasted seed of Brosimum alicastrum, a tropical rainforest tree that The MayaNut Company is helping introduce to Florida.");
-    }else if(m.includes("where") && m.includes("grow")){
-      write("Bot","We are trialing Brosimum alicastrum in warm parts of South Florida, especially at or below 27°N latitude.");
-    }else if(m.includes("license plate") || m.includes("orange")){
-      write("Bot","One of our dreams is for maya nut to someday replace the orange on the Florida license plate as a symbol of a new breadwinner crop.");
-    }else{
-      write("Bot","Ask me something about maya nut, Brosimum alicastrum, Florida plantations, or this website.");
-    }
-  }
-
-  send.addEventListener('click',()=>{
-    const val=input.value.trim();
-    if(!val) return;
-    write("You",val);
-    input.value="";
-    respond(val);
-  });
-
-  input.addEventListener('keydown',e=>{
-    if(e.key==="Enter"){ send.click(); }
-  });
-})();
-
-/* GALLERY LOAD MORE – buttons never darkened */
-(function(){
-  const b1=document.getElementById('gallery-block-1');
-  const b2=document.getElementById('gallery-block-2');
-  const b3=document.getElementById('gallery-block-3');
-  const btn1=document.getElementById('gallery-more-1-btn');
-  const btn2=document.getElementById('gallery-more-2-btn');
-  const wrap2=document.getElementById('gallery-more-2-wrap');
-
-  if(!b1 || !b2 || !b3 || !btn1 || !btn2 || !wrap2) return;
-
-  btn1.addEventListener('click',()=>{
-    b2.style.display='grid';
-    wrap2.style.display='block';
-    btn1.style.display='none';
-  });
-
-  btn2.addEventListener('click',()=>{
-    b3.style.display='grid';
-    btn2.style.display='none';
-  });
-})();
-
-/* WELCOME POPUP – always show on load (desktop + mobile) */
-(function(){
-  const backdrop=document.getElementById('welcome-backdrop');
-  const closeBtn=document.getElementById('welcome-close');
-  const mainBtn=document.getElementById('welcome-main-btn');
-
-  if(!backdrop || !closeBtn || !mainBtn) return;
-
-  function close(){
-    backdrop.style.display='none';
-  }
-
-  closeBtn.addEventListener('click',close);
-  mainBtn.addEventListener('click',close);
-  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
-})();
-
-/* HERO SNOW EFFECT – varied size, speed, sideways drift */
-(function(){
-  const container = document.getElementById('hero-snow');
-  if(!container) return;
-
-  const flakes = 40;
-  for(let i = 0; i < flakes; i++){
-    const span = document.createElement('span');
-    span.className = 'snowflake';
-    span.textContent = '❄';
-
-    const leftPercent = Math.random() * 100;
-    const duration = 8 + Math.random() * 10; // 8–18s
-    const delay = Math.random() * -20;
-    const size = 10 + Math.random() * 18; // 10–28px
-
-    const amplitude = 20 + Math.random() * 40; // 20–60px side drift
-    const xStart = (Math.random() * 40 - 20) + 'px';
-    const xMid   = (Math.random() * amplitude - amplitude/2) + 'px';
-    const xEnd   = (Math.random() * amplitude - amplitude/2) + 'px';
-
-    span.style.left = leftPercent + '%';
-    span.style.animationDuration = duration + 's';
-    span.style.animationDelay = delay + 's';
-    span.style.fontSize = size + 'px';
-
-    span.style.setProperty('--x-start', xStart);
-    span.style.setProperty('--x-mid',   xMid);
-    span.style.setProperty('--x-end',   xEnd);
-
-    container.appendChild(span);
-  }
-})();
-
-/* BOTTOM LOGO SCROLL TO TOP */
-(function(){
-  const link=document.getElementById('bottom-logo-link');
-  if(!link) return;
-  link.addEventListener('click',e=>{
-    e.preventDefault();
-    window.scrollTo({top:0,behavior:'smooth'});
-  });
 })();
 </script>
+  <!-- ========================= -->
+  <!-- 🌱 FULL JS SCRIPT BLOCK  -->
+  <!-- ========================= -->
+  <script>
+  /* LANGUAGE DROPDOWN */
+  (function(){
+    const toggle = document.getElementById('lang-toggle');
+    const dropdown = document.getElementById('lang-dropdown');
+    const currentSpan = document.getElementById('lang-current');
+
+    if(!toggle || !dropdown || !currentSpan) return;
+
+    const items = dropdown.querySelectorAll('[data-file]');
+    const file = window.location.pathname.split('/').pop() || 'index.html';
+
+    items.forEach(i=>{
+      if(i.getAttribute('data-file')===file){
+        currentSpan.textContent=i.textContent.trim();
+        i.classList.add('active');
+      }
+    });
+
+    toggle.addEventListener('click', e=>{
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+    });
+
+    items.forEach(i=>{
+      i.addEventListener('click',()=>{
+        window.location.href=i.getAttribute('data-file');
+      });
+    });
+
+    document.addEventListener('click', e=>{
+      if(!dropdown.contains(e.target) && !toggle.contains(e.target)){
+        dropdown.classList.remove('open');
+      }
+    });
+  })();
+
+  /* PRIVACY MODAL */
+  (function(){
+    const backdrop=document.getElementById('modal-backdrop');
+    const titleEl=document.getElementById('modal-title');
+    const bodyEl=document.getElementById('modal-body');
+    const closeBtn=document.getElementById('modal-close');
+    const privacy=document.getElementById('privacy-link');
+    const dns=document.getElementById('dns-link');
+
+    if(!backdrop || !titleEl || !bodyEl || !closeBtn || !privacy || !dns) return;
+
+    function open(kind){
+      backdrop.style.display='flex';
+      if(kind==='privacy'){
+        titleEl.textContent='Privacy Policy';
+        bodyEl.innerHTML=`<p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+  <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+  <p>We do not sell your personal information. Some website translations from English may be wrong.</p>`;
+      }else{
+        titleEl.textContent='Do Not Sell My Info';
+        bodyEl.innerHTML=`<p>The MayaNut Company does not sell personal data. If you have questions or requests regarding your information, please contact us via email.</p>`;
+      }
+    }
+    function close(){ backdrop.style.display='none'; }
+
+    privacy.addEventListener('click',()=>open('privacy'));
+    dns.addEventListener('click',()=>open('dns'));
+    closeBtn.addEventListener('click',close);
+    backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
+  })();
+
+  /* NAV OVERLAY + LINK HIGHLIGHTING */
+  (function(){
+    const toggle=document.getElementById('menu-toggle');
+    const backdrop=document.getElementById('nav-backdrop');
+    const closeBtn=document.getElementById('nav-close');
+    const links = backdrop ? backdrop.querySelectorAll('.nav-modal-links a') : [];
+
+    if(!toggle || !backdrop || !closeBtn) return;
+
+    function closeNav(){
+      toggle.classList.remove('open');
+      backdrop.classList.remove('open');
+    }
+
+    toggle.addEventListener('click',()=>{
+      toggle.classList.toggle('open');
+      backdrop.classList.toggle('open');
+    });
+
+    closeBtn.addEventListener('click',closeNav);
+
+    backdrop.addEventListener('click',e=>{
+      if(e.target===backdrop){
+        closeNav();
+      }
+    });
+
+    links.forEach(link=>{
+      link.addEventListener('click',()=>{
+        closeNav();
+      });
+    });
+
+    window.addEventListener('hashchange',()=>{
+      const hash = window.location.hash || '#top';
+      links.forEach(a=>{
+        const sec=a.getAttribute('data-section');
+        if(!sec){ a.classList.remove('nav-link-active'); return; }
+        if(hash==='#'+sec || (hash==='#top' && sec==='top')){
+          a.classList.add('nav-link-active');
+        }else{
+          a.classList.remove('nav-link-active');
+        }
+      });
+    });
+  })();
+
+  /* RICKY EASTER EGG – drag to show draggable tile, click logo = home, tile click toggles image/home */
+  (function(){
+    const logo = document.getElementById('nav-logo-easter');
+    const tile = document.getElementById('nav-ricky-tile');
+    const backdrop = document.getElementById('nav-backdrop');
+    if(!logo || !tile || !backdrop) return;
+
+    let startX=null, startY=null, dragging=false, pointerId=null;
+    let tileDragged=false;
+    let tileClickStage=0; // 0 = message, 1 = showing ricky.jpeg
+
+    function goHomeAndReset(){
+      // go home (top of page), close nav, reset tile
+      window.location.hash = '#top';
+      const menuToggle=document.getElementById('menu-toggle');
+      if(menuToggle){
+        menuToggle.classList.remove('open');
+      }
+      backdrop.classList.remove('open');
+      tile.style.display='none';
+      tileClickStage=0;
+      tileDragged=false;
+      // restore tile content to text
+      tile.innerHTML = `<p>
+  💙🧡💙<br>
+  THIS SITE IS<br>
+  DEDICATED TO RICKY<br>
+  FOREVER LOVED<br>
+  BY THE MAYANUT COMPANY<br>
+  💙🧡💙
+  </p>`;
+    }
+
+    // Helper: set tile position under pointer
+    function positionTile(clientX, clientY){
+      const modal = tile.closest('.nav-modal');
+      if(!modal) return;
+      const rect = modal.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      tile.style.left = x + 'px';
+      tile.style.top  = y + 'px';
+      tile.style.transform = 'translate(-50%, -50%)';
+    }
+
+    // LOGO pointer logic
+    logo.addEventListener('pointerdown', e=>{
+      dragging=false;
+      tileDragged=false;
+      startX=e.clientX;
+      startY=e.clientY;
+      pointerId=e.pointerId;
+      logo.setPointerCapture(pointerId);
+    });
+
+    logo.addEventListener('pointermove', e=>{
+      if(startX===null) return;
+      const dx=Math.abs(e.clientX-startX);
+      const dy=Math.abs(e.clientY-startY);
+      if(dx>6 || dy>6){
+        dragging=true;
+        // show tile and move with pointer
+        tile.style.display='block';
+        positionTile(e.clientX, e.clientY);
+      }
+    });
+
+    logo.addEventListener('pointerup', e=>{
+      if(pointerId!==null){
+        try{ logo.releasePointerCapture(pointerId); }catch(_){}
+      }
+      if(dragging){
+        tileDragged=true;
+        // leave tile where last placed
+      }else{
+        // simple click on logo: go home & reset
+        goHomeAndReset();
+      }
+      startX=null;
+      startY=null;
+      dragging=false;
+      pointerId=null;
+    });
+
+    logo.addEventListener('pointercancel', ()=>{
+      startX=null;
+      startY=null;
+      dragging=false;
+      pointerId=null;
+    });
+
+    // TILE dragging
+    (function(){
+      let tPointerId=null;
+      let tStartX=null, tStartY=null;
+      let tDragging=false;
+
+      tile.addEventListener('pointerdown', e=>{
+        tDragging=false;
+        tStartX=e.clientX;
+        tStartY=e.clientY;
+        tPointerId=e.pointerId;
+        tile.setPointerCapture(tPointerId);
+      });
+
+      tile.addEventListener('pointermove', e=>{
+        if(tStartX===null) return;
+        const dx=Math.abs(e.clientX-tStartX);
+        const dy=Math.abs(e.clientY-tStartY);
+        if(dx>3 || dy>3){
+          tDragging=true;
+          positionTile(e.clientX, e.clientY);
+          tileDragged=true;
+        }
+      });
+
+      tile.addEventListener('pointerup', e=>{
+        if(tPointerId!==null){
+          try{ tile.releasePointerCapture(tPointerId); }catch(_){}
+        }
+        if(!tDragging){
+          // click on tile: after dragging, we toggle image/home
+          if(tileDragged){
+            if(tileClickStage===0){
+              // switch to Ricky image
+              tile.innerHTML = `<img src="ricky.jpeg" alt="Ricky dedication" style="width:100%; height:100%; object-fit:cover; border-radius:14px;">`;
+              tileClickStage=1;
+            }else{
+              // second click -> home + reset
+              goHomeAndReset();
+            }
+          }
+        }
+        tPointerId=null;
+        tStartX=null;
+        tStartY=null;
+        tDragging=false;
+      });
+
+      tile.addEventListener('pointercancel', ()=>{
+        tPointerId=null;
+        tStartX=null;
+        tStartY=null;
+        tDragging=false;
+      });
+    })();
+  })();
+
+  /* ABOUT IMAGE LIGHTBOX + GALLERY CLICK EXPAND */
+  (function(){
+    const buttons=document.querySelectorAll('.img-expand-btn');
+    const backdrop=document.getElementById('img-lightbox-backdrop');
+    const img=document.getElementById('img-lightbox-img');
+    const close=document.getElementById('img-lightbox-close');
+
+    if(!backdrop || !img || !close) return;
+
+    // About images
+    buttons.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const src = btn.getAttribute('data-img-src');
+        if(!src) return;
+        img.src=src;
+        backdrop.style.display='flex';
+      });
+    });
+
+    // Gallery images – click to expand
+    const galleryImgs=document.querySelectorAll('.gallery-item img');
+    galleryImgs.forEach(el=>{
+      el.addEventListener('click',()=>{
+        img.src = el.getAttribute('src');
+        img.alt = el.getAttribute('alt') || '';
+        backdrop.style.display='flex';
+      });
+    });
+
+    function closeLightbox(){
+      backdrop.style.display='none';
+      img.src='';
+    }
+
+    close.addEventListener('click',closeLightbox);
+    backdrop.addEventListener('click',e=>{ if(e.target===backdrop) closeLightbox(); });
+  })();
+
+  /* CHAT BOT */
+  (function(){
+    const launcher=document.getElementById('chat-launcher');
+    const panel=document.getElementById('chat-panel');
+    const closeBtn=document.getElementById('chat-close');
+    const input=document.getElementById('chat-input');
+    const send=document.getElementById('chat-send');
+    const log=document.getElementById('chat-log');
+
+    if(!launcher || !panel || !closeBtn || !input || !send || !log) return;
+
+    launcher.addEventListener('click',()=>{
+      panel.style.display = panel.style.display==='block' ? 'none':'block';
+      if(panel.style.display==='block'){
+        setTimeout(()=>input.focus(),50);
+      }
+    });
+
+    closeBtn.addEventListener('click',()=>panel.style.display='none');
+
+    function write(role,text){
+      const div=document.createElement('div');
+      div.className='chat-msg';
+      div.innerHTML=`<strong>${role}:</strong> ${text}`;
+      log.appendChild(div);
+      log.scrollTop=log.scrollHeight;
+    }
+
+    function respond(message){
+      const m=message.toLowerCase();
+      if(m.includes("mayanut")||m.includes("maya nut")||m.includes("brosimum")){
+        write("Bot","Maya nut is the roasted seed of Brosimum alicastrum, a tropical rainforest tree that The MayaNut Company is helping introduce to Florida.");
+      }else if(m.includes("where") && m.includes("grow")){
+        write("Bot","We are trialing Brosimum alicastrum in warm parts of South Florida, especially at or below 27°N latitude.");
+      }else if(m.includes("license plate") || m.includes("orange")){
+        write("Bot","One of our dreams is for maya nut to someday replace the orange on the Florida license plate as a symbol of a new breadwinner crop.");
+      }else{
+        write("Bot","Ask me something about maya nut, Brosimum alicastrum, Florida plantations, or this website.");
+      }
+    }
+
+    send.addEventListener('click',()=>{
+      const val=input.value.trim();
+      if(!val) return;
+      write("You",val);
+      input.value="";
+      respond(val);
+    });
+
+    input.addEventListener('keydown',e=>{
+      if(e.key==="Enter"){ send.click(); }
+    });
+  })();
+
+  /* GALLERY LOAD MORE – buttons never darkened */
+  (function(){
+    const b1=document.getElementById('gallery-block-1');
+    const b2=document.getElementById('gallery-block-2');
+    const b3=document.getElementById('gallery-block-3');
+    const btn1=document.getElementById('gallery-more-1-btn');
+    const btn2=document.getElementById('gallery-more-2-btn');
+    const wrap2=document.getElementById('gallery-more-2-wrap');
+
+    if(!b1 || !b2 || !b3 || !btn1 || !btn2 || !wrap2) return;
+
+    btn1.addEventListener('click',()=>{
+      b2.style.display='grid';
+      wrap2.style.display='block';
+      btn1.style.display='none';
+    });
+
+    btn2.addEventListener('click',()=>{
+      b3.style.display='grid';
+      btn2.style.display='none';
+    });
+  })();
+
+  /* WELCOME POPUP – always show on load (desktop + mobile) */
+  (function(){
+    const backdrop=document.getElementById('welcome-backdrop');
+    const closeBtn=document.getElementById('welcome-close');
+    const mainBtn=document.getElementById('welcome-main-btn');
+
+    if(!backdrop || !closeBtn || !mainBtn) return;
+
+    function close(){
+      backdrop.style.display='none';
+    }
+
+    closeBtn.addEventListener('click',close);
+    mainBtn.addEventListener('click',close);
+    backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
+  })();
+
+  /* HERO SNOW EFFECT – varied size, speed, sideways drift */
+  (function(){
+    const container = document.getElementById('hero-snow');
+    if(!container) return;
+
+    const flakes = 40;
+    for(let i = 0; i < flakes; i++){
+      const span = document.createElement('span');
+      span.className = 'snowflake';
+      span.textContent = '❄';
+
+      const leftPercent = Math.random() * 100;
+      const duration = 8 + Math.random() * 10; // 8–18s
+      const delay = Math.random() * -20;
+      const size = 10 + Math.random() * 18; // 10–28px
+
+      const amplitude = 20 + Math.random() * 40; // 20–60px side drift
+      const xStart = (Math.random() * 40 - 20) + 'px';
+      const xMid   = (Math.random() * amplitude - amplitude/2) + 'px';
+      const xEnd   = (Math.random() * amplitude - amplitude/2) + 'px';
+
+      span.style.left = leftPercent + '%';
+      span.style.animationDuration = duration + 's';
+      span.style.animationDelay = delay + 's';
+      span.style.fontSize = size + 'px';
+
+      span.style.setProperty('--x-start', xStart);
+      span.style.setProperty('--x-mid',   xMid);
+      span.style.setProperty('--x-end',   xEnd);
+
+      container.appendChild(span);
+    }
+  })();
+
+  /* BOTTOM LOGO SCROLL TO TOP */
+  (function(){
+    const link=document.getElementById('bottom-logo-link');
+    if(!link) return;
+    link.addEventListener('click',e=>{
+      e.preventDefault();
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  })();
+  </script>
 
 </body>
 </html>
