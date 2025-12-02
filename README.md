@@ -1,106 +1,129 @@
-# The MayaNut Company Website
+# 🌿 The MayaNut Company Website  
+### *MayaNut • Brosimum alicastrum • Sustainable Agroforestry • Tropical Reforestation*
 
-Welcome to the source code for **The MayaNut Company** (https://mayanut.com) – a static, multi-language website introducing MayaNut beverages and the tropical tree *Brosimum alicastrum*.
+Welcome to the official repository for **The MayaNut Company** — a multi-language, research-driven website dedicated to promoting the nutritional, ecological, cultural, and commercial value of **MayaNut** (*Brosimum alicastrum*).  
+Website: **https://mayanut.com**
 
-The site is designed for **GitHub Pages** (or any static host) and is built with plain **HTML, CSS, and vanilla JavaScript** – no build tools required.
+This project is built entirely with:
+- **HTML**
+- **CSS**
+- **Vanilla JavaScript**
+- **Static hosting via GitHub Pages**
 
----
-
-## Features
-
-- **Hero section** with animated gradient background, snowflake overlay, and a call-to-action button linking to the Store section.
-- **MayaNut beverage hero layout**  
-  - Desktop: Text image on the left, glass image on the right, CTA and arrow in a 2×2 “square” layout.  
-  - Mobile: Text and button on the left, glass and arrow on the right, all scaled down for small screens.
-- **Multi-language support** (via separate HTML files) with a Language dropdown:
-  - English (`index.html`)
-  - Español (`index-es.html`)
-  - Português (`index-pt.html`)
-  - Français (`index-fr.html`)
-  - Deutsch (`index-de.html`)
-  - Italiano (`index-it.html`)
-  - Русский (`index-ru.html`)
-  - 中文 (`index-zh.html`)
-  - 日本語 (`index-ja.html`)
-  - हिन्दी (`index-hi.html`)
-  - اردو (`index-ur.html`)
-  - বাংলা (`index-bn.html`)
-  - Bahasa Indonesia (`index-id.html`)
-  - العربية (`index-ar.html`)
-  - Kiswahili (`index-sw.html`)
-  - Hausa (`index-ha.html`)
-  - Filipino (`index-fil.html`)
-  - Yorùbá (`index-yo.html`)
-- **Store preview section**  
-  Placeholder products and images that represent future MayaNut beverages, powders, and flours.
-- **About section**  
-  Multiple cards describing:
-  - The MayaNut Company
-  - Founder August Kokus
-  - Where the trees are being grown
-  - Mission and fascination with *Brosimum alicastrum*
-- **Image expand / lightbox** in the About section for key images (fruit, trees, nursery, founder).
-- **Top navigation bar** with:
-  - Holiday greeting
-  - Centered logo on mobile
-  - Language selector (with hover highlight)
-  - Fixed hamburger menu (works on desktop and mobile)
-- **Full-screen navigation modal** with links:
-  - HOME, STORE, ABOUT (on-page anchors)
-  - RESEARCH, BLOG, FAQ, CONTACT (external/internal pages)
-- **Ricky Easter Egg**  
-  In the navigation modal, the logo can be dragged to reveal a hidden dedication text, and clicking the “Ricky” image returns to the main hero.
-- **Welcome popup**  
-  A one-time welcome message explaining the plantation and rough timeline.
-- **Chat assistant (FAQ bot)**  
-  A small chat bubble in the bottom-right that opens a panel answering simple questions about:
-  - MayaNut / *Brosimum alicastrum*
-  - The company and founder
-  - Where it grows
-  - Research page (`research.html`) for scientific info
-- **Footer**  
-  - Privacy Policy & “Do Not Sell My Info” links open a small modal.
-  - Instagram icon linked to the official account.
-  - Copyright notice.
+No frameworks. No dependencies. Fast. Lightweight. Extensively SEO-optimized.
 
 ---
 
-## File Structure
+# 📘 Table of Contents
+- [About The MayaNut Company](#about-the-mayanut-company)
+- [Website Features](#website-features)
+- [Technology Stack](#technology-stack)
+- [File Structure](#file-structure)
+- [Scientific & Research Focus](#scientific--research-focus)
+- [Wholesale & Commercial Vision](#wholesale--commercial-vision)
+- [Contributing](#contributing)
+- [Security Policy](#security-policy)
+- [License](#license)
+- [Contact](#contact)
 
-The exact structure can vary, but a typical layout:
+---
 
-```text
-.
-├── index.html               # English main page
-├── index-es.html            # Spanish
-├── index-pt.html            # Portuguese
-├── index-fr.html            # French
-├── index-de.html            # German
-├── index-it.html            # Italian
-├── index-ru.html            # Russian
-├── index-zh.html            # Chinese
-├── index-ja.html            # Japanese
-├── index-hi.html            # Hindi
-├── index-ur.html            # Urdu
-├── index-bn.html            # Bengali
-├── index-id.html            # Bahasa Indonesia
-├── index-ar.html            # Arabic
-├── index-sw.html            # Swahili
-├── index-ha.html            # Hausa
-├── index-fil.html           # Filipino
-├── index-yo.html            # Yoruba
-├── research.html            # Research page (optional / WIP)
-├── blog.html                # Blog page (optional / WIP)
-├── faq.html                 # FAQ page (optional / WIP)
-├── contact.html             # Contact page (optional / WIP)
-├── mayanut-the-maya-nut-company-logo.png
-├── the-maya-nut-company-favicon-logo.png
-├── mayanut-maya-nut-beverage-brosimum-alicastrum.png
-├── rach20.png               # Hero glass image
-├── arrow-the-maya-nut-company-mayanut.png
-├── ricky.jpeg               # Easter egg image
-├── maya-nut-mayanut-fruit-brosimum-alicastrum.jpg
-├── august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg
-├── maya-nut-mayanut-plant-tree-nursery.jpg
-├── maya-nut-mayanut-plant-tree-moraceae.jpg
-└── README.md
+# 🌱 About The MayaNut Company
+
+**The MayaNut Company** is dedicated to:
+- Developing **beverages, powders, and flours** from MayaNut  
+- Reforesting tropical regions with **Brosimum alicastrum**  
+- Supporting genetic conservation and agroforestry  
+- Sharing accurate global research  
+- Educating the world on this forgotten superfood  
+
+We are currently working in **Florida** to cultivate, research, conserve, and eventually commercialize multiple seedlines of *Brosimum alicastrum*.  
+
+Our mission is to:  
+**Restore ecosystems, nourish communities, and protect a species that has fed people for thousands of years.**
+
+---
+
+# ✨ Website Features
+
+### 🌈 Dynamic Hero Section
+- Animated gradient background  
+- Snowflake physics overlay  
+- “Try Now” CTA button  
+- Beautiful 2×2 grid layout on desktop  
+
+### 🌐 Multi-Language Support (18+ Languages)
+- English, Spanish, Portuguese, French, German  
+- Italian, Russian, Chinese, Japanese  
+- Hindi, Urdu, Bengali, Indonesian  
+- Arabic, Swahili, Hausa, Filipino, Yoruba  
+- And more…
+
+### 🛒 Store Section (Future E-Commerce)
+- MayaNut beverages  
+- Flours, powders, concentrates  
+- Merch / apparel with product carousels  
+- Scroll-triggered animations  
+
+### 🧠 Research Section
+Deep-dive scientific pages explaining:
+- Common names & synonyms  
+- Distribution and climate  
+- Uses in archaeology and history  
+- Nutritional profile  
+- Domestication + genetic diversity  
+- Role in reforestation  
+- Carbon capture potential  
+- Florida growth and cultivation  
+
+### 🖼️ Image Galleries
+- Beautiful card grids  
+- Click-to-expand on desktop  
+- Hover previews  
+- Touch-to-expand on mobile  
+
+### 🗺️ Blog & Future Articles
+Custom-written long-form content for:
+- Agroforestry  
+- Genetic conservation  
+- Beverage development  
+- Plantation updates  
+
+### 🤖 FAQ Bot
+A custom chatbot answering:
+- MayaNut questions  
+- Research queries  
+- Company info  
+- Scientific details  
+
+### 🎁 Easter Egg (Ricky Tribute)
+In the navigation modal:
+- Hold the logo 1 second → text appears on left  
+- Click again → shows **ricky.jpeg**  
+- Click outside → resets menu  
+
+### 🧩 Fully SEO-Optimized
+- Meta tags  
+- Semantic structure  
+- Keyword integration  
+- Alt text for all images  
+- Internal linking system  
+- Dedicated SEO superpage (`seo.html`)
+
+---
+
+# 🛠 Technology Stack
+
+| Technology | Use |
+|-----------|-----|
+| **HTML5** | Static site structure |
+| **CSS3**  | Layout, gradients, animations, responsive design |
+| **JavaScript (Vanilla)** | Menu logic, Easter eggs, chat bot, gallery |
+| **GitHub Pages** | Hosting |
+| **GitHub Actions** | SEO workflows, link checkers, deployments |
+| **No frameworks** | Faster load, maximum compatibility |
+
+---
+
+# 📂 File Structure
+
