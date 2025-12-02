@@ -1,4 +1,3 @@
-<!-- BLOCK 1/4 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -444,7 +443,7 @@ body{
   50%{ opacity:1; }
 }
 
-/* TRANSITION STRIP – dark blue band */
+/* TRANSITION STRIP – dark blue band (default) */
 .transition-strip{
   background:linear-gradient(90deg, #001a80 0%, #2e7aff 50%, #001a80 100%);
   color:var(--accent-cyan);
@@ -461,8 +460,8 @@ body{
   box-shadow:0 3px 8px rgba(0,0,0,0.55);
 }
 
-/* Make bottom tab match darker green top bar */
-.bottom-blue-tab{
+/* Bottom tab matches green top bar */
+.transition-strip.bottom-blue-tab{
   background:linear-gradient(90deg,#02401a 0%, #16a34a 50%, #02401a 100%);
   color:#e0ffe9;
 }
@@ -564,9 +563,11 @@ body{
   flex-direction:column;
   gap:12px;
 }
+
+/* Make ALL about tiles square */
 .about-image-tile{
   position:relative;
-  aspect-ratio:1/1; /* make all about images square */
+  aspect-ratio:1/1;
 }
 .about-images img{
   width:100%;
@@ -969,6 +970,8 @@ footer{
   z-index:1400;
 }
 .nav-backdrop.open{ display:flex; }
+
+/* Yellow outline around menu */
 .nav-modal{
   max-width:420px;
   width:min(90vw, 420px);
@@ -984,7 +987,7 @@ footer{
     radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 60%),
     radial-gradient(circle at 100% 100%, #16a34a 0, transparent 60%),
     linear-gradient(135deg, #064e3b 0%, #022c22 100%);
-  border:2px solid #fac000; /* yellow outline around menu */
+  border:3px solid #fac000;
 }
 .nav-modal-title{
   margin:0 0 4px;
@@ -1062,15 +1065,15 @@ footer{
   cursor:pointer;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,0.7));
   user-select:none;
-  position:relative; /* will be made absolute on drag */
+  position:relative;
   z-index:10;
 }
 
 /* Ricky tile: message appears behind original logo spot */
 #nav-ricky-tile{
   position:absolute;
-  width:120px;   /* match logo size */
-  height:120px;  /* match logo size */
+  width:140px;
+  height:140px;
   background:#020617;
   border-radius:18px;
   border:2px solid var(--brand-blue-light);
@@ -1143,7 +1146,7 @@ footer{
   cursor:pointer;
 }
 
-/* Welcome popup – orange + green gradient */
+/* Welcome popup – orange + green gradient + yellow outline */
 .welcome-backdrop{
   position:fixed;
   inset:0;
@@ -1174,7 +1177,7 @@ footer{
     linear-gradient(135deg, #064e3b 0%, #022c22 100%);
   box-shadow:0 10px 30px rgba(0,0,0,0.7);
   color:#ffffff;
-  border:2px solid #fac000; /* yellow outline around welcome message */
+  border:3px solid #fac000;
 }
 .welcome-panel-left{ min-width:0; }
 .welcome-panel-right{
@@ -1264,7 +1267,7 @@ footer{
   min-width:30px;
   min-height:20px;
   box-shadow:0 1px 4px rgba(0,0,0,0.25);
-  overflow:visible; /* allow tail to show */
+  overflow:hidden;
 }
 .chat-icon-bubble::after{
   content:"";
@@ -1598,6 +1601,7 @@ BY THE MAYANUT COMPANY<br>
       </div>
     </div>
   </section>
+
   <!-- TRANSITION: STORE -->
   <div class="transition-strip">STORE – COMING SOON!</div>
 
@@ -1722,7 +1726,7 @@ BY THE MAYANUT COMPANY<br>
           </div>
 
           <div class="about-image-tile">
-            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
+            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" alt="Founder August Kokus of The MayaNut Company">
             <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
               <span class="img-expand-hint">👆 Click to Expand 👆</span>
@@ -1750,7 +1754,7 @@ BY THE MAYANUT COMPANY<br>
         <div class="about-text-col">
           <div class="about-text-card about-card-1">
             <h2>About The MayaNut Company</h2>
-            <p>Welcome to mayanut.com, home of The MayaNut Company. We were founded in 2025 by August Kokus, a South Floridian botanist. August wanted to create his own unique world, but how? He'd have to develop a species which had economic potential and was itself new. His facination with banyan trees led him to discover Moraceae, and soon the maya nut plant, which resembeled a fig in its fruit, but had a seed infinetly more valuable.</p>
+            <p>Welcome to mayanut.com, home of The MayaNut Company. We were founded in 2025 by August Kokus, a South Floridian botanist. August wanted to create his own unique world, but how? He'd have to develop a species which had economic potential and was itself new. His fascination with banyan trees led him to discover Moraceae, and soon the maya nut plant, which resembled a fig in its fruit, but had a seed infinitely more valuable.</p>
           </div>
 
           <div class="about-text-card about-card-2">
@@ -1780,6 +1784,7 @@ BY THE MAYANUT COMPANY<br>
       </div>
     </div>
   </section>
+
   <!-- TRANSITION: RESEARCH -->
   <div class="transition-strip">RESEARCH</div>
 
@@ -1934,208 +1939,711 @@ BY THE MAYANUT COMPANY<br>
       </div>
     </div>
   </section>
+
+  <!-- TRANSITION: BLOG -->
+  <div class="transition-strip">BLOG</div>
+
+  <!-- BLOG SECTION -->
+  <section class="section section--blog" id="blog">
+    <div class="section-inner">
+      <h2>The MayaNut Company Blog</h2>
+      <p><strong>Our blog will follow the journey of maya nut from seed to beverage.</strong> We plan to share updates about our farms, planting experiments, weather events, and behind-the-scenes notes as we develop our first maya nut products.</p>
+      <p>Future posts may include:</p>
+      <ul>
+        <li>Planting diaries from different parts of South Florida</li>
+        <li>Thoughts on agroforestry and long-term tree crops</li>
+        <li>Early taste tests and recipe ideas for maya nut beverages and flours</li>
+        <li>Reflections on what it means to build a brand-new industry around an underused species</li>
+      </ul>
+      <p>As the project grows, the blog on this main page will become a living record of how The MayaNut Company develops over the years.</p>
+    </div>
+  </section>
+
+  <!-- TRANSITION: FAQ -->
+  <div class="transition-strip">FAQ</div>
+
+  <!-- FAQ SECTION -->
+  <section class="section section--faq" id="faq">
+    <div class="section-inner">
+      <div class="faq-list">
+        <div class="faq-item">
+          <h3>What is maya nut?</h3>
+          <p>Maya nut is the seed of the mysterious, tropical rainforest tree <em>Brosimum alicastrum</em>. The seed can be roasted and ground into a powder, then brewed into a rich, naturally caffeine-free beverage. If harvested fresh and separated from its fruity pulp, the seeds can go through a process of nixtamalization, which is the very same process corn must go through to become corn-flour. Seeds may then be ground into a paste and made into tortillas or any baked goods like cookies and bread.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is maya nut the same as breadnut, ojoche or ramón?</h3>
+          <p>Yes. In different regions, the tree and its seeds are known as maya nut, breadnut, ojoche, ramón or guaimaro. They all refer to the same species, <em>Brosimum alicastrum</em>, or to its roasted seeds used for food and drink. For English, mayanut as one word, just like jackfruit, should be used to refer to this new plant.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Can Brosimum alicastrum grow in Florida?</h3>
+          <p>Early observations suggest that warm parts of Florida, especially South Florida at or below about 27°N, can support this species. Our work focuses on proving how well maya nut can grow and produce in subtropical Florida conditions. No one has yet come along to commercialize this species, and we, The MayaNut Company, choose <em>Brosimum alicastrum</em> as our candidate species for the revitalization of humanity.</p>
+        </div>
+        <div class="faq-item">
+          <h3>When will I be able to buy maya nut beverages?</h3>
+          <p>The plantation is still being established. Our goal is to have functional plantings and early products by the late 2020s, ('28-'29). Until then, this site shows concepts and placeholder products while the trees grow. As of late November, 2025, we currently have 200 mayanut trees ready for a forever home. The most probable home, an old citrus grove. With a dying citrus industry, and monoculture orchards, ensuring genetic diversity in the <em>Brosimum alicastrum</em> population by continuous expeditions seeking new genetic strains of unique qualities. Our dream would be to replace the orange on the Florida license plate, as the new breadwinner of South Florida agriculture.</p>
+        </div>
+        <div class="faq-item">
+          <h3>Is The MayaNut Company currently open to partnerships?</h3>
+          <p>We are in an early development phase and welcome interest from growers, researchers, and future distribution partners. See the Contact section below to reach out.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- TRANSITION: CONTACT -->
   <div class="transition-strip">CONTACT</div>
 
   <!-- CONTACT SECTION -->
   <section class="section section--contact" id="contact">
-    <div class="section-inner contact-inner">
-      <h2>Contact Us</h2>
-      <p>If you would like to reach The MayaNut Company, feel free to send us a message using the form below.</p>
-
-      <form class="contact-form" action="#" method="POST">
-        <label>Name</label>
-        <input type="text" name="name" required>
-
-        <label>Email</label>
-        <input type="email" name="email" required>
-
-        <label>Message</label>
-        <textarea name="message" rows="5" required></textarea>
-
-        <button type="submit" class="contact-submit-btn">Send Message</button>
-      </form>
+    <div class="section-inner">
+      <h2>Contact The MayaNut Company</h2>
+      <p>If you are interested in maya nut trees, future maya nut beverages and powders, agroforestry in Florida, or potential research or business collaborations, we would welcome you and be happy to hear from you.</p>
+      <p><strong>Email:</strong> <a href="mailto:themayanutcompany@gmail.com" style="color:#ff941f; text-decoration:underline;">themayanutcompany@gmail.com</a></p>
+      <p><strong>Instagram:</strong> <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" style="color:#ff941f; text-decoration:underline;">@themayanutcompany</a></p>
+      <p>As the project grows, this main page at mayanut.com will remain the central place to learn about our plantation, products, and news. Thank you for your support because it contributes to the evolution of a species.</p>
     </div>
   </section>
 
-  <!-- FOOTER TAB WITH LOGO -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-logo-strip">
-        <div class="footer-logo-wrapper" id="draggable-logo">
-          <img src="maya-nut-logo-green-gradient.png" alt="The MayaNut Company Logo">
-        </div>
-        <div class="footer-logo-text">The MayaNut Company</div>
-      </div>
-      <p class="footer-copy">&copy; 2025 The MayaNut Company — All rights reserved.</p>
+  <!-- BOTTOM GREEN TAB + LOGO SECTION -->
+  <div class="transition-strip bottom-blue-tab">THE MAYANUT COMPANY</div>
+
+  <section class="section section--bottom-logo">
+    <div class="section-inner">
+      <a href="#top" id="bottom-logo-link">
+        <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
+      </a>
     </div>
-  </footer>
+  </section>
 
-  <!-- IMAGE EXPAND MODAL -->
-  <div id="imgModal" class="img-modal">
-    <span class="img-modal-close">&times;</span>
-    <img class="img-modal-content" id="imgModalSrc">
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <hr class="footer-line" />
+    <div class="footer-row">
+      <div class="footer-links">
+        <a id="privacy-link">Privacy Policy</a>
+        <a id="dns-link">Do Not Sell My Info</a>
+      </div>
+      <div class="footer-instagram">
+        <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" aria-label="The MayaNut Company on Instagram">
+          <span>IG</span>
+        </a>
+      </div>
+    </div>
+    <div class="footer-copy">
+      © 2025 The MayaNut Company, Inc. All Rights Reserved.
+    </div>
   </div>
+</footer>
 
-  <!-- FLOATING CHAT BUBBLE -->
-  <div id="chat-bubble">
-    <div id="chat-tail"></div> <!-- POINTS LEFT NOW -->
-    💬
+<!-- Welcome popup -->
+<div class="welcome-backdrop" id="welcome-backdrop">
+  <div class="welcome-modal">
+    <button class="welcome-close" id="welcome-close" aria-label="Close welcome message">&times;</button>
+
+    <div class="welcome-panel welcome-panel-left">
+      <h2 class="welcome-title">Welcome to mayanut.com</h2>
+      <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>) plantations of tropical trees.</p>
+      <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience!</p>
+    </div>
+
+    <div class="welcome-panel welcome-panel-right">
+      <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo" class="welcome-logo">
+      <button class="welcome-main-btn hero-cta-btn" id="welcome-main-btn">Go to Main Page</button>
+    </div>
   </div>
+</div>
 
-  <!-- JAVASCRIPT -->
-  <script>
-    /* ---------------------------------------------
-       Floating Chat Bubble – tail fixed to point left
-    ----------------------------------------------*/
-    const chatBubble = document.getElementById('chat-bubble');
-    const chatTail = document.getElementById('chat-tail');
+<!-- Privacy / DNS Modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h3 id="modal-title">Privacy Policy</h3>
+    <div id="modal-body">
+      <p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+      <p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+      <p>We do not sell your personal information. Some website translations from English may be wrong.</p>
+    </div>
+    <button class="modal-close" id="modal-close">Close</button>
+  </div>
+</div>
 
-    chatBubble.style.position = 'fixed';
-    chatBubble.style.bottom = '30px';
-    chatBubble.style.right = '30px';
+<!-- Lightbox for expanded images -->
+<div class="img-lightbox-backdrop" id="img-lightbox-backdrop">
+  <div class="img-lightbox-content">
+    <img src="" alt="" class="img-lightbox-img" id="img-lightbox-img">
+    <button class="img-lightbox-close" id="img-lightbox-close" aria-label="Close image">&times;</button>
+  </div>
+</div>
 
-    // tail positioning
-    chatTail.style.position = 'absolute';
-    chatTail.style.left = '-8px';
-    chatTail.style.bottom = '10px';
-    chatTail.style.width = '0';
-    chatTail.style.height = '0';
-    chatTail.style.borderTop = '8px solid transparent';
-    chatTail.style.borderBottom = '8px solid transparent';
-    chatTail.style.borderRight = '8px solid #fff'; /* white tail */
-    chatTail.style.zIndex = '3000';
+<!-- Chat assistant launcher -->
+<div class="chat-launcher" id="chat-launcher" aria-label="Open maya nut chat assistant">
+  <div class="chat-icon-bubble">
+    <span class="chat-icon-dots">...</span>
+  </div>
+</div>
 
-    /* ---------------------------------------------
-       Easter Egg – draggable footer logo
-    ----------------------------------------------*/
-    const dragLogo = document.getElementById('draggable-logo');
+<div class="chat-panel" id="chat-panel" aria-label="maya nut chat assistant">
+  <div class="chat-panel-header">
+    <div class="chat-panel-title">Maya nut Assistant</div>
+    <button class="chat-panel-close" id="chat-close" aria-label="Close chat">&times;</button>
+  </div>
+  <div class="chat-panel-body" id="chat-log">
+    <div class="chat-msg">
+      <strong>Bot:</strong> Hi! I’m a tiny FAQ helper. Ask me about maya nut, Brosimum alicastrum, or this website.
+    </div>
+  </div>
+  <div class="chat-panel-input-row">
+    <input type="text" id="chat-input" class="chat-panel-input" placeholder="Ask a short question…" />
+    <button class="chat-panel-send" id="chat-send">Ask</button>
+  </div>
+</div>
 
-    dragLogo.addEventListener('mousedown', startDrag);
-    dragLogo.addEventListener('touchstart', startDrag);
+<!-- ========================= -->
+<!-- 🌱 FULL JS SCRIPT BLOCK  -->
+<!-- ========================= -->
+<script>
+/* === LANGUAGE DROPDOWN === */
+(function(){
+  const toggle = document.getElementById('lang-toggle');
+  const dropdown = document.getElementById('lang-dropdown');
+  const currentSpan = document.getElementById('lang-current');
 
-    function startDrag(e) {
-      e.preventDefault();
-      document.addEventListener('mousemove', drag);
-      document.addEventListener('touchmove', drag);
-      document.addEventListener('mouseup', stopDrag);
-      document.addEventListener('touchend', stopDrag);
+  if(!toggle || !dropdown || !currentSpan) return;
+
+  const items = dropdown.querySelectorAll('[data-file]');
+  const file = window.location.pathname.split('/').pop() || 'index.html';
+
+  items.forEach(i=>{
+    if(i.getAttribute('data-file')===file){
+      currentSpan.textContent=i.textContent.trim();
+      i.classList.add('active');
     }
+  });
 
-    function drag(e) {
-      let x = e.clientX || (e.touches && e.touches[0].clientX);
-      let y = e.clientY || (e.touches && e.touches[0].clientY);
-      dragLogo.style.position = 'fixed';
-      dragLogo.style.left = x - 40 + 'px';
-      dragLogo.style.top = y - 40 + 'px';
-      dragLogo.style.cursor = 'grabbing';
+  toggle.addEventListener('click', e=>{
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  items.forEach(i=>{
+    i.addEventListener('click',()=>{
+      window.location.href=i.getAttribute('data-file');
+    });
+  });
+
+  document.addEventListener('click', e=>{
+    if(!dropdown.contains(e.target) && !toggle.contains(e.target)){
+      dropdown.classList.remove('open');
     }
+  });
+})();
 
-    function stopDrag() {
-      document.removeEventListener('mousemove', drag);
-      document.removeEventListener('touchmove', drag);
-      dragLogo.style.cursor = 'grab';
+/* === PRIVACY MODAL === */
+(function(){
+  const backdrop=document.getElementById('modal-backdrop');
+  const titleEl=document.getElementById('modal-title');
+  const bodyEl=document.getElementById('modal-body');
+  const closeBtn=document.getElementById('modal-close');
+  const privacy=document.getElementById('privacy-link');
+  const dns=document.getElementById('dns-link');
+
+  if(!backdrop || !titleEl || !bodyEl || !closeBtn || !privacy || !dns) return;
+
+  function open(kind){
+    backdrop.style.display='flex';
+    if(kind==='privacy'){
+      titleEl.textContent='Privacy Policy';
+      bodyEl.innerHTML=`<p>We collect only the minimum information needed to operate this website, such as standard server logs and anonymous usage data.</p>
+<p>Any information you voluntarily share with us (for example, via email) is used only to respond to your inquiry and improve our services.</p>
+<p>We do not sell your personal information. Some website translations from English may be wrong.</p>`;
+    }else{
+      titleEl.textContent='Do Not Sell My Info';
+      bodyEl.innerHTML=`<p>The MayaNut Company does not sell personal data. If you have questions or requests regarding your information, please contact us via email.</p>`;
     }
+  }
+  function close(){ backdrop.style.display='none'; }
 
-    /* ---------------------------------------------
-       Gallery: expand buttons – Show next block
-    ----------------------------------------------*/
-    const btn1 = document.getElementById('gallery-more-1-btn');
-    const wrap1 = document.getElementById('gallery-more-1-wrap');
-    const block2 = document.getElementById('gallery-block-2');
+  privacy.addEventListener('click',()=>open('privacy'));
+  dns.addEventListener('click',()=>open('dns'));
+  closeBtn.addEventListener('click',close);
+  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
+})();
 
-    btn1.addEventListener('click', () => {
-      block2.style.display = 'grid';
-      wrap1.style.display = 'none';
-      document.getElementById('gallery-more-2-wrap').style.display = 'block';
+/* === NAV OVERLAY + LINK HIGHLIGHTING + SCROLL SPY === */
+(function(){
+  const toggle=document.getElementById('menu-toggle');
+  const backdrop=document.getElementById('nav-backdrop');
+  const closeBtn=document.getElementById('nav-close');
+  const links = backdrop ? backdrop.querySelectorAll('.nav-modal-links a[data-section]') : [];
+
+  if(!toggle || !backdrop || !closeBtn) return;
+
+  function closeNav(){
+    toggle.classList.remove('open');
+    backdrop.classList.remove('open');
+  }
+
+  toggle.addEventListener('click',()=>{
+    toggle.classList.toggle('open');
+    backdrop.classList.toggle('open');
+  });
+
+  closeBtn.addEventListener('click',closeNav);
+
+  backdrop.addEventListener('click',e=>{
+    if(e.target===backdrop){
+      closeNav();
+    }
+  });
+
+  links.forEach(link=>{
+    link.addEventListener('click',()=>{
+      closeNav();
     });
+  });
 
-    const btn2 = document.getElementById('gallery-more-2-btn');
-    const wrap2 = document.getElementById('gallery-more-2-wrap');
-    const block3 = document.getElementById('gallery-block-3');
+  // Scroll-based "active section" highlight
+  const sectionIds = ['top','buy','about','research','gallery','blog','faq','contact'];
+  const sectionInfo = sectionIds
+    .map(id => ({ id, elem: document.getElementById(id) }))
+    .filter(s => s.elem);
 
-    btn2.addEventListener('click', () => {
-      block3.style.display = 'grid';
-      wrap2.style.display = 'none';
-    });
-
-    /* ---------------------------------------------
-       Image Modal Expand
-    ----------------------------------------------*/
-    const modal = document.getElementById('imgModal');
-    const modalImg = document.getElementById('imgModalSrc');
-    const modalClose = document.querySelector('.img-modal-close');
-
-    document.querySelectorAll('.img-expand-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const src = btn.getAttribute('data-img-src');
-        modal.style.display = 'block';
-        modalImg.src = src;
-      });
-    });
-
-    modalClose.addEventListener('click', () => {
-      modal.style.display = 'none';
-    });
-
-    /* ---------------------------------------------
-       Snowflake Physics – drifting side to side
-    ----------------------------------------------*/
-    function createSnowflake() {
-      const snow = document.createElement('div');
-      snow.classList.add('snowflake');
-      snow.textContent = '❄';
-
-      let startLeft = Math.random() * window.innerWidth;
-      snow.style.left = startLeft + 'px';
-      snow.style.top = '-40px';
-
-      document.body.appendChild(snow);
-
-      let fallSpeed = 1 + Math.random() * 2;
-      let drift = (Math.random() * 2 - 1) * 0.5;
-      let sway = 0;
-
-      function animate() {
-        let top = parseFloat(snow.style.top);
-        let left = parseFloat(snow.style.left);
-
-        snow.style.top = top + fallSpeed + 'px';
-
-        // drifting left and right slowly
-        sway += drift;
-        snow.style.left = left + Math.sin(sway / 20) * 1.5 + 'px';
-
-        if (top < window.innerHeight + 40) {
-          requestAnimationFrame(animate);
-        } else {
-          snow.remove();
-        }
+  function setActiveSection(currentId){
+    links.forEach(a=>{
+      const sec=a.getAttribute('data-section');
+      if(sec === currentId){
+        a.classList.add('nav-link-active');
+      }else{
+        a.classList.remove('nav-link-active');
       }
-      animate();
-    }
+    });
+  }
 
-    setInterval(createSnowflake, 150);
+  function updateActiveOnScroll(){
+    const scrollPos = window.scrollY || window.pageYOffset;
+    const offset = 150; // ~50+ px into section visually, accounting for top bar
 
-    /* ---------------------------------------------
-       Fix background on iOS / Android landscape
-       Ensures full fixed-gradient on mobile
-    ----------------------------------------------*/
-    function fixMobileBackground() {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        document.body.style.backgroundAttachment = 'scroll';
-        document.body.style.backgroundSize = 'cover';
-      } else {
-        document.body.style.backgroundAttachment = 'fixed';
+    let currentId = 'top';
+    sectionInfo.forEach(sec=>{
+      const top = sec.elem.offsetTop;
+      if(scrollPos + offset >= top){
+        currentId = sec.id;
       }
+    });
+
+    setActiveSection(currentId);
+  }
+
+  window.addEventListener('hashchange',()=>{
+    updateActiveOnScroll();
+  });
+
+  window.addEventListener('scroll', updateActiveOnScroll);
+  window.addEventListener('load', updateActiveOnScroll);
+})();
+
+/* === RICKY EASTER EGG – draggable logo + square text, click to ricky.jpeg === */
+(function(){
+  const logo = document.getElementById('nav-logo-easter');
+  const tile = document.getElementById('nav-ricky-tile');
+  const navBackdrop = document.getElementById('nav-backdrop');
+  const menuToggle = document.getElementById('menu-toggle');
+  if(!logo || !tile || !navBackdrop) return;
+
+  let pointerId = null;
+  let startX = null;
+  let startY = null;
+  let dragging = false;
+  let didDrag = false;
+  let wrapperRect = null;
+  let offsetX = 0;
+  let offsetY = 0;
+  let originalPos = null;
+
+  const dedicationHTML = `
+    <p>
+    💙🧡💙<br>
+    THIS SITE IS<br>
+    DEDICATED TO RICKY<br>
+    FOREVER LOVED<br>
+    BY THE MAYANUT COMPANY<br>
+    💙🧡💙
+    </p>
+  `;
+
+  function resetTileContent(){
+    tile.innerHTML = dedicationHTML;
+  }
+
+  function syncTileSizeToLogo(){
+    const w = logo.offsetWidth;
+    const h = logo.offsetHeight;
+    if(w === 0 || h === 0) return;
+    tile.style.width  = w + 'px';
+    tile.style.height = h + 'px';
+  }
+
+  function positionTileAt(pos){
+    const wrapper = logo.parentElement;
+    const wRect = wrapper.getBoundingClientRect();
+    tile.style.left = (pos.left - wRect.left) + 'px';
+    tile.style.top  = (pos.top  - wRect.top ) + 'px';
+  }
+
+  function captureOriginalPos(){
+    const logoRect = logo.getBoundingClientRect();
+    originalPos = { left: logoRect.left, top: logoRect.top };
+  }
+
+  function goHomeAndReset(){
+    // Scroll home
+    window.location.hash = '#top';
+
+    // Close menu
+    if(menuToggle){
+      menuToggle.classList.remove('open');
+    }
+    navBackdrop.classList.remove('open');
+
+    // Reset logo position inside wrapper
+    const wrapper = logo.parentElement;
+    logo.style.position='relative';
+    logo.style.left='';
+    logo.style.top='';
+    logo.style.transform='';
+
+    // Recompute original position for next time
+    const logoRect = logo.getBoundingClientRect();
+    originalPos = { left: logoRect.left, top: logoRect.top };
+
+    // Reset tile
+    tile.style.display='none';
+    resetTileContent();
+  }
+
+  // Initialize tile size and original position
+  window.addEventListener('load', ()=>{
+    syncTileSizeToLogo();
+    captureOriginalPos();
+    tile.style.display='none';
+  });
+  window.addEventListener('resize', ()=>{
+    syncTileSizeToLogo();
+    if(originalPos){
+      positionTileAt(originalPos);
+    }
+  });
+
+  function onPointerDown(e){
+    e.preventDefault();
+    dragging = false;
+    didDrag = false;
+
+    pointerId = e.pointerId || null;
+    startX = e.clientX;
+    startY = e.clientY;
+
+    const wrapper = logo.parentElement;
+    wrapperRect = wrapper.getBoundingClientRect();
+
+    // Convert logo to absolute inside wrapper
+    const logoRect = logo.getBoundingClientRect();
+    logo.style.position='absolute';
+    logo.style.left = (logoRect.left - wrapperRect.left) + 'px';
+    logo.style.top  = (logoRect.top  - wrapperRect.top ) + 'px';
+    logo.style.transform='translate(0,0)';
+
+    offsetX = startX - (wrapperRect.left + parseFloat(logo.style.left));
+    offsetY = startY - (wrapperRect.top  + parseFloat(logo.style.top));
+
+    if(pointerId !== null){
+      logo.setPointerCapture(pointerId);
+    }
+  }
+
+  function onPointerMove(e){
+    if(startX === null) return;
+
+    const x = e.clientX;
+    const y = e.clientY;
+
+    const dx = x - startX;
+    const dy = y - startY;
+
+    if(!dragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)){
+      dragging = true;
+      didDrag = true;
+
+      // Show dedication tile behind original logo spot (same size)
+      syncTileSizeToLogo();
+      resetTileContent();
+      if(!originalPos){
+        captureOriginalPos();
+      }
+      positionTileAt(originalPos);
+      tile.style.display='block';
+      tile.style.position='absolute';
     }
 
-    window.addEventListener('resize', fixMobileBackground);
-    window.addEventListener('orientationchange', fixMobileBackground);
-    fixMobileBackground();
-  </script>
+    if(dragging){
+      const wrapper = logo.parentElement;
+      const wRect = wrapperRect || wrapper.getBoundingClientRect();
+      let newLeft = x - wRect.left - offsetX;
+      let newTop  = y - wRect.top  - offsetY;
+
+      const maxLeft = wRect.width - logo.offsetWidth;
+      const maxTop  = wRect.height - logo.offsetHeight;
+      newLeft = Math.max(0, Math.min(maxLeft, newLeft));
+      newTop  = Math.max(0, Math.min(maxTop, newTop));
+
+      logo.style.left = newLeft + 'px';
+      logo.style.top  = newTop  + 'px';
+    }
+  }
+
+  function onPointerUp(e){
+    if(pointerId !== null){
+      try{ logo.releasePointerCapture(pointerId); }catch(_){}
+    }
+    startX = null;
+    startY = null;
+    pointerId = null;
+    dragging = false;
+    // Logo stays where it was dropped; tile stays at original position.
+  }
+
+  logo.addEventListener('pointerdown', onPointerDown);
+  logo.addEventListener('pointermove', onPointerMove);
+  logo.addEventListener('pointerup', onPointerUp);
+  logo.addEventListener('pointercancel', onPointerUp);
+
+  // Click behavior (no drag): show ricky.jpeg; click that => home + reset
+  logo.addEventListener('click', (e)=>{
+    if(didDrag){
+      didDrag=false;
+      return;
+    }
+
+    // Show tile at current logo position with ricky.jpeg
+    syncTileSizeToLogo();
+    const wrapper = logo.parentElement;
+    const wRect = wrapper.getBoundingClientRect();
+    const logoRect = logo.getBoundingClientRect();
+    tile.style.left = (logoRect.left - wRect.left) + 'px';
+    tile.style.top  = (logoRect.top  - wRect.top ) + 'px';
+    tile.style.display='block';
+
+    tile.innerHTML = `
+      <img src="ricky.jpeg"
+           alt="Ricky dedication"
+           id="ricky-image"
+           style="width:100%;height:100%;object-fit:cover;border-radius:14px;cursor:pointer;">
+    `;
+
+    const rickyImg = tile.querySelector('#ricky-image');
+    if(rickyImg){
+      rickyImg.addEventListener('click', ()=>{
+        goHomeAndReset();
+      }, { once:true });
+    }
+  });
+})();
+
+/* === ABOUT IMAGE LIGHTBOX + GALLERY CLICK EXPAND === */
+(function(){
+  const buttons=document.querySelectorAll('.img-expand-btn');
+  const backdrop=document.getElementById('img-lightbox-backdrop');
+  const img=document.getElementById('img-lightbox-img');
+  const close=document.getElementById('img-lightbox-close');
+
+  if(!backdrop || !img || !close) return;
+
+  // About images
+  buttons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const src = btn.getAttribute('data-img-src');
+      if(!src) return;
+      img.src=src;
+      backdrop.style.display='flex';
+    });
+  });
+
+  // Gallery images – click to expand
+  const galleryImgs=document.querySelectorAll('.gallery-item img');
+  galleryImgs.forEach(el=>{
+    el.addEventListener('click',()=>{
+      img.src = el.getAttribute('src');
+      img.alt = el.getAttribute('alt') || '';
+      backdrop.style.display='flex';
+    });
+  });
+
+  function closeLightbox(){
+    backdrop.style.display='none';
+    img.src='';
+  }
+
+  close.addEventListener('click',closeLightbox);
+  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) closeLightbox(); });
+})();
+
+/* === CHAT BOT – stays in lower-right on desktop & mobile === */
+(function(){
+  const launcher=document.getElementById('chat-launcher');
+  const panel=document.getElementById('chat-panel');
+  const closeBtn=document.getElementById('chat-close');
+  const input=document.getElementById('chat-input');
+  const send=document.getElementById('chat-send');
+  const log=document.getElementById('chat-log');
+
+  if(!launcher || !panel || !closeBtn || !input || !send || !log) return;
+
+  launcher.addEventListener('click',()=>{
+    panel.style.display = panel.style.display==='block' ? 'none':'block';
+    if(panel.style.display==='block'){
+      setTimeout(()=>input.focus(),50);
+    }
+  });
+
+  closeBtn.addEventListener('click',()=>panel.style.display='none');
+
+  function write(role,text){
+    const div=document.createElement('div');
+    div.className='chat-msg';
+    div.innerHTML=`<strong>${role}:</strong> ${text}`;
+    log.appendChild(div);
+    log.scrollTop=log.scrollHeight;
+  }
+
+  function respond(message){
+    const m=message.toLowerCase();
+    if(m.includes("mayanut")||m.includes("maya nut")||m.includes("brosimum")){
+      write("Bot","Maya nut is the roasted seed of Brosimum alicastrum, a tropical rainforest tree that The MayaNut Company is helping introduce to Florida.");
+    }else if(m.includes("where") && m.includes("grow")){
+      write("Bot","We are trialing Brosimum alicastrum in warm parts of South Florida, especially at or below 27°N latitude.");
+    }else if(m.includes("license plate") || m.includes("orange")){
+      write("Bot","One of our dreams is for maya nut to someday replace the orange on the Florida license plate as a symbol of a new breadwinner crop.");
+    }else{
+      write("Bot","Ask me something about maya nut, Brosimum alicastrum, Florida plantations, or this website.");
+    }
+  }
+
+  send.addEventListener('click',()=>{
+    const val=input.value.trim();
+    if(!val) return;
+    write("You",val);
+    input.value="";
+    respond(val);
+  });
+
+  input.addEventListener('keydown',e=>{
+    if(e.key==="Enter"){ send.click(); }
+  });
+})();
+
+/* === GALLERY LOAD MORE === */
+(function(){
+  const b1=document.getElementById('gallery-block-1');
+  const b2=document.getElementById('gallery-block-2');
+  const b3=document.getElementById('gallery-block-3');
+  const btn1=document.getElementById('gallery-more-1-btn');
+  const btn2=document.getElementById('gallery-more-2-btn');
+  const wrap2=document.getElementById('gallery-more-2-wrap');
+
+  if(!b1 || !b2 || !b3 || !btn1 || !btn2 || !wrap2) return;
+
+  btn1.addEventListener('click',()=>{
+    b2.style.display='grid';
+    wrap2.style.display='block';
+    btn1.style.display='none';
+  });
+
+  btn2.addEventListener('click',()=>{
+    b3.style.display='grid';
+    btn2.style.display='none';
+  });
+})();
+
+/* === WELCOME POPUP – always show on load === */
+(function(){
+  const backdrop=document.getElementById('welcome-backdrop');
+  const closeBtn=document.getElementById('welcome-close');
+  const mainBtn=document.getElementById('welcome-main-btn');
+
+  if(!backdrop || !closeBtn || !mainBtn) return;
+
+  function close(){
+    backdrop.style.display='none';
+  }
+
+  closeBtn.addEventListener('click',close);
+  mainBtn.addEventListener('click',close);
+  backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
+})();
+
+/* === HERO SNOW EFFECT – varied size, speed, sideways drift === */
+(function(){
+  const container = document.getElementById('hero-snow');
+  if(!container) return;
+
+  const flakes = 40;
+  for(let i = 0; i < flakes; i++){
+    const span = document.createElement('span');
+    span.className = 'snowflake';
+    span.textContent = '❄';
+
+    const leftPercent = Math.random() * 100;
+    const duration = 8 + Math.random() * 10; // 8–18s
+    const delay = Math.random() * -20;
+    const size = 10 + Math.random() * 18; // 10–28px
+
+    const amplitude = 20 + Math.random() * 40; // 20–60px side drift
+    const xStart = (Math.random() * 40 - 20) + 'px';
+    const xMid   = (Math.random() * amplitude - amplitude/2) + 'px';
+    const xEnd   = (Math.random() * amplitude - amplitude/2) + 'px';
+
+    span.style.left = leftPercent + '%';
+    span.style.animationDuration = duration + 's';
+    span.style.animationDelay = delay + 's';
+    span.style.fontSize = size + 'px';
+
+    span.style.setProperty('--x-start', xStart);
+    span.style.setProperty('--x-mid',   xMid);
+    span.style.setProperty('--x-end',   xEnd);
+
+    container.appendChild(span);
+  }
+})();
+
+/* === BOTTOM LOGO SCROLL TO TOP === */
+(function(){
+  const link=document.getElementById('bottom-logo-link');
+  if(!link) return;
+  link.addEventListener('click',e=>{
+    e.preventDefault();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+
+/* === MOBILE BACKGROUND FIX (for fixed gradient on phones) === */
+(function(){
+  function fixMobileBackground() {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      document.body.style.backgroundAttachment = 'scroll';
+      document.body.style.backgroundSize = 'cover';
+    } else {
+      document.body.style.backgroundAttachment = 'fixed';
+    }
+  }
+
+  window.addEventListener('resize', fixMobileBackground);
+  window.addEventListener('orientationchange', fixMobileBackground);
+  fixMobileBackground();
+})();
+</script>
 
 </body>
 </html>
