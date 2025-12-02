@@ -20,9 +20,10 @@
 <meta name="robots" content="index,follow" />
 
 <!-- SEO: description + keywords – all text visible on this page -->
-<meta name="description" content="The MayaNut Company – maya nut beverage, powder and flour from Brosimum alicastrum (maya nut, breadnut, ramón, ojoche, guaimaro). Tropical agroforestry research and Florida plantations by The MayaNut Company.">
+<meta name="description" content="The MayaNut Company – maya nut beverage, powder and flour from Brosimum alicastrum (maya nut, breadnut, ramón, ojoche, guaimaro). Tropical agroforestry research, Florida plantations, genetic diversity and domestication of Brosimum alicastrum by The MayaNut Company.">
 <meta name="keywords" content="
-Maya nut, mayanut, The MayaNut Company, mayanut.com, maya nut drink, maya nut beverage, maya nut powder, maya nut flour, maya nut Florida, maya nut plantation, Brosimum alicastrum, breadnut, bread nut, nuez de ramón, ojoche, guaimaro, guayumaro, ramón,
+Maya nut, mayanut, The MayaNut Company, mayanut.com, maya nut drink, maya nut beverage, maya nut powder, maya nut flour, maya nut Florida, maya nut plantation, Brosimum alicastrum, Brosimum alicastrum subsp. alicastrum, Brosimum alicastrum subsp. bolivarense,
+breadnut, bread nut, nuez de ramón, ramón, ojoche, guaimaro, guayumaro, oox, ox,
 maya nut agroforestry, tropical trees Florida, subtropical agriculture Florida, South Florida plantation,
 玛雅坚果, 面包果, Brosimum alicastrum, 热带树木,
 माया नट, ब्रेडनट, Brosimum alicastrum,
@@ -38,8 +39,11 @@ noz maia, Brosimum alicastrum, árvore tropical,
   --brand-blue-dark:#0803d4;
   --brand-blue-light:#00b6fb;
 
-  /* Accent cyan for titles/buttons/text */
+  /* Accent cyan for some buttons/text */
   --accent-cyan:#00fff2;
+
+  /* Accent yellow for labels/tabs */
+  --accent-yellow:#fac000;
 
   /* Jungle gradient core */
   --orange:#ff8a00;
@@ -89,6 +93,21 @@ body{
   background-size:cover;
   background-position:center top;
   overflow-x:hidden;
+}
+
+/* Mobile vertical orange->green background */
+@media (max-width:600px){
+  body{
+    background:
+      linear-gradient(to bottom,
+        #ff8a00 0%,
+        #ffd85a 32%,
+        #15803d 70%,
+        #022c22 100%);
+    background-attachment:scroll;
+    background-repeat:no-repeat;
+    background-size:cover;
+  }
 }
 
 /* Hidden SEO block – still indexable, but visually off-screen */
@@ -244,7 +263,7 @@ body{
   background:rgba(70,120,255,0.4);
 }
 .lang-dropdown li.active{
-  color:var(--orange);
+  color:var(--accent-yellow); /* English tab text yellow */
   text-decoration:underline;
   text-underline-offset:3px;
 }
@@ -261,12 +280,12 @@ body{
   }
 }
 
-/* MOBILE TOPBAR LOGO INLINE */
+/* MOBILE TOPBAR LOGO INLINE – centered */
 .topbar-logo-inline{
   display:none;
 }
 .topbar-logo-inline img{
-  height:50px;
+  height:55px;
   width:auto;
   filter:drop-shadow(0 1px 4px rgba(0,0,0,0.5));
 }
@@ -288,7 +307,7 @@ body{
     justify-content:center;
     align-items:center;
   }
-  .topbar-logo-inline img{ height:46px; }
+  .topbar-logo-inline img{ height:52px; }
   .topbar-title{
     font-size:14px;
     line-height:1.2;
@@ -299,7 +318,7 @@ body{
   .topbar-lang{ align-items:flex-end; }
 }
 
-/* Fixed logo (desktop only) – 15% bigger */
+/* Fixed logo (desktop only) – 20% bigger */
 .topbar-logo-link{
   position:fixed;
   left:12px;
@@ -307,7 +326,7 @@ body{
   z-index:900;
 }
 .topbar-logo{
-  width:104px;
+  width:125px; /* was 104px – now 20% larger */
   height:auto;
   display:block;
   filter:drop-shadow(0 2px 8px rgba(0,0,0,0.35));
@@ -404,7 +423,7 @@ body{
 
 /* CTA */
 .hero-cta-wrap{
-  margin-top:-70px;
+  margin-top:-90px; /* moved up so it lines up closer with text image bottom */
   width:100%;
   display:flex;
   justify-content:flex-end;
@@ -443,10 +462,10 @@ body{
   50%{ opacity:1; }
 }
 
-/* TRANSITION STRIP – green band */
+/* TRANSITION STRIP – now green bar, yellow text */
 .transition-strip{
-  background:linear-gradient(90deg, #02401a 0%, #16a34a 50%, #02401a 100%);
-  color:var(--accent-cyan);
+  background:linear-gradient(90deg,#02401a 0%, #16a34a 50%, #02401a 100%);
+  color:var(--accent-yellow);
   text-align:center;
   padding:14px 16px;
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -487,7 +506,7 @@ body{
 .store-heading h2{
   margin:0 0 6px;
   font-size:22px;
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 .store-heading p{
@@ -563,21 +582,24 @@ body{
 .about-images img{
   width:100%;
   height:auto;
-  aspect-ratio:1/1;
+  max-height:260px;
   object-fit:cover;
   border-radius:14px;
   box-shadow:0 2px 10px rgba(0,0,0,0.55);
   display:block;
 }
+.about-images .square{
+  aspect-ratio:1/1;
+}
 
-/* Click to expand button – arrow only, expands on hover */
+/* Image expand button (about) */
 .img-expand-btn{
   position:absolute;
   top:8px;
   right:8px;
   border:none;
   border-radius:999px;
-  padding:4px 8px;
+  padding:4px 10px;
   background:rgba(0,0,0,0.65);
   color:#ffffff;
   font-size:11px;
@@ -586,29 +608,23 @@ body{
   gap:4px;
   cursor:pointer;
   white-space:nowrap;
-  overflow:hidden;
-  max-width:26px; /* arrow only */
-  transition:max-width 0.18s ease, padding 0.18s ease, transform 0.18s ease;
 }
-.img-expand-icon{
-  font-size:13px;
-}
-.img-expand-text{
+.img-expand-icon{ font-size:13px; }
+.img-expand-hint{
   opacity:0;
-  width:0;
-  overflow:hidden;
-  transition:opacity 0.18s ease, width 0.18s ease;
+  transition:opacity 0.18s ease, transform 0.18s ease;
 }
-
-/* On hover, stretch to show text */
-.about-image-tile:hover .img-expand-btn{
-  max-width:160px;
-  padding:4px 10px;
-  transform:scale(1.04);
+@media(min-width:801px){
+  .about-image-tile:hover .img-expand-hint{
+    opacity:1;
+    transform:translateY(-1px);
+  }
+  .about-image-tile:hover .img-expand-btn{
+    transform:scale(1.04);
+  }
 }
-.about-image-tile:hover .img-expand-text{
-  opacity:1;
-  width:auto;
+@media(max-width:800px){
+  .img-expand-hint{ display:none; }
 }
 
 /* About text column – blue gradient cards */
@@ -630,7 +646,7 @@ body{
 .about-text-card h3{
   margin-top:0;
   margin-bottom:8px;
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   display:inline-block;
   padding:4px 10px;
@@ -656,7 +672,7 @@ body{
   color:#ffffff;
 }
 .section--research h2{
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   display:inline-block;
   padding:4px 10px;
@@ -685,7 +701,7 @@ body{
 .research-card h2{
   margin-top:0;
   margin-bottom:8px;
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   display:inline-block;
   padding:4px 10px;
@@ -703,12 +719,17 @@ body{
   margin:0 auto;
 }
 
-/* Gallery titles */
+/* Gallery titles – dark blue pill behind text */
 .gallery-title-desktop,
 .gallery-title-mobile{
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   margin:0 0 6px;
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#020617 0%, #1d4ed8 90%);
+  text-shadow:0 1px 2px rgba(0,0,0,0.55);
 }
 .gallery-title-mobile{ display:none; }
 
@@ -818,8 +839,13 @@ body{
   color:#ffffff;
 }
 .section--blog h2{
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#020617 0%, #1d4ed8 90%);
+  text-shadow:0 1px 2px rgba(0,0,0,0.55);
 }
 
 /* FAQ */
@@ -835,7 +861,7 @@ body{
 .faq-item h3{
   margin-top:0;
   margin-bottom:6px;
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   display:inline-block;
   padding:4px 10px;
@@ -849,8 +875,12 @@ body{
   color:#ffffff;
 }
 .section--contact h2{
-  color:var(--accent-cyan);
+  color:var(--accent-yellow);
   font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
 }
 
 /* BOTTOM LOGO SECTION */
@@ -865,7 +895,7 @@ body{
   cursor:pointer;
 }
 
-/* FOOTER – jungle green */
+/* FOOTER – jungle green-ish */
 footer{
   background:
     radial-gradient(circle at 50% 50%,
@@ -956,7 +986,7 @@ footer{
   }
 }
 
-/* NAV OVERLAY + RICKY TILE */
+/* NAV OVERLAY + RICKY EASTER EGG */
 .nav-backdrop{
   position:fixed;
   inset:0;
@@ -983,7 +1013,6 @@ footer{
     radial-gradient(circle at 0% 0%, var(--orange) 0, transparent 60%),
     radial-gradient(circle at 100% 100%, #16a34a 0, transparent 60%),
     linear-gradient(135deg, #064e3b 0%, #022c22 100%);
-  border:3px solid #fac000;
 }
 .nav-modal-title{
   margin:0 0 4px;
@@ -1040,7 +1069,7 @@ footer{
   transition:transform 0.15s ease;
 }
 .nav-modal-links a.nav-link-active{
-  color:var(--orange-light);
+  color:var(--accent-yellow);
   background:rgba(0,0,0,0.45);
 }
 .nav-modal-links a.nav-link-active::after{
@@ -1052,7 +1081,7 @@ footer{
 .nav-logo-easter-wrapper{
   display:flex;
   justify-content:center;
-  margin:10px 0 14px;
+  margin:10px 0 10px;
   position:relative;
 }
 #nav-logo-easter{
@@ -1061,30 +1090,36 @@ footer{
   cursor:pointer;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,0.7));
   user-select:none;
-  position:relative;
-  z-index:10;
 }
 
-/* Ricky tile: message appears behind original logo spot */
-#nav-ricky-tile{
-  position:absolute;
+/* Easter egg panel shown on long-press */
+.nav-ricky-panel{
+  display:none;
+  margin:6px auto 14px;
+  max-width:320px;
   background:#020617;
   border-radius:18px;
   border:2px solid var(--brand-blue-light);
-  color:var(--accent-cyan);
+  color:#ffffff;
   box-shadow:0 4px 14px rgba(0,0,0,0.8);
-  display:none;
   padding:10px;
   font-size:11px;
   line-height:1.4;
-  text-align:center;
-  z-index:5;
-  pointer-events:auto;
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
 }
-#nav-ricky-tile p{
-  margin:0;
-  background:none;
-  padding:0;
+.nav-ricky-text{
+  flex:1;
+  text-align:center;
+}
+.nav-ricky-image img{
+  width:100px;
+  height:100px;
+  border-radius:12px;
+  object-fit:cover;
+  cursor:pointer;
 }
 
 /* Nav close button */
@@ -1145,7 +1180,7 @@ footer{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,0.6);
-  display:flex;
+  display:flex; /* show every load */
   align-items:center;
   justify-content:center;
   z-index:2500;
@@ -1171,7 +1206,6 @@ footer{
     linear-gradient(135deg, #064e3b 0%, #022c22 100%);
   box-shadow:0 10px 30px rgba(0,0,0,0.7);
   color:#ffffff;
-  border:3px solid #fac000;
 }
 .welcome-panel-left{ min-width:0; }
 .welcome-panel-right{
@@ -1459,7 +1493,8 @@ footer{
 <!-- Hidden SEO block – all words indexable on a single page -->
 <div class="visually-hidden">
   <h1>The MayaNut Company – maya nut beverage, breadnut, ojoche, ramón, Brosimum alicastrum</h1>
-  <p>The MayaNut Company at mayanut.com is developing tropical plantations of Brosimum alicastrum (maya nut, mayanut, breadnut, ramón, ojoche, guaimaro) in Florida. This single page describes our maya nut beverage concepts, powder and flour ideas, agroforestry research, FAQ, gallery, and contact information.</p>
+  <p>The MayaNut Company at mayanut.com is developing tropical plantations of Brosimum alicastrum (maya nut, breadnut, ramón, ojoche, guaimaro) in Florida. This single page describes our maya nut beverage concepts, powder and flour ideas, agroforestry research, genetic diversity, domestication, FAQ, gallery, and contact information.</p>
+  <p>Keywords: maya nut, mayanut, breadnut, nuez de ramón, ramón, ojoche, guaimaro, Brosimum alicastrum subsp. alicastrum, Brosimum alicastrum subsp. bolivarense, Central America, Venezuela, Colombia, semi-dry rainforest, rainforest, Florida plantations, South Florida agriculture, agroforestry, underutilized tropical species, superfood beverage.</p>
 </div>
 
 <header class="topbar">
@@ -1468,7 +1503,7 @@ footer{
     <span></span><span></span><span></span>
   </button>
 
-  <!-- Mobile inline logo -->
+  <!-- Mobile inline logo (centered) -->
   <a href="#top" class="topbar-logo-inline" id="topbar-logo-inline">
     <img src="mayanut-the-maya-nut-company-logo.png" alt="The MayaNut Company logo">
   </a>
@@ -1537,16 +1572,20 @@ footer{
         <img src="mayanut-the-maya-nut-company-logo.png"
              alt="The MayaNut Company logo"
              id="nav-logo-easter">
+      </div>
 
-        <div id="nav-ricky-tile">
-          <p>
-💙🧡💙<br>
-THIS SITE IS<br>
-DEDICATED TO RICKY<br>
-FOREVER LOVED<br>
-BY THE MAYANUT COMPANY<br>
-💙🧡💙
-          </p>
+      <!-- Easter egg panel appears on long-press -->
+      <div id="nav-ricky-panel" class="nav-ricky-panel">
+        <div class="nav-ricky-text">
+          💙🧡💙<br>
+          THIS SITE IS<br>
+          DEDICATED TO RICKY<br>
+          FOREVER LOVED<br>
+          BY THE MAYANUT COMPANY<br>
+          💙🧡💙
+        </div>
+        <div class="nav-ricky-image">
+          <img src="ricky.jpeg" alt="Ricky dedication" id="nav-ricky-img">
         </div>
       </div>
 
@@ -1556,6 +1595,7 @@ BY THE MAYANUT COMPANY<br>
         <a href="#blog" data-section="blog">BLOG</a>
         <a href="#faq" data-section="faq">FAQ</a>
         <a href="#contact" data-section="contact">CONTACT</a>
+        <!-- THE MAYANUT COMPANY link removed per request -->
       </div>
     </div>
   </div>
@@ -1596,14 +1636,14 @@ BY THE MAYANUT COMPANY<br>
   </section>
 
   <!-- TRANSITION: STORE -->
-  <div class="transition-strip">STORE – COMING SOON!</div>
+  <div class="transition-strip">STORE</div>
 
   <!-- STORE / BUY -->
   <section class="section section--buy" id="buy">
     <div class="section-inner store-inner">
       <div class="store-heading">
         <h2>Maya nut Store – Coming Soon</h2>
-        <p>Preview future beverages, powder, and flour products made from maya nut, mayanut, breadnut, ramón, ojoche, guaimaro – all names for Brosimum alicastrum. These are placeholder items while the first maya nut plantation grows in Florida.</p>
+        <p>Preview future beverages, powder, and flour products. These are placeholder items while the first maya nut plantation grows.</p>
       </div>
 
       <div class="store-scroller-wrapper">
@@ -1628,25 +1668,25 @@ BY THE MAYANUT COMPANY<br>
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut fruit and seeds placeholder image"
+                   alt="Maya nut image 1"
                    class="store-item-photo">
             </div>
-            <div class="store-item-label">Maya nut beverage – vanilla concept</div>
+            <div class="store-item-label">Maya nut beverage – vanilla</div>
           </div>
 
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut fruit and beverage concept"
+                   alt="Maya nut image 2"
                    class="store-item-photo">
             </div>
-            <div class="store-item-label">Maya nut beverage – mocha concept</div>
+            <div class="store-item-label">Maya nut beverage – mocha</div>
           </div>
 
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut tree and fruit"
+                   alt="Maya nut image 3"
                    class="store-item-photo">
             </div>
             <div class="store-item-label">Future maya nut tropical treats</div>
@@ -1655,7 +1695,7 @@ BY THE MAYANUT COMPANY<br>
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut drinks placeholder"
+                   alt="Maya nut image 4"
                    class="store-item-photo">
             </div>
             <div class="store-item-label">Maya nut iced drink concept</div>
@@ -1664,7 +1704,7 @@ BY THE MAYANUT COMPANY<br>
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut latte style beverage"
+                   alt="Maya nut image 5"
                    class="store-item-photo">
             </div>
             <div class="store-item-label">Maya nut latte concept</div>
@@ -1673,7 +1713,7 @@ BY THE MAYANUT COMPANY<br>
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut flour package"
+                   alt="Maya nut image 6"
                    class="store-item-photo">
             </div>
             <div class="store-item-label">Maya nut flour packaging demo</div>
@@ -1682,7 +1722,7 @@ BY THE MAYANUT COMPANY<br>
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut cookie concept"
+                   alt="Maya nut image 7"
                    class="store-item-photo">
             </div>
             <div class="store-item-label">Maya nut cookie concept</div>
@@ -1691,7 +1731,7 @@ BY THE MAYANUT COMPANY<br>
           <div class="store-item">
             <div class="store-item-image">
               <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
-                   alt="Maya nut bakery line concept"
+                   alt="Maya nut image 8"
                    class="store-item-photo">
             </div>
             <div class="store-item-label">Future maya nut bakery line</div>
@@ -1711,51 +1751,51 @@ BY THE MAYANUT COMPANY<br>
         <!-- Images LEFT -->
         <div class="about-images">
           <div class="about-image-tile">
-            <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
+            <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" class="square" alt="Maya nut fruit on Brosimum alicastrum tree in a tropical setting">
             <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-text">Click to Expand</span>
+              <span class="img-expand-hint">Click to Expand</span>
             </button>
           </div>
 
           <div class="about-image-tile">
-            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" alt="Founder August Kokus of The MayaNut Company">
+            <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" class="square" alt="Founder August Kokus of The MayaNut Company">
             <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-text">Click to Expand</span>
+              <span class="img-expand-hint">Click to Expand</span>
             </button>
           </div>
 
           <div class="about-image-tile">
-            <img src="maya-nut-mayanut-plant-tree-nursery.jpg" alt="Young maya nut Brosimum alicastrum trees growing in a nursery">
+            <img src="maya-nut-mayanut-plant-tree-nursery.jpg" class="square" alt="Young maya nut Brosimum alicastrum trees growing in a nursery">
             <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-nursery.jpg" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-text">Click to Expand</span>
+              <span class="img-expand-hint">Click to Expand</span>
             </button>
           </div>
 
           <div class="about-image-tile">
-            <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
+            <img src="maya-nut-mayanut-plant-tree-moraceae.jpg" class="square" alt="Maya nut tree Brosimum alicastrum from the Moraceae family">
             <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-moraceae.jpg" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-text">Click to Expand</span>
+              <span class="img-expand-hint">Click to Expand</span>
             </button>
           </div>
 
-          <!-- Two extra beverage placeholders to fill column -->
+          <!-- Two extra beverage placeholder images to fill space -->
           <div class="about-image-tile">
-            <img src="rach20.png" alt="Maya nut beverage placeholder glass image">
+            <img src="rach20.png" class="square" alt="Maya nut beverage placeholder 1">
             <button class="img-expand-btn" data-img-src="rach20.png" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-text">Click to Expand</span>
+              <span class="img-expand-hint">Click to Expand</span>
             </button>
           </div>
 
           <div class="about-image-tile">
-            <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png" alt="Maya nut powder and Brosimum alicastrum seeds placeholder">
-            <button class="img-expand-btn" data-img-src="mayanut-powder-maya-nut-brosimum-alicastrum.png" aria-label="Expand image">
+            <img src="rach20.png" class="square" alt="Maya nut beverage placeholder 2">
+            <button class="img-expand-btn" data-img-src="rach20.png" aria-label="Expand image">
               <span class="img-expand-icon">⤢</span>
-              <span class="img-expand-text">Click to Expand</span>
+              <span class="img-expand-hint">Click to Expand</span>
             </button>
           </div>
         </div>
@@ -1772,7 +1812,7 @@ BY THE MAYANUT COMPANY<br>
             <p>August Kokus created The MayaNut Company because he wanted to leave something behind for the world to see. Often wondering and questioning the natural world around him and admiring its beauty, he wanted to capture that very essence of nature in something for humanity.</p>
             <p>But what if we could grow an underutilized species, like <em>Brosimum alicastrum</em>, and create an entirely new industry around it?</p>
             <p>In 2025, that is exactly what August Kokus had in mind. The foundation of The MayaNut Company was the way to bring his love for botany into something successful and brave. It would not be easy, but building an entire industry from the ground up — literally — was a challenge worth accepting.</p>
-            <p>By 2030, August expects to have at least one functional plantation, at least one acre in size, for the world to start enjoying. It truly is amazing to create something new like a maya nut / breadnut plantation, and accomplish things no one has ever achieved.</p>
+            <p>By 2030, August expects to have at least one functional plantation, at least one acre in size, for the world to start enjoying. It truly is amazing to create something new like a maya nut/breadnut plantation, and accomplish things no one has ever achieved.</p>
           </div>
 
           <div class="about-text-card about-card-3">
@@ -1783,7 +1823,7 @@ BY THE MAYANUT COMPANY<br>
 
           <div class="about-text-card about-card-4">
             <h3>Our Mission</h3>
-            <p>What we hope to achieve is a lasting effect down through the coming centuries — a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as maya nut, mayanut, breadnut, ojoche, ramón, or guaimaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
+            <p>What we hope to achieve is a lasting effect down through the coming centuries — a way to establish something beautiful and new. We want the species <em>Brosimum alicastrum</em> (known as maya nut, breadnut, ojoche, ramón, or guaimaro) not to be overlooked, but enjoyed and celebrated in American culture.</p>
           </div>
 
           <div class="about-text-card about-card-5">
@@ -1807,13 +1847,13 @@ BY THE MAYANUT COMPANY<br>
 
         <div class="research-card">
           <h2>Common Names &amp; Synonyms</h2>
-          <p><em>Brosimum alicastrum</em> is known by many common names across its range. In English and Spanish it is often called maya nut or nuez de ramón. Other names include mayanut, breadnut, ojoche, ramón, guaimaro, and regional spellings such as guayumaro, oox or ox.</p>
-          <p>In parts of Colombia and Venezuela, local names sometimes emphasize its role as a shade and food tree in humid lowland forests, and it may be grouped in everyday speech with other “pan de árbol” or bread-tree types. Botanically, at least two subspecies are recognized: <em>Brosimum alicastrum</em> subsp. <em>alicastrum</em> and <em>Brosimum alicastrum</em> subsp. <em>bolivarense</em>. All of these names generally refer to the same tree species and its edible seeds, which people now also search under “maya nut,” “mayanut,” “breadnut,” “ojoche,” “ramón,” and “guaimaro.”</p>
+          <p><em>Brosimum alicastrum</em> is known by many common names across its range. In English and Spanish it is often called maya nut or nuez de ramón. Other names include breadnut, ojoche, ramón, guaimaro, and regional spellings such as guayumaro, oox or ox.</p>
+          <p>In parts of Colombia and Venezuela, local names emphasize its role as a shade and food tree in humid lowland forests, and it may be grouped in everyday speech with other “pan de árbol” or bread-tree types. Botanically, two subspecies are commonly recognized, <em>Brosimum alicastrum</em> subsp. <em>alicastrum</em> and <em>Brosimum alicastrum</em> subsp. <em>bolivarense</em>, although both are usually referred to by the same regional common names.</p>
         </div>
 
         <div class="research-card">
           <h2>Natural Range &amp; Climate</h2>
-          <p><em>Brosimum alicastrum</em>, commonly called maya nut, mayanut, breadnut, ramón, ojoche, or guaimaro, is native to the tropical and subtropical forests of Mesoamerica and northern South America. Its natural range extends from southern Mexico and Guatemala through much of Central America and into parts of Colombia and Venezuela.</p>
+          <p><em>Brosimum alicastrum</em>, commonly called maya nut, mayan breadnut, breadnut, ramón, ojoche, or guaimaro, is native to the tropical and subtropical forests of Mesoamerica and northern South America. Its natural range extends from southern Mexico and Guatemala through much of Central America and into parts of Colombia and Venezuela.</p>
           <p>In its home range the tree can be found from lowland rainforests near sea level up into mid-elevation cloud forests. It prefers warm, humid climates with distinct wet and dry seasons, and it tolerates a wide variety of soils as long as they are not permanently waterlogged.</p>
           <p>For Florida, The MayaNut Company is especially interested in how far north the species can be grown reliably. Early evidence suggests that areas at or below about 27°N (just south of Stuart, Florida) should be suitable for long-term cultivation, with the best success expected in the warmest parts of South Florida.</p>
         </div>
@@ -1823,6 +1863,14 @@ BY THE MAYANUT COMPANY<br>
           <p>Maya nut is a medium to large evergreen tree, often reaching 20–35&nbsp;m (65–100&nbsp;ft) tall in favorable conditions. Young trees typically grow with a straight trunk and a dense, rounded canopy that becomes more spreading with age.</p>
           <p>Seedlings establish best in filtered light or partial shade, then gradually adapt to more open conditions as they mature. Once rooted, the tree develops a strong, extensive root system that helps it tolerate seasonal droughts and anchor itself firmly in the soil.</p>
           <p>Flowering and fruiting depend on local climate, but in many areas trees can bear annually once they reach maturity. The fruits ripen into small, yellow-orange drupes containing a single, nutritious seed — the “maya nut” — which can be dried, roasted, or ground into flour or beverage bases.</p>
+        </div>
+
+        <div class="research-card">
+          <h2>Domestication</h2>
+          <p><em>Brosimum alicastrum</em> has not seen any large-scale commercial use as of 2025 in America, partly because the tree is strictly tropical, only growing reliably in the warmest tip of Florida. This limits its range significantly, even though people in Central America have relied on this wonder tree to survive for generations.</p>
+          <p>Mature trees appear to be cold-hardy only down to about 31&nbsp;°F for short periods and will defoliate completely under strong cold events. Perhaps if evolutionary pressure selected individuals with more cold-hardy genes, the range of this species could be extended. In contrast, <em>Morus rubra</em>, a similar Moraceae species, grows all the way up into Canada, while <em>Brosimum alicastrum</em> can suffer leaf wilt at temperatures as high as 50&nbsp;°F.</p>
+          <p>Because of this sensitivity and its tropical requirements, maya nut has not been commercialized yet. The MayaNut Company aims to ensure that this species survives with enough genetic diversity to sustain new cultivars. Domesticating individuals with more ideal traits — such as better cold tolerance, higher yields, and more favorable seed-to-fruit ratios — is necessary to improve this crop further.</p>
+          <p>Indirect breeding may have occurred over centuries as Maya people planted or selected the biggest seeds from preferred trees, favoring large-seed individuals. If a dedicated breeding program for <em>B. alicastrum</em> is established, then in just a few generations — given that trees can begin fruiting in 3–4 years under ideal conditions — large-seed, low-fruit-ratio individuals could be selected, and cold-hardy individuals could also be bred into stable cultivars.</p>
         </div>
 
         <div class="research-card">
@@ -1839,17 +1887,17 @@ BY THE MAYANUT COMPANY<br>
         </div>
 
         <div class="research-card">
-          <h2>Domestication</h2>
-          <p><em>Brosimum alicastrum</em> has not seen any large-scale commercial use as of 2025 in America, partly due to the fact that the tree is strongly tropical, only growing reliably in the warmest parts of Florida, thus limiting its range significantly. Yet people in Central America have relied on this wonder tree to survive for centuries.</p>
-          <p>Mature trees may be cold-hardy to around 31°F for only a short time and can defoliate completely after strong cold events. Perhaps if evolutionary pressure selected individuals with cold-hardy genes, its range could be extended. Even though another Moraceae species, <em>Morus rubra</em>, grows all the way up to Canada, <em>Brosimum alicastrum</em> can suffer leaf-wilt at temperatures as high as the low 50s°F when stressed. Thus it has not been commercialized yet — but The MayaNut Company intends to ensure this species survives with enough genetic diversity to sustain new cultivars.</p>
-          <p>As such, domesticating individuals with more ideal traits is necessary to improve this crop further. Indirect breeding may have occurred over centuries as Maya people planted or saved the biggest seeds from trees, favoring large-seed individuals. If a structured breeding program for <em>B. alicastrum</em> is developed, then in just a few generations — with trees fruiting in as little as 3–4 years under ideal conditions — large-seed, high-yield, and more cold-tolerant individuals could be selected and released as named cultivars. This is one of the long-term goals for The MayaNut Company.</p>
+          <h2>Genetic Diversity</h2>
+          <p><em>Brosimum alicastrum</em> is a common species in semi-dry rainforests and rainforests of Central America, extending into northern parts of South America. We are currently working in Florida to acquire as many different seed sources of <em>Brosimum alicastrum</em> as possible to help conserve this species.</p>
+          <p>Most modern cultivars of major crops tend to lack genetic diversity and rely heavily on human intervention to succeed. Our goal is different: we want to go on expeditions and source the best, highest-yielding cultivars of <em>Brosimum alicastrum</em>, thus saving a species that might otherwise become locally extinct in areas due to deforestation and habitat loss.</p>
+          <p>Although the seeds are recalcitrant and have a short shelf life in agriculture — which limits long-distance germination — roasted seeds made into powder can last more than a year if handled correctly. The MayaNut Company therefore hopes to acquire more seed sources of <em>Brosimum alicastrum</em> subsp. <em>alicastrum</em> and to obtain seeds of <em>Brosimum alicastrum</em> subsp. <em>bolivarense</em> to secure this species’ future.</p>
         </div>
 
         <div class="research-card">
           <h2>Future Directions</h2>
           <p>The MayaNut Company is working toward a future in which maya nut is a familiar and celebrated ingredient in American kitchens. That future will depend on careful field trials, selection of promising seed sources, and collaboration with growers, researchers, and local communities across Florida and beyond.</p>
           <p>As new farms are established and more data become available, this page will grow to include findings on cold tolerance, yield potential in different parts of Florida, ideal spacing, intercropping combinations, and processing methods for beverages, powders, and flours.</p>
-          <p>Until then, this research overview is a starting point — a way to share why we believe <em>Brosimum alicastrum</em> (maya nut, mayanut, breadnut, ojoche, ramón, guaimaro) is worth watching, planting, and studying for generations to come.</p>
+          <p>Until then, this research overview is a starting point — a way to share why we believe <em>Brosimum alicastrum</em> is worth watching, planting, and studying for generations to come.</p>
         </div>
 
       </div>
@@ -1956,15 +2004,15 @@ BY THE MAYANUT COMPANY<br>
   <section class="section section--blog" id="blog">
     <div class="section-inner">
       <h2>The MayaNut Company Blog</h2>
-      <p><strong>Our blog will follow the journey of maya nut from seed to beverage.</strong> We plan to share updates about our Brosimum alicastrum trees, tropical maya nut plantations, planting experiments, weather events, and behind-the-scenes notes as we develop our first maya nut / breadnut / ojoche / ramón / guaimaro products.</p>
+      <p><strong>Our blog will follow the journey of maya nut from seed to beverage.</strong> We plan to share updates about our farms, planting experiments, weather events, and behind-the-scenes notes as we develop our first maya nut products.</p>
       <p>Future posts may include:</p>
       <ul>
-        <li>Planting diaries from different parts of South Florida focused on <em>Brosimum alicastrum</em> (maya nut, mayanut, breadnut, ojoche, ramón, guaimaro)</li>
-        <li>Thoughts on agroforestry, rainforest trees, and long-term Moraceae crops in Florida</li>
-        <li>Early taste tests and recipe ideas for maya nut beverages, powders, flours, tortillas, and baked goods</li>
-        <li>Reflections on what it means to build a brand-new industry around an underused tropical tree species</li>
+        <li>Planting diaries from different parts of South Florida</li>
+        <li>Thoughts on agroforestry and long-term tree crops</li>
+        <li>Early taste tests and recipe ideas for maya nut beverages and flours</li>
+        <li>Reflections on what it means to build a brand-new industry around an underused species</li>
       </ul>
-      <p>As the project grows, this blog on the main page of mayanut.com will become a living record of how The MayaNut Company develops over the years.</p>
+      <p>As the project grows, the blog on this main page will become a living record of how The MayaNut Company develops over the years.</p>
     </div>
   </section>
 
@@ -1977,24 +2025,23 @@ BY THE MAYANUT COMPANY<br>
       <div class="faq-list">
         <div class="faq-item">
           <h3>What is maya nut?</h3>
-          <p>Maya nut is the seed of the mysterious, tropical rainforest tree <em>Brosimum alicastrum</em>. The seed can be roasted and ground into a powder, then brewed into a rich, naturally caffeine-free beverage. If harvested fresh and separated from its fruity pulp, the seeds can go through nixtamalization, the very same process corn must go through to become corn flour. Seeds may then be ground into a paste and made into tortillas or any baked goods like cookies and bread. In many regions this same plant is also called mayanut, breadnut, ojoche, ramón, or guaimaro.</p>
+          <p>Maya nut is the seed of the mysterious, tropical rainforest tree <em>Brosimum alicastrum</em>. The seed can be roasted and ground into a powder, then brewed into a rich, naturally caffeine-free beverage. If harvested fresh and separated from its fruity pulp, the seeds can go through a process called nixtamalization, which is the very same process corn must go through to become corn flour. Seeds may then be ground into a paste and made into tortillas or any baked goods like cookies and bread.</p>
         </div>
         <div class="faq-item">
           <h3>Is maya nut the same as breadnut, ojoche or ramón?</h3>
-          <p>Yes. In different regions, the tree and its seeds are known as maya nut, mayanut, breadnut, ojoche, ramón or guaimaro. They all refer to the same species, <em>Brosimum alicastrum</em>, or to its roasted seeds used for food and drink. For English, “mayanut” as one word — just like jackfruit — can be used to refer to this new plant and its products.</p>
+          <p>Yes. In different regions, the tree and its seeds are known as maya nut, breadnut, ojoche, ramón or guaimaro. They all refer to the same species, <em>Brosimum alicastrum</em>, or to its roasted seeds used for food and drink. For English, mayanut as one word, just like jackfruit, can be used to refer to this new plant.</p>
         </div>
         <div class="faq-item">
           <h3>Can Brosimum alicastrum grow in Florida?</h3>
-          <p>Early observations suggest that warm parts of Florida, especially South Florida at or below about 27°N, can support this species. Our work focuses on proving how well maya nut / breadnut / ojoche / ramón / guaimaro can grow and produce in subtropical Florida conditions. No one has yet come along to commercialize this species in America, and we, The MayaNut Company, choose <em>Brosimum alicastrum</em> as our candidate species for the revitalization of Florida agriculture and future tropical agroforestry systems.</p>
+          <p>Early observations suggest that warm parts of Florida, especially South Florida at or below about 27°N, can support this species. Our work focuses on proving how well maya nut can grow and produce in subtropical Florida conditions. No one has yet come along to commercialize this species, and we, The MayaNut Company, choose <em>Brosimum alicastrum</em> as our candidate species for the revitalization of humanity.</p>
         </div>
         <div class="faq-item">
           <h3>When will I be able to buy maya nut beverages?</h3>
-          <p>The plantation is still being established. Our goal is to have functional plantings and early products by the late 2020s (around 2028–2029). Until then, this site shows concepts and placeholder maya nut beverages, maya nut powders, and maya nut flours while the trees grow. As of late November 2025, we currently have around 200 mayanut trees ready for a forever home, most likely in an old citrus grove.</p>
-          <p>With a dying citrus industry and monoculture orchards, we dream of ensuring genetic diversity in <em>Brosimum alicastrum</em> populations by continuous expeditions seeking new genetic strains with unique qualities. Our dream would be for the maya nut tree to become a new breadwinner for South Florida agriculture.</p>
+          <p>The plantation is still being established. Our goal is to have functional plantings and early products by the late 2020s, ('28–'29). Until then, this site shows concepts and placeholder products while the trees grow. As of late November 2025, we currently have around 200 maya nut trees ready for a forever home, most likely an old citrus grove. With a struggling citrus industry and monoculture orchards, ensuring genetic diversity in the <em>Brosimum alicastrum</em> population through continuous expeditions seeking new genetic strains with unique qualities is critical. Our dream would be to one day replace the orange on the Florida license plate with maya nut, as the new breadwinner of South Florida agriculture.</p>
         </div>
         <div class="faq-item">
           <h3>Is The MayaNut Company currently open to partnerships?</h3>
-          <p>We are in an early development phase and welcome interest from growers, researchers, agroforestry partners, food scientists, and future distribution partners. See the Contact section below to reach out to The MayaNut Company.</p>
+          <p>We are in an early development phase and welcome interest from growers, researchers, and future distribution partners. See the Contact section below to reach out.</p>
         </div>
       </div>
     </div>
@@ -2007,14 +2054,14 @@ BY THE MAYANUT COMPANY<br>
   <section class="section section--contact" id="contact">
     <div class="section-inner">
       <h2>Contact The MayaNut Company</h2>
-      <p>If you are interested in maya nut trees, future maya nut beverages and powders, agroforestry in Florida, Brosimum alicastrum research, or potential business collaborations, we would welcome you and be happy to hear from you.</p>
+      <p>If you are interested in maya nut trees, future maya nut beverages and powders, agroforestry in Florida, or potential research or business collaborations, we would welcome you and be happy to hear from you.</p>
       <p><strong>Email:</strong> <a href="mailto:themayanutcompany@gmail.com" style="color:#ff941f; text-decoration:underline;">themayanutcompany@gmail.com</a></p>
       <p><strong>Instagram:</strong> <a href="https://instagram.com/themayanutcompany" target="_blank" rel="noopener" style="color:#ff941f; text-decoration:underline;">@themayanutcompany</a></p>
-      <p>As the project grows, this main page at mayanut.com will remain the central place to learn about our maya nut plantation, future products, and news. Thank you for your support — it contributes to the evolution and long-term survival of this species, <em>Brosimum alicastrum</em>.</p>
+      <p>As the project grows, this main page at mayanut.com will remain the central place to learn about our plantation, products, and news. Thank you for your support because it contributes to the evolution of a species.</p>
     </div>
   </section>
 
-  <!-- BOTTOM TAB + LOGO SECTION -->
+  <!-- BOTTOM HEADER TAB + LOGO SECTION -->
   <div class="transition-strip bottom-blue-tab">THE MAYANUT COMPANY</div>
 
   <section class="section section--bottom-logo">
@@ -2054,8 +2101,8 @@ BY THE MAYANUT COMPANY<br>
 
     <div class="welcome-panel welcome-panel-left">
       <h2 class="welcome-title">Welcome to mayanut.com</h2>
-      <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>, also known as mayanut, breadnut, ojoche, ramón, or guaimaro) plantations of tropical trees.</p>
-      <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience while the trees grow and The MayaNut Company breathes life into this new crop.</p>
+      <p>We are currently developing one of Florida's first maya nut (<em>Brosimum alicastrum</em>) plantations of tropical trees.</p>
+      <p>We hope to be serving you our delicious maya nut beverage by 2028. Thank you for your patience!</p>
     </div>
 
     <div class="welcome-panel welcome-panel-right">
@@ -2100,7 +2147,7 @@ BY THE MAYANUT COMPANY<br>
   </div>
   <div class="chat-panel-body" id="chat-log">
     <div class="chat-msg">
-      <strong>Bot:</strong> Hi! I’m a tiny FAQ helper. Ask me about maya nut, mayanut, breadnut, ojoche, ramón, guaimaro, Brosimum alicastrum, Florida plantations, or this website.
+      <strong>Bot:</strong> Hi! I’m a tiny FAQ helper. Ask me about maya nut, Brosimum alicastrum, Florida plantations, genetic diversity, domestication, or this website.
     </div>
   </div>
   <div class="chat-panel-input-row">
@@ -2113,7 +2160,7 @@ BY THE MAYANUT COMPANY<br>
 <!-- 🌱 FULL JS SCRIPT BLOCK  -->
 <!-- ========================= -->
 <script>
-/* LANGUAGE DROPDOWN */
+/* === LANGUAGE DROPDOWN === */
 (function(){
   const toggle = document.getElementById('lang-toggle');
   const dropdown = document.getElementById('lang-dropdown');
@@ -2128,8 +2175,6 @@ BY THE MAYANUT COMPANY<br>
     if(i.getAttribute('data-file')===file){
       currentSpan.textContent=i.textContent.trim();
       i.classList.add('active');
-      // Highlight current language in orange
-      currentSpan.style.color = '#fac000';
     }
   });
 
@@ -2151,7 +2196,7 @@ BY THE MAYANUT COMPANY<br>
   });
 })();
 
-/* PRIVACY MODAL */
+/* === PRIVACY MODAL === */
 (function(){
   const backdrop=document.getElementById('modal-backdrop');
   const titleEl=document.getElementById('modal-title');
@@ -2182,7 +2227,7 @@ BY THE MAYANUT COMPANY<br>
   backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
 })();
 
-/* NAV OVERLAY + LINK HIGHLIGHTING + SCROLL SPY */
+/* === NAV OVERLAY + LINK HIGHLIGHTING + SCROLL SPY === */
 (function(){
   const toggle=document.getElementById('menu-toggle');
   const backdrop=document.getElementById('nav-backdrop');
@@ -2209,9 +2254,9 @@ BY THE MAYANUT COMPANY<br>
     }
   });
 
-  // When you click a section in the menu, close it
   links.forEach(link=>{
     link.addEventListener('click',()=>{
+      // close menu when a section is clicked
       closeNav();
     });
   });
@@ -2248,171 +2293,76 @@ BY THE MAYANUT COMPANY<br>
     setActiveSection(currentId);
   }
 
-  window.addEventListener('hashchange', updateActiveOnScroll);
+  window.addEventListener('hashchange',()=>{
+    updateActiveOnScroll();
+  });
+
   window.addEventListener('scroll', updateActiveOnScroll);
   window.addEventListener('load', updateActiveOnScroll);
 })();
 
-/* RICKY EASTER EGG – DRAG, TEXT, RICKY IMAGE, RESET HOME */
+/* === RICKY EASTER EGG – LONG PRESS ON MENU LOGO === */
 (function(){
   const logo = document.getElementById('nav-logo-easter');
-  const tile = document.getElementById('nav-ricky-tile');
+  const panel = document.getElementById('nav-ricky-panel');
+  const rickyImg = document.getElementById('nav-ricky-img');
   const navBackdrop = document.getElementById('nav-backdrop');
-  const menuToggle = document.getElementById('menu-toggle');
-  if(!logo || !tile || !navBackdrop) return;
+  if(!logo || !panel || !rickyImg || !navBackdrop) return;
 
-  let startX=null, startY=null, pointerId=null;
-  let dragging=false, movedEnough=false;
-  let originalLogoRect=null;
-  let hasBeenDragged=false;
-  let tileStage=0; // 0=hidden, 1=text, 2=ricky image
+  let pressTimer = null;
+  let longPressTriggered = false;
 
-  const dedicationHTML = `
-    <p>
-💙🧡💙<br>
-THIS SITE IS<br>
-DEDICATED TO RICKY<br>
-FOREVER LOVED<br>
-BY THE MAYANUT COMPANY<br>
-💙🧡💙
-    </p>
-  `;
-
-  function ensureTileOriginalPosition(){
-    if(originalLogoRect) return;
-    const wrapper = logo.parentElement;
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const logoRect = logo.getBoundingClientRect();
-    const size = Math.max(logoRect.width, logoRect.height);
-    originalLogoRect = {
-      left: logoRect.left - wrapperRect.left + logoRect.width/2,
-      top:  logoRect.top  - wrapperRect.top  + logoRect.height/2,
-      size
-    };
-    tile.style.left = originalLogoRect.left + 'px';
-    tile.style.top  = originalLogoRect.top  + 'px';
-    tile.style.width = size + 'px';
-    tile.style.height = size + 'px';
-    tile.style.transform = 'translate(-50%, -50%)';
-  }
-
-  function showDedicationTile(){
-    ensureTileOriginalPosition();
-    tile.innerHTML = dedicationHTML;
-    tile.style.display='block';
-    tileStage = 1;
-  }
-
-  function showRickyImage(){
-    ensureTileOriginalPosition();
-    tile.innerHTML = `<img src="ricky.jpeg" alt="Ricky dedication" style="width:100%; height:100%; object-fit:cover; border-radius:14px;">`;
-    tile.style.display='block';
-    tileStage = 2;
-  }
-
-  function resetLogoPosition(){
-    logo.style.position='relative';
-    logo.style.left='';
-    logo.style.top='';
-    logo.style.transform='';
-    originalLogoRect=null;
+  function resetEasterEgg(){
+    panel.style.display = 'none';
+    longPressTriggered = false;
   }
 
   function goHomeAndReset(){
     window.location.hash = '#top';
+    const menuToggle=document.getElementById('menu-toggle');
     if(menuToggle){
       menuToggle.classList.remove('open');
     }
     navBackdrop.classList.remove('open');
-
-    tile.style.display='none';
-    tile.innerHTML = dedicationHTML;
-    tileStage=0;
-    hasBeenDragged=false;
-    resetLogoPosition();
+    resetEasterEgg();
   }
 
-  function onPointerDown(e){
-    dragging=false;
-    movedEnough=false;
-    startX=e.clientX;
-    startY=e.clientY;
-    pointerId=e.pointerId;
-    logo.setPointerCapture(pointerId);
+  function showEasterEgg(){
+    longPressTriggered = true;
+    panel.style.display = 'flex';
   }
 
-  function onPointerMove(e){
-    if(startX===null) return;
-    const dx=e.clientX-startX;
-    const dy=e.clientY-startY;
-    if(!dragging && (Math.abs(dx)>4 || Math.abs(dy)>4)){
-      dragging=true;
-      movedEnough=true;
-
-      ensureTileOriginalPosition();
-      const wrapper = logo.parentElement;
-      const wRect = wrapper.getBoundingClientRect();
-      const lRect = logo.getBoundingClientRect();
-
-      logo.style.position='absolute';
-      logo.style.left = (lRect.left - wRect.left) + 'px';
-      logo.style.top  = (lRect.top  - wRect.top ) + 'px';
-      logo.style.transform='translate(0,0)';
-    }
-    if(dragging){
-      const wrapper = logo.parentElement;
-      const wRect = wrapper.getBoundingClientRect();
-      const newLeft = e.clientX - wRect.left - (logo.offsetWidth/2);
-      const newTop  = e.clientY - wRect.top  - (logo.offsetHeight/2);
-      logo.style.left = newLeft + 'px';
-      logo.style.top  = newTop  + 'px';
-    }
-  }
-
-  function onPointerUp(e){
-    if(pointerId!==null){
-      try{ logo.releasePointerCapture(pointerId); }catch(_){}
-    }
-    if(movedEnough){
-      hasBeenDragged = true;
-      showDedicationTile();
-    }
-    startX=null;
-    startY=null;
-    dragging=false;
-    pointerId=null;
-  }
-
-  logo.addEventListener('pointerdown', onPointerDown);
-  logo.addEventListener('pointermove', onPointerMove);
-  logo.addEventListener('pointerup', onPointerUp);
-  logo.addEventListener('pointercancel', onPointerUp);
-
-  // Click behavior:
-  // - If never dragged: click = go home & reset.
-  // - If has been dragged: click toggles to Ricky image (tile stays where it is).
-  logo.addEventListener('click', (e)=>{
-    if(movedEnough){
-      movedEnough=false;
-      return;
-    }
-
-    if(!hasBeenDragged){
-      goHomeAndReset();
-    }else{
-      showRickyImage();
-    }
+  logo.addEventListener('pointerdown', e=>{
+    longPressTriggered = false;
+    if(pressTimer) clearTimeout(pressTimer);
+    pressTimer = setTimeout(showEasterEgg, 1000); // 1 second hold
   });
 
-  // Clicking the tile when Ricky image is shown returns home & resets
-  tile.addEventListener('click', ()=>{
-    if(tileStage === 2){
+  function clearPressTimer(){
+    if(pressTimer){
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+  }
+
+  logo.addEventListener('pointerup', e=>{
+    if(!longPressTriggered){
+      // short click => go home and close menu
       goHomeAndReset();
     }
+    clearPressTimer();
+  });
+
+  logo.addEventListener('pointerleave', clearPressTimer);
+  logo.addEventListener('pointercancel', clearPressTimer);
+
+  // Clicking ricky image returns to main page and resets
+  rickyImg.addEventListener('click', ()=>{
+    goHomeAndReset();
   });
 })();
 
-/* ABOUT IMAGE LIGHTBOX + GALLERY CLICK EXPAND */
+/* === ABOUT IMAGE LIGHTBOX + GALLERY CLICK EXPAND === */
 (function(){
   const buttons=document.querySelectorAll('.img-expand-btn');
   const backdrop=document.getElementById('img-lightbox-backdrop');
@@ -2450,7 +2400,7 @@ BY THE MAYANUT COMPANY<br>
   backdrop.addEventListener('click',e=>{ if(e.target===backdrop) closeLightbox(); });
 })();
 
-/* CHAT BOT – SMARTER, MORE KEYWORDS, SEO-VISIBLE ANSWERS */
+/* === CHAT BOT – simple pattern recognition, typo-tolerant === */
 (function(){
   const launcher=document.getElementById('chat-launcher');
   const panel=document.getElementById('chat-panel');
@@ -2478,86 +2428,41 @@ BY THE MAYANUT COMPANY<br>
     log.scrollTop=log.scrollHeight;
   }
 
-  const botAnswers = {
-    intro: "Maya nut is the roasted seed of Brosimum alicastrum, a tropical rainforest tree also known as mayanut, breadnut, ojoche, ramón, and guaimaro. The MayaNut Company is developing Florida plantations and future beverages, powders, and flours from this species.",
-    whatIsMayaNut: "Maya nut (or mayanut, breadnut, ojoche, ramón, guaimaro) is the edible seed of the tropical tree Brosimum alicastrum. The seeds can be roasted and ground into a naturally caffeine-free beverage, or nixtamalized and turned into flour for tortillas, cookies, and bread.",
-    names: "Across its range, Brosimum alicastrum goes by many names: maya nut, mayanut, breadnut, ojoche, ramón, and guaimaro. In Colombia and Venezuela it may be grouped with other 'pan de árbol' or bread-tree types. Botanically there are at least two subspecies, B. alicastrum subsp. alicastrum and B. alicastrum subsp. bolivarense.",
-    florida: "Brosimum alicastrum is strongly tropical. Early observations suggest it can grow reliably in warm parts of South Florida, especially at or below about 27°N. The MayaNut Company is testing how far north this maya nut / breadnut tree can be planted as a future agroforestry and orchard crop.",
-    cold: "Mature Brosimum alicastrum trees may tolerate brief drops near 31°F but can completely defoliate after strong cold events and even show leaf-wilt in the low 50s°F if stressed. Domestication and breeding programs could select more cold-tolerant individuals over time.",
-    domestication: "Brosimum alicastrum has not yet seen large-scale commercial use in the United States as of 2025. The MayaNut Company aims to domesticate this species by selecting trees with large seeds, good flavor, strong yields, and better cold tolerance. Because trees may fruit in 3–4 years under ideal conditions, breeding progress can happen within a few generations.",
-    floridaLicense: "The MayaNut Company dreams that someday maya nut could become a symbol of a new breadwinner crop for Florida, even replacing the orange on the Florida license plate, as diversified agroforestry and Brosimum alicastrum plantations spread.",
-    products: "Future products from The MayaNut Company may include chilled maya nut beverages, roasted mayanut powders, baked goods using maya nut flour, and other Brosimum alicastrum-based foods. The current site shows placeholder concepts while the real plantation grows.",
-    blog: "The blog on mayanut.com will track the journey from planting Brosimum alicastrum seedlings in South Florida to harvesting, processing, and sharing maya nut beverages, powders, and baked goods with the world.",
-    faq: "The FAQ on this site answers questions like: What is maya nut? Is it the same as breadnut, ojoche, or ramón? Can Brosimum alicastrum grow in Florida? When will beverages be available? And is The MayaNut Company open to partnerships?",
-    contact: "You can contact The MayaNut Company at themayanutcompany@gmail.com or on Instagram at @themayanutcompany to ask about trees, plantations, research, partnerships, or future maya nut beverages and powders."
-  };
-
-  // Hidden SEO block so search engines see what the bot knows
-  (function injectChatSEO(){
-    const seoDiv = document.createElement('div');
-    seoDiv.className = 'visually-hidden';
-    seoDiv.id = 'chat-knowledge-seo';
-    seoDiv.textContent =
-      "Maya nut chat assistant answers: " +
-      botAnswers.intro + " " +
-      botAnswers.whatIsMayaNut + " " +
-      botAnswers.names + " " +
-      botAnswers.florida + " " +
-      botAnswers.cold + " " +
-      botAnswers.domestication + " " +
-      botAnswers.floridaLicense + " " +
-      botAnswers.products + " " +
-      botAnswers.blog + " " +
-      botAnswers.faq + " " +
-      botAnswers.contact;
-    document.body.appendChild(seoDiv);
-  })();
-
-  function normalize(msg){
-    let m = msg.toLowerCase();
-    m = m.replace(/maya[\s-]*nut/g, "mayanut");
-    m = m.replace(/\s+/g, " ").trim();
-    return m;
+  // very light typo-normalization
+  function norm(str){
+    return str.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9]/g,'');
   }
 
   function respond(message){
-    const mRaw = message || "";
-    const m = normalize(mRaw);
+    const m = message.toLowerCase();
+    const n = norm(message);
 
-    if(!m){
-      write("Bot","Ask me something about maya nut, Brosimum alicastrum, Florida plantations, or this website.");
-      return;
-    }
-
-    if(m.includes("what is") && (m.includes("mayanut") || m.includes("brosimum") || m.includes("breadnut") || m.includes("ojoche") || m.includes("ramon") || m.includes("guaimaro"))){
-      write("Bot", botAnswers.whatIsMayaNut);
-    }else if(
-      m.includes("name") ||
-      m.includes("synonym") ||
-      (m.includes("called") && (m.includes("mayanut") || m.includes("breadnut") || m.includes("ojoche") || m.includes("ramon") || m.includes("guaimaro")))
-    ){
-      write("Bot", botAnswers.names);
-    }else if((m.includes("grow") || m.includes("range") || m.includes("where")) &&
-             (m.includes("florida") || m.includes("america") || m.includes("usa") || m.includes("united states"))){
-      write("Bot", botAnswers.florida);
-    }else if(m.includes("cold") || m.includes("freeze") || m.includes("31") || m.includes("50") || m.includes("hardy")){
-      write("Bot", botAnswers.cold);
-    }else if(m.includes("domesticat") || m.includes("breeding") || m.includes("cultivar") || m.includes("selecting") || m.includes("selection")){
-      write("Bot", botAnswers.domestication);
-    }else if(m.includes("license plate") || (m.includes("plate") && m.includes("orange"))){
-      write("Bot", botAnswers.floridaLicense);
-    }else if(m.includes("product") || m.includes("drink") || m.includes("beverage") || m.includes("powder") || m.includes("flour") || m.includes("cookie") || m.includes("tortilla")){
-      write("Bot", botAnswers.products);
-    }else if(m.includes("blog") || m.includes("post") || m.includes("update")){
-      write("Bot", botAnswers.blog);
-    }else if(m.includes("faq") || m.includes("question") || m.includes("help")){
-      write("Bot", botAnswers.faq);
-    }else if(m.includes("contact") || m.includes("email") || m.includes("instagram") || m.includes("partner") || m.includes("partnership")){
-      write("Bot", botAnswers.contact);
-    }else if(m.includes("mayanut") || m.includes("brosimum") || m.includes("breadnut") || m.includes("ojoche") || m.includes("ramon") || m.includes("guaimaro")){
-      write("Bot", botAnswers.intro);
+    if(n.includes('mayanut') || n.includes('mayanut') || n.includes('mayanuttree')){
+      write("Bot","Maya nut (mayanut) is the roasted seed of the tropical tree Brosimum alicastrum. It can be brewed into a caffeine-free beverage or ground into flour for tortillas, cookies, and bread.");
+    }else if(m.includes('what is maya') || m.includes('what is mayanut') || m.includes('what is brosimum')){
+      write("Bot","Maya nut is the common name for the edible seed of Brosimum alicastrum, also called breadnut, ojoche, ramón or guaimaro. It has been used for millennia in Central America as a staple food and survival crop.");
+    }else if(m.includes('names') || m.includes('called') || m.includes('synonym')){
+      write("Bot","Across its range, Brosimum alicastrum is known as maya nut, mayanut, breadnut, nuez de ramón, ramón, ojoche and guaimaro. Two subspecies are often recognized: B. alicastrum subsp. alicastrum and B. alicastrum subsp. bolivarense.");
+    }else if(m.includes('where') && m.includes('grow')){
+      write("Bot","Naturally, Brosimum alicastrum grows from southern Mexico through Central America into parts of Colombia and Venezuela. In Florida, The MayaNut Company is trialing it mainly in warm parts of South Florida at or below about 27°N.");
+    }else if(m.includes('cold') || m.includes('freeze') || m.includes('hardy')){
+      write("Bot","Mature Brosimum alicastrum trees may tolerate brief dips near 31 °F but can defoliate. Our Domestication research section talks about selecting more cold-hardy individuals in future breeding programs.");
+    }else if(m.includes('genetic') || m.includes('diversity') || m.includes('seed source')){
+      write("Bot","Our Genetic Diversity section explains how we are collecting many different seed sources of Brosimum alicastrum (subsp. alicastrum and subsp. bolivarense) to keep this species resilient as forests are cleared.");
+    }else if(m.includes('domestication') || m.includes('breeding') || m.includes('cultivar')){
+      write("Bot","The Domestication section describes how Brosimum alicastrum has not yet been commercialized in the U.S., and how selective breeding for cold tolerance and high-yield traits could turn it into a true orchard crop in Florida.");
+    }else if(m.includes('florida')){
+      write("Bot","South Florida’s subtropical climate is currently the safest area for maya nut in the U.S. Our goal is to establish plantations there and test how far north Brosimum alicastrum can be grown successfully.");
+    }else if(m.includes('license plate') || m.includes('orange')){
+      write("Bot","One long-term dream of The MayaNut Company is for maya nut to replace the orange on the Florida license plate as a symbol of a new breadwinner crop for the state.");
+    }else if(m.includes('blog') || m.includes('updates')){
+      write("Bot","The MayaNut Company Blog section on this page will eventually record planting diaries, agroforestry experiments, taste tests and stories from building a brand-new industry around maya nut.");
+    }else if(m.includes('gallery') || m.includes('photos') || m.includes('pictures')){
+      write("Bot","The Field Gallery shows Brosimum alicastrum trees, fruits and nursery plants from our early field work. Click any image to expand it.");
+    }else if(m.includes('contact') || m.includes('email') || m.includes('partner')){
+      write("Bot","You can reach us at themayanutcompany@gmail.com or on Instagram @themayanutcompany. We are open to growers, researchers and future distribution partners.");
     }else{
-      write("Bot","I’ll do my best to help. Try asking about maya nut (mayanut), Brosimum alicastrum, where it grows in Florida, domestication and breeding, future beverages and powders, or how to contact The MayaNut Company.");
+      write("Bot","Ask me about maya nut, Brosimum alicastrum, where it grows, its common names (breadnut, ojoche, ramón, guaimaro), genetic diversity, domestication, Florida plantations, or anything you see on this page.");
     }
   }
 
@@ -2574,7 +2479,7 @@ BY THE MAYANUT COMPANY<br>
   });
 })();
 
-/* GALLERY LOAD MORE */
+/* === GALLERY LOAD MORE === */
 (function(){
   const b1=document.getElementById('gallery-block-1');
   const b2=document.getElementById('gallery-block-2');
@@ -2597,7 +2502,7 @@ BY THE MAYANUT COMPANY<br>
   });
 })();
 
-/* WELCOME POPUP – always show on load (desktop + mobile) */
+/* === WELCOME POPUP – always show on load === */
 (function(){
   const backdrop=document.getElementById('welcome-backdrop');
   const closeBtn=document.getElementById('welcome-close');
@@ -2614,7 +2519,7 @@ BY THE MAYANUT COMPANY<br>
   backdrop.addEventListener('click',e=>{ if(e.target===backdrop) close(); });
 })();
 
-/* HERO SNOW EFFECT – varied size, speed, sideways drift (SLOWER) */
+/* === HERO SNOW EFFECT – slower drift, side-to-side === */
 (function(){
   const container = document.getElementById('hero-snow');
   if(!container) return;
@@ -2626,8 +2531,8 @@ BY THE MAYANUT COMPANY<br>
     span.textContent = '❄';
 
     const leftPercent = Math.random() * 100;
-    const duration = 16 + Math.random() * 14; // 16–30s (slower)
-    const delay = Math.random() * -30;
+    const duration = 14 + Math.random() * 12; // 14–26s (slower)
+    const delay = Math.random() * -20;
     const size = 10 + Math.random() * 18; // 10–28px
 
     const amplitude = 20 + Math.random() * 40; // 20–60px side drift
@@ -2648,7 +2553,7 @@ BY THE MAYANUT COMPANY<br>
   }
 })();
 
-/* BOTTOM LOGO SCROLL TO TOP */
+/* === BOTTOM LOGO SCROLL TO TOP === */
 (function(){
   const link=document.getElementById('bottom-logo-link');
   if(!link) return;
