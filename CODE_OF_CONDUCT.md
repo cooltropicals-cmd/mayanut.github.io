@@ -1,6 +1,8 @@
-# Code of Conduct  
+# Code of Conduct (v4.8)  
 ## The MayaNut Company Website & Open Source Project  
-Based on the Contributor Covenant v2.1
+Based on the Contributor Covenant v2.1  
+
+_Last updated: Version 4.8 – December 2025_
 
 ---
 
@@ -127,4 +129,5 @@ By participating in this project, you help support:
 - Sustainable agroforestry  
 - A global educational movement  
 
-We appreciate your dedication to keeping this project respectful and thriving.
+We appreciate your dedication to keeping this project respectful and thriving.  
+This document is The MayaNut Company Code of Conduct **v4.8**.
