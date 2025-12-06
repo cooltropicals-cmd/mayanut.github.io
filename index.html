@@ -136,12 +136,12 @@
       display:flex;
       align-items:center;
       gap:6px;
+      cursor:pointer;
     }
 
     .site-logo{
       height:46px;
       width:auto;
-      cursor:pointer;
     }
 
     .site-wordmark{
@@ -154,6 +154,9 @@
     }
     .site-wordmark .tmc-main{
       color:var(--accent-yellow);
+    }
+    .site-wordmark .tmc-main span{
+      color:#f97316;
     }
     .site-wordmark .tmc-sub{
       font-size:11px;
@@ -291,7 +294,7 @@
       background:rgba(30,64,175,0.75);
     }
 
-    /* NAV LINKS – visible on all sizes now */
+    /* NAV LINKS (desktop) – with dim orange→green→blue bar behind */
     .header-nav-shell{
       display:flex;
       align-items:center;
@@ -304,8 +307,6 @@
       border-radius:999px;
       padding:3px;
       box-shadow:0 0 0 1px rgba(15,23,42,0.9), 0 3px 12px rgba(0,0,0,0.7);
-      max-width:100%;
-      overflow:auto;
     }
 
     .header-nav{
@@ -315,7 +316,6 @@
       background:rgba(15,23,42,0.96);
       border-radius:999px;
       padding:3px 4px;
-      white-space:nowrap;
     }
 
     .nav-link{
@@ -329,6 +329,8 @@
       cursor:pointer;
       transition:color 0.15s ease, transform 0.15s ease, background 0.15s ease;
       background:transparent;
+      white-space:nowrap;
+      display:inline-block;
     }
 
     .nav-link:hover{
@@ -343,26 +345,52 @@
       box-shadow:0 0 0 1px rgba(248,250,252,0.12);
     }
 
-    /* We still keep the utility classes but don't hide nav on mobile */
-    .mobile-only{
+    /* MOBILE NAV PANEL (always visible on mobile, no burger) */
+    .mobile-nav-panel{
       display:none;
+      padding:6px 10px 10px;
+      border-top:1px solid rgba(31,41,55,0.9);
     }
+
+    .mobile-nav-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .mobile-nav-link{
+      flex:1 0 45%;
+      font-size:11px;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(55,65,81,0.9);
+      background:radial-gradient(circle at 20% 0%, rgba(15,23,42,0.9), rgba(3,7,18,0.98));
+      text-align:center;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      cursor:pointer;
+      color:#e5f2ff;
+      display:block;
+    }
+
+    .mobile-nav-link--active{
+      border-color:#facc15;
+      color:#fefce8;
+    }
+
     .desktop-only{
       display:flex;
     }
 
     @media(max-width:900px){
-      .header-inner{
-        flex-wrap:wrap;
-        gap:8px;
+      .desktop-only{
+        display:none;
       }
-      .header-right{
-        width:100%;
-        justify-content:flex-end;
-        flex-wrap:wrap;
-      }
-      .header-nav-shell{
-        flex:1;
+      .mobile-nav-panel{
+        display:block;
       }
     }
 
@@ -543,7 +571,7 @@
       box-shadow:0 3px 10px rgba(0,0,0,0.7);
     }
 
-    /* HERO RIGHT */
+    /* HERO RIGHT – just PNG + easter egg */
     .hero-right{
       position:relative;
       display:flex;
@@ -555,58 +583,21 @@
       width:100%;
       max-width:360px;
       border-radius:24px;
-      padding:14px 12px 16px;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(255,255,255,0.15) 0%, transparent 60%),
-        linear-gradient(135deg,rgba(15,23,42,0.96),rgba(3,7,18,0.99));
-      box-shadow:0 16px 40px rgba(0,0,0,0.9);
-      border:1px solid rgba(15,118,110,0.9);
+      padding:0;
+      background:transparent;
+      box-shadow:none;
+      border:none;
       position:relative;
-      overflow:hidden;
+      overflow:visible;
     }
 
-    .hero-card-header{
-      font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      font-size:14px;
-      color:#a5b4fc;
-      margin-bottom:6px;
-    }
-
-    .hero-card-tagline{
-      font-size:11px;
-      color:#e0f2fe;
-      opacity:0.9;
-      margin-bottom:10px;
-    }
-
-    /* New image-only block for beverage */
-    .hero-card-image{
-      border-radius:18px;
-      overflow:hidden;
-      border:1px solid rgba(148,163,184,0.7);
-      box-shadow:0 8px 24px rgba(0,0,0,0.9);
-    }
-    .hero-card-image img{
+    .hero-card-main-img{
       display:block;
       width:100%;
       height:auto;
-      object-fit:cover;
-    }
-
-    .hero-card-ribbon{
-      position:absolute;
-      top:10px;
-      right:-50px;
-      width:160px;
-      transform:rotate(35deg);
-      text-align:center;
-      font-size:10px;
-      padding:3px 0;
-      background:linear-gradient(90deg,#f97316,#facc15);
-      color:#111827;
-      text-transform:uppercase;
-      letter-spacing:0.08em;
-      box-shadow:0 4px 10px rgba(0,0,0,0.7);
+      border-radius:24px;
+      box-shadow:0 16px 40px rgba(0,0,0,0.9);
+      border:1px solid rgba(15,118,110,0.9);
     }
 
     .ricky-easter-egg{
@@ -657,36 +648,38 @@
     <header class="site-header">
       <div class="header-inner">
         <div class="header-left">
-          <div class="site-logo-wrap">
+          <div class="site-logo-wrap" id="site-logo">
             <img
               src="mayanut-the-maya-nut-company-logo.png"
               alt="The MayaNut Company logo"
               class="site-logo"
-              id="site-logo"
             />
             <div class="site-wordmark desktop-only">
-              <span class="tmc-main">The <span style="color:#f97316;">MayaNut</span> Company</span>
-              <span class="tmc-sub">MayaNut superfood from <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span></span>
+              <span class="tmc-main">The <span>MayaNut</span> Company</span>
+              <span class="tmc-sub">
+                MayaNut superfood from
+                <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span>
+              </span>
             </div>
           </div>
         </div>
 
         <div class="header-right">
-          <!-- Nav tabs (desktop+mobile) -->
-          <div class="header-nav-shell">
+          <!-- Desktop nav inside gradient shell -->
+          <div class="header-nav-shell desktop-only">
             <nav class="header-nav" aria-label="Main navigation">
-              <button class="nav-link nav-link--active" data-target="#hero">Home</button>
-              <button class="nav-link" data-target="#store">Store</button>
-              <button class="nav-link" data-target="#about">About</button>
-              <button class="nav-link" data-target="#research">Research</button>
-              <button class="nav-link" data-target="#gallery">Gallery</button>
-              <button class="nav-link" data-target="#recipes">Recipes</button>
-              <button class="nav-link" data-target="#faq">FAQ</button>
-              <button class="nav-link" data-target="#contact">Contact</button>
+              <a class="nav-link nav-link--active" href="#hero">Home</a>
+              <a class="nav-link" href="#store">Store</a>
+              <a class="nav-link" href="#about">About</a>
+              <a class="nav-link" href="#research">Research</a>
+              <a class="nav-link" href="#gallery">Gallery</a>
+              <a class="nav-link" href="#recipes">Recipes</a>
+              <a class="nav-link" href="#faq">FAQ</a>
+              <a class="nav-link" href="#contact">Contact</a>
             </nav>
           </div>
 
-          <div class="header-icon-row">
+          <div class="header-icon-row desktop-only">
             <button class="header-icon-btn" id="header-search" data-label="Search">
               🔍
             </button>
@@ -760,6 +753,20 @@
           </div>
         </div>
       </div>
+
+      <!-- MOBILE NAV PANEL – no burger, always visible on mobile -->
+      <div class="mobile-nav-panel" id="mobile-nav-panel">
+        <ul class="mobile-nav-list">
+          <li><a class="mobile-nav-link mobile-nav-link--active" href="#hero">Home</a></li>
+          <li><a class="mobile-nav-link" href="#store">Store</a></li>
+          <li><a class="mobile-nav-link" href="#about">About</a></li>
+          <li><a class="mobile-nav-link" href="#research">Research</a></li>
+          <li><a class="mobile-nav-link" href="#gallery">Gallery</a></li>
+          <li><a class="mobile-nav-link" href="#recipes">Recipes</a></li>
+          <li><a class="mobile-nav-link" href="#faq">FAQ</a></li>
+          <li><a class="mobile-nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </header>
 
     <main id="main-content">
@@ -813,23 +820,16 @@
             </div>
           </div>
 
-          <!-- RIGHT: card + Ricky easter egg -->
+          <!-- RIGHT: just PNG + Ricky egg -->
           <div class="hero-right">
             <div class="hero-card">
-              <div class="hero-card-header">MayaNut Concept Beverage</div>
-              <div class="hero-card-tagline">
-                Early concept artwork for roasted
-                <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span> seed drinks.
-              </div>
+              <img
+                src="mayanutbeverageishere-the-maya-nut-company-image.png"
+                alt="MayaNut beverage concept"
+                class="hero-card-main-img"
+              />
 
-              <div class="hero-card-image">
-                <img
-                  src="mayanutbeverageishere-the-maya-nut-company-image.png"
-                  alt="Concept image for a roasted MayaNut beverage"
-                />
-              </div>
-
-              <!-- Hidden Ricky easter egg -->
+              <!-- Hidden Ricky easter egg – shown when search term “ricky” is used -->
               <div class="ricky-easter-egg" id="ricky-easter-egg" aria-hidden="true">
                 🧡💛💚💙🩵 The MayaNut Company grows on for Ricky, forever loved. 🧡💛💚💙🩵
                 <img src="ricky.jpeg" alt="Ricky – forever part of The MayaNut Company story">
@@ -987,7 +987,7 @@
           text-transform:uppercase;
         }
 
-        /* Right column – concept image from research */
+        /* Right column – canopy reminder image */
         .store-side-panel{
           border-radius:20px;
           padding:11px 11px 14px;
@@ -1141,7 +1141,7 @@
             </div>
           </div>
 
-          <!-- RIGHT: side image & copy from research area -->
+          <!-- RIGHT: canopy reminder -->
           <aside class="store-side-panel">
             <h3>Canopy Tree Behind the Superfood</h3>
             <p>
@@ -1188,215 +1188,253 @@
           mix-blend-mode:multiply;
           pointer-events:none;
         }
-        .about-inner{
+        .section--about .section-inner{
           position:relative;
           z-index:1;
           max-width:1120px;
           margin:0 auto;
           padding:0 4px;
-          display:grid;
-          grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
-          gap:22px;
-          align-items:flex-start;
-        }
-        @media(max-width:960px){
-          .about-inner{
-            grid-template-columns:minmax(0,1fr);
-          }
-        }
-
-        .about-left-header{
-          margin-bottom:10px;
-        }
-        .about-left-header h2{
-          margin:0 0 6px;
-          font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-          color:var(--accent-cyan);
-          display:inline-block;
-          padding:4px 10px;
-          border-radius:999px;
-          background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
-        }
-        .about-left-header p{
-          margin:0;
-          font-size:14px;
-          max-width:640px;
-          background:linear-gradient(135deg, rgba(3,7,30,0.94), rgba(15,23,42,0.96));
-          border-radius:10px;
-          padding:7px 9px;
         }
 
         .about-grid{
           display:grid;
-          grid-template-columns:minmax(0,1fr);
-          gap:10px;
-          margin-top:10px;
+          grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr);
+          gap:22px;
+          align-items:flex-start;
         }
-        .about-card{
+        @media(max-width:960px){
+          .about-grid{
+            grid-template-columns:minmax(0,1fr);
+          }
+        }
+
+        /* Images LEFT */
+        .about-images{
+          display:grid;
+          grid-template-columns:repeat(2,minmax(0,1fr));
+          gap:8px;
+        }
+        @media(max-width:640px){
+          .about-images{
+            grid-template-columns:repeat(2,minmax(0,1fr));
+          }
+        }
+
+        .about-image-tile{
+          position:relative;
+          border-radius:14px;
+          overflow:hidden;
+          box-shadow:0 6px 18px rgba(0,0,0,0.9);
+          border:1px solid rgba(15,23,42,0.9);
+        }
+
+        .about-square{
+          width:100%;
+          height:100%;
+          max-height:180px;
+          object-fit:cover;
+          display:block;
+        }
+
+        .img-expand-btn{
+          position:absolute;
+          right:6px;
+          bottom:6px;
+          width:26px;
+          height:26px;
+          border-radius:999px;
+          border:none;
+          cursor:pointer;
+          background:rgba(15,23,42,0.9);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          box-shadow:0 4px 12px rgba(0,0,0,0.9);
+        }
+        .img-expand-icon{
+          font-size:14px;
+          color:#e5f2ff;
+        }
+
+        /* Text RIGHT */
+        .about-text-col{
+          display:flex;
+          flex-direction:column;
+          gap:12px;
+        }
+
+        .about-text-card{
           border-radius:16px;
-          padding:9px 9px 11px;
+          padding:9px 10px 11px;
           background:linear-gradient(135deg,#020617 0%,#020617 50%,#0b1120 100%);
           box-shadow:0 4px 18px rgba(0,0,0,0.9);
           border:1px solid rgba(15,23,42,0.95);
           font-size:13px;
-          line-height:1.9;
+          line-height:1.8;
         }
-        .about-card h3{
-          margin:0 0 5px;
+
+        .about-text-card h2,
+        .about-text-card h3{
+          margin:0 0 6px;
           font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-          font-size:15px;
+          font-size:16px;
           color:var(--accent-cyan);
         }
-        .about-card p{
-          margin:0 0 4px;
+        .about-text-card p{
+          margin:0 0 6px;
           background:linear-gradient(135deg, rgba(3,7,30,0.9), rgba(15,23,42,0.9));
           border-radius:8px;
           padding:6px 8px;
         }
-        .about-note{
-          font-size:12px;
-          opacity:0.92;
-        }
-
-        .about-right-panel{
-          border-radius:20px;
-          padding:11px 11px 14px;
-          background:radial-gradient(circle at 0% 0%, rgba(9,237,218,0.2), transparent 60%),
-                     radial-gradient(circle at 100% 100%, rgba(59,130,246,0.28), transparent 65%),
-                     linear-gradient(135deg,#020617 0%,#0b1120 60%,#020617 100%);
-          box-shadow:0 10px 32px rgba(0,0,0,0.95);
-          font-size:13px;
-          line-height:1.8;
-          border:1px solid rgba(37,99,235,0.85);
-        }
-        .about-right-panel h3{
-          margin:0 0 5px;
-          font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-          font-size:15px;
-          color:var(--accent-cyan);
-        }
-        .about-right-panel p{
-          margin:0 0 5px;
-          background:linear-gradient(135deg, rgba(3,7,30,0.92), rgba(15,23,42,0.96));
-          border-radius:8px;
-          padding:6px 8px;
-        }
-        .about-right-pill-row{
-          display:flex;
-          flex-wrap:wrap;
-          gap:6px;
-          margin-top:4px;
-        }
-        .about-right-pill{
-          font-size:10px;
-          padding:2px 7px;
-          border-radius:999px;
-          border:1px solid rgba(9,237,218,0.85);
-          background:rgba(9,237,218,0.22);
-          color:#e0f2fe;
-          letter-spacing:0.06em;
-          text-transform:uppercase;
-        }
       </style>
 
+      <!-- ABOUT -->
       <section class="section section--about" id="about">
-        <div class="section-inner about-inner">
-          <!-- LEFT: mission + context -->
-          <div>
-            <div class="about-left-header">
-              <h2>Why MayaNut? Why This Tree?</h2>
-              <p>
-                <span class="highlight-company">The MayaNut Company</span> is built around one
-                simple, powerful idea: if you treat
-                <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span> as a serious
-                food tree and not a botanical curiosity, you can <strong>grow nutrition, shade,
-                and resilience at the same time</strong>.
-              </p>
+        <div class="section-inner">
+          <div class="about-grid">
+            <!-- Images LEFT -->
+            <div class="about-images">
+              <!-- Fruit on tree -->
+              <div class="about-image-tile">
+                <img src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg"
+                     alt="MayaNut fruit on Brosimum alicastrum tree in a tropical forest"
+                     class="about-square">
+                <button class="img-expand-btn" data-img-src="maya-nut-mayanut-fruit-brosimum-alicastrum.jpg" aria-label="Expand image">
+                  <span class="img-expand-icon">⤢</span>
+                </button>
+              </div>
+
+              <!-- Founder -->
+              <div class="about-image-tile">
+                <img src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg"
+                     alt="Founder August Kokus of The MayaNut Company"
+                     class="about-square">
+                <button class="img-expand-btn" data-img-src="august-kokus-augustkokus-mayanut-brosimum-alicastrum.jpg" aria-label="Expand image">
+                  <span class="img-expand-icon">⤢</span>
+                </button>
+              </div>
+
+              <!-- Nursery -->
+              <div class="about-image-tile">
+                <img src="maya-nut-mayanut-plant-tree-nursery.jpg"
+                     alt="Young MayaNut Brosimum alicastrum trees growing in a nursery"
+                     class="about-square">
+                <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-nursery.jpg" aria-label="Expand image">
+                  <span class="img-expand-icon">⤢</span>
+                </button>
+              </div>
+
+              <!-- Mature tree -->
+              <div class="about-image-tile">
+                <img src="maya-nut-mayanut-plant-tree-moraceae.jpg"
+                     alt="Mature MayaNut tree Brosimum alicastrum from the Moraceae family"
+                     class="about-square">
+                <button class="img-expand-btn" data-img-src="maya-nut-mayanut-plant-tree-moraceae.jpg" aria-label="Expand image">
+                  <span class="img-expand-icon">⤢</span>
+                </button>
+              </div>
+
+              <!-- Beverage concept -->
+              <div class="about-image-tile">
+                <img src="rach20.png"
+                     alt="MayaNut superfood beverage concept glass"
+                     class="about-square">
+                <button class="img-expand-btn" data-img-src="rach20.png" aria-label="Expand image">
+                  <span class="img-expand-icon">⤢</span>
+                </button>
+              </div>
+
+              <!-- Powder concept -->
+              <div class="about-image-tile">
+                <img src="mayanut-powder-maya-nut-brosimum-alicastrum.png"
+                     alt="MayaNut powder superfood concept"
+                     class="about-square">
+                <button class="img-expand-btn" data-img-src="mayanut-powder-maya-nut-brosimum-alicastrum.png" aria-label="Expand image">
+                  <span class="img-expand-icon">⤢</span>
+                </button>
+              </div>
             </div>
 
-            <div class="about-grid">
-              <article class="about-card">
-                <h3>Origin Story &amp; Long-Term View</h3>
+            <!-- Text RIGHT -->
+            <div class="about-text-col">
+              <div class="about-text-card">
+                <h2>About The MayaNut Company</h2>
                 <p>
-                  This project began with a collection of seeds and an obsession with how a single
-                  tropical tree could fit into future human diets. From there it grew into a plan:
-                  document the species carefully, plant it in the right places, and build a clear
-                  public record as it moves from “interesting” to <strong>indispensable</strong>.
+                  Welcome to <strong>The MayaNut Company</strong> at <strong>mayanut.com</strong>,
+                  created to bring a single underused tree – <em>Brosimum alicastrum</em> – into the
+                  spotlight as a true tropical superfood. In Spanish it is often called
+                  <strong>nuez de ramón</strong> or <strong>ojoche</strong>. In other regions it goes by
+                  <strong>breadnut</strong>, <strong>guayumaro</strong>, <strong>guaimaro</strong>, and more.
+                  On this site we unify those traditions under one simple name:
+                  <strong>MayaNut</strong>.
                 </p>
-                <p class="about-note">
-                  The time scale is measured in years and decades, not quarters. Trees need that
-                  kind of patience; so does any honest attempt to create a new superfood industry.
+                <p>
+                  People have eaten the fruits and seeds of this tree for centuries, roasting the
+                  “nuts” into a coffee-like drink, grinding them into flour, or storing them as
+                  emergency food. Our goal is to translate that history into a modern industry built
+                  around respectful agriculture, genetics, and world-class flavor.
                 </p>
-              </article>
+              </div>
 
-              <article class="about-card">
-                <h3>South Florida Trials &amp; Beyond</h3>
+              <div class="about-text-card">
+                <h3>Founder – August Kokus</h3>
                 <p>
-                  Early work is focused on <strong>South Florida</strong> and other frost-free
-                  subtropical areas where
-                  <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span> can thrive.
-                  The goal is to treat each planting as a datapoint: how it handles storms, dry
-                  spells, soils, and microclimates – all recorded and shared.
+                  The MayaNut Company was founded in 2025 by
+                  <strong>August Kokus</strong>, a South Floridian botanist fascinated by banyan trees,
+                  figs, and the entire Moraceae family. While exploring this family, he found
+                  <em>Brosimum alicastrum</em> – a tree whose fruits resemble a small fig, but whose
+                  seed has an entirely different potential.
                 </p>
                 <p>
-                  Over time, the same logic can stretch toward other regions in the Americas and
-                  around the world, wherever climate and regulations permit.
+                  August wanted to build something that could live on after him: a planted, living
+                  world of trees that people actually use. MayaNut offered exactly that – a species
+                  with genuine food value, deep cultural history, and enough mystery that almost no
+                  one in the United States had explored it seriously.
                 </p>
-              </article>
+                <p>
+                  By around <strong>2030</strong>, he aims to have a functional plantation of MayaNut
+                  trees in South Florida, at least an acre in size, bearing the first real harvests
+                  that can be turned into beverages, powders, flours, and more.
+                </p>
+              </div>
 
-              <article class="about-card">
-                <h3>Genetic Diversity &amp; Academic Respect</h3>
+              <div class="about-text-card">
+                <h3>Where We’re Growing</h3>
                 <p>
-                  This is not just about branding. It is also about
-                  <strong>genetic safeguarding</strong>. By sourcing seeds from many regions and
-                  keeping those lineages visible, the project aims to support botanists, ecologists,
-                  and growers who care about the full Brosimeae story – not just one commercial line.
+                  South Florida’s warm, frost-free climate makes it a natural testing ground for
+                  <em>Brosimum alicastrum</em>. The MayaNut Company focuses first on locations at or
+                  below roughly <strong>27°N</strong> in Florida, where winter cold is rare and
+                  evergreen trees can maintain year-round growth.
                 </p>
                 <p>
-                  That is why you will see research-style language, references to subspecies, and a
-                  strong emphasis on <span class="highlight-mayanut">MayaNut</span> as both food and
-                  field project.
+                  Further north – up toward <strong>28°N</strong> – the species may survive but still
+                  needs long-term trials. Our early plantings explore which microclimates, soils, and
+                  layouts give the tree the best chance to become a stable, hurricane-resilient part
+                  of the landscape.
                 </p>
-              </article>
+              </div>
+
+              <div class="about-text-card">
+                <h3>Mission &amp; Long View</h3>
+                <p>
+                  Our mission is simple and ambitious at the same time:
+                  <strong>make Brosimum alicastrum impossible to ignore</strong>. That means
+                  developing an entire chain – from genetics and seedlings, to plantations and
+                  agroforestry, to MayaNut superfood powders and beverages on store shelves.
+                </p>
+                <p>
+                  We want future generations to recognize MayaNut the way people recognize coffee or
+                  cacao today: as a flavor, a story, and a living tree that shaped landscapes and
+                  communities. This site is the first chapter in that story.
+                </p>
+              </div>
             </div>
           </div>
-
-          <!-- RIGHT: directive + quick facts -->
-          <aside class="about-right-panel">
-            <h3>Core Directive of The MayaNut Company</h3>
-            <p>
-              Build a <strong>modern superfood brand</strong> that behaves like a
-              <strong>living archive</strong> for
-              <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span>: documenting
-              origins, traits, performance, and uses in a way that will still be useful to someone
-              reading this site in 2050 or 2100.
-            </p>
-            <p>
-              That means transparent timelines, realistic claims, and a willingness to talk about
-              the tree itself just as much as bottled drinks or powders. The planet does not need
-              another trend; it needs <span class="highlight-mayanut">MayaNut</span> to be
-              <strong>reliable</strong>.
-            </p>
-            <p>
-              Along the way, this project also celebrates the wider Moraceae family:
-              <strong>figs, mulberries, breadfruit, Treculia, and the Brosimeae clade</strong> that
-              includes <span class="highlight-brosimum"><em>Brosimum</em></span>,
-              <em>Trymatococcus</em>, and <em>Helianthostylis</em>. MayaNut stands out inside that
-              story as a canopy tree with a directly drinkable, millable seed.
-            </p>
-            <div class="about-right-pill-row">
-              <span class="about-right-pill">superfood + genetics</span>
-              <span class="about-right-pill">south florida trials</span>
-              <span class="about-right-pill">moraceae focus</span>
-              <span class="about-right-pill">long-term directive</span>
-            </div>
-          </aside>
         </div>
       </section>
 
       <!-- TRANSITION: RESEARCH -->
       <div class="transition-strip">MAYANUT RESEARCH &amp; TREE BACKGROUND</div>
-
       <!-- RESEARCH SECTION -->
       <style>
         .section--research{
@@ -1595,7 +1633,6 @@
           </div>
 
           <div class="research-grid">
-            <!-- Common Names & Indigenous Use -->
             <article class="research-card" id="research-common">
               <h3>Common Names &amp; Indigenous Use</h3>
               <p>
@@ -1624,7 +1661,6 @@
               </p>
             </article>
 
-            <!-- Natural Range & Climate -->
             <article class="research-card" id="research-range">
               <h3>Natural Range &amp; Climate</h3>
               <p>
@@ -1643,7 +1679,6 @@
               </p>
             </article>
 
-            <!-- Growth, Roots & Hurricane Resistance -->
             <article class="research-card" id="research-growth">
               <h3>Growth, Roots &amp; Hurricane Resistance</h3>
               <p>
@@ -1668,7 +1703,6 @@
               </p>
             </article>
 
-            <!-- Agroforestry & Superfood Systems -->
             <article class="research-card" id="research-agroforestry">
               <h3>Agroforestry &amp; Superfood Systems</h3>
               <p>
@@ -1688,7 +1722,6 @@
               </p>
             </article>
 
-            <!-- Ecology & Forest Role -->
             <article class="research-card" id="research-ecology">
               <h3>Ecology &amp; Forest Role</h3>
               <p>
@@ -1706,7 +1739,6 @@
               </p>
             </article>
 
-            <!-- Domestication & Genetic Diversity -->
             <article class="research-card" id="research-genetics">
               <h3>Domestication &amp; Genetic Diversity</h3>
               <p>
@@ -1726,7 +1758,6 @@
               </p>
             </article>
 
-            <!-- Reforestation & Directive for Survival -->
             <article class="research-card" id="research-directive">
               <h3>Reforestation &amp; Our Survival Directive</h3>
               <p>
@@ -1757,10 +1788,11 @@
 
       <!-- TRANSITION: GALLERY -->
       <div class="transition-strip">THE MAYANUT COMPANY FIELD GALLERY – CLICK TO EXPAND</div>
-      <!-- GALLERY SECTION -->
+
+      <!-- GALLERY SECTION (BLUE GRADIENT) -->
       <style>
         .section--gallery{
-          background:transparent;
+          background:linear-gradient(180deg,#0ea5e9 0%, #1d4ed8 40%, #020617 100%);
           color:#ffffff;
           padding:50px 0 60px;
         }
@@ -1895,7 +1927,6 @@
           gap:6px;
         }
 
-        /* Secondary grid (hidden until expanded) */
         #gallery-block-2{
           margin-top:10px;
           display:none;
@@ -2042,12 +2073,12 @@
       <!-- TRANSITION: RECIPES -->
       <div class="transition-strip">RECIPES – MAYANUT SUPERFOOD IDEAS</div>
 
-      <!-- RECIPES SECTION -->
+      <!-- RECIPES SECTION (GREEN GRADIENT) -->
       <style>
         .section--recipes{
-          background:transparent;
+          background:linear-gradient(180deg,#16a34a 0%, #22c55e 40%, #065f46 80%, #022c22 100%);
           color:#ffffff;
-          padding:48px 0 56px;
+          padding:52px 0 60px;
         }
         .recipes-inner{
           max-width:1120px;
@@ -2055,24 +2086,24 @@
           padding:0 4px;
         }
         .recipes-header{
-          margin-bottom:16px;
+          margin-bottom:18px;
         }
         .recipes-header h2{
           margin:0 0 6px;
           font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-          color:var(--accent-cyan);
+          color:#ecfdf5;
           display:inline-block;
           padding:4px 10px;
           border-radius:999px;
-          background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
+          background:linear-gradient(135deg,#15803d,#4ade80);
         }
         .recipes-header p{
           margin:0;
           font-size:14px;
           max-width:680px;
-          background:linear-gradient(135deg, rgba(3,7,30,0.94), rgba(15,23,42,0.96));
-          border-radius:10px;
-          padding:7px 9px;
+          background:linear-gradient(135deg, rgba(3,7,30,0.9), rgba(6,78,59,0.9));
+          border-radius:8px;
+          padding:6px 8px;
         }
 
         .recipes-grid{
@@ -2095,201 +2126,133 @@
         .recipe-card{
           border-radius:16px;
           padding:10px 10px 12px;
-          background:linear-gradient(135deg,#020617 0%,#020617 50%,#0b1120 100%);
+          background:linear-gradient(135deg,#022c22 0%,#064e3b 50%,#0f172a 100%);
           box-shadow:0 4px 18px rgba(0,0,0,0.9);
-          border:1px solid rgba(15,23,42,0.95);
+          border:1px solid rgba(16,185,129,0.85);
           font-size:13px;
           line-height:1.8;
         }
         .recipe-card h3{
-          margin:0 0 5px;
+          margin:0 0 6px;
           font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
           font-size:15px;
-          color:var(--accent-cyan);
+          color:#bbf7d0;
         }
         .recipe-meta{
           font-size:11px;
           opacity:0.9;
           margin-bottom:4px;
         }
-        .recipe-card strong{
-          font-weight:600;
+        .recipe-card p{
+          margin:0 0 5px;
+          background:linear-gradient(135deg, rgba(3,7,30,0.92), rgba(6,78,59,0.96));
+          border-radius:8px;
+          padding:6px 8px;
         }
-        .recipe-card ul{
-          margin:4px 0 6px 16px;
+        .recipe-list{
+          margin:4px 0 6px 18px;
           padding:0;
+          font-size:12px;
         }
-        .recipe-card li{
+        .recipe-list li{
           margin-bottom:2px;
-        }
-        .recipe-note{
-          font-size:11px;
-          opacity:0.9;
-          margin-top:3px;
         }
       </style>
 
       <section class="section section--recipes" id="recipes">
         <div class="section-inner recipes-inner">
           <div class="recipes-header">
-            <h2>MayaNut Recipes &amp; Starting Ideas</h2>
+            <h2>MayaNut Recipe Ideas</h2>
             <p>
-              These recipes are <strong>idea starters</strong> only – home-kitchen experiments that
-              show how <span class="highlight-mayanut">MayaNut</span> powder and fruits might fit
-              into daily food and drink. Adjust sweetness, roast level, and ratios to your taste,
-              and always follow food safety best practices when preparing and storing foods.
+              These recipes are concept-level starting points for working with
+              <span class="highlight-mayanut">MayaNut</span> at home. They focus on simple methods:
+              roasted MayaNut powder in drinks and porridges, flour blends for tortillas and baking,
+              and even a jam-style spread that uses the sweet fruit pulp around the seed.
             </p>
           </div>
 
           <div class="recipes-grid">
-            <!-- Recipe 1: MayaNut Mocha (drink) -->
+            <!-- Recipe 1: Morning Mocha -->
             <article class="recipe-card">
-              <h3>MayaNut Evening Mocha (Caffeine-Free)</h3>
-              <div class="recipe-meta">Warm drink · Serves 1</div>
+              <h3>MayaNut Morning Mocha (Caffeine-Optional)</h3>
+              <div class="recipe-meta">Makes 1 large mug · ~10 minutes</div>
               <p><strong>Ingredients</strong></p>
-              <ul>
+              <ul class="recipe-list">
                 <li>2–3 tsp roasted MayaNut powder</li>
                 <li>1 tsp cocoa powder</li>
-                <li>1–2 tsp sugar, honey, or sweetener of choice (to taste)</li>
-                <li>1 cup hot water or warm plant milk</li>
-                <li>Pinch of salt and cinnamon (optional)</li>
+                <li>1–2 tsp sugar, panela, or honey (to taste)</li>
+                <li>1 cup hot water or hot plant milk</li>
+                <li>Optional: 1–2 tbsp strong coffee or espresso</li>
+                <li>Pinch of salt and cinnamon</li>
               </ul>
               <p><strong>Method</strong></p>
-              <ul>
-                <li>Whisk the MayaNut powder, cocoa, and sweetener in a mug.</li>
-                <li>Add a small splash of hot liquid and stir into a smooth paste.</li>
-                <li>Top up with the remaining hot water or milk while whisking.</li>
-                <li>Finish with a pinch of salt and cinnamon if desired.</li>
-              </ul>
-              <p class="recipe-note">
-                This version is naturally caffeine-free. For a morning drink, blend with a shot of
-                espresso or strong coffee.
+              <p>
+                Whisk the MayaNut powder, cocoa, sweetener, salt, and cinnamon with a splash of hot
+                water to make a smooth paste. Top up with the rest of the hot water or plant milk,
+                whisking until frothy. Add coffee only if you want a caffeinated version – the base
+                drink is naturally caffeine-free.
               </p>
             </article>
 
-            <!-- Recipe 2: MayaNut Breakfast Porridge -->
+            <!-- Recipe 2: Warm Porridge -->
             <article class="recipe-card">
-              <h3>MayaNut Breakfast Porridge</h3>
-              <div class="recipe-meta">Comfort bowl · Serves 1–2</div>
+              <h3>Roasted MayaNut Breakfast Porridge</h3>
+              <div class="recipe-meta">Makes 1–2 servings · ~15 minutes</div>
               <p><strong>Ingredients</strong></p>
-              <ul>
-                <li>1/2 cup rolled oats or cooked grain of choice</li>
+              <ul class="recipe-list">
+                <li>3 tbsp rolled oats or other hot cereal base</li>
                 <li>1–2 tbsp roasted MayaNut powder</li>
-                <li>1 cup water or plant milk (more as needed)</li>
-                <li>1–2 tsp sweetener (to taste)</li>
-                <li>Fruit, nuts, or seeds for topping</li>
+                <li>1 cup water + ½ cup milk or plant milk</li>
+                <li>1–2 tsp sugar, maple, or panela</li>
+                <li>Pinch of salt and cinnamon</li>
+                <li>Optional toppings: sliced banana, nuts, dried fruit</li>
               </ul>
               <p><strong>Method</strong></p>
-              <ul>
-                <li>Cook oats (or grain) in water or milk until soft.</li>
-                <li>Stir in MayaNut powder and sweetener while still warm.</li>
-                <li>Adjust liquid for desired thickness.</li>
-                <li>Top with sliced fruit, nuts, or seeds before serving.</li>
-              </ul>
-              <p class="recipe-note">
-                MayaNut can deepen the flavor of simple porridge without taking over the whole bowl.
+              <p>
+                Simmer oats with water, milk, salt, and cinnamon until creamy. Stir in the MayaNut
+                powder and sweetener near the end so the aroma stays bright. Adjust thickness with a
+                splash of extra liquid and top with fruit or nuts before serving.
               </p>
             </article>
 
-            <!-- Recipe 3: MayaNut Tortilla / Flatbread Blend -->
+            <!-- Recipe 3: Flour Blend -->
             <article class="recipe-card">
-              <h3>MayaNut Tortilla &amp; Flatbread Blend</h3>
-              <div class="recipe-meta">Dough idea · Percentages only</div>
-              <p><strong>Concept Ratios</strong></p>
-              <ul>
+              <h3>Tortilla &amp; Flatbread MayaNut Flour Blend</h3>
+              <div class="recipe-meta">Ratio concept · Adjust to taste</div>
+              <p><strong>Basic blend</strong></p>
+              <ul class="recipe-list">
                 <li>80–90% masa harina or wheat flour</li>
-                <li>10–20% roasted MayaNut flour or fine powder</li>
-                <li>Water, salt, and fat as your base recipe requires</li>
+                <li>10–20% MayaNut flour (partially defatted if possible)</li>
+                <li>Water and salt as your usual tortilla/flatbread recipe</li>
               </ul>
               <p><strong>Method</strong></p>
-              <ul>
-                <li>Combine base flour and MayaNut flour thoroughly.</li>
-                <li>Prepare dough as you normally would (for tortillas or flatbreads).</li>
-                <li>Rest, shape, and cook according to your usual method.</li>
-              </ul>
-              <p class="recipe-note">
-                Start with 10% MayaNut and increase slowly until you like the aroma and color. Exact
-                limits will depend on roast level and your flour.
+              <p>
+                Mix the MayaNut flour into your base flour before adding water. Start with 10% and
+                work upward until you like the color and aroma. Rest the dough as usual, then press
+                or roll into tortillas or flatbreads. The goal is a subtle roasted flavor that
+                supports – not overwhelms – the main grain.
               </p>
             </article>
 
-            <!-- Recipe 4: MayaNut Fruit Jam / Jelly Concept -->
+            <!-- Recipe 4: Fruit + Seed Jam / Jelly Concept -->
             <article class="recipe-card">
-              <h3>MayaNut Fruit Jam / Jelly Concept</h3>
-              <div class="recipe-meta">Uses ripe MayaNut fruit pulp · Small test batch</div>
+              <h3>MayaNut Fruit &amp; Seed Jam Concept</h3>
+              <div class="recipe-meta">Concept method · For ripe MayaNut fruits</div>
               <p><strong>Ingredients</strong></p>
-              <ul>
-                <li>2 cups ripe MayaNut fruit pulp (cleaned, without seed)</li>
-                <li>1–1.5 cups sugar (adjust to sweetness and water content)</li>
-                <li>2–3 tbsp lemon or lime juice</li>
-                <li>Optional: natural pectin if extra setting is needed</li>
+              <ul class="recipe-list">
+                <li>Fresh, fully ripe MayaNut fruits</li>
+                <li>A little sugar or panela (start low, adjust to taste)</li>
+                <li>Water, just enough to help the pulp loosen</li>
+                <li>Optional: squeeze of lime juice, pinch of salt</li>
               </ul>
-              <p><strong>Method</strong></p>
-              <ul>
-                <li>
-                  Gently cook the cleaned MayaNut pulp with sugar and citrus in a small pot over
-                  low–medium heat.
-                </li>
-                <li>
-                  Stir often to prevent sticking. As it thickens, taste and adjust sweetness or
-                  acidity.
-                </li>
-                <li>
-                  For a firmer jelly-style set, follow a tested jam or jelly recipe and apply those
-                  timing and temperature guidelines to this fruit.
-                </li>
-                <li>
-                  Transfer hot jam into clean, heat-safe jars and cool in the refrigerator for
-                  short-term use.
-                </li>
-              </ul>
-              <p class="recipe-note">
-                Always rely on up-to-date, trusted food preservation guidelines if you move beyond
-                small, refrigerated test batches into canning or long-term storage.
-              </p>
-            </article>
-
-            <!-- Recipe 5: Iced MayaNut Latte -->
-            <article class="recipe-card">
-              <h3>Iced MayaNut Latte</h3>
-              <div class="recipe-meta">Cold drink · Serves 1</div>
-              <p><strong>Ingredients</strong></p>
-              <ul>
-                <li>2 tsp roasted MayaNut powder</li>
-                <li>1 tsp sweetener of choice</li>
-                <li>1–2 tbsp hot water</li>
-                <li>3/4 cup cold plant milk</li>
-                <li>Ice cubes</li>
-              </ul>
-              <p><strong>Method</strong></p>
-              <ul>
-                <li>Stir MayaNut powder with hot water to form a smooth concentrate.</li>
-                <li>Add sweetener and mix well.</li>
-                <li>Fill a glass with ice, pour in cold milk, then swirl in the MayaNut concentrate.</li>
-              </ul>
-              <p class="recipe-note">
-                Shake everything in a jar with a lid if you want a foamier texture.
-              </p>
-            </article>
-
-            <!-- Recipe 6: Simple MayaNut Cookie Test -->
-            <article class="recipe-card">
-              <h3>Simple MayaNut Cookie Test Batch</h3>
-              <div class="recipe-meta">Concept · Small batch</div>
-              <p><strong>Base Idea</strong></p>
-              <ul>
-                <li>Use your favorite simple cookie recipe.</li>
-                <li>Replace 10–15% of the flour with roasted MayaNut powder.</li>
-                <li>Watch color and aroma as the cookies bake.</li>
-              </ul>
-              <p><strong>Notes</strong></p>
-              <ul>
-                <li>Roast level will change flavor and color in a big way.</li>
-                <li>Record your percentages so you can adjust in the next batch.</li>
-              </ul>
-              <p class="recipe-note">
-                These early experiments help map where MayaNut fits nicely alongside familiar
-                ingredients instead of overpowering them.
+              <p><strong>Method (concept)</strong></p>
+              <p>
+                When fruits are fully ripe and sweet, remove any spoiled ones and gently simmer the
+                good fruits with a splash of water in a small pot. As the skins soften, press the
+                pulp away from the seed using a spoon or sieve. Sweeten lightly if needed and cook
+                down until the pulp thickens into a jam-like texture. A very small amount of lime
+                and salt can brighten the flavor. Spread on bread or swirl into yogurt – this is a
+                way to celebrate the fruit pulp itself, not just the roasted seed.
               </p>
             </article>
           </div>
@@ -2297,227 +2260,213 @@
       </section>
 
       <!-- TRANSITION: FAQ -->
-      <div class="transition-strip">FAQ – MAYANUT, TREE, PRODUCTS &amp; PROJECT</div>
+      <div class="transition-strip">FAQ &amp; PROJECT NOTES</div>
 
-      <!-- FAQ SECTION -->
+      <!-- FAQ SECTION (ORANGE GRADIENT FADING OUT AT BOTTOM) -->
       <style>
         .section--faq{
-          background:transparent;
-          color:#ffffff;
-          padding:48px 0 60px;
+          background:linear-gradient(
+            180deg,
+            #fed7aa 0%,
+            #fdba74 20%,
+            #fb923c 45%,
+            #ea580c 70%,
+            rgba(234,88,12,0.5) 90%,
+            rgba(15,23,42,0) 100%
+          );
+          color:#111827;
+          padding:52px 0 40px;
         }
         .faq-inner{
           max-width:1120px;
           margin:0 auto;
           padding:0 4px;
+        }
+        .faq-header{
+          margin-bottom:18px;
+        }
+        .faq-header h2{
+          margin:0 0 6px;
+          font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+          color:#7c2d12;
+          display:inline-block;
+          padding:4px 10px;
+          border-radius:999px;
+          background:linear-gradient(135deg,#f97316,#fdba74);
+        }
+        .faq-header p{
+          margin:0;
+          font-size:14px;
+          max-width:720px;
+          background:rgba(255,251,235,0.9);
+          border-radius:8px;
+          padding:6px 8px;
+          border:1px solid rgba(251,146,60,0.6);
+        }
+
+        .faq-layout{
+          margin-top:14px;
           display:grid;
-          grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-          gap:20px;
+          grid-template-columns:minmax(0,1.1fr) minmax(0,1.1fr);
+          gap:14px;
         }
         @media(max-width:960px){
-          .faq-inner{
+          .faq-layout{
             grid-template-columns:minmax(0,1fr);
           }
         }
 
-        .faq-left-header h2{
-          margin:0 0 6px;
-          font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-          color:var(--accent-cyan);
-          display:inline-block;
-          padding:4px 10px;
-          border-radius:999px;
-          background:linear-gradient(135deg, rgba(8,3,212,0.9), rgba(0,182,251,0.9));
-        }
-        .faq-left-header p{
-          margin:0 0 8px;
-          font-size:14px;
-          max-width:640px;
-          background:linear-gradient(135deg, rgba(3,7,30,0.94), rgba(15,23,42,0.96));
-          border-radius:10px;
-          padding:7px 9px;
-        }
-
-        .faq-list{
-          margin-top:10px;
-          display:grid;
-          grid-template-columns:minmax(0,1fr);
-          gap:8px;
-        }
-        .faq-item{
-          border-radius:12px;
-          padding:7px 9px;
-          background:linear-gradient(135deg,#020617 0%,#020617 50%,#0b1120 100%);
-          box-shadow:0 3px 14px rgba(0,0,0,0.8);
-          border:1px solid rgba(15,23,42,0.9);
-          font-size:13px;
-          line-height:1.7;
-        }
-        .faq-item strong{
-          display:block;
-          margin-bottom:3px;
-          color:var(--accent-cyan);
-        }
-
-        .faq-bot{
+        .faq-card{
           border-radius:16px;
           padding:10px 10px 12px;
-          background:linear-gradient(135deg,#020617 0%,#020617 50%,#020617 100%);
-          box-shadow:0 4px 18px rgba(0,0,0,0.9);
-          border:1px solid rgba(37,99,235,0.9);
+          background:rgba(255,251,235,0.96);
+          box-shadow:0 4px 18px rgba(0,0,0,0.3);
+          border:1px solid rgba(248,153,72,0.9);
           font-size:13px;
           line-height:1.8;
         }
-        .faq-bot h3{
-          margin:0 0 4px;
+        .faq-card h3{
+          margin:0 0 6px;
           font-family:"Bungee", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
           font-size:15px;
-          color:var(--accent-cyan);
+          color:#7c2d12;
         }
-        .faq-bot p{
+        .faq-card p{
           margin:0 0 6px;
         }
+
         .faq-bot-chips{
           display:flex;
           flex-wrap:wrap;
           gap:6px;
-          margin-bottom:8px;
+          margin:6px 0 8px;
         }
         .faq-bot-chip{
           font-size:11px;
           padding:3px 8px;
           border-radius:999px;
-          border:1px solid rgba(9,237,218,0.9);
-          background:rgba(9,237,218,0.22);
-          color:#e0f2fe;
+          border:1px solid rgba(248,153,72,0.9);
+          background:rgba(254,243,199,0.9);
+          color:#7c2d12;
           cursor:pointer;
         }
+
         .faq-bot-input-row{
           display:flex;
           gap:6px;
-          margin-bottom:6px;
+          margin-top:4px;
         }
         #faq-bot-input{
           flex:1;
-          font-size:13px;
+          font-size:12px;
           padding:6px 8px;
           border-radius:999px;
-          border:1px solid rgba(148,163,184,0.8);
-          background:rgba(15,23,42,0.96);
-          color:#e5f2ff;
-        }
-        #faq-bot-input::placeholder{
-          color:#9ca3af;
+          border:1px solid rgba(248,153,72,0.9);
         }
         #faq-bot-search-btn{
+          font-size:12px;
           padding:6px 10px;
           border-radius:999px;
           border:none;
           cursor:pointer;
-          font-size:12px;
+          background:linear-gradient(135deg,#f97316,#ea580c);
+          color:#fff7ed;
           font-weight:600;
-          background:linear-gradient(135deg,#0803d4,#00b6fb);
-          color:#ecfeff;
-          white-space:nowrap;
         }
         #faq-bot-output{
+          margin-top:6px;
           font-size:12px;
-          background:linear-gradient(135deg, rgba(3,7,30,0.94), rgba(15,23,42,0.96));
-          border-radius:10px;
-          padding:7px 9px;
+          background:rgba(255,247,237,0.9);
+          border-radius:8px;
+          padding:6px 8px;
+          border:1px dashed rgba(248,153,72,0.9);
+        }
+
+        .faq-health-note{
+          margin-top:8px;
+          font-size:11px;
+          background:rgba(254,226,226,0.95);
+          border-radius:8px;
+          padding:6px 8px;
+          border:1px solid rgba(248,113,113,0.9);
+          color:#7f1d1d;
         }
       </style>
 
       <section class="section section--faq" id="faq">
         <div class="section-inner faq-inner">
-          <!-- LEFT: static FAQ items -->
-          <div>
-            <div class="faq-left-header">
-              <h2>MayaNut &amp; Project FAQ</h2>
-              <p>
-                A few short answers to questions people tend to ask first about
-                <span class="highlight-mayanut">MayaNut</span>, the
-                <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span> tree, and this
-                long-term project.
+          <div class="faq-header">
+            <h2>FAQ &amp; Project Notes</h2>
+            <p>
+              Short answers to common questions about MayaNut, the tree, products, and this project.
+              For deeper questions, use the mini FAQ assistant below or email us through the contact
+              section at the bottom of the page.
+            </p>
+          </div>
+
+          <div class="faq-layout">
+            <!-- Left: static FAQ -->
+            <div class="faq-card">
+              <h3>Quick MayaNut Questions</h3>
+              <p><strong>When will products be for sale?</strong><br>
+                Concept powders and beverages are being developed alongside real tree plantings.
+                The goal is to move toward late-2020s releases once plantations can support honest,
+                scalable supply.
+              </p>
+              <p><strong>Where are you planting?</strong><br>
+                Early work is centered in South Florida and other frost-free areas where
+                <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span> can grow as a
+                long-lived evergreen canopy tree.
+              </p>
+              <p><strong>Is MayaNut new?</strong><br>
+                The tree and its seed have been used for generations across Mesoamerica. What is
+                “new” is the attempt to treat it as a modern superfood crop with transparent genetics,
+                agroforestry design, and product development.
               </p>
             </div>
 
-            <div class="faq-list">
-              <div class="faq-item">
-                <strong>Is The MayaNut Company giving medical or health advice?</strong>
-                <span>
-                  No. This site is informational and experimental. Nothing here is medical, health,
-                  or nutrition advice. Always talk to a qualified health professional about your own
-                  diet and health decisions.
-                </span>
+            <!-- Right: FAQ mini-bot + health note -->
+            <div class="faq-card">
+              <h3>Ask the MayaNut FAQ Assistant</h3>
+              <p>Tap a topic or type a question about the tree, Moraceae, recipes, or this project.</p>
+
+              <div class="faq-bot-chips">
+                <button class="faq-bot-chip" data-faq-topic="superfood">Why a “superfood”?</button>
+                <button class="faq-bot-chip" data-faq-topic="tree">About the tree</button>
+                <button class="faq-bot-chip" data-faq-topic="products">Products &amp; timing</button>
+                <button class="faq-bot-chip" data-faq-topic="recipes">Recipes</button>
+                <button class="faq-bot-chip" data-faq-topic="moraceae">Moraceae family</button>
+                <button class="faq-bot-chip" data-faq-topic="survival">Genetics &amp; survival</button>
+                <button class="faq-bot-chip" data-faq-topic="sitemap">Where is everything?</button>
               </div>
 
-              <div class="faq-item">
-                <strong>Can I buy MayaNut products right now?</strong>
-                <span>
-                  Not yet. The concept store on this page is a preview space. Real products depend
-                  on mature trees, harvest, processing, and careful testing. The earliest realistic
-                  timeframe for meaningful product launches is in the later 2020s.
-                </span>
+              <div class="faq-bot-input-row">
+                <input
+                  type="text"
+                  id="faq-bot-input"
+                  placeholder="Ask a short question about MayaNut or the tree..."
+                />
+                <button id="faq-bot-search-btn">Ask</button>
               </div>
 
-              <div class="faq-item">
-                <strong>Where are the trees being planted?</strong>
-                <span>
-                  Early work is in South Florida and other frost-free subtropical locations, with an
-                  eye toward wider tropical plantings where climate, soils, and local regulations
-                  make sense for <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span>.
-                </span>
+              <div id="faq-bot-output">
+                Ask about MayaNut, the tree, products, genetics, Moraceae, recipes, or where to find
+                something on this site.
               </div>
 
-              <div class="faq-item">
-                <strong>Why use the word “MayaNut” instead of all the local names?</strong>
-                <span>
-                  “MayaNut” is a simple, modern unifying term for global audiences. Local names like
-                  nuez de ramón, ojoche, breadnut, guayumaro, and guaimaro remain important and are
-                  acknowledged across this site.
-                </span>
+              <div class="faq-health-note">
+                <strong>Health &amp; medical note:</strong> The MayaNut Company does not provide
+                medical advice, diagnosis, or treatment. All information and recipes on this site
+                are for general education and food exploration only. Always talk with a qualified
+                healthcare professional about your own nutrition or health questions.
               </div>
             </div>
           </div>
-
-          <!-- RIGHT: mini FAQ bot -->
-          <aside class="faq-bot">
-            <h3>Ask the On-Page MayaNut FAQ Assistant</h3>
-            <p>
-              Use the quick chips or type a question about the tree, recipes, Moraceae, genetics,
-              future products, or where to find something on this page.
-            </p>
-
-            <div class="faq-bot-chips">
-              <button class="faq-bot-chip" data-faq-topic="superfood">Why is it a superfood?</button>
-              <button class="faq-bot-chip" data-faq-topic="tree">Tell me about the tree</button>
-              <button class="faq-bot-chip" data-faq-topic="products">When are products?</button>
-              <button class="faq-bot-chip" data-faq-topic="recipes">Recipe ideas</button>
-              <button class="faq-bot-chip" data-faq-topic="moraceae">Moraceae family</button>
-              <button class="faq-bot-chip" data-faq-topic="survival">Genetics &amp; survival</button>
-              <button class="faq-bot-chip" data-faq-topic="sitemap">Where is everything?</button>
-            </div>
-
-            <div class="faq-bot-input-row">
-              <input
-                type="text"
-                id="faq-bot-input"
-                placeholder="Ask about MayaNut, the tree, Moraceae, recipes, products..."
-              />
-              <button id="faq-bot-search-btn">Ask</button>
-            </div>
-
-            <div id="faq-bot-output">
-              Ask about MayaNut, the tree, products, genetics, Moraceae, recipes, or where to find
-              something on this single long page.
-            </div>
-          </aside>
         </div>
       </section>
 
-      <!-- TRANSITION: CONTACT -->
-      <div class="transition-strip">CONTACT &amp; PROJECT NOTES</div>
+      <!-- TRANSITION: CONTACT / BULK ORDERS -->
+      <div class="transition-strip">CONTACT, BULK REQUESTS &amp; PROJECT UPDATES</div>
       <!-- CONTACT + FOOTER -->
       <style>
         .section--contact{
@@ -2532,7 +2481,6 @@
           margin:0 auto;
         }
 
-        /* Pyramid contact text */
         .contact-pyramid{
           text-align:center;
           margin-bottom:32px;
@@ -2624,13 +2572,6 @@
         .footer a:hover{
           border-bottom-style:solid;
         }
-
-        /* Make mobile nav panel visible on small screens even without burger */
-        @media(max-width:900px){
-          #mobile-nav-panel{
-            display:block;
-          }
-        }
       </style>
 
       <section class="section section--contact" id="contact">
@@ -2651,8 +2592,9 @@
               snacks, etc.).
             </div>
             <div class="contact-pyramid-line">
-              This site is informational only and does not provide medical, nutritional, or health
-              advice. Always consult qualified professionals for health decisions. Future updates and
+              Before commercial products are available,
+              <span class="highlight-company">The MayaNut Company</span> will focus on information,
+              planting notes, and long-term partnerships rather than direct sales. Future updates and
               project notes will live here on <a href="#hero">mayanut.com</a>.
             </div>
           </div>
@@ -2681,7 +2623,7 @@
         </div>
       </section>
 
-      <!-- Small invisible anchors so links always have a real target -->
+      <!-- Invisible anchors -->
       <div id="privacy" style="position:absolute;bottom:0;left:0;height:1px;width:1px;overflow:hidden;"></div>
       <div id="terms" style="position:absolute;bottom:0;left:2px;height:1px;width:1px;overflow:hidden;"></div>
       <div id="sitemap" style="position:absolute;bottom:0;left:4px;height:1px;width:1px;overflow:hidden;"></div>
@@ -2712,9 +2654,12 @@
           position:absolute;
           top:6px;
           right:8px;
-          font-size:18px;
+          font-size:20px;
           cursor:pointer;
-          color:#f9fafb;
+          color:#ffffff;
+          background:none;
+          border:none;
+          line-height:1;
         }
         .welcome-inner{
           display:flex;
@@ -2753,9 +2698,9 @@
         }
         .welcome-proceed-btn{
           margin-top:10px;
-          display:inline-flex;
-          align-items:center;
-          justify-content:center;
+          display:block;
+          margin-left:auto;
+          margin-right:auto;
           padding:9px 22px;
           border-radius:999px;
           border:none;
@@ -2781,35 +2726,40 @@
           }
         }
 
-        /* LIGHTBOX FOR ANY EXPAND IMAGES */
+        /* IMAGE LIGHTBOX (scrollable) */
         .image-lightbox{
           position:fixed;
           inset:0;
           background:rgba(3,7,18,0.92);
           display:none;
-          align-items:center;
           justify-content:center;
+          align-items:flex-start;
+          overflow-y:auto;
+          padding:40px 0;
           z-index:820;
         }
         .image-lightbox-inner{
           position:relative;
           max-width:90vw;
-          max-height:90vh;
+          margin:auto;
         }
         .image-lightbox-inner img{
           max-width:100%;
-          max-height:100%;
+          height:auto;
           display:block;
           border-radius:12px;
           box-shadow:0 10px 40px rgba(0,0,0,0.9);
         }
         .image-lightbox-close{
           position:absolute;
-          top:-36px;
+          top:-32px;
           right:0;
           font-size:22px;
           color:#e5f2ff;
           cursor:pointer;
+          background:none;
+          border:none;
+          line-height:1;
         }
 
         /* HEADER POPOVER (search/cart/location/legal) */
@@ -2840,6 +2790,9 @@
           font-size:14px;
           cursor:pointer;
           opacity:0.8;
+          background:none;
+          border:none;
+          color:#e5f2ff;
         }
         @media(max-width:768px){
           .header-popover{
@@ -2891,26 +2844,26 @@
       <!-- GLOBAL LIGHTBOX -->
       <div class="image-lightbox" id="image-lightbox">
         <div class="image-lightbox-inner">
-          <span class="image-lightbox-close" id="image-lightbox-close">×</span>
+          <button class="image-lightbox-close" id="image-lightbox-close" aria-label="Close image">×</button>
           <img src="" alt="Expanded image" id="image-lightbox-img" />
         </div>
       </div>
 
       <!-- HEADER POPOVER CONTAINER -->
       <div class="header-popover" id="header-popover" role="status" aria-live="polite">
-        <span class="header-popover-close" id="header-popover-close">×</span>
+        <button class="header-popover-close" id="header-popover-close" aria-label="Close popover">×</button>
         <h4 id="header-popover-title"></h4>
         <div id="header-popover-body"></div>
       </div>
 
-      <!-- SCRIPT -->
+      <!-- SCRIPTS -->
       <script>
         (function(){
           const $  = (sel, root=document) => root.querySelector(sel);
           const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
           /* FOOTER YEAR + LOGO TO TOP */
-          (function setupFooter(){
+          (function(){
             const yearSpan = $('#footer-year');
             if(yearSpan){
               yearSpan.textContent = new Date().getFullYear();
@@ -2919,6 +2872,56 @@
             if(footerLogo){
               footerLogo.addEventListener('click', ()=>{
                 window.scrollTo({top:0, behavior:'smooth'});
+              });
+            }
+          })();
+
+          /* NAV: smooth scroll + active states (desktop + mobile) */
+          (function setupNav(){
+            const headerNavLinks  = $$('.nav-link');
+            const mobileNavLinks  = $$('.mobile-nav-link');
+            const allNavLinks     = headerNavLinks.concat(mobileNavLinks);
+            const mobilePanel     = $('#mobile-nav-panel');
+            const mobileToggle    = $('#mobile-menu-toggle');
+
+            function setActive(targetId){
+              allNavLinks.forEach(btn=>{
+                const t = btn.getAttribute('data-target');
+                const isActive = t === targetId;
+                btn.classList.toggle('nav-link--active', isActive && btn.classList.contains('nav-link'));
+                btn.classList.toggle('mobile-nav-link--active', isActive && btn.classList.contains('mobile-nav-link'));
+              });
+            }
+
+            function scrollToTarget(targetId){
+              const el = document.querySelector(targetId);
+              if(el){
+                el.scrollIntoView({behavior:'smooth', block:'start'});
+                setActive(targetId);
+              }
+            }
+
+            allNavLinks.forEach(btn=>{
+              btn.addEventListener('click', ()=>{
+                const targetId = btn.getAttribute('data-target');
+                if(targetId){
+                  scrollToTarget(targetId);
+                  if(mobilePanel && mobileToggle && btn.classList.contains('mobile-nav-link')){
+                    mobilePanel.classList.remove('is-open');
+                    mobilePanel.style.display = 'none';
+                    mobileToggle.setAttribute('aria-expanded','false');
+                  }
+                }
+              });
+            });
+
+            // Mobile toggle
+            if(mobileToggle && mobilePanel){
+              mobileToggle.addEventListener('click', ()=>{
+                const isOpen = mobilePanel.style.display === 'block';
+                mobilePanel.style.display = isOpen ? 'none' : 'block';
+                mobilePanel.classList.toggle('is-open', !isOpen);
+                mobileToggle.setAttribute('aria-expanded', String(!isOpen));
               });
             }
           })();
@@ -2981,7 +2984,7 @@
             }
           })();
 
-          /* HERO SNOW */
+          /* HERO SNOW (optional subtle) */
           (function setupSnow(){
             const hero = document.getElementById('hero');
             if(!hero) return;
@@ -3093,8 +3096,8 @@
               recipes:
                 "MayaNut powder can be whisked into hot or cold drinks, blended with cocoa, " +
                 "worked into tortillas and flatbreads, or baked into cookies and breads. The " +
-                "Recipes section on this page gives starter ideas, including porridge, mocha, an " +
-                "iced latte, test cookies, and a small-batch fruit jam concept using ripe pulp.",
+                "Recipes section on this page gives starter ideas, including porridge, mocha, and " +
+                "a fruit-pulp jam concept using fully ripe MayaNut fruits.",
               sitemap:
                 "Site map: HERO, STORE, ABOUT, RESEARCH, GALLERY, RECIPES, FAQ, CONTACT. " +
                 "All sections live on this single long page for SEO and easy scrolling.",
@@ -3173,7 +3176,7 @@
             }
           })();
 
-          /* IMAGE LIGHTBOX (gallery + expand buttons) */
+          /* LIGHTBOX (scrollable overlay) */
           (function setupLightbox(){
             const lightbox    = $('#image-lightbox');
             const lightboxImg = $('#image-lightbox-img');
@@ -3192,7 +3195,9 @@
 
             closeBtn.addEventListener('click', close);
             lightbox.addEventListener('click', (e)=>{
-              if(e.target === lightbox) close();
+              if(e.target === lightbox){
+                close();
+              }
             });
             document.addEventListener('keydown', (e)=>{
               if(e.key === 'Escape') close();
@@ -3218,21 +3223,21 @@
           (function setupGalleryTabs(){
             const tabs       = $$('.gallery-tab');
             const imagePanel = $('#gallery-panel-images');
-            const videoPanel = $('#gallery-panel-videos');
+            const videoPanel = '#gallery-panel-videos' ? $('#gallery-panel-videos') : null;
             const moreBtn    = $('#gallery-more-btn');
             const extraBlock = $('#gallery-block-2');
-            if(!imagePanel || !videoPanel) return;
+            if(!imagePanel) return;
 
             tabs.forEach(tab=>{
               tab.addEventListener('click', ()=>{
                 const target = tab.getAttribute('data-gallery-tab');
                 tabs.forEach(t=>t.classList.remove('gallery-tab--active'));
                 tab.classList.add('gallery-tab--active');
-                if(target === 'videos'){
+                if(target === 'videos' && videoPanel){
                   imagePanel.classList.remove('gallery-panel--active');
                   videoPanel.classList.add('gallery-panel--active');
                 }else{
-                  videoPanel.classList.remove('gallery-panel--active');
+                  if(videoPanel) videoPanel.classList.remove('gallery-panel--active');
                   imagePanel.classList.add('gallery-panel--active');
                 }
               });
@@ -3254,12 +3259,12 @@
             }
           })();
 
-          /* STORE SEARCH + RICKY EASTER EGG */
+          /* STORE SEARCH + RICKY EGG TRIGGER */
           (function setupStoreSearch(){
             const input   = document.getElementById('store-search-input');
             const message = document.getElementById('store-search-message');
             const cards   = $$('.store-product-card');
-            const rickyEgg = document.getElementById('ricky-easter-egg');
+            const rickyEgg = $('#ricky-easter-egg');
             if(!input || cards.length === 0) return;
 
             const normalize = s => (s || '').toLowerCase().trim();
@@ -3287,19 +3292,17 @@
                 card.style.backgroundColor = '';
               });
               if(!q){
-                if(message) message.textContent = '';
+                if(message) message.textContent = 'Start typing to softly highlight matching concept items below.';
                 if(rickyEgg) rickyEgg.classList.remove('ricky-easter-egg--visible');
                 return null;
               }
 
-              // Ricky egg
+              // Ricky easter egg
               if(rickyEgg){
                 if(q.includes('ricky')){
                   rickyEgg.classList.add('ricky-easter-egg--visible');
-                  rickyEgg.setAttribute('aria-hidden','false');
                 }else{
                   rickyEgg.classList.remove('ricky-easter-egg--visible');
-                  rickyEgg.setAttribute('aria-hidden','true');
                 }
               }
 
@@ -3367,10 +3370,10 @@
               }
             });
 
-            const cartBtn     = document.getElementById('header-cart');
-            const locationBtn = document.getElementById('header-location');
-            const searchBtn   = document.getElementById('header-search');
-            const faqBtn      = document.getElementById('header-faq');
+            const cartBtn     = $('#header-cart');
+            const locationBtn = $('#header-location');
+            const searchBtn   = $('#header-search');
+            const faqBtn      = $('#header-faq');
 
             if(cartBtn){
               cartBtn.addEventListener('click', (e)=>{
@@ -3388,7 +3391,7 @@
               locationBtn.addEventListener('click', (e)=>{
                 e.stopPropagation();
                 show(
-                  'Location & Timeline',
+                  'Location &amp; Timeline',
                   'Our planting and product work is focused in South Florida and other frost-free ' +
                   'tropical or subtropical areas. The goal is to have the first meaningful product roll-out ' +
                   'around the late 2020s, once plantations of <span class="highlight-brosimum"><em>Brosimum alicastrum</em></span> ' +
@@ -3402,10 +3405,10 @@
               searchBtn.addEventListener('click', (e)=>{
                 e.stopPropagation();
                 show(
-                  'Search & Ask',
-                  'Search <span class="highlight-mayanut">MayaNut</span> concepts using the Store search bar. ' +
-                  'You can also type questions into the FAQ assistant box to ask about the tree, recipes, ' +
-                  'genetics, Moraceae, or where to find something on this site.'
+                  'Search &amp; Ask',
+                  'Search <span class="highlight-mayanut">MayaNut</span> concept products using the ' +
+                  'Store search bar. You can also type questions into the FAQ assistant box to ask ' +
+                  'about the tree, recipes, genetics, Moraceae, or where to find something on this site.'
                 );
                 if(storeInput){
                   setTimeout(()=>{
@@ -3423,11 +3426,6 @@
                 if(faqSection){
                   faqSection.scrollIntoView({behavior:'smooth', block:'start'});
                 }
-                show(
-                  'FAQ',
-                  'Scroll to the FAQ section below to see short answers and use the on-page assistant for ' +
-                  'questions about <span class="highlight-mayanut">MayaNut</span>, the tree, recipes, and more.'
-                );
               });
             }
 
@@ -3438,18 +3436,14 @@
                 const type = link.getAttribute('data-legal-link');
                 if(type === 'privacy'){
                   show(
-                    'Privacy & Health Disclaimer',
+                    'Privacy',
                     'A full privacy policy will be published once mayanut.com begins collecting ' +
                     'customer data. At this early stage, the site is primarily informational and does ' +
-                    'not process online orders.<br><br>' +
-                    '<strong>Health disclaimer:</strong> The MayaNut Company does not provide medical, ' +
-                    'nutritional, or health advice. All content on this site is for general ' +
-                    'informational and educational purposes only. Always consult qualified health ' +
-                    'professionals before making decisions about your diet or health.'
+                    'not process online orders.'
                   );
                 }else if(type === 'terms'){
                   show(
-                    'Terms of Use (Future)',
+                    'Terms of Use',
                     'Future Terms of Use will cover commercial sales, shipping, and disclaimers related ' +
                     'to <span class="highlight-mayanut">MayaNut</span> products. For now, this site is ' +
                     'experimental and informational only.'
@@ -3465,42 +3459,32 @@
             });
           })();
 
-          /* LANGUAGE DROPDOWN (header globe) */
-          (function setupLanguageDropdown(){
-            const trigger = document.getElementById('language-trigger');
-            const menu    = document.getElementById('language-menu');
+          /* LANGUAGE DROPDOWN */
+          (function setupLanguageMenu(){
+            const trigger = $('#language-trigger');
+            const menu    = $('#language-menu');
             if(!trigger || !menu) return;
 
-            const codeSpan = trigger.querySelector('.code');
-
-            function closeMenu(){
-              menu.style.display = 'none';
-              trigger.setAttribute('aria-expanded','false');
+            function toggleMenu(force){
+              const isOpen = menu.style.display === 'block';
+              const next = (typeof force === 'boolean') ? force : !isOpen;
+              menu.style.display = next ? 'block' : 'none';
             }
 
             trigger.addEventListener('click', (e)=>{
               e.stopPropagation();
-              const isOpen = menu.style.display === 'block';
-              menu.style.display = isOpen ? 'none' : 'block';
-              trigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+              toggleMenu();
             });
 
             document.addEventListener('click', (e)=>{
-              if(!menu.contains(e.target) && e.target !== trigger && !trigger.contains(e.target)){
-                closeMenu();
+              if(!menu.contains(e.target) && e.target !== trigger){
+                toggleMenu(false);
               }
             });
 
             $$('.language-menu-item', menu).forEach(item=>{
               item.addEventListener('click', ()=>{
-                const href  = item.getAttribute('data-href');
-                const lang  = item.getAttribute('data-lang');
-                $$('.language-menu-item', menu).forEach(i=>i.classList.remove('language-menu-item--active'));
-                item.classList.add('language-menu-item--active');
-                if(codeSpan && lang){
-                  codeSpan.textContent = lang.toUpperCase();
-                }
-                closeMenu();
+                const href = item.getAttribute('data-href');
                 if(href){
                   window.location.href = href;
                 }
@@ -3508,7 +3492,7 @@
             });
           })();
 
-          /* HIDDEN SEO TEXT */
+          /* SIMPLE HIDDEN SEO TEXT */
           (function injectHiddenSeo(){
             const main = document.querySelector('main') || document.body;
             if(!main) return;
