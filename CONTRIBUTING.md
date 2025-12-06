@@ -1,113 +1,197 @@
+# 🤝 Contributing Guide  
+## The MayaNut Company Website Project
 
-## 3. Make Your Changes
-Please follow these guidelines:
+Thank you for your interest in contributing to this project.  
+Whether you're improving translations, refining UI, sharing research, or adding media — your help supports a global mission to elevate awareness of **MayaNut** (*Brosimum alicastrum*) and sustainable agroforestry systems.
 
-### ✔ Coding Style
-- Use clean, readable HTML/CSS/JS  
-- Keep all gradients, branding colors, and layout structure intact  
-- Use semantic HTML whenever possible  
-- Avoid adding dependencies or heavy libraries  
-- Test on both desktop and mobile  
+Before contributing, please:
 
-### ✔ SEO
-If modifying page text:
-- Keep scientific names italicized  
-- Use descriptive alt text for all images  
-- Do not remove existing keywords  
-- Add new keywords only if relevant to *Brosimum alicastrum* or MayaNut products  
-
-### ✔ Images
-Before submitting images:
-- Must be owned by contributor OR public domain  
-- Compress to reasonable size  
-- Use `.png` for UI graphics & logos  
-- Use `.jpg` for large photography  
-
-### ✔ JavaScript
-- Use vanilla JS (no frameworks)  
-- Keep logic simple and readable  
-- Avoid breaking existing UI interactions  
-- Keep Easter eggs functional  
+- Read the **Code of Conduct**
+- Follow the guidelines below
+- Test your changes before submitting
 
 ---
 
-# 🔍 Testing Your Changes
+## 1️⃣ Getting Started
 
-Before submitting a pull request, please check:
+You may contribute by:
 
-### Desktop
+- Fixing typos or improving documentation  
+- Enhancing translations  
+- Refining layout or UI behavior  
+- Adding research-based content  
+- Submitting original images or graphics  
+- Improving accessibility or SEO  
+- Reporting or fixing bugs  
+
+Fork the repository before making changes.
+
+---
+
+## 2️⃣ Branch Naming
+
+Use clear, structured naming:
+
+```
+feature/<short-description>
+fix/<bug-context>
+lang/<language-code>
+docs/<documentation-change>
+```
+
+Examples:
+
+```
+feature/gallery-scroll
+fix/mobile-menu-spacing
+lang/fr-formatting
+docs/readme-refactor
+```
+
+---
+
+## 3️⃣ Making Changes
+
+### ✔ Coding Style
+
+- Use clean, readable **HTML / CSS / JavaScript**
+- Maintain existing visual identity and color gradients
+- Use **semantic HTML** where possible
+- Avoid adding dependencies (no React, jQuery, Vue, etc.)
+- Ensure the site remains **lightweight and fast**
+- Test on both desktop and mobile
+
+---
+
+### ✔ SEO Practices
+
+If changing site text:
+
+- Keep **scientific names in italics**
+- Maintain existing SEO keywords  
+- Add new keywords **only if relevant** to MayaNut, *Brosimum alicastrum*, or associated topics
+- Provide accurate, descriptive `alt` text for images
+
+---
+
+### ✔ Image Contributions
+
+Before submitting images:
+
+| Requirement | Notes |
+|------------|-------|
+| Ownership | Must be original content or verified public domain |
+| Format | `.png` for logos, vector UI, `.jpg` for photography |
+| Optimization | Compress images to reasonable sizes |
+| Relevance | Must relate to MayaNut, agroforestry, nurseries, trees, ecosystems, etc. |
+
+---
+
+### ✔ JavaScript Guidelines
+
+- Use **vanilla JavaScript only**
+- Keep logic clear and minimal
+- Do not remove or break:
+  - Menu open/close logic  
+  - Language selector  
+  - Lightbox behavior  
+  - Chat assistant  
+  - Easter egg interactions  
+
+---
+
+## 4️⃣ Testing Requirements
+
+Before opening a pull request, perform basic testing.
+
+### Desktop:
+
 - Chrome  
-- Safari  
 - Firefox (preferred)  
+- Safari  
 
-### Mobile
+### Mobile:
+
 - iPhone Safari  
 - Android Chrome  
 
-Verify that:
+Verify:
 
-- The menu opens/closes correctly  
+- Menu toggles normally  
+- Lightbox image expansion works  
+- Scroll links jump to correct sections  
 - Language selector functions  
-- The chat bot opens and responds  
-- Image expand/lightbox works  
-- Easter egg behavior still functions  
-- All sections scroll-link correctly  
+- Overlay messages dismiss properly  
+- Easter egg behavior still exists  
+- Layout remains readable and aligned  
 
 ---
 
-# 📝 Submitting a Pull Request
+## 5️⃣ Submitting a Pull Request (PR)
 
-When your update is ready:
+Once changes are ready:
 
-1. Push your branch to your fork  
-2. Open a Pull Request  
-3. Fill out the PR template  
-4. Assign to: **@cooltropicals-cmd**  
+1. Commit to your branch  
+2. Push to your fork  
+3. Open a Pull Request  
 
-Please ensure PRs include:
-- Clear description of changes  
-- Screenshots (if UI changes)  
-- Confirmations that testing was done  
+Your PR must include:
 
----
+- A clear summary of changes  
+- Screenshots if UI changed  
+- Confirmation that testing was completed  
 
-# 🐛 Reporting Issues
+Assign the PR to:
 
-Before opening a new issue, please check existing issues.
-
-Use the appropriate template:
-- **Bug Report**  
-- **Feature Request**  
-- **Documentation Request**  
-- **Security Issue** (→ report privately if needed)  
+👉 **@cooltropicals-cmd**
 
 ---
 
-# 🌍 Translation Contributions
+## 6️⃣ Reporting Issues
 
-To add or improve language support:
+Before creating a new issue, check if it already exists.
 
-- Ensure the new/updated file mirrors **index.html** layout  
-- Do not change line spacing structure  
-- Keep scientific text intact  
-- Keep the menu, chat bot, and hero layout identical  
+Use the appropriate category:
+
+- **Bug Report**
+- **Feature Request**
+- **Documentation Change**
+- **Translation Fix**
+- **Security Concern** (email privately — do NOT post publicly)
 
 ---
 
-# 🔐 Security Vulnerabilities
+## 🌍 Translation Contributions
 
-Do NOT open a public issue.
+To add a new language or improve an existing one:
 
-Please email:
+- Follow the structure of `index.html` exactly  
+- Keep spacing and formatting consistent  
+- Preserve italic formatting for scientific names  
+- Ensure menu, chatbot, hero layout, and gallery remain identical
+
+---
+
+## 🔐 Security Vulnerabilities
+
+Do not open a public issue.
+
+Report privately to:
 
 📧 **themayanutcompany@gmail.com**  
-Subject: *Security Vulnerability Report*
+Subject: **Security Vulnerability Report**
 
 ---
 
-# ❤️ Thank You!
+## ❤️ Thank You
 
-Your contributions help improve global understanding of  
-**MayaNut, sustainable tropical agroforestry, and the preservation of *Brosimum alicastrum*.**
+By contributing, you help support:
 
-Thank you for helping strengthen The MayaNut Company’s mission!
+- Tropical ecosystem restoration  
+- Conservation of *Brosimum alicastrum*  
+- Global education and accessibility  
+- Open-source collaboration  
+
+Every improvement — large or small — strengthens the mission and future of MayaNut.
+
+🌿 _Thank you for being part of this project._  
