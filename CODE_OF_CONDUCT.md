@@ -1,133 +1,137 @@
-# Code of Conduct (v4.8)  
+# Code of Conduct  
 ## The MayaNut Company Website & Open Source Project  
-Based on the Contributor Covenant v2.1  
-
-_Last updated: Version 4.8 – December 2025_
+_Based on the Contributor Covenant v2.1_
 
 ---
 
 ## 🌱 Our Commitment
 
-We pledge to make participation in this project a harassment-free, inclusive, and respectful experience for everyone — whether you are contributing code, filing issues, improving documentation, reporting research updates about *Brosimum alicastrum*, or helping with global language translations.
+We commit to providing a welcoming, respectful, and harassment-free environment for everyone contributing to this repository — whether you're writing code, improving translations, submitting research, reporting bugs, or sharing photos and knowledge about *Brosimum alicastrum*.
 
-Our mission reflects the values of The MayaNut Company:
+The values guiding this project include:
+
 - Sustainability  
-- Respect for all cultures  
+- Respect for culture and biodiversity  
 - Scientific integrity  
-- Honesty  
-- Collaboration  
+- Transparency and honesty  
+- Collaboration over competition  
 - Environmental stewardship  
 
-We expect all contributors to reflect these values.
+Everyone participating is expected to uphold these values.
 
 ---
 
 ## 🤝 Our Standards
 
-### **Examples of positive behavior:**
-- Being respectful and considerate in all communication  
-- Helping others engage and learn  
-- Offering constructive feedback without harshness  
-- Giving credit where due  
-- Acknowledging different perspectives and experiences  
-- Focusing on what is best for the community and project  
-- Promoting accurate and culturally-respectful information about Maya Nut and indigenous knowledge systems
+### ✔ Positive and encouraged behaviors:
 
-### **Unacceptable behavior includes:**
-- Harassment, discrimination, or derogatory comments  
-- Personal or political attacks  
-- Trolling, insulting, or mocking behavior  
-- Posting private information without permission  
-- Publishing harmful misinformation  
-- Deliberate technical disruption of the website  
-- Improper use of copyrighted or commercial content  
-- Attempting to exploit security issues
+- Acting with kindness, empathy, and professionalism  
+- Providing constructive, respectful feedback  
+- Helping newcomers feel welcome  
+- Acknowledging differing viewpoints and lived experiences  
+- Giving proper credit and citation when applicable  
+- Sharing accurate information and avoiding speculation presented as fact  
+- Respectfully honoring indigenous knowledge tied to MayaNut and its history  
+
+### ✘ Unacceptable behaviors:
+
+- Harassment, threats, discrimination, or hateful language  
+- Personal, political, or cultural attacks  
+- Persistent negativity or antagonistic debate  
+- Posting private, confidential, or identifying information without consent  
+- Publishing misinformation or misleading claims  
+- Uploading copyrighted materials without rights or permission  
+- Attempting to exploit or destabilize the website or repository  
+- Spam, self-promotion, commercial solicitation unrelated to this project  
 
 ---
 
 ## 🛠 Enforcement Responsibilities
 
 Project maintainers are responsible for:
-- Defining and enforcing community standards  
-- Reviewing and acting on issues of misconduct  
-- Providing fair and consistent consequences  
 
-Maintainers may remove, edit, or reject:
+- Clarifying community expectations  
+- Responding to unacceptable behavior  
+- Taking corrective action when needed  
+
+Maintainers have the right to remove or reject:
+
 - Comments  
 - Commits  
-- Code  
 - Issues  
 - Pull requests  
+- Contributions  
 
-If they violate this Code of Conduct.
+that violate this Code of Conduct.
 
 ---
 
-## 📞 Reporting Misconduct
+## 📩 Reporting Violations
 
-If you observe unacceptable behavior, please report it to:
+To report concerns, email:
 
 📧 **themayanutcompany@gmail.com**  
-Subject: *Code of Conduct Report*
+Subject Line: **Code of Conduct Report**
 
-Include:
-- A description of what happened  
-- Links or screenshots if applicable  
-- Names of individuals involved  
-- Whether this is a repeated behavior  
+Please include:
 
-We will respond within **5 business days**.
+- What happened  
+- Where it occurred  
+- Supporting evidence (screenshots, links, etc.)  
+- Whether this is ongoing behavior  
+
+A response will be provided within **5 business days**.
 
 ---
 
-## 🔏 Confidentiality
+## 🔒 Confidentiality
 
-All reports will be handled privately.  
-Information will only be shared on a need-to-know basis to enforce the policy.
+All reports are handled privately.  
+Information shared will only be used to enforce project policy — never published or stored publicly.
 
 ---
 
 ## 🚫 Consequences
 
-Depending on severity or frequency, violations may result in:
+Depending on severity and frequency, actions may include:
 
-- A warning  
-- Temporary or permanent ban from contributing  
-- Rejection of pull requests  
-- Blocking from the repository  
-- Escalation if involving legal or safety concerns  
+- A private warning  
+- Temporary contribution suspension  
+- Permanent ban from participation  
+- Issue lockdown or removal  
+- Legal escalation if required  
 
 ---
 
-## 🔄 Scope
+## 🌍 Scope
 
 This Code of Conduct applies to:
-- All GitHub interactions  
-- Issues and pull requests  
-- Documentation updates  
-- Discussions, comments, and feedback  
-- Community communication related to this project  
 
-It also applies when representing The MayaNut Company in public spaces.
+- GitHub interactions (issues, commits, PRs)  
+- Documentation editing  
+- Community discussions  
+- Any project-related communication or representation in public spaces  
 
 ---
 
 ## ❤️ Attribution
 
-This Code of Conduct is adapted from the **Contributor Covenant version 2.1**  
-https://www.contributor-covenant.org/version/2/1/code_of_conduct.html  
-with modifications for the cultural, scientific, and sustainability goals  
-of The MayaNut Company.
+Adapted from the **Contributor Covenant v2.1:**  
+https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
 
 ---
 
-## 🌍 Thank You
+### 🌳 Thank You
 
-By participating in this project, you help support:
-- Tropical ecosystem restoration  
-- Research on *Brosimum alicastrum*  
-- Sustainable agroforestry  
-- A global educational movement  
+By participating in this project, you support:
 
-We appreciate your dedication to keeping this project respectful and thriving.  
-This document is The MayaNut Company Code of Conduct **v4.8**.
+- Restoration of tropical ecosystems  
+- Scientific documentation of *Brosimum alicastrum*  
+- Translation accessibility  
+- A global effort to reintroduce a resilient and culturally meaningful superfood  
+
+Your respect and collaboration help this project grow — just like the trees it represents.
+
+---
+
+📌 _Last updated: December 2025_
